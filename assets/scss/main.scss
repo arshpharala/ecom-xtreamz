@@ -10,10 +10,14 @@
 @import "components/video-section";
 @import "components/gift-collection";
 @import "components/footer";
+@import "components/form";
 
 @import "components/breadcrumb";
 @import "components/product-detail";
 @import "components/product-specifications";
+
+@import "components/listing-header";
+@import "components/product-listing";
 
 html {
   background-color: $bg-color;

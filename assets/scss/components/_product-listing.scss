@@ -1,0 +1,57 @@
+.product-listing-page {
+	background: #f5f5f5;
+
+	.sidebar-filters {
+		min-width: 220px;
+		border-right: 1px solid #e0e0e0;
+		.category-list {
+			li {
+				cursor: pointer;
+				padding: 8px 10px;
+				transition: background 0.2s;
+				&.active,
+				&:hover {
+					background: $white;
+					font-weight: 500;
+					border-bottom: none !important;
+				}
+				.badge {
+					font-size: 0.8em;
+				}
+				&:last-child {
+					border-bottom: none !important;
+				}
+			}
+			img,
+			i {
+				font-size: 1.2rem;
+				opacity: 0.85;
+			}
+		}
+		.form-select {
+			min-width: 100px;
+			font-size: 0.97em;
+		}
+		
+	}
+
+	.pagination .page-link {
+		color: #008ba0;
+		border: none;
+		background: transparent;
+		font-weight: 500;
+		&:hover,
+		&.active {
+			background: #e8f4f4;
+			color: #006a7b;
+		}
+	}
+}
+
+@media (max-width: 991px) {
+	.sidebar-filters {
+		min-width: 100%;
+		border-right: none;
+		margin-bottom: 2rem;
+	}
+}

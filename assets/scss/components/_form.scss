@@ -5,21 +5,21 @@
 	@include select-shared;
 
 	&:focus {
-		border-color: $main-color;
+		border-color: $primary;
 		outline: 0;
-		box-shadow: 0 0 0 0.25rem $main-color;
+		box-shadow: 0 0 0 0.25rem $primary;
 	}
 
 	option:checked {
-		background: $main-color;
+		background: $primary;
 		color: $white;
 	}
 }
 
 
 .cc-form-check-input:checked {
-	background-color: $main-color;
-	border-color: $main-color;
+	background-color: $primary;
+	border-color: $primary;
 }
 
 .cc-price-range {
@@ -29,15 +29,18 @@
 		box-shadow: none;
 		height: 4px;
 		margin-top: 0.5rem;
+		z-index: 2;
 	}
 	.noUi-base {
 		background: #222;
 		border-radius: 2px;
 		height: 2px;
+		z-index: 2;
 	}
 	.noUi-connect {
 		background: #008ba0;
 		height: 2px;
+		z-index: 2;
 	}
 	.noUi-horizontal .noUi-handle {
 		top: -7px;
@@ -49,6 +52,7 @@
 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 		cursor: pointer;
 		transition: border 0.2s;
+		z-index: 2;
 	}
 	.noUi-handle:after,
 	.noUi-handle:before {
@@ -58,5 +62,6 @@
 		font-size: 1rem;
 		font-weight: 500;
 		color: #222;
+		z-index: 2;
 	}
 }

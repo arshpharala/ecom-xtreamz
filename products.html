@@ -109,7 +109,7 @@
                 class="nav-link px-4">Home</a></li>
             <li class="nav-item"><a href="#"
                 class="nav-link px-4">About</a></li>
-            <li class="nav-item"><a href="#"
+            <li class="nav-item"><a href="products.html"
                 class="nav-link px-4">Products</a></li>
             <li class="nav-item"><a href="#"
                 class="nav-link px-4">Contact</a></li>
@@ -180,7 +180,7 @@
             <h2 class="section-title fw-normal mb-0"
               style="font-size:2.3rem;">Category</h2>
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-6 d-flex align-items-center">
             <form class="search-bar w-100">
               <div class="input-group search-group">
                 <input type="text" class="form-control search-input fw-bold"
@@ -190,9 +190,14 @@
                 </span>
               </div>
             </form>
+            <!-- Filter Icon (shows only on mobile) -->
+            <button class="btn filter-btn d-md-none ms-2" id="openFilterModal"
+              aria-label="Open Filters">
+              <i class="bi bi-funnel-fill fs-2"></i>
+            </button>
           </div>
           <div
-            class="col-lg-3 d-flex align-items-center justify-content-end gap-3">
+            class="col-lg-3 d-none d-md-flex align-items-center justify-content-end gap-3">
             <span class="fw-bold sort-label text-nowrap">Sort By</span>
             <select class="form-select cc-select">
               <option>Featured</option>
@@ -210,7 +215,7 @@
 
         <div class="row gx-5">
           <!-- Sidebar: Filters -->
-          <aside class="col-lg-3 col-md-4 mb-4 mt-3">
+          <aside class="col-lg-3 col-md-4 mb-4 mt-3 d-none d-md-block">
             <div class="sidebar-filters pe-4">
               <!-- Category -->
               <div class="mb-4">
@@ -288,10 +293,10 @@
               <div class="price-range-wrapper cc-price-range mb-4">
                 <div
                   class="d-flex justify-content-between align-items-center mb-2">
-                  <span id="priceLabelMin" class="price-label">5 AED</span>
-                  <span id="priceLabelMax" class="price-label">4000 AED</span>
+                  <span id="priceLabelMinSidebar" class="price-label">5 AED</span>
+                  <span id="priceLabelMaxSidebar" class="price-label">4000 AED</span>
                 </div>
-                <div id="price-slider"></div>
+                <div id="price-slider-sidebar"></div>
               </div>
 
             </div>
@@ -556,6 +561,110 @@
         <small>COPYRIGHT 2024 - XTREMEZ | ALL RIGHTS RESERVED</small>
       </div>
     </footer>
+
+    <!-- Filter Modal / Offcanvas -->
+    <div class="modal fade" id="filterModal" tabindex="-1"
+      aria-labelledby="filterModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-slideout modal-fullscreen-sm-down">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="filterModalLabel">Filters</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="sidebar-filters pe-4">
+              <!-- Category -->
+              <div class="mb-4">
+                <ul class="category-list list-unstyled mb-0">
+                  <li
+                    class="d-flex align-items-center py-3 border-bottom active">
+                    <img src="assets/icons/shirt.png" class="me-2" width="22"
+                      alt> Clothing <span
+                      class="ms-auto badge text-dark">30</span>
+                  </li>
+                  <li class="d-flex align-items-center py-3 border-bottom">
+                    <i class="bi bi-headphones me-2"></i> Technology <span
+                      class="ms-auto badge text-dark">40</span>
+                  </li>
+                  <li class="d-flex align-items-center py-3 border-bottom">
+                    <i class="bi bi-recycle me-2"></i> Sustainability <span
+                      class="ms-auto badge text-dark">20</span>
+                  </li>
+                  <li class="d-flex align-items-center py-3 border-bottom">
+                    <i class="bi bi-briefcase me-2"></i> Travel Bag <span
+                      class="ms-auto badge text-dark">60</span>
+                  </li>
+                  <li class="d-flex align-items-center py-3 border-bottom">
+                    <i class="bi bi-journal-bookmark me-2"></i> Office &amp;
+                    Writing <span
+                      class="ms-auto badge text-dark">10</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Brands -->
+              <div class="mb-4">
+                <h5 class="fs-3 mb-3">Brands</h5>
+                <select class="form-select cc-select">
+                  <option selected>–</option>
+                  <option>BOSS</option>
+                  <option>Chanel</option>
+                  <option>Adidas</option>
+                  <option>Ikasu</option>
+                </select>
+              </div>
+
+              <!-- Primary Color -->
+              <div class="mb-4">
+                <h5 class="fs-3 mb-3">Primary Color</h5>
+                <select class="form-select cc-select">
+                  <option selected>Black</option>
+                  <option>Blue</option>
+                  <option>Red</option>
+                  <option>White</option>
+                </select>
+              </div>
+
+              <!-- Tags -->
+              <div class="mb-4">
+                <h5 class="fs-3 mb-3x ">Tags</h5>
+                <div class="form-check">
+                  <input class="form-check-input cc-form-check-input"
+                    type="checkbox" id="tag1">
+                  <label class="form-check-label" for="tag1">Sustainable</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input cc-form-check-input"
+                    type="checkbox" id="tag2">
+                  <label class="form-check-label" for="tag2">New Arrival</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input cc-form-check-input"
+                    type="checkbox" id="tag3">
+                  <label class="form-check-label" for="tag3">On Sale</label>
+                </div>
+              </div>
+
+              <!-- Price Range -->
+              <div class="price-range-wrapper cc-price-range mb-4">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-2">
+                  <span id="priceLabelMinModal" class="price-label">5 AED</span>
+                  <span id="priceLabelMaxModal" class="price-label">4000 AED</span>
+                </div>
+                <div id="price-slider-modal"></div>
+              </div>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary"
+              data-bs-dismiss="modal">Apply Filters</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

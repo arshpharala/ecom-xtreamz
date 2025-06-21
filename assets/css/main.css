@@ -510,6 +510,33 @@
   color: #fff;
 }
 
+.cc-search-bar .search-group {
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+.cc-search-bar .search-input {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 1.2rem 1.3rem;
+  outline: none;
+  box-shadow: none !important;
+}
+.cc-search-bar .search-icon {
+  background: #fff;
+  border: none;
+  font-size: 1.8rem;
+  color: #222;
+  padding-right: 1.4rem;
+  padding-left: 0;
+}
+.cc-search-bar .form-control:focus {
+  box-shadow: none;
+  border-color: #fff;
+}
+
 .cc-form-check-input:checked {
   background-color: #39767b;
   border-color: #39767b;
@@ -724,53 +751,11 @@
   font-weight: 400;
   letter-spacing: -1px;
 }
-.listing-header .search-bar .search-group {
-  background: #fff;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
-.listing-header .search-bar .search-input {
-  border: none;
-  background: transparent;
-  font-size: 1.1rem;
-  font-weight: 700;
-  padding: 1.2rem 1.3rem;
-  outline: none;
-  box-shadow: none !important;
-}
-.listing-header .search-bar .search-icon {
-  background: #fff;
-  border: none;
-  font-size: 1.8rem;
-  color: #222;
-  padding-right: 1.4rem;
-  padding-left: 0;
-}
-.listing-header .search-bar .form-control:focus {
-  box-shadow: none;
-  border-color: #fff;
-}
 .listing-header .sort-label {
   font-size: 1.12rem;
   font-weight: 700;
 }
 
-@media (max-width: 991px) {
-  .listing-header .section-title {
-    font-size: 1.45rem;
-  }
-  .listing-header .search-bar .search-input {
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-  }
-  .listing-header .sort-select {
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-  }
-  .listing-header .sort-label {
-    font-size: 1rem;
-  }
-}
 @media (max-width: 575px) {
   .listing-header .row {
     flex-direction: column;
@@ -819,16 +804,6 @@
   min-width: 100px;
   font-size: 0.97em;
 }
-.product-listing-page .pagination .page-link {
-  color: #008ba0;
-  border: none;
-  background: transparent;
-  font-weight: 500;
-}
-.product-listing-page .pagination .page-link:hover, .product-listing-page .pagination .page-link.active {
-  background: #e8f4f4;
-  color: #006a7b;
-}
 
 @media (max-width: 991px) {
   .sidebar-filters {
@@ -837,6 +812,17 @@
     margin-bottom: 2rem;
   }
 }
+.pagination-section .pagination .page-link {
+  color: #008ba0;
+  border: none;
+  background: transparent;
+  font-weight: 500;
+}
+.pagination-section .pagination .page-link:hover, .pagination-section .pagination .page-link.active {
+  background: #e8f4f4;
+  color: #006a7b;
+}
+
 html {
   background-color: #f5f5f5;
 }

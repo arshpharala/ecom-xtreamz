@@ -16,6 +16,34 @@
 	}
 }
 
+.cc-search-bar {
+	.search-group {
+		background: #fff;
+		overflow: hidden;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+	}
+	.search-input {
+		border: none;
+		background: transparent;
+		font-size: 1.1rem;
+		font-weight: 700;
+		padding: 1.2rem 1.3rem;
+		outline: none;
+		box-shadow: none !important;
+	}
+	.search-icon {
+		background: #fff;
+		border: none;
+		font-size: 1.8rem;
+		color: #222;
+		padding-right: 1.4rem;
+		padding-left: 0;
+	}
+	.form-control:focus {
+		box-shadow: none;
+		border-color: #fff;
+	}
+}
 
 .cc-form-check-input:checked {
 	background-color: $primary;

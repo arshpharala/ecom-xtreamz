@@ -1,0 +1,70 @@
+.hero-section {
+  background: url('../images/banner.jpg') no-repeat center center;
+  background-size: cover;
+  height: 700px;
+  // max-height: 75vh;
+  // min-height: 60vh;
+  padding: 4rem 0;
+
+  
+
+  .hero-text {
+    max-width: 540px;
+
+    .hero-subtitle {
+      font-size: 1.8rem;
+      font-weight: 100;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 500;
+      line-height: 1.1;
+      color: #fff;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .btn-light{
+      color: $main-color;
+      padding: 14px 28px;
+      box-shadow: 0 0.5rem 1rem rgba(59, 58, 58, 0.4);
+      border-radius: 8px;
+    }
+  
+  }
+}
+
+.search-bar-wrapper {
+  background-color: $bg-color;
+  padding: 1.5rem 0;
+
+  .search-bar {
+    background: #fff;
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    margin-top: -60px;
+    overflow: hidden;
+
+    input {
+      flex: 1;
+      font-weight: 700;
+      color: $dark;
+      font-size: 1rem;
+      padding: 1rem 0.75rem;
+      outline: none;
+      box-shadow: none;
+    }
+
+    button {
+      i {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}

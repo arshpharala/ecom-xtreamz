@@ -1,0 +1,63 @@
+.video-section {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7; // ✅ Responsive height based on width
+  background: $bg-color;
+
+  .video-bg {
+    width: 100%;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  .video-overlay {
+    background-color: rgba(0, 139, 160, 0.5);
+    z-index: 1;
+  }
+
+  .video-play-btn {
+    z-index: 2;
+    width: 64px;
+    height: 64px;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #008ba0;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    aspect-ratio: 16 / 9;
+
+    .video-play-btn {
+      width: 50px;
+      height: 50px;
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    aspect-ratio: 4 / 3;
+
+    .video-play-btn {
+      width: 44px;
+      height: 44px;
+      font-size: 1.125rem;
+    }
+  }
+}

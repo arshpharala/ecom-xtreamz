@@ -1,0 +1,26 @@
+@import "base/variables"; // allows $primary to be impo@importd everywhere
+@import "base/mixins";
+@import "components/header";
+@import "components/hero";
+@import "components/browse-categories";
+@import "components/product-card";
+@import "components/gift-sets";
+@import "components/sustainable";
+@import "components/our-brands";
+@import "components/video-section";
+@import "components/gift-collection";
+@import "components/footer";
+
+@import "components/breadcrumb";
+@import "components/product-detail";
+@import "components/product-specifications";
+
+html {
+  background-color: $bg-color;
+}
+body {
+	font-family: $font-family-base;
+	max-width: 2000px;
+	overflow-x: hidden;
+	margin: 0 auto;
+}

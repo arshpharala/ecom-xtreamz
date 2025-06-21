@@ -1,0 +1,39 @@
+.browse-categories {
+  background-color: $bg-color;
+  padding: 3rem 0;
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: $font-family-base;
+    color: #222;
+  }
+
+  .category-icons {
+    .category-item {
+      .category-icon {
+        width: 40px;
+        height: 40px;
+        opacity: 0.6;
+        transition: opacity 0.3s, transform 0.3s;
+        cursor: pointer;
+
+        &.active {
+          opacity: 1;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        &:hover {
+          opacity: 1;
+          transform: scale(1.1);
+        }
+      }
+    }
+
+    .dot-separator {
+      font-size: 1.5rem;
+      color: #ccc;
+      user-select: none;
+    }
+  }
+}

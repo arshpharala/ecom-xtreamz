@@ -1,0 +1,35 @@
+.breadcrumb-bar {
+	background-color: $main-color;
+	font-size: 0.875rem;
+
+	.breadcrumb {
+		background: transparent;
+		padding-left: 0;
+		margin-bottom: 0;
+		flex-wrap: nowrap; // No wrapping
+		overflow: hidden;
+	}
+
+	.breadcrumb-item {
+		max-width: 85%; // Set your own preferred max-width
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: inline-block;
+		vertical-align: middle;
+		line-height: 1.5;
+		position: relative;
+
+		&.active {
+			font-weight: 500;
+			color: #fff !important;
+		}
+	}
+
+	.breadcrumb-item + .breadcrumb-item::before {
+		content: "|";
+		color: #b5d0d0;
+		padding: 0 0.5rem;
+		font-size: 1.2em;
+	}
+}

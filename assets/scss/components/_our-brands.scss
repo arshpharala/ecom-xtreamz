@@ -1,0 +1,26 @@
+.our-brands-section {
+	background-color: $bg-color;
+
+	.section-title {
+		font-weight: 500;
+		font-family: $font-family-base;
+		color: #222;
+	}
+
+	.brand-logo {
+		max-height: 40px;
+		object-fit: contain;
+		filter: grayscale(100%);
+		transition: filter 0.3s ease;
+
+		&:hover {
+			filter: grayscale(0%);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.brand-logo {
+			max-height: 30px;
+		}
+	}
+}

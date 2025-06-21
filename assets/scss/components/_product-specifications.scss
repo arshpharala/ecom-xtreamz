@@ -1,0 +1,31 @@
+.product-specifications {
+  background-color: #f3f3f3;
+
+  .spec-box {
+    .section-title {
+      color: #4b9aa5;
+    }
+
+    .specs-table {
+      width: 100%;
+      font-size: 16px;
+      margin-top: -1rem !important;
+
+      th {
+        background-color: transparent;
+        font-weight: 600;
+        font-size: 16px;
+        padding: 0 0 0 0;
+      }
+
+      td {
+        padding: 0.75rem 0;
+        border-color: #d9d9d9;
+      }
+
+      // tr:last-child td {
+      //   border-bottom: none;
+      // }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+.main-header {
+  background-color: #fff;
+  .navbar-brand img {
+    max-height: 40px;
+  }
+
+  .nav-link {
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+
+  .search-wrapper input {
+    min-width: 200px;
+    font-size: 0.875rem;
+  }
+
+  .icon-link {
+    color: #333;
+    position: relative;
+
+    &:hover {
+      color: $primary;
+    }
+
+    .badge-sm {
+      font-size: 0.65rem;
+      padding: 0.25em 0.4em;
+    }
+  }
+
+  .mobile-nav {
+    ul {
+      .nav-link {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #ddd;
+        color: #333;
+
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+.sustainable-section {
+
+	background-color: $bg-color;
+
+	.bg-beige {
+		background-color: #ede3d7;
+	}
+
+	.sustainable-heading {
+		font-family: "Roboto", sans-serif;
+		font-size: 2.5rem;
+		line-height: 1.2;
+		color: #222;
+	}
+
+	.btn-sustainable {
+		background-color: #92c9cb;
+		color: #fff;
+		padding: 12px 24px;
+		border-radius: 10px;
+		box-shadow: 0 10px 20px rgba(146, 201, 203, 0.3);
+		transition: all 0.3s ease-in-out;
+		font-weight: 500;
+
+		&:hover {
+			background-color: #78b8bb;
+			box-shadow: 0 12px 24px rgba(146, 201, 203, 0.4);
+		}
+	}
+
+	.sustainable-image {
+		height: 100%;
+		img {
+			object-fit: cover;
+			height: 100%;
+		}
+	}
+
+	@media (max-width: 767.98px) {
+		.sustainable-heading {
+			font-size: 2rem;
+		}
+
+		.btn-sustainable {
+			padding: 10px 20px;
+		}
+	}
+}

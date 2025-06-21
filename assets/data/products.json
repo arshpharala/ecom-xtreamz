@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "title": "BREDA - Insulated Bottle - Green",
+    "price": "70 AED",
+    "image": "assets/images/product.png",
+    "category": "Clothing"
+  },
+  {
+    "id": 2,
+    "title": "BREDA - Insulated Bottle - Green",
+    "price": "70 AED",
+    "image": "assets/images/product.png",
+    "category": "Clothing"
+  },
+  {
+    "id": 3,
+    "title": "BREDA - Insulated Bottle - Green",
+    "price": "70 AED",
+    "image": "assets/images/product.png",
+    "category": "Clothing"
+  },
+  {
+    "id": 4,
+    "title": "BREDA - Insulated Bottle - Green",
+    "price": "70 AED",
+    "image": "assets/images/product.png",
+    "category": "Clothing"
+  },
+  {
+    "id": 5,
+    "title": "BREDA - Insulated Bottle - Green",
+    "price": "70 AED",
+    "image": "assets/images/product.png",
+    "category": "Clothing"
+  },
+  {
+    "id": 6,
+    "title": "Custom Mug - Ceramic",
+    "price": "45 AED",
+    "image": "assets/images/product.png",
+    "category": "Mugs"
+  },
+  {
+    "id": 7,
+    "title": "Custom Mug - Ceramic",
+    "price": "45 AED",
+    "image": "assets/images/product.png",
+    "category": "Mugs"
+  },
+  {
+    "id": 8,
+    "title": "Custom Mug - Ceramic",
+    "price": "45 AED",
+    "image": "assets/images/product.png",
+    "category": "Mugs"
+  },
+  {
+    "id": 9,
+    "title": "Eco Tote Bag",
+    "price": "35 AED",
+    "image": "assets/images/product.png",
+    "category": "Gift Bags"
+  }
+]

@@ -1,0 +1,42 @@
+.site-footer {
+  background-color: $white;
+
+  .footer-logo {
+    max-width: 160px;
+  }
+
+  .social-icons a {
+    color: #000;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #008ba0;
+    }
+  }
+
+  .footer-links {
+    li {
+      margin-bottom: 0.5rem;
+
+      a {
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        color: #111;
+        text-transform: uppercase;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: #008ba0;
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    background-color: $dark;
+  }
+}

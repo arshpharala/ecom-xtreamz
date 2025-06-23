@@ -1,4 +1,4 @@
-.cc-select {
+.theme-select {
 	min-width: 140px;
 	font-size: 1.08rem;
 	font-weight: 500;
@@ -13,6 +13,63 @@
 	option:checked {
 		background: $primary;
 		color: $white;
+	}
+}
+
+.theme-input-group {
+	border: none;
+	background: transparent;
+	font-size: 1.1rem;
+	font-weight: 700;
+	padding: 1.2rem 1.3rem;
+	outline: none;
+	box-shadow: none !important;
+	
+}
+
+.theme-input {
+	background: transparent;
+	font-size: 1.1rem;
+	padding: 1.2rem 1.3rem;
+	outline: none;
+	box-shadow: none !important;
+	&:focus {
+		border-color: $primary;
+		// outline: 0;
+		box-shadow: 0 0 0 0.25rem $primary;
+	}
+}
+
+.theme-radio,
+.theme0-checkbox {
+	&:checked {
+		background-color: $primary;
+		border-color: $primary;
+	}
+}
+
+.cc-form {
+	.cc-input-group {
+		border: none;
+		background: transparent;
+		font-size: 1.1rem;
+		font-weight: 700;
+		padding: 1.2rem 1.3rem;
+		outline: none;
+		box-shadow: none !important;
+
+		.cc-button {
+			border: none;
+			font-size: 1.8rem;
+			color: #222;
+			padding-right: 1.4rem;
+			padding-left: 0;
+		}
+	}
+
+	.form-control:focus {
+		box-shadow: none;
+		border-color: #fff;
 	}
 }
 

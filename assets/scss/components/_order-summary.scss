@@ -1,0 +1,42 @@
+.order-summary-section {
+	background-color: $bg-color;
+
+	.section-title {
+		font-size: 1.5rem;
+		font-weight: 500;
+		font-family: $font-family-base;
+		color: #222;
+	}
+
+	.order-thankyou {
+		.order-thankyou-heading {
+			font-size: 3.1rem;
+			font-weight: 400;
+		}
+		.order-id {
+			color: $primary;
+		}
+	}
+
+	.order-item {
+		align-items: center;
+		margin-bottom: 0.5rem;
+		&:last-child {
+			margin-bottom: 0;
+		}
+		.order-item-img {
+			width: 48px;
+			height: 48px;
+			background: #e7f6fa;
+			border-radius: 3px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				max-width: 36px;
+				max-height: 36px;
+				object-fit: contain;
+			}
+		}
+	}
+}

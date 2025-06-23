@@ -1,9 +1,10 @@
 $(document).ready(function () {
-	$("#mobileNavToggle").on("click", function () {
+	$("#header").load("components/header-component.html"); // Load header
+	$("#footer").load("components/footer-component.html"); // Load footer
+
+	$("body").on("click", "#mobileNavToggle", function () {
 		$("#mobileNav").collapse("toggle");
 	});
-
-
 });
 
 $(".btn-primary").on("click", function (e) {

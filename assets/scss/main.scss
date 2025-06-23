@@ -1,5 +1,6 @@
 @import "base/variables"; // allows $primary to be impo@importd everywhere
 @import "base/mixins";
+@import "components/buttons";
 @import "components/header";
 @import "components/hero";
 @import "components/browse-categories";
@@ -19,12 +20,18 @@
 @import "components/listing-header";
 @import "components/product-listing";
 
-
 @import "components/pagination";
 
+@import "components/cart";
+
+@import "components/checkout";
+
+@import "components/order-summary";
+
 html {
-  background-color: $bg-color;
+	background-color: $bg-color;
 }
+
 body {
 	font-family: $font-family-base;
 	max-width: 2000px;
@@ -32,10 +39,7 @@ body {
 	margin: 0 auto;
 }
 
-.bg-primary{
-	background-color: $primary !important;
-}
-.btn-primary{
+.bg-primary {
 	background-color: $primary !important;
 }
 

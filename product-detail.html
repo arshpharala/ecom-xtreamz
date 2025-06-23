@@ -94,65 +94,8 @@
 	</head>
 	<body>
 
-		<header class="main-header py-5 border-bottom">
-			<div
-				class="container d-flex justify-content-between align-items-center">
-				<!-- Logo -->
-				<a href="#" class="navbar-brand d-flex align-items-center">
-					<img src="assets/images/logo.png" alt="Logo"
-						class="img-fluid">
-				</a>
-
-				<!-- Navigation (Desktop) -->
-				<nav class="main-nav d-none d-lg-block">
-					<ul class="nav">
-						<li class="nav-item"><a href="index.html"
-								class="nav-link px-4">Home</a></li>
-						<li class="nav-item"><a href="#"
-								class="nav-link px-4">About</a></li>
-						<li class="nav-item"><a href="products.html"
-								class="nav-link px-4">Products</a></li>
-						<li class="nav-item"><a href="#"
-								class="nav-link px-4">Contact</a></li>
-					</ul>
-				</nav>
-
-				<!-- Icons -->
-				<div class="header-icons d-flex align-items-center gap-3">
-
-					<!-- User -->
-					<a href="#" class="icon-link"><i
-							class="bi bi-person fs-5"></i></a>
-
-					<!-- Cart -->
-					<a href="#" class="icon-link position-relative">
-						<i class="bi bi-cart fs-5"></i>
-						<span
-							class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm">2</span>
-					</a>
-
-					<!-- Mobile Nav Toggle -->
-					<button class="btn btn-outline-secondary d-lg-none"
-						id="mobileNavToggle">
-						<i class="bi bi-list fs-4"></i>
-					</button>
-				</div>
-			</div>
-
-			<!-- Mobile Nav -->
-			<div class="mobile-nav d-lg-none collapse px-3 py-2 bg-light"
-				id="mobileNav">
-				<ul class="nav flex-column">
-					<li class="nav-item"><a href="#"
-							class="nav-link">Home</a></li>
-					<li class="nav-item"><a href="#"
-							class="nav-link">About</a></li>
-					<li class="nav-item"><a href="#"
-							class="nav-link">Products</a></li>
-					<li class="nav-item"><a href="#"
-							class="nav-link">Contact</a></li>
-				</ul>
-			</div>
+		<header class="main-header py-5 border-bottom" id="header">
+			<!-- Dynamically load header component here - main.js-->
 		</header>
 
 		<section class="breadcrumb-bar py-2">
@@ -352,57 +295,8 @@
 			</div>
 		</section>
 
-		<footer class="site-footer pt-5">
-			<div class="container">
-				<div class="row gy-4 justify-content-between align-items-start">
-
-					<!-- Logo + Social -->
-					<div class="col-md-4">
-						<img src="assets/images/logo.png" alt="Logo"
-							class="footer-logo mb-3">
-						<div class="social-icons d-flex gap-3">
-							<a href="#" class="text-dark"><i
-									class="bi bi-facebook fs-5"></i></a>
-							<a href="#" class="text-dark"><i
-									class="bi bi-instagram fs-5"></i></a>
-							<a href="#" class="text-dark"><i
-									class="bi bi-twitter fs-5"></i></a>
-						</div>
-					</div>
-
-					<!-- Links Group 1 -->
-					<div class="col-6 col-md-2">
-						<ul class="footer-links list-unstyled">
-							<li><a href="#">About</a></li>
-							<li><a href="#">Products</a></li>
-							<li><a href="#">Categories</a></li>
-						</ul>
-					</div>
-
-					<!-- Links Group 2 -->
-					<div class="col-6 col-md-2">
-						<ul class="footer-links list-unstyled">
-							<li><a href="#">About</a></li>
-							<li><a href="#">Products</a></li>
-							<li><a href="#">Categories</a></li>
-						</ul>
-					</div>
-
-					<!-- Account Links -->
-					<div class="col-6 col-md-2">
-						<ul class="footer-links list-unstyled">
-							<li><a href="#">My Account</a></li>
-							<li><a href="#">Create Account</a></li>
-						</ul>
-					</div>
-
-				</div>
-			</div>
-
-			<!-- Bottom Bar -->
-			<div class="footer-bottom text-white text-center py-4 mt-4">
-				<small>COPYRIGHT 2024 - XTREMEZ | ALL RIGHTS RESERVED</small>
-			</div>
+		<footer class="site-footer pt-5" id="footer">
+			<!-- Dynamically load footer component here - main.js -->
 		</footer>
 
 		<!-- jQuery -->

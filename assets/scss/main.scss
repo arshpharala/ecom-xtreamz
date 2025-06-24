@@ -28,6 +28,11 @@
 
 @import "components/order-summary";
 
+@import "components/login";
+
+@import "components/profile";
+@import "components/saved-card";
+
 html {
 	background-color: $bg-color;
 }
@@ -38,6 +43,18 @@ body {
 	overflow-x: hidden;
 	margin: 0 auto;
 }
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+	background-color: $bg-color;
+}
+
 
 .bg-primary {
 	background-color: $primary !important;

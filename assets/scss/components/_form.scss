@@ -1,6 +1,6 @@
 .theme-select {
 	min-width: 140px;
-	font-size: 1.08rem;
+	font-size: 1rem;
 	font-weight: 500;
 	@include select-shared;
 
@@ -19,20 +19,20 @@
 .theme-input-group {
 	border: none;
 	background: transparent;
-	font-size: 1.1rem;
+	font-size: 1rem;
 	font-weight: 700;
-	padding: 1.2rem 1.3rem;
+	padding: 1rem;
 	outline: none;
 	box-shadow: none !important;
-	
 }
 
 .theme-input {
 	background: transparent;
-	font-size: 1.1rem;
-	padding: 1.2rem 1.3rem;
+	font-size: 1rem;
+	padding: 1rem;
 	outline: none;
 	box-shadow: none !important;
+	border-radius: 0;
 	&:focus {
 		border-color: $primary;
 		// outline: 0;
@@ -41,7 +41,7 @@
 }
 
 .theme-radio,
-.theme0-checkbox {
+.theme-checkbox {
 	&:checked {
 		background-color: $primary;
 		border-color: $primary;
@@ -52,9 +52,9 @@
 	.cc-input-group {
 		border: none;
 		background: transparent;
-		font-size: 1.1rem;
+		font-size: 1rem;
 		font-weight: 700;
-		padding: 1.2rem 1.3rem;
+		padding: 1rem;
 		outline: none;
 		box-shadow: none !important;
 
@@ -82,16 +82,16 @@
 	.search-input {
 		border: none;
 		background: transparent;
-		font-size: 1.1rem;
+		font-size: 1rem;
 		font-weight: 700;
-		padding: 1.2rem 1.3rem;
+		padding: 1rem;
 		outline: none;
 		box-shadow: none !important;
 	}
 	.search-icon {
 		background: #fff;
 		border: none;
-		font-size: 1.8rem;
+		font-size: 1.2rem;
 		color: #222;
 		padding-right: 1.4rem;
 		padding-left: 0;

@@ -1,0 +1,50 @@
+// _login.scss
+
+.login-section {
+	background: $bg-color;
+  min-height: 70.9vh;
+
+	.section-title {
+		font-family: $font-family-base;
+		font-weight: 500;
+		margin: 0;
+		color: $dark;
+	}
+
+	.login-boxes {
+		border-radius: 0;
+		overflow: hidden;
+		min-height: 520px;
+	}
+
+	.login-signup-box {
+		min-height: 520px;
+	}
+
+	.login-signin-box {
+		background: $secondary;
+		min-height: 350px;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+
+		.login-inp {
+			background: $white;
+			color: $dark;
+			
+		}
+	}
+}
+
+// Responsive
+@media (max-width: 767.98px) {
+	.login-section {
+		.login-boxes {
+			flex-direction: column;
+		}
+		.login-signup-box,
+		.login-signin-box {
+			min-height: unset;
+			padding: 2rem 1.2rem;
+		}
+	}
+}

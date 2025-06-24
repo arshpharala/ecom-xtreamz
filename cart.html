@@ -88,273 +88,281 @@
   </head>
   <body>
 
-    <header class="main-header py-5 border-bottom" id="header">
-      <!-- Dynamically load header component here - main.js-->
-    </header>
+    <div class="site-wrapper d-flex flex-column min-vh-100">
 
-    <section class="breadcrumb-bar py-2">
-      <div class="container">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb mb-0 py-2">
-            <li class="breadcrumb-item">
-              <a href="index.html" class="text-white" title="Home">
-                <!-- <i class="bi bi-house"></i> -->
-                Home
-              </a>
-            </li>
-            <li class="breadcrumb-item active text-white" aria-current="page"
-              title="Search">
-              My Cart
-            </li>
-          </ol>
-        </nav>
-      </div>
-    </section>
+      <header class="main-header py-5 border-bottom" id="header">
+        <!-- Dynamically load header component here - main.js-->
+      </header>
 
-    <!-- cart section -->
-    <section class="cart-section py-5">
-      <div class="container">
-        <div class="text-center mb-4">
-          <h2 class="section-title fs-1">My Cart</h2>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div
-              class="cart-selectall d-flex align-items-center mb-3 d-none d-md-flex">
-              <input type="checkbox" id="selectAll"
-                class="cc-form-check-input form-check-input me-2" />
-              <label for="selectAll" class="form-label mb-0">Select
-                all</label>
-            </div>
+      <main class="flex-fill">
+
+        <section class="breadcrumb-bar py-2">
+          <div class="container">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0 py-2">
+                <li class="breadcrumb-item">
+                  <a href="index.html" class="text-white" title="Home">
+                    <!-- <i class="bi bi-house"></i> -->
+                    Home
+                  </a>
+                </li>
+                <li class="breadcrumb-item active text-white"
+                  aria-current="page"
+                  title="Search">
+                  My Cart
+                </li>
+              </ol>
+            </nav>
           </div>
-        </div>
-        <div class="row gx-4 gy-4">
-          <!-- Cart List -->
-          <div class="col-lg-8">
+        </section>
 
-            <div class="cart-list bg-white p-4">
-
-              <div class="cart-items">
-                <!-- Cart Item Start -->
+        <!-- cart section -->
+        <section class="cart-section py-5">
+          <div class="container">
+            <div class="text-center mb-4">
+              <h2 class="section-title fs-1">My Cart</h2>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
                 <div
-                  class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3">
-                  <!-- Select on desktop -->
-                  <div class="col-auto d-none d-md-flex align-items-center">
-                    <input type="checkbox"
-                      class="cc-form-check-input form-check-input me-2" />
-                  </div>
-                  <!-- Image + Title (all screens) -->
-                  <div class="col-4 col-md-4 cart-img-box">
-                    <img src="assets/images/product.png" class="cart-img"
-                      alt="Product" />
-                  </div>
-                  <div
-                    class="col-9 col-md-6 cart-product-title d-flex align-self-start">
-                    <span class="fw-bold m-4">High polo tshirt black color -
-                      Beezeeforch</span>
-                  </div>
-                  <!-- Qty + Delete desktop -->
-                  <div
-                    class="col-md-4 d-none d-md-flex flex-column align-items-end">
-                    <div
-                      class="qty-delete-box d-flex flex-row gap-2">
-                      <div class="cart-qty-box d-flex flex-column">
-                        <div class="p-3 cart-qty-val text-center">1</div>
-                        <button class="btn btn-trash">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                      <div class="d-flex cart-qty-box flex-column">
-                        <button class="btn qty-btn plus border border-1"><i
-                            class="bi bi-plus"></i></button>
+                  class="cart-selectall d-flex align-items-center mb-3 d-none d-md-flex">
+                  <input type="checkbox" id="selectAll"
+                    class="cc-form-check-input form-check-input me-2" />
+                  <label for="selectAll" class="form-label mb-0">Select
+                    all</label>
+                </div>
+              </div>
+            </div>
+            <div class="row gx-4 gy-4">
+              <!-- Cart List -->
+              <div class="col-lg-8">
 
-                        <button class="btn qty-btn minus border border-1"><i
-                            class="bi bi-dash"></i></button>
-                      </div>
+                <div class="cart-list bg-white p-4">
 
-                    </div>
-                  </div>
-                  <!-- Qty + Delete mobile -->
-                  <div class="col-12 d-flex d-md-none mt-2">
+                  <div class="cart-items">
+                    <!-- Cart Item Start -->
                     <div
-                      class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
+                      class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3">
+                      <!-- Select on desktop -->
+                      <div class="col-auto d-none d-md-flex align-items-center">
+                        <input type="checkbox"
+                          class="cc-form-check-input form-check-input me-2" />
+                      </div>
+                      <!-- Image + Title (all screens) -->
+                      <div class="col-4 col-md-4 cart-img-box">
+                        <img src="assets/images/product.png" class="cart-img"
+                          alt="Product" />
+                      </div>
                       <div
-                        class="cart-qty-box d-flex align-items-center">
-                        <button class="btn qty-btn minus"><i
-                            class="bi bi-dash"></i></button>
-                        <div class="cart-qty-val text-center">1</div>
-                        <button class="btn qty-btn plus"><i
-                            class="bi bi-plus"></i></button>
+                        class="col-9 col-md-6 cart-product-title d-flex align-self-start">
+                        <span class="fw-bold m-4">High polo tshirt black color -
+                          Beezeeforch</span>
                       </div>
-                      <button class="btn btn-trash ms-2">
-                        <i class="bi bi-trash"></i>
-                      </button>
+                      <!-- Qty + Delete desktop -->
+                      <div
+                        class="col-md-4 d-none d-md-flex flex-column align-items-end">
+                        <div
+                          class="qty-delete-box d-flex flex-row gap-2">
+                          <div class="cart-qty-box d-flex flex-column">
+                            <div class="p-3 cart-qty-val text-center">1</div>
+                            <button class="btn btn-trash">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </div>
+                          <div class="d-flex cart-qty-box flex-column">
+                            <button class="btn qty-btn plus border border-1"><i
+                                class="bi bi-plus"></i></button>
+
+                            <button class="btn qty-btn minus border border-1"><i
+                                class="bi bi-dash"></i></button>
+                          </div>
+
+                        </div>
+                      </div>
+                      <!-- Qty + Delete mobile -->
+                      <div class="col-12 d-flex d-md-none mt-2">
+                        <div
+                          class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
+                          <div
+                            class="cart-qty-box d-flex align-items-center">
+                            <button class="btn qty-btn minus"><i
+                                class="bi bi-dash"></i></button>
+                            <div class="cart-qty-val text-center">1</div>
+                            <button class="btn qty-btn plus"><i
+                                class="bi bi-plus"></i></button>
+                          </div>
+                          <button class="btn btn-trash ms-2">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </div>
+                      </div>
                     </div>
+                    <!-- Cart Item End -->
+                    <!-- Cart Item Start -->
+                    <div
+                      class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3">
+                      <!-- Select on desktop -->
+                      <div class="col-auto d-none d-md-flex align-items-center">
+                        <input type="checkbox"
+                          class="cc-form-check-input form-check-input me-2" />
+                      </div>
+                      <!-- Image + Title (all screens) -->
+                      <div class="col-4 col-md-4 cart-img-box">
+                        <img src="assets/images/product.png" class="cart-img"
+                          alt="Product" />
+                      </div>
+                      <div
+                        class="col-9 col-md-6 cart-product-title d-flex align-self-start">
+                        <span class="fw-bold m-4">High polo tshirt black color -
+                          Beezeeforch</span>
+                      </div>
+                      <!-- Qty + Delete desktop -->
+                      <div
+                        class="col-md-4 d-none d-md-flex flex-column align-items-end">
+                        <div
+                          class="qty-delete-box d-flex flex-row gap-2">
+                          <div class="cart-qty-box d-flex flex-column">
+                            <div class="cart-qty-val text-center">1</div>
+                            <button class="btn btn-trash">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </div>
+                          <div class="d-flex cart-qty-box flex-column">
+                            <button class="btn qty-btn plus border border-1"><i
+                                class="bi bi-plus"></i></button>
+
+                            <button class="btn qty-btn minus border border-1"><i
+                                class="bi bi-dash"></i></button>
+                          </div>
+
+                        </div>
+                      </div>
+                      <!-- Qty + Delete mobile -->
+                      <div class="col-12 d-flex d-md-none mt-2">
+                        <div
+                          class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
+                          <div
+                            class="cart-qty-box d-flex align-items-center">
+                            <button class="btn qty-btn minus"><i
+                                class="bi bi-dash"></i></button>
+                            <div class="cart-qty-val text-center">1</div>
+                            <button class="btn qty-btn plus"><i
+                                class="bi bi-plus"></i></button>
+                          </div>
+                          <button class="btn btn-trash ms-2">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Cart Item End -->
+                    <!-- Cart Item Start -->
+                    <div
+                      class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3">
+                      <!-- Select on desktop -->
+                      <div class="col-auto d-none d-md-flex align-items-center">
+                        <input type="checkbox"
+                          class="cc-form-check-input form-check-input me-2" />
+                      </div>
+                      <!-- Image + Title (all screens) -->
+                      <div class="col-4 col-md-4 cart-img-box">
+                        <img src="assets/images/product.png" class="cart-img"
+                          alt="Product" />
+                      </div>
+                      <div
+                        class="col-9 col-md-6 cart-product-title d-flex align-self-start">
+                        <span class="fw-bold m-4">High polo tshirt black color -
+                          Beezeeforch</span>
+                      </div>
+                      <!-- Qty + Delete desktop -->
+                      <div
+                        class="col-md-4 d-none d-md-flex flex-column align-items-end">
+                        <div
+                          class="qty-delete-box d-flex flex-row gap-2">
+                          <div class="cart-qty-box d-flex flex-column">
+                            <div class="p-3 cart-qty-val text-center">1</div>
+                            <button class="btn btn-trash">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </div>
+                          <div class="d-flex cart-qty-box flex-column">
+                            <button class="btn qty-btn plus border border-1"><i
+                                class="bi bi-plus"></i></button>
+
+                            <button class="btn qty-btn minus border border-1"><i
+                                class="bi bi-dash"></i></button>
+                          </div>
+
+                        </div>
+                      </div>
+                      <!-- Qty + Delete mobile -->
+                      <div class="col-12 d-flex d-md-none mt-2">
+                        <div
+                          class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
+                          <div
+                            class="cart-qty-box d-flex align-items-center">
+                            <button class="btn qty-btn minus"><i
+                                class="bi bi-dash"></i></button>
+                            <div class="cart-qty-val text-center">1</div>
+                            <button class="btn qty-btn plus"><i
+                                class="bi bi-plus"></i></button>
+                          </div>
+                          <button class="btn btn-trash ms-2">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Cart Item End -->
+
                   </div>
                 </div>
-                <!-- Cart Item End -->
-                <!-- Cart Item Start -->
-                <div
-                  class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3">
-                  <!-- Select on desktop -->
-                  <div class="col-auto d-none d-md-flex align-items-center">
-                    <input type="checkbox"
-                      class="cc-form-check-input form-check-input me-2" />
-                  </div>
-                  <!-- Image + Title (all screens) -->
-                  <div class="col-4 col-md-4 cart-img-box">
-                    <img src="assets/images/product.png" class="cart-img"
-                      alt="Product" />
-                  </div>
-                  <div
-                    class="col-9 col-md-6 cart-product-title d-flex align-self-start">
-                    <span class="fw-bold m-4">High polo tshirt black color -
-                      Beezeeforch</span>
-                  </div>
-                  <!-- Qty + Delete desktop -->
-                  <div
-                    class="col-md-4 d-none d-md-flex flex-column align-items-end">
-                    <div
-                      class="qty-delete-box d-flex flex-row gap-2">
-                      <div class="cart-qty-box d-flex flex-column">
-                        <div class="cart-qty-val text-center">1</div>
-                        <button class="btn btn-trash">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                      <div class="d-flex cart-qty-box flex-column">
-                        <button class="btn qty-btn plus border border-1"><i
-                            class="bi bi-plus"></i></button>
-
-                        <button class="btn qty-btn minus border border-1"><i
-                            class="bi bi-dash"></i></button>
-                      </div>
-
+              </div>
+              <!-- Cart Summary -->
+              <div class="col-lg-4">
+                <div class="cart-summary bg-white p-4">
+                  <ul class="list-unstyled mb-4">
+                    <li class="d-flex justify-content-between mb-2">
+                      <span>Subtotal</span>
+                      <span>79.00 AED</span>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                      <span>Texas</span>
+                      <span>0.00 AED</span>
+                    </li>
+                    <li
+                      class="d-flex justify-content-between fw-bold border-top pt-2">
+                      <span>Total</span>
+                      <span class="text-black">79.00 AED</span>
+                    </li>
+                  </ul>
+                  <form class="cc-form w-100 py-4">
+                    <div class="input-group border border-black">
+                      <input type="text" class="form-control border-0"
+                        placeholder="Gift card number" />
+                      <span class="input-group-text border-0 bg-white pe-2">
+                        <button class="btn btn-dark cc-button btn-apply"
+                          type="button">Apply</button>
+                      </span>
                     </div>
-                  </div>
-                  <!-- Qty + Delete mobile -->
-                  <div class="col-12 d-flex d-md-none mt-2">
-                    <div
-                      class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
-                      <div
-                        class="cart-qty-box d-flex align-items-center">
-                        <button class="btn qty-btn minus"><i
-                            class="bi bi-dash"></i></button>
-                        <div class="cart-qty-val text-center">1</div>
-                        <button class="btn qty-btn plus"><i
-                            class="bi bi-plus"></i></button>
-                      </div>
-                      <button class="btn btn-trash ms-2">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                    </div>
-                  </div>
+                  </form>
+                  <button class="btn btn-secondary btn-checkout w-100">
+                    CHECKOUT <img src="assets/icons/right-arrow.png"
+                      alt="arrow-icon" class="ms-1">
+                  </button>
                 </div>
-                <!-- Cart Item End -->
-                <!-- Cart Item Start -->
-                <div
-                  class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3">
-                  <!-- Select on desktop -->
-                  <div class="col-auto d-none d-md-flex align-items-center">
-                    <input type="checkbox"
-                      class="cc-form-check-input form-check-input me-2" />
-                  </div>
-                  <!-- Image + Title (all screens) -->
-                  <div class="col-4 col-md-4 cart-img-box">
-                    <img src="assets/images/product.png" class="cart-img"
-                      alt="Product" />
-                  </div>
-                  <div
-                    class="col-9 col-md-6 cart-product-title d-flex align-self-start">
-                    <span class="fw-bold m-4">High polo tshirt black color -
-                      Beezeeforch</span>
-                  </div>
-                  <!-- Qty + Delete desktop -->
-                  <div
-                    class="col-md-4 d-none d-md-flex flex-column align-items-end">
-                    <div
-                      class="qty-delete-box d-flex flex-row gap-2">
-                      <div class="cart-qty-box d-flex flex-column">
-                        <div class="p-3 cart-qty-val text-center">1</div>
-                        <button class="btn btn-trash">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                      <div class="d-flex cart-qty-box flex-column">
-                        <button class="btn qty-btn plus border border-1"><i
-                            class="bi bi-plus"></i></button>
-
-                        <button class="btn qty-btn minus border border-1"><i
-                            class="bi bi-dash"></i></button>
-                      </div>
-
-                    </div>
-                  </div>
-                  <!-- Qty + Delete mobile -->
-                  <div class="col-12 d-flex d-md-none mt-2">
-                    <div
-                      class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
-                      <div
-                        class="cart-qty-box d-flex align-items-center">
-                        <button class="btn qty-btn minus"><i
-                            class="bi bi-dash"></i></button>
-                        <div class="cart-qty-val text-center">1</div>
-                        <button class="btn qty-btn plus"><i
-                            class="bi bi-plus"></i></button>
-                      </div>
-                      <button class="btn btn-trash ms-2">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <!-- Cart Item End -->
-
-
               </div>
             </div>
           </div>
-          <!-- Cart Summary -->
-          <div class="col-lg-4">
-            <div class="cart-summary bg-white p-4">
-              <ul class="list-unstyled mb-4">
-                <li class="d-flex justify-content-between mb-2">
-                  <span>Subtotal</span>
-                  <span>79.00 AED</span>
-                </li>
-                <li class="d-flex justify-content-between mb-2">
-                  <span>Texas</span>
-                  <span>0.00 AED</span>
-                </li>
-                <li
-                  class="d-flex justify-content-between fw-bold border-top pt-2">
-                  <span>Total</span>
-                  <span class="text-black">79.00 AED</span>
-                </li>
-              </ul>
-              <form class="cc-form w-100 py-4">
-                <div class="input-group border border-black">
-                  <input type="text" class="form-control border-0"
-                    placeholder="Gift card number" />
-                  <span class="input-group-text border-0 bg-white pe-2">
-                    <button class="btn btn-dark cc-button btn-apply"
-                      type="button">Apply</button>
-                  </span>
-                </div>
-              </form>
-              <button class="btn btn-checkout w-100 py-2">
-                CHECKOUT <img src="assets/icons/right-arrow.png"
-                  alt="arrow-icon" class="ms-1">
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <footer class="site-footer pt-5" id="footer">
-      <!-- Dynamically load footer component here - main.js -->
-    </footer>
+      </main>
+
+      <footer class="site-footer pt-5" id="footer">
+        <!-- Dynamically load footer component here - main.js -->
+      </footer>
+
+    </div>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

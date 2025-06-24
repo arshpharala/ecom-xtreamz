@@ -93,370 +93,388 @@
   </head>
   <body>
 
-    <header class="main-header py-5 border-bottom" id="header">
-      <!-- Dynamically load header component here - main.js-->
-    </header>
+    <div class="site-wrapper d-flex flex-column min-vh-100">
 
-    <section class="breadcrumb-bar py-2">
-      <div class="container">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb mb-0 py-2">
-            <li class="breadcrumb-item">
-              <a href="#" class="text-white" title="Home">
-                <!-- <i class="bi bi-house"></i> -->
-                Home
-              </a>
-            </li>
-            <li class="breadcrumb-item active text-white" aria-current="page"
-              title="Categories">
-              Categories
-            </li>
-          </ol>
-        </nav>
-      </div>
-    </section>
+      <header class="main-header py-5 border-bottom" id="header">
+        <!-- Dynamically load header component here - main.js-->
+      </header>
 
-    <section class="listing-header py-5">
-      <div class="container">
-        <div class="row align-items-center g-3">
-          <div class="col-lg-3 d-flex align-items-center">
-            <h2 class="section-title fw-normal mb-0"
-              style="font-size:2.3rem;">Category</h2>
-          </div>
-          <div class="col-lg-6 d-flex align-items-center">
-            <form class="cc-search-bar w-100">
-              <div class="input-group search-group">
-                <input type="text" class="form-control search-input fw-bold"
-                  placeholder="Search Here" />
-                <span class="input-group-text search-icon">
-                  <i class="bi bi-search"></i>
-                </span>
-              </div>
-            </form>
-            <!-- Filter Icon (shows only on mobile) -->
-            <button class="btn filter-btn d-md-none ms-2" id="openFilterModal"
-              aria-label="Open Filters">
-              <i class="bi bi-funnel-fill fs-2"></i>
-            </button>
-          </div>
-          <div
-            class="col-lg-3 d-none d-md-flex align-items-center justify-content-end gap-3">
-            <span class="fw-bold sort-label text-nowrap">Sort By</span>
-            <select class="form-select theme-select">
-              <option>Featured</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-              <option>Newest</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
+      <main class="flex-fill">
 
-    <section class="product-listing-page py-2">
-      <div class="container">
-
-        <div class="row gx-5">
-          <!-- Sidebar: Filters -->
-          <aside class="col-lg-3 col-md-4 mb-4 mt-3 d-none d-md-block">
-            <div class="sidebar-filters pe-4">
-              <!-- Category -->
-              <div class="mb-4">
-                <ul class="category-list list-unstyled mb-0">
-                  <li
-                    class="d-flex align-items-center py-3 border-bottom active">
-                    <img src="assets/icons/shirt.png" class="me-2" width="22"
-                      alt> Clothing <span
-                      class="ms-auto badge text-dark">30</span>
-                  </li>
-                  <li class="d-flex align-items-center py-3 border-bottom">
-                    <i class="bi bi-headphones me-2"></i> Technology <span
-                      class="ms-auto badge text-dark">40</span>
-                  </li>
-                  <li class="d-flex align-items-center py-3 border-bottom">
-                    <i class="bi bi-recycle me-2"></i> Sustainability <span
-                      class="ms-auto badge text-dark">20</span>
-                  </li>
-                  <li class="d-flex align-items-center py-3 border-bottom">
-                    <i class="bi bi-briefcase me-2"></i> Travel Bag <span
-                      class="ms-auto badge text-dark">60</span>
-                  </li>
-                  <li class="d-flex align-items-center py-3 border-bottom">
-                    <i class="bi bi-journal-bookmark me-2"></i> Office &amp;
-                    Writing <span
-                      class="ms-auto badge text-dark">10</span>
-                  </li>
-                </ul>
-              </div>
-
-              <!-- Brands -->
-              <div class="mb-4">
-                <h5 class="fs-3 mb-3">Brands</h5>
-                <select class="form-select theme-select">
-                  <option selected>–</option>
-                  <option>BOSS</option>
-                  <option>Chanel</option>
-                  <option>Adidas</option>
-                  <option>Ikasu</option>
-                </select>
-              </div>
-
-              <!-- Primary Color -->
-              <div class="mb-4">
-                <h5 class="fs-3 mb-3">Primary Color</h5>
-                <select class="form-select theme-select">
-                  <option selected>Black</option>
-                  <option>Blue</option>
-                  <option>Red</option>
-                  <option>White</option>
-                </select>
-              </div>
-
-              <!-- Tags -->
-              <div class="mb-4">
-                <h5 class="fs-3 mb-3x ">Tags</h5>
-                <div class="form-check">
-                  <input class="form-check-input cc-form-check-input"
-                    type="checkbox" id="tag1">
-                  <label class="form-check-label" for="tag1">Sustainable</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input cc-form-check-input"
-                    type="checkbox" id="tag2">
-                  <label class="form-check-label" for="tag2">New Arrival</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input cc-form-check-input"
-                    type="checkbox" id="tag3">
-                  <label class="form-check-label" for="tag3">On Sale</label>
-                </div>
-              </div>
-
-              <!-- Price Range -->
-              <div class="price-range-wrapper cc-price-range mb-4">
-                <div
-                  class="d-flex justify-content-between align-items-center mb-2">
-                  <span id="priceLabelMinSidebar" class="price-label">5
-                    AED</span>
-                  <span id="priceLabelMaxSidebar" class="price-label">4000
-                    AED</span>
-                </div>
-                <div id="price-slider-sidebar"></div>
-              </div>
-
-            </div>
-          </aside>
-
-          <!-- Main Content: Product List -->
-          <main class="col-lg-9 col-md-8">
-
-            <!-- Product Grid -->
-            <div class="row g-4">
-              <!-- Product Card Start -->
-              <div class="col-md-4 col-sm-12">
-                <div
-                  class="product-card h-100 d-flex flex-column align-items-center text-center">
-                  <!-- Image Block -->
-                  <div class="product-image-box mb-3">
-                    <img src="assets/images/product-1.png"
-                      alt="Product Name"
-                      class="img-fluid">
-                  </div>
-
-                  <!-- Title Block -->
-                  <div class="product-title-box">
-                    <h6 class="product-title">
-                      BREDA - CHANGE Collection Insulated Water
-                      Bottle - Green
-                    </h6>
-                  </div>
-
-                  <!-- Price + Cart -->
-                  <div
-                    class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                    <span class="price fs-4 fw-bold">70 AED</span>
-                    <button class="btn cart-btn">
-                      <i class="bi bi-cart"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- Product Card End -->
-              <!-- Product Card Start -->
-              <div class="col-md-4 col-sm-12">
-                <div
-                  class="product-card h-100 d-flex flex-column align-items-center text-center">
-                  <!-- Image Block -->
-                  <div class="product-image-box mb-3">
-                    <img src="assets/images/product-1.png"
-                      alt="Product Name"
-                      class="img-fluid">
-                  </div>
-
-                  <!-- Title Block -->
-                  <div class="product-title-box">
-                    <h6 class="product-title">
-                      BREDA - CHANGE Collection Insulated Water
-                      Bottle - Green
-                    </h6>
-                  </div>
-
-                  <!-- Price + Cart -->
-                  <div
-                    class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                    <span class="price fs-4 fw-bold">70 AED</span>
-                    <button class="btn cart-btn">
-                      <i class="bi bi-cart"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- Product Card End -->
-              <!-- Product Card Start -->
-              <div class="col-md-4 col-sm-12">
-                <div
-                  class="product-card h-100 d-flex flex-column align-items-center text-center">
-                  <!-- Image Block -->
-                  <div class="product-image-box mb-3">
-                    <img src="assets/images/product-1.png"
-                      alt="Product Name"
-                      class="img-fluid">
-                  </div>
-
-                  <!-- Title Block -->
-                  <div class="product-title-box">
-                    <h6 class="product-title">
-                      BREDA - CHANGE Collection Insulated Water
-                      Bottle - Green
-                    </h6>
-                  </div>
-
-                  <!-- Price + Cart -->
-                  <div
-                    class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                    <span class="price fs-4 fw-bold">70 AED</span>
-                    <button class="btn cart-btn">
-                      <i class="bi bi-cart"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- Product Card End -->
-              <!-- Product Card Start -->
-              <div class="col-md-4 col-sm-12">
-                <div
-                  class="product-card h-100 d-flex flex-column align-items-center text-center">
-                  <!-- Image Block -->
-                  <div class="product-image-box mb-3">
-                    <img src="assets/images/product-1.png"
-                      alt="Product Name"
-                      class="img-fluid">
-                  </div>
-
-                  <!-- Title Block -->
-                  <div class="product-title-box">
-                    <h6 class="product-title">
-                      BREDA - CHANGE Collection Insulated Water
-                      Bottle - Green
-                    </h6>
-                  </div>
-
-                  <!-- Price + Cart -->
-                  <div
-                    class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                    <span class="price fs-4 fw-bold">70 AED</span>
-                    <button class="btn cart-btn">
-                      <i class="bi bi-cart"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- Product Card End -->
-              <!-- Product Card Start -->
-              <div class="col-md-4 col-sm-12">
-                <div
-                  class="product-card h-100 d-flex flex-column align-items-center text-center">
-                  <!-- Image Block -->
-                  <div class="product-image-box mb-3">
-                    <img src="assets/images/product-1.png"
-                      alt="Product Name"
-                      class="img-fluid">
-                  </div>
-
-                  <!-- Title Block -->
-                  <div class="product-title-box">
-                    <h6 class="product-title">
-                      BREDA - CHANGE Collection Insulated Water
-                      Bottle - Green
-                    </h6>
-                  </div>
-
-                  <!-- Price + Cart -->
-                  <div
-                    class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                    <span class="price fs-4 fw-bold">70 AED</span>
-                    <button class="btn cart-btn">
-                      <i class="bi bi-cart"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- Product Card End -->
-              <!-- Product Card Start -->
-              <div class="col-md-4 col-sm-12">
-                <div
-                  class="product-card h-100 d-flex flex-column align-items-center text-center">
-                  <!-- Image Block -->
-                  <div class="product-image-box mb-3">
-                    <img src="assets/images/product-1.png"
-                      alt="Product Name"
-                      class="img-fluid">
-                  </div>
-
-                  <!-- Title Block -->
-                  <div class="product-title-box">
-                    <h6 class="product-title">
-                      BREDA - CHANGE Collection Insulated Water
-                      Bottle - Green
-                    </h6>
-                  </div>
-
-                  <!-- Price + Cart -->
-                  <div
-                    class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                    <span class="price fs-4 fw-bold">70 AED</span>
-                    <button class="btn cart-btn">
-                      <i class="bi bi-cart"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- Product Card End -->
-            </div>
-
-            <!-- Pagination -->
-            <nav class="d-flex justify-content-center my-5 pagination-section">
-              <ul class="pagination mb-0">
-                <li class="page-item"><a class="page-link" href="#"><i
-                      class="bi bi-chevron-left"></i></a></li>
-                <li class="page-item active"><a class="page-link"
-                    href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item"><a class="page-link" href="#"><i
-                      class="bi bi-chevron-right"></i></a></li>
-              </ul>
+        <section class="breadcrumb-bar py-2">
+          <div class="container">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0 py-2">
+                <li class="breadcrumb-item">
+                  <a href="#" class="text-white" title="Home">
+                    <!-- <i class="bi bi-house"></i> -->
+                    Home
+                  </a>
+                </li>
+                <li class="breadcrumb-item active text-white"
+                  aria-current="page"
+                  title="Categories">
+                  Categories
+                </li>
+              </ol>
             </nav>
-          </main>
-        </div>
-      </div>
-    </section>
+          </div>
+        </section>
 
-    <footer class="site-footer pt-5" id="footer">
-      <!-- Dynamically load footer component here - main.js -->
-    </footer>
+        <section class="listing-header py-5">
+          <div class="container">
+            <div class="row align-items-center g-3">
+              <div class="col-lg-3 d-flex align-items-center">
+                <h2 class="section-title fw-normal mb-0"
+                  style="font-size:2.3rem;">Category</h2>
+              </div>
+              <div class="col-lg-6 d-flex align-items-center">
+                <form class="cc-search-bar w-100">
+                  <div class="input-group search-group">
+                    <input type="text" class="form-control search-input fw-bold"
+                      placeholder="Search Here" />
+                    <span class="input-group-text search-icon">
+                      <i class="bi bi-search"></i>
+                    </span>
+                  </div>
+                </form>
+                <!-- Filter Icon (shows only on mobile) -->
+                <button class="btn filter-btn d-md-none ms-2"
+                  id="openFilterModal"
+                  aria-label="Open Filters">
+                  <i class="bi bi-funnel-fill fs-2"></i>
+                </button>
+              </div>
+              <div
+                class="col-lg-3 d-none d-md-flex align-items-center justify-content-end gap-3">
+                <span class="fw-bold sort-label text-nowrap">Sort By</span>
+                <select class="form-select theme-select border-0">
+                  <option>Featured</option>
+                  <option>Price: Low to High</option>
+                  <option>Price: High to Low</option>
+                  <option>Newest</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="product-listing-page py-2">
+          <div class="container">
+
+            <div class="row gx-5">
+              <!-- Sidebar: Filters -->
+              <aside class="col-lg-3 col-md-4 mb-4 mt-3 d-none d-md-block">
+                <div class="sidebar-filters pe-4">
+                  <!-- Category -->
+                  <div class="mb-4">
+                    <ul class="category-list list-unstyled mb-0">
+                      <li
+                        class="d-flex align-items-center py-3 border-bottom active">
+                        <img src="assets/icons/shirt.png" class="me-2"
+                          width="22"
+                          alt> Clothing <span
+                          class="ms-auto badge text-dark">30</span>
+                      </li>
+                      <li class="d-flex align-items-center py-3 border-bottom">
+                        <i class="bi bi-headphones me-2"></i> Technology <span
+                          class="ms-auto badge text-dark">40</span>
+                      </li>
+                      <li class="d-flex align-items-center py-3 border-bottom">
+                        <i class="bi bi-recycle me-2"></i> Sustainability <span
+                          class="ms-auto badge text-dark">20</span>
+                      </li>
+                      <li class="d-flex align-items-center py-3 border-bottom">
+                        <i class="bi bi-briefcase me-2"></i> Travel Bag <span
+                          class="ms-auto badge text-dark">60</span>
+                      </li>
+                      <li class="d-flex align-items-center py-3 border-bottom">
+                        <i class="bi bi-journal-bookmark me-2"></i> Office &amp;
+                        Writing <span
+                          class="ms-auto badge text-dark">10</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Brands -->
+                  <div class="mb-4">
+                    <h5 class="fs-3 mb-3">Brands</h5>
+                    <select class="form-select theme-select">
+                      <option selected>–</option>
+                      <option>BOSS</option>
+                      <option>Chanel</option>
+                      <option>Adidas</option>
+                      <option>Ikasu</option>
+                    </select>
+                  </div>
+
+                  <!-- Primary Color -->
+                  <div class="mb-4">
+                    <h5 class="fs-3 mb-3">Primary Color</h5>
+                    <select class="form-select theme-select">
+                      <option selected>Black</option>
+                      <option>Blue</option>
+                      <option>Red</option>
+                      <option>White</option>
+                    </select>
+                  </div>
+
+                  <!-- Tags -->
+                  <div class="mb-4">
+                    <h5 class="fs-3 mb-3x ">Tags</h5>
+                    <div class="form-check">
+                      <input class="form-check-input cc-form-check-input"
+                        type="checkbox" id="tag1">
+                      <label class="form-check-label"
+                        for="tag1">Sustainable</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input cc-form-check-input"
+                        type="checkbox" id="tag2">
+                      <label class="form-check-label" for="tag2">New
+                        Arrival</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input cc-form-check-input"
+                        type="checkbox" id="tag3">
+                      <label class="form-check-label" for="tag3">On Sale</label>
+                    </div>
+                  </div>
+
+                  <!-- Price Range -->
+                  <div class="price-range-wrapper cc-price-range mb-4">
+                    <div
+                      class="d-flex justify-content-between align-items-center mb-2">
+                      <span id="priceLabelMinSidebar" class="price-label">5
+                        AED</span>
+                      <span id="priceLabelMaxSidebar" class="price-label">4000
+                        AED</span>
+                    </div>
+                    <div id="price-slider-sidebar"></div>
+                  </div>
+
+                </div>
+              </aside>
+
+              <!-- Main Content: Product List -->
+              <main class="col-lg-9 col-md-8">
+
+                <!-- Product Grid -->
+                <div class="row g-4">
+                  <!-- Product Card Start -->
+                  <div class="col-md-4 col-sm-12">
+                    <div
+                      class="product-card h-100 d-flex flex-column align-items-center text-center">
+                      <!-- Image Block -->
+                      <div class="product-image-box mb-3">
+                        <img src="assets/images/product-1.png"
+                          alt="Product Name"
+                          class="img-fluid">
+                      </div>
+
+                      <!-- Title Block -->
+                      <div class="product-title-box">
+                        <h6 class="product-title">
+                          BREDA - CHANGE Collection Insulated Water
+                          Bottle - Green
+                        </h6>
+                      </div>
+
+                      <!-- Price + Cart -->
+                      <div
+                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                        <span class="price fs-4 fw-bold">70 AED</span>
+                        <button class="btn cart-btn">
+                          <i class="bi bi-cart"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Product Card End -->
+                  <!-- Product Card Start -->
+                  <div class="col-md-4 col-sm-12">
+                    <div
+                      class="product-card h-100 d-flex flex-column align-items-center text-center">
+                      <!-- Image Block -->
+                      <div class="product-image-box mb-3">
+                        <img src="assets/images/product-1.png"
+                          alt="Product Name"
+                          class="img-fluid">
+                      </div>
+
+                      <!-- Title Block -->
+                      <div class="product-title-box">
+                        <h6 class="product-title">
+                          BREDA - CHANGE Collection Insulated Water
+                          Bottle - Green
+                        </h6>
+                      </div>
+
+                      <!-- Price + Cart -->
+                      <div
+                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                        <span class="price fs-4 fw-bold">70 AED</span>
+                        <button class="btn cart-btn">
+                          <i class="bi bi-cart"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Product Card End -->
+                  <!-- Product Card Start -->
+                  <div class="col-md-4 col-sm-12">
+                    <div
+                      class="product-card h-100 d-flex flex-column align-items-center text-center">
+                      <!-- Image Block -->
+                      <div class="product-image-box mb-3">
+                        <img src="assets/images/product-1.png"
+                          alt="Product Name"
+                          class="img-fluid">
+                      </div>
+
+                      <!-- Title Block -->
+                      <div class="product-title-box">
+                        <h6 class="product-title">
+                          BREDA - CHANGE Collection Insulated Water
+                          Bottle - Green
+                        </h6>
+                      </div>
+
+                      <!-- Price + Cart -->
+                      <div
+                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                        <span class="price fs-4 fw-bold">70 AED</span>
+                        <button class="btn cart-btn">
+                          <i class="bi bi-cart"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Product Card End -->
+                  <!-- Product Card Start -->
+                  <div class="col-md-4 col-sm-12">
+                    <div
+                      class="product-card h-100 d-flex flex-column align-items-center text-center">
+                      <!-- Image Block -->
+                      <div class="product-image-box mb-3">
+                        <img src="assets/images/product-1.png"
+                          alt="Product Name"
+                          class="img-fluid">
+                      </div>
+
+                      <!-- Title Block -->
+                      <div class="product-title-box">
+                        <h6 class="product-title">
+                          BREDA - CHANGE Collection Insulated Water
+                          Bottle - Green
+                        </h6>
+                      </div>
+
+                      <!-- Price + Cart -->
+                      <div
+                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                        <span class="price fs-4 fw-bold">70 AED</span>
+                        <button class="btn cart-btn">
+                          <i class="bi bi-cart"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Product Card End -->
+                  <!-- Product Card Start -->
+                  <div class="col-md-4 col-sm-12">
+                    <div
+                      class="product-card h-100 d-flex flex-column align-items-center text-center">
+                      <!-- Image Block -->
+                      <div class="product-image-box mb-3">
+                        <img src="assets/images/product-1.png"
+                          alt="Product Name"
+                          class="img-fluid">
+                      </div>
+
+                      <!-- Title Block -->
+                      <div class="product-title-box">
+                        <h6 class="product-title">
+                          BREDA - CHANGE Collection Insulated Water
+                          Bottle - Green
+                        </h6>
+                      </div>
+
+                      <!-- Price + Cart -->
+                      <div
+                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                        <span class="price fs-4 fw-bold">70 AED</span>
+                        <button class="btn cart-btn">
+                          <i class="bi bi-cart"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Product Card End -->
+                  <!-- Product Card Start -->
+                  <div class="col-md-4 col-sm-12">
+                    <div
+                      class="product-card h-100 d-flex flex-column align-items-center text-center">
+                      <!-- Image Block -->
+                      <div class="product-image-box mb-3">
+                        <img src="assets/images/product-1.png"
+                          alt="Product Name"
+                          class="img-fluid">
+                      </div>
+
+                      <!-- Title Block -->
+                      <div class="product-title-box">
+                        <h6 class="product-title">
+                          BREDA - CHANGE Collection Insulated Water
+                          Bottle - Green
+                        </h6>
+                      </div>
+
+                      <!-- Price + Cart -->
+                      <div
+                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                        <span class="price fs-4 fw-bold">70 AED</span>
+                        <button class="btn cart-btn">
+                          <i class="bi bi-cart"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Product Card End -->
+                </div>
+
+                <!-- Pagination -->
+                <nav
+                  class="d-flex justify-content-center my-5 pagination-section">
+                  <ul class="pagination mb-0">
+                    <li class="page-item"><a class="page-link" href="#"><i
+                          class="bi bi-chevron-left"></i></a></li>
+                    <li class="page-item active"><a class="page-link"
+                        href="#">1</a></li>
+                    <li class="page-item"><a class="page-link"
+                        href="#">2</a></li>
+                    <li class="page-item"><a class="page-link"
+                        href="#">3</a></li>
+                    <li class="page-item"><a class="page-link"
+                        href="#">4</a></li>
+                    <li class="page-item"><a class="page-link"
+                        href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" href="#"><i
+                          class="bi bi-chevron-right"></i></a></li>
+                  </ul>
+                </nav>
+              </main>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <footer class="site-footer pt-5" id="footer">
+        <!-- Dynamically load footer component here - main.js -->
+      </footer>
+
+    </div>
 
     <!-- Filter Modal / Offcanvas -->
     <div class="modal fade" id="filterModal" tabindex="-1"

@@ -1,0 +1,134 @@
+.profile-section {
+	background-color: $bg-color;
+
+	.section-title {
+		font-family: $font-family-base;
+		font-weight: 500;
+		margin: 0;
+		color: #222;
+	}
+
+	.profile-sidebar {
+		font-size: 0.9rem;
+		color: #222;
+		a {
+			display: block;
+			padding: 0.5rem 1rem;
+			color: #222;
+			text-decoration: none;
+			border-left: 3px solid transparent;
+			transition: all 0.3s ease;
+			&.active {
+				color: $secondary;
+				border-left-color: $secondary;
+			}
+			&:hover {
+				color: $secondary;
+			}
+		}
+	}
+
+	.profile-main {
+		max-width: 800px;
+		margin: 0 auto;
+
+		.input-group {
+			border: 1px solid #ddd;
+			border-radius: 2px;
+			overflow: hidden;
+
+			.btn-edit {
+				background-color: #f5f5f5;
+				border: none;
+				width: 50px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #666;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+				&:hover {
+					background-color: #e0e0e0;
+					color: $primary;
+				}
+				i {
+					font-size: 1.2rem;
+				}
+			}
+		}
+
+		.gender-toggle {
+			border: 1px solid #ddd;
+			border-radius: 0;
+
+			.btn-outline-primary {
+				margin: 0.25rem !important;
+				padding: 0.75rem 2rem !important;
+				border: 0;
+				&.active {
+					background-color: $primary !important;
+					color: $white !important;
+					border-color: $primary;
+				}
+			}
+		}
+	}
+
+	.card-list-box {
+		.btn-delete-card {
+			background: #f5f5f5;
+			border: none;
+			color: #888;
+			font-size: 1.2rem;
+			border-radius: 0px;
+			&:hover {
+				background: #ffeaea;
+				color: #ff1744;
+			}
+		}
+	}
+
+  .order-list {
+    .order-item {
+			border-bottom: 2px dotted #ddd;
+
+			&:last-child {
+				border-bottom: none;
+			}
+
+      .order-img-box {
+        width: 64px;
+        height: 64px;
+        background: #e7f6fa;
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1.2rem;
+        .order-img {
+          max-width: 54px;
+          max-height: 54px;
+          object-fit: contain;
+        }
+      }
+      .order-title {
+        font-size: 1.13rem;
+        color: #232323;
+      }
+      .order-price {
+        font-size: 1.15rem;
+      }
+    }
+
+  }
+}
+
+@media (max-width: 767px) {
+	.profile-section {
+		.profile-main {
+			.btn-save {
+				width: 100% !important;
+			}
+		}
+	}
+}

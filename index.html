@@ -94,519 +94,565 @@
     </head>
     <body>
 
-        <header class="main-header py-5 border-bottom" id="header">
-            <!-- Dynamically load header component here - main.js-->
-        </header>
+        <div class="site-wrapper d-flex flex-column min-vh-100">
 
-        <section class="hero-section d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 text-white hero-text">
-                        <h2 class="hero-subtitle">Corporate</h2>
-                        <h1 class="hero-title">Gift Items</h1>
-                        <p class="hero-description">
-                            Xtremez is the Middle East's largest and leading
-                            corporate gifts
-                            supplier and solution provider,
-                            with deep expertise in branded merchandise,
-                            corporate giveaways
-                            and promotional gifts and giveaways.
-                        </p>
-                        <a href="#" class="btn btn-light btn-lg mt-3">Browse
-                            More</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+            <header class="main-header py-5 border-bottom" id="header">
+                <!-- Dynamically load header component here - main.js-->
+            </header>
 
-        <!-- Search Section -->
-        <div class="search-bar-wrapper">
-            <div class="container">
-                <form action="search.html" method="get">
+            <main class="flex-fill">
 
-                    <div class="search-bar d-flex align-items-center shadow">
-                        <input type="text" class="form-control border-0"
-                            name="q"
-                            placeholder="Search Products">
-                        <button class="btn btn-link text-dark p-0 pe-3">
-                            <i class="bi bi-search fs-2"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <section class="browse-categories py-3">
-            <div class="container text-center">
-                <h2 class="section-title mb-4 py-5 fs-1">Browse by Category</h2>
-                <div
-                    class="category-icons d-flex justify-content-center align-items-center gap-5 flex-wrap pb-5">
-
-                    <div class="category-item" data-category="Clothing">
-                        <img src="assets/icons/shirt.png" alt="Clothing"
-                            class="category-icon active">
-                    </div>
-
-                    <span class="dot-separator">•</span>
-
-                    <div class="category-item" data-category="Mugs">
-                        <img src="assets/icons/mug.png" alt="Mugs"
-                            class="category-icon">
-                    </div>
-
-                    <span class="dot-separator">•</span>
-
-                    <div class="category-item" data-category="Gift Bags">
-                        <img src="assets/icons/bag.png" alt="Gift Bags"
-                            class="category-icon">
-                    </div>
-
-                    <span class="dot-separator">•</span>
-
-                    <div class="category-item" data-category="Backpacks">
-                        <img src="assets/icons/backpack.png" alt="Backpacks"
-                            class="category-icon">
-                    </div>
-
-                    <span class="dot-separator">•</span>
-
-                    <div class="category-item" data-category="Books">
-                        <img src="assets/icons/books.png" alt="Books"
-                            class="category-icon">
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <section class="product-section py-5">
-            <div class="container">
-                <div
-                    class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="section-title fs-1">Clothing</h2>
-                    <div class="section-nav">
-                        <button id="productCustomPrev"
-                            class="btn btn-link p-0 me-2">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
-                        <button id="productCustomNext" class="btn btn-link p-0">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="product-carousel" class="owl-carousel owl-theme"></div>
-
-            </div>
-        </section>
-
-        <section class="gift-set-section py-5">
-            <div class="container">
-                <div class="row g-0 gift-set-grid">
-                    <!-- LEFT: Full-height box -->
-                    <div class="col-lg-6">
-                        <div
-                            class="gift-box h-100 gift-left position-relative bg-gray text-white p-4 d-flex flex-column justify-content-between">
-                            <div class="z-2 px-3">
-                                <h2 class="mb-3">Gift Set</h2>
-
-                            </div>
-                            <div class="z-2 d-flex justify-content-around px-3">
-                                <p class="fs-5 fw-semibold mt-3">
-                                    SKROSS - Gift Set of Powerbank, Travel
-                                    Adapter & Charging
-                                    Cable
+                <section class="hero-section d-flex align-items-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 text-white hero-text">
+                                <h2 class="hero-subtitle">Corporate</h2>
+                                <h1 class="hero-title">Gift Items</h1>
+                                <p class="hero-description">
+                                    Xtremez is the Middle East's largest and
+                                    leading
+                                    corporate gifts
+                                    supplier and solution provider,
+                                    with deep expertise in branded merchandise,
+                                    corporate giveaways
+                                    and promotional gifts and giveaways.
                                 </p>
-                                <p class="fs-2 fw-normal mt-3 z-2">89 AED</p>
-
+                                <a href="#"
+                                    class="btn btn-light btn-lg mt-3">Browse
+                                    More</a>
                             </div>
-                            <img src="assets/images/gift-set-left.png"
-                                alt="Gift Set"
-                                class="gift-img img-left-big">
                         </div>
                     </div>
+                </section>
 
-                    <!-- RIGHT: Two stacked half-height boxes -->
-                    <div class="col-lg-6 d-flex flex-column">
-                        <!-- Top box -->
-                        <div
-                            class="gift-box gift-right-half bg-lightblue flex-fill position-relative text-white p-4 d-flex flex-column justify-content-between">
-                            <div class="z-2 px-4">
-                                <p class="fs-5 fw-bold my-3">BEBRA - XD Bamboo
-                                    Free Flow TWS
-                                    Earbuds in Charging Case - Black</p>
-                                <p class="fs-2 fw-normal">89 AED</p>
-                            </div>
-                            <img src="assets/images/gift-set-top.png" alt="TWS"
-                                class="gift-img img-right-small">
-                        </div>
+                <!-- Search Section -->
+                <div class="search-bar-wrapper">
+                    <div class="container">
+                        <form action="search.html" method="get">
 
-                        <!-- Bottom box -->
-                        <div
-                            class="gift-box gift-right-half bg-tan flex-fill position-relative text-white p-4 d-flex flex-column justify-content-between">
-                            <img src="assets/images/gift-set-bottom.png"
-                                alt="Gift Box"
-                                class="gift-img img-left-small">
-                            <div class="z-2 text-start px-4">
-                                <p class="fs-5 fw-bold my-3">BEBRA - XD Bamboo
-                                    Free Flow TWS
-                                    Earbuds in Charging Case - Black</p>
-                                <p class="fs-2 fw-normal">89 AED</p>
+                            <div
+                                class="search-bar d-flex align-items-center shadow">
+                                <input type="text" class="form-control border-0"
+                                    name="q"
+                                    placeholder="Search Products">
+                                <button class="btn btn-link text-dark p-0 pe-3">
+                                    <i class="bi bi-search fs-2"></i>
+                                </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <section class="product-section py-5">
-            <div class="container">
-                <div class="text-center mb-4">
-                    <h2 class="section-title mb-4 py-5 fs-1">Featured
-                        Products</h2>
-                </div>
-
-                <div class="row g-4">
-                    <!-- Product Card Start -->
-                    <div class="col-md-4 col-sm-12 col-lg-3">
+                <section class="browse-categories py-3">
+                    <div class="container text-center">
+                        <h2 class="section-title mb-4 py-5 fs-1">Browse by
+                            Category</h2>
                         <div
-                            class="product-card h-100 d-flex flex-column align-items-center text-center">
-                            <!-- Image Block -->
-                            <div class="product-image-box mb-3">
-                                <img src="assets/images/product-1.png"
-                                    alt="Product Name"
-                                    class="img-fluid">
+                            class="category-icons d-flex justify-content-center align-items-center gap-5 flex-wrap pb-5">
+
+                            <div class="category-item" data-category="Clothing">
+                                <img src="assets/icons/shirt.png" alt="Clothing"
+                                    class="category-icon active">
                             </div>
 
-                            <!-- Title Block -->
-                            <div class="product-title-box">
-                                <h6 class="product-title">
-                                    BREDA - CHANGE Collection Insulated Water
-                                    Bottle - Green
-                                </h6>
+                            <span class="dot-separator">•</span>
+
+                            <div class="category-item" data-category="Mugs">
+                                <img src="assets/icons/mug.png" alt="Mugs"
+                                    class="category-icon">
                             </div>
 
-                            <!-- Price + Cart -->
-                            <div
-                                class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                                <span class="price fs-4 fw-bold">70 AED</span>
-                                <button class="btn cart-btn">
-                                    <i class="bi bi-cart"></i>
+                            <span class="dot-separator">•</span>
+
+                            <div class="category-item"
+                                data-category="Gift Bags">
+                                <img src="assets/icons/bag.png" alt="Gift Bags"
+                                    class="category-icon">
+                            </div>
+
+                            <span class="dot-separator">•</span>
+
+                            <div class="category-item"
+                                data-category="Backpacks">
+                                <img src="assets/icons/backpack.png"
+                                    alt="Backpacks"
+                                    class="category-icon">
+                            </div>
+
+                            <span class="dot-separator">•</span>
+
+                            <div class="category-item" data-category="Books">
+                                <img src="assets/icons/books.png" alt="Books"
+                                    class="category-icon">
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <section class="product-section py-5">
+                    <div class="container">
+                        <div
+                            class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="section-title fs-1">Clothing</h2>
+                            <div class="section-nav">
+                                <button id="productCustomPrev"
+                                    class="btn btn-link p-0 me-2">
+                                    <i class="bi bi-chevron-left"></i>
+                                </button>
+                                <button id="productCustomNext"
+                                    class="btn btn-link p-0">
+                                    <i class="bi bi-chevron-right"></i>
                                 </button>
                             </div>
                         </div>
+
+                        <div id="product-carousel"
+                            class="owl-carousel owl-theme"></div>
+
                     </div>
-                    <!-- Product Card End -->
-                    <!-- Product Card Start -->
-                    <div class="col-md-4 col-sm-12 col-lg-3">
+                </section>
+
+                <section class="gift-set-section py-5">
+                    <div class="container">
+                        <div class="row g-0 gift-set-grid">
+                            <!-- LEFT: Full-height box -->
+                            <div class="col-lg-6">
+                                <div
+                                    class="gift-box h-100 gift-left position-relative bg-gray text-white p-4 d-flex flex-column justify-content-between">
+                                    <div class="z-2 px-3">
+                                        <h2 class="mb-3">Gift Set</h2>
+
+                                    </div>
+                                    <div
+                                        class="z-2 d-flex justify-content-around px-3">
+                                        <p class="fs-5 fw-semibold mt-3">
+                                            SKROSS - Gift Set of Powerbank,
+                                            Travel
+                                            Adapter & Charging
+                                            Cable
+                                        </p>
+                                        <p class="fs-2 fw-normal mt-3 z-2">89
+                                            AED</p>
+
+                                    </div>
+                                    <img src="assets/images/gift-set-left.png"
+                                        alt="Gift Set"
+                                        class="gift-img img-left-big">
+                                </div>
+                            </div>
+
+                            <!-- RIGHT: Two stacked half-height boxes -->
+                            <div class="col-lg-6 d-flex flex-column">
+                                <!-- Top box -->
+                                <div
+                                    class="gift-box gift-right-half bg-lightblue flex-fill position-relative text-white p-4 d-flex flex-column justify-content-between">
+                                    <div class="z-2 px-4">
+                                        <p class="fs-5 fw-bold my-3">BEBRA - XD
+                                            Bamboo
+                                            Free Flow TWS
+                                            Earbuds in Charging Case - Black</p>
+                                        <p class="fs-2 fw-normal">89 AED</p>
+                                    </div>
+                                    <img src="assets/images/gift-set-top.png"
+                                        alt="TWS"
+                                        class="gift-img img-right-small">
+                                </div>
+
+                                <!-- Bottom box -->
+                                <div
+                                    class="gift-box gift-right-half bg-tan flex-fill position-relative text-white p-4 d-flex flex-column justify-content-between">
+                                    <img src="assets/images/gift-set-bottom.png"
+                                        alt="Gift Box"
+                                        class="gift-img img-left-small">
+                                    <div class="z-2 text-start px-4">
+                                        <p class="fs-5 fw-bold my-3">BEBRA - XD
+                                            Bamboo
+                                            Free Flow TWS
+                                            Earbuds in Charging Case - Black</p>
+                                        <p class="fs-2 fw-normal">89 AED</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="product-section py-5">
+                    <div class="container">
+                        <div class="text-center mb-4">
+                            <h2 class="section-title mb-4 py-5 fs-1">Featured
+                                Products</h2>
+                        </div>
+
+                        <div class="row g-4">
+                            <!-- Product Card Start -->
+                            <div class="col-md-4 col-sm-12 col-lg-3">
+                                <div
+                                    class="product-card h-100 d-flex flex-column align-items-center text-center">
+                                    <!-- Image Block -->
+                                    <div class="product-image-box mb-3">
+                                        <img src="assets/images/product-1.png"
+                                            alt="Product Name"
+                                            class="img-fluid">
+                                    </div>
+
+                                    <!-- Title Block -->
+                                    <div class="product-title-box">
+                                        <h6 class="product-title">
+                                            BREDA - CHANGE Collection Insulated
+                                            Water
+                                            Bottle - Green
+                                        </h6>
+                                    </div>
+
+                                    <!-- Price + Cart -->
+                                    <div
+                                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                                        <span class="price fs-4 fw-bold">70
+                                            AED</span>
+                                        <button class="btn cart-btn">
+                                            <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product Card End -->
+                            <!-- Product Card Start -->
+                            <div class="col-md-4 col-sm-12 col-lg-3">
+                                <div
+                                    class="product-card h-100 d-flex flex-column align-items-center text-center">
+                                    <!-- Image Block -->
+                                    <div class="product-image-box mb-3">
+                                        <img src="assets/images/product-1.png"
+                                            alt="Product Name"
+                                            class="img-fluid">
+                                    </div>
+
+                                    <!-- Title Block -->
+                                    <div class="product-title-box">
+                                        <h6 class="product-title">
+                                            BREDA - CHANGE Collection Insulated
+                                            Water
+                                            Bottle - Green
+                                        </h6>
+                                    </div>
+
+                                    <!-- Price + Cart -->
+                                    <div
+                                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                                        <span class="price fs-4 fw-bold">70
+                                            AED</span>
+                                        <button class="btn cart-btn">
+                                            <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product Card End -->
+                            <!-- Product Card Start -->
+                            <div class="col-md-4 col-sm-12 col-lg-3">
+                                <div
+                                    class="product-card h-100 d-flex flex-column align-items-center text-center">
+                                    <!-- Image Block -->
+                                    <div class="product-image-box mb-3">
+                                        <img src="assets/images/product-1.png"
+                                            alt="Product Name"
+                                            class="img-fluid">
+                                    </div>
+
+                                    <!-- Title Block -->
+                                    <div class="product-title-box">
+                                        <h6 class="product-title">
+                                            BREDA - CHANGE Collection Insulated
+                                            Water
+                                            Bottle - Green
+                                        </h6>
+                                    </div>
+
+                                    <!-- Price + Cart -->
+                                    <div
+                                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                                        <span class="price fs-4 fw-bold">70
+                                            AED</span>
+                                        <button class="btn cart-btn">
+                                            <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product Card End -->
+                            <!-- Product Card Start -->
+                            <div class="col-md-4 col-sm-12 col-lg-3">
+                                <div
+                                    class="product-card h-100 d-flex flex-column align-items-center text-center">
+                                    <!-- Image Block -->
+                                    <div class="product-image-box mb-3">
+                                        <img src="assets/images/product-1.png"
+                                            alt="Product Name"
+                                            class="img-fluid">
+                                    </div>
+
+                                    <!-- Title Block -->
+                                    <div class="product-title-box">
+                                        <h6 class="product-title">
+                                            BREDA - CHANGE Collection Insulated
+                                            Water
+                                            Bottle - Green
+                                        </h6>
+                                    </div>
+
+                                    <!-- Price + Cart -->
+                                    <div
+                                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                                        <span class="price fs-4 fw-bold">70
+                                            AED</span>
+                                        <button class="btn cart-btn">
+                                            <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product Card End -->
+                            <!-- Product Card Start -->
+                            <div class="col-md-4 col-sm-12 col-lg-3">
+                                <div
+                                    class="product-card h-100 d-flex flex-column align-items-center text-center">
+                                    <!-- Image Block -->
+                                    <div class="product-image-box mb-3">
+                                        <img src="assets/images/product-1.png"
+                                            alt="Product Name"
+                                            class="img-fluid">
+                                    </div>
+
+                                    <!-- Title Block -->
+                                    <div class="product-title-box">
+                                        <h6 class="product-title">
+                                            BREDA - CHANGE Collection Insulated
+                                            Water
+                                            Bottle - Green
+                                        </h6>
+                                    </div>
+
+                                    <!-- Price + Cart -->
+                                    <div
+                                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                                        <span class="price fs-4 fw-bold">70
+                                            AED</span>
+                                        <button class="btn cart-btn">
+                                            <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product Card End -->
+                            <!-- Product Card Start -->
+                            <div class="col-md-4 col-sm-12 col-lg-3">
+                                <div
+                                    class="product-card h-100 d-flex flex-column align-items-center text-center">
+                                    <!-- Image Block -->
+                                    <div class="product-image-box mb-3">
+                                        <img src="assets/images/product-1.png"
+                                            alt="Product Name"
+                                            class="img-fluid">
+                                    </div>
+
+                                    <!-- Title Block -->
+                                    <div class="product-title-box">
+                                        <h6 class="product-title">
+                                            BREDA - CHANGE Collection Insulated
+                                            Water
+                                            Bottle - Green
+                                        </h6>
+                                    </div>
+
+                                    <!-- Price + Cart -->
+                                    <div
+                                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                                        <span class="price fs-4 fw-bold">70
+                                            AED</span>
+                                        <button class="btn cart-btn">
+                                            <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product Card End -->
+                            <!-- Product Card Start -->
+                            <div class="col-md-4 col-lg-3">
+                                <div
+                                    class="product-card h-100 d-flex flex-column align-items-center text-center">
+                                    <!-- Image Block -->
+                                    <div class="product-image-box mb-3">
+                                        <img src="assets/images/product-1.png"
+                                            alt="Product Name"
+                                            class="img-fluid">
+                                    </div>
+
+                                    <!-- Title Block -->
+                                    <div class="product-title-box">
+                                        <h6 class="product-title">
+                                            BREDA - CHANGE Collection Insulated
+                                            Water
+                                            Bottle - Green
+                                        </h6>
+                                    </div>
+
+                                    <!-- Price + Cart -->
+                                    <div
+                                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                                        <span class="price fs-4 fw-bold">70
+                                            AED</span>
+                                        <button class="btn cart-btn">
+                                            <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product Card End -->
+                            <!-- Product Card Start -->
+                            <div class="col-md-4 col-sm-12 col-lg-3">
+                                <div
+                                    class="product-card h-100 d-flex flex-column align-items-center text-center">
+                                    <!-- Image Block -->
+                                    <div class="product-image-box mb-3">
+                                        <img src="assets/images/product-1.png"
+                                            alt="Product Name"
+                                            class="img-fluid">
+                                    </div>
+
+                                    <!-- Title Block -->
+                                    <div class="product-title-box">
+                                        <h6 class="product-title">
+                                            BREDA - CHANGE Collection Insulated
+                                            Water
+                                            Bottle - Green
+                                        </h6>
+                                    </div>
+
+                                    <!-- Price + Cart -->
+                                    <div
+                                        class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+                                        <span class="price fs-4 fw-bold">70
+                                            AED</span>
+                                        <button class="btn cart-btn">
+                                            <i class="bi bi-cart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product Card End -->
+                        </div>
+                    </div>
+                </section>
+
+                <section class="sustainable-section py-5">
+                    <div class="container-fluid px-0 bg-beige">
+                        <div class="row g-0 align-items-center">
+
+                            <!-- Left Text Column -->
+                            <div class="col-md-6 text-center text-md-start p-5">
+                                <div class="sustainable-content px-3 px-md-5">
+                                    <h2
+                                        class="sustainable-heading fw-bold fs-1 mb-4">Sustainable<br>Products</h2>
+                                    <a href="#" class="btn btn-sustainable">View
+                                        Items</a>
+                                </div>
+                            </div>
+
+                            <!-- Right Image Column -->
+                            <div class="col-md-6">
+                                <div class="sustainable-image">
+                                    <img src="assets/images/sustainable.png"
+                                        alt="Sustainable Products"
+                                        class="img-fluid w-100 h-100 object-fit-cover">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <section class="our-brands-section py-5">
+                    <div class="container text-center">
+                        <h2 class="section-title mb-4  fs-1">Our Brands</h2>
+
                         <div
-                            class="product-card h-100 d-flex flex-column align-items-center text-center">
-                            <!-- Image Block -->
-                            <div class="product-image-box mb-3">
-                                <img src="assets/images/product-1.png"
-                                    alt="Product Name"
-                                    class="img-fluid">
+                            class="row justify-content-center align-items-center g-4 py-5">
+                            <div class="col-4 col-md-2">
+                                <img src="assets/images/brands/adidas.png"
+                                    alt="Adidas"
+                                    class="brand-logo img-fluid">
                             </div>
-
-                            <!-- Title Block -->
-                            <div class="product-title-box">
-                                <h6 class="product-title">
-                                    BREDA - CHANGE Collection Insulated Water
-                                    Bottle - Green
-                                </h6>
+                            <div class="col-4 col-md-2">
+                                <img src="assets/images/brands/boss.png"
+                                    alt="Boss"
+                                    class="brand-logo img-fluid">
                             </div>
-
-                            <!-- Price + Cart -->
-                            <div
-                                class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                                <span class="price fs-4 fw-bold">70 AED</span>
-                                <button class="btn cart-btn">
-                                    <i class="bi bi-cart"></i>
-                                </button>
+                            <div class="col-4 col-md-2">
+                                <img src="assets/images/brands/chanel.png"
+                                    alt="Chanel"
+                                    class="brand-logo img-fluid">
                             </div>
-                        </div>
-                    </div>
-                    <!-- Product Card End -->
-                    <!-- Product Card Start -->
-                    <div class="col-md-4 col-sm-12 col-lg-3">
-                        <div
-                            class="product-card h-100 d-flex flex-column align-items-center text-center">
-                            <!-- Image Block -->
-                            <div class="product-image-box mb-3">
-                                <img src="assets/images/product-1.png"
-                                    alt="Product Name"
-                                    class="img-fluid">
+                            <div class="col-4 col-md-2">
+                                <img src="assets/images/brands/boss.png"
+                                    alt="Boss 2"
+                                    class="brand-logo img-fluid">
                             </div>
-
-                            <!-- Title Block -->
-                            <div class="product-title-box">
-                                <h6 class="product-title">
-                                    BREDA - CHANGE Collection Insulated Water
-                                    Bottle - Green
-                                </h6>
-                            </div>
-
-                            <!-- Price + Cart -->
-                            <div
-                                class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                                <span class="price fs-4 fw-bold">70 AED</span>
-                                <button class="btn cart-btn">
-                                    <i class="bi bi-cart"></i>
-                                </button>
+                            <div class="col-4 col-md-2">
+                                <img src="assets/images/brands/ikasu.png"
+                                    alt="Ikasu"
+                                    class="brand-logo img-fluid">
                             </div>
                         </div>
                     </div>
-                    <!-- Product Card End -->
-                    <!-- Product Card Start -->
-                    <div class="col-md-4 col-sm-12 col-lg-3">
-                        <div
-                            class="product-card h-100 d-flex flex-column align-items-center text-center">
-                            <!-- Image Block -->
-                            <div class="product-image-box mb-3">
-                                <img src="assets/images/product-1.png"
-                                    alt="Product Name"
-                                    class="img-fluid">
-                            </div>
+                </section>
 
-                            <!-- Title Block -->
-                            <div class="product-title-box">
-                                <h6 class="product-title">
-                                    BREDA - CHANGE Collection Insulated Water
-                                    Bottle - Green
-                                </h6>
-                            </div>
-
-                            <!-- Price + Cart -->
-                            <div
-                                class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                                <span class="price fs-4 fw-bold">70 AED</span>
-                                <button class="btn cart-btn">
-                                    <i class="bi bi-cart"></i>
-                                </button>
-                            </div>
-                        </div>
+                <section class="video-section position-relative">
+                    <div class="video-bg">
+                        <img src="assets/images/video-thumbnail.png"
+                            alt="Video Background"
+                            class="w-100 h-100 object-fit-cover">
                     </div>
-                    <!-- Product Card End -->
-                    <!-- Product Card Start -->
-                    <div class="col-md-4 col-sm-12 col-lg-3">
-                        <div
-                            class="product-card h-100 d-flex flex-column align-items-center text-center">
-                            <!-- Image Block -->
-                            <div class="product-image-box mb-3">
-                                <img src="assets/images/product-1.png"
-                                    alt="Product Name"
-                                    class="img-fluid">
-                            </div>
-
-                            <!-- Title Block -->
-                            <div class="product-title-box">
-                                <h6 class="product-title">
-                                    BREDA - CHANGE Collection Insulated Water
-                                    Bottle - Green
-                                </h6>
-                            </div>
-
-                            <!-- Price + Cart -->
-                            <div
-                                class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                                <span class="price fs-4 fw-bold">70 AED</span>
-                                <button class="btn cart-btn">
-                                    <i class="bi bi-cart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Product Card End -->
-                    <!-- Product Card Start -->
-                    <div class="col-md-4 col-sm-12 col-lg-3">
-                        <div
-                            class="product-card h-100 d-flex flex-column align-items-center text-center">
-                            <!-- Image Block -->
-                            <div class="product-image-box mb-3">
-                                <img src="assets/images/product-1.png"
-                                    alt="Product Name"
-                                    class="img-fluid">
-                            </div>
-
-                            <!-- Title Block -->
-                            <div class="product-title-box">
-                                <h6 class="product-title">
-                                    BREDA - CHANGE Collection Insulated Water
-                                    Bottle - Green
-                                </h6>
-                            </div>
-
-                            <!-- Price + Cart -->
-                            <div
-                                class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                                <span class="price fs-4 fw-bold">70 AED</span>
-                                <button class="btn cart-btn">
-                                    <i class="bi bi-cart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Product Card End -->
-                    <!-- Product Card Start -->
-                    <div class="col-md-4 col-lg-3">
-                        <div
-                            class="product-card h-100 d-flex flex-column align-items-center text-center">
-                            <!-- Image Block -->
-                            <div class="product-image-box mb-3">
-                                <img src="assets/images/product-1.png"
-                                    alt="Product Name"
-                                    class="img-fluid">
-                            </div>
-
-                            <!-- Title Block -->
-                            <div class="product-title-box">
-                                <h6 class="product-title">
-                                    BREDA - CHANGE Collection Insulated Water
-                                    Bottle - Green
-                                </h6>
-                            </div>
-
-                            <!-- Price + Cart -->
-                            <div
-                                class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                                <span class="price fs-4 fw-bold">70 AED</span>
-                                <button class="btn cart-btn">
-                                    <i class="bi bi-cart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Product Card End -->
-                    <!-- Product Card Start -->
-                    <div class="col-md-4 col-sm-12 col-lg-3">
-                        <div
-                            class="product-card h-100 d-flex flex-column align-items-center text-center">
-                            <!-- Image Block -->
-                            <div class="product-image-box mb-3">
-                                <img src="assets/images/product-1.png"
-                                    alt="Product Name"
-                                    class="img-fluid">
-                            </div>
-
-                            <!-- Title Block -->
-                            <div class="product-title-box">
-                                <h6 class="product-title">
-                                    BREDA - CHANGE Collection Insulated Water
-                                    Bottle - Green
-                                </h6>
-                            </div>
-
-                            <!-- Price + Cart -->
-                            <div
-                                class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
-                                <span class="price fs-4 fw-bold">70 AED</span>
-                                <button class="btn cart-btn">
-                                    <i class="bi bi-cart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Product Card End -->
-                </div>
-            </div>
-        </section>
-
-        <section class="sustainable-section py-5">
-            <div class="container-fluid px-0 bg-beige">
-                <div class="row g-0 align-items-center">
-
-                    <!-- Left Text Column -->
-                    <div class="col-md-6 text-center text-md-start p-5">
-                        <div class="sustainable-content px-3 px-md-5">
-                            <h2
-                                class="sustainable-heading fw-bold fs-1 mb-4">Sustainable<br>Products</h2>
-                            <a href="#" class="btn btn-sustainable">View
-                                Items</a>
-                        </div>
-                    </div>
-
-                    <!-- Right Image Column -->
-                    <div class="col-md-6">
-                        <div class="sustainable-image">
-                            <img src="assets/images/sustainable.png"
-                                alt="Sustainable Products"
-                                class="img-fluid w-100 h-100 object-fit-cover">
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <section class="our-brands-section py-5">
-            <div class="container text-center">
-                <h2 class="section-title mb-4  fs-1">Our Brands</h2>
-
-                <div
-                    class="row justify-content-center align-items-center g-4 py-5">
-                    <div class="col-4 col-md-2">
-                        <img src="assets/images/brands/adidas.png" alt="Adidas"
-                            class="brand-logo img-fluid">
-                    </div>
-                    <div class="col-4 col-md-2">
-                        <img src="assets/images/brands/boss.png" alt="Boss"
-                            class="brand-logo img-fluid">
-                    </div>
-                    <div class="col-4 col-md-2">
-                        <img src="assets/images/brands/chanel.png" alt="Chanel"
-                            class="brand-logo img-fluid">
-                    </div>
-                    <div class="col-4 col-md-2">
-                        <img src="assets/images/brands/boss.png" alt="Boss 2"
-                            class="brand-logo img-fluid">
-                    </div>
-                    <div class="col-4 col-md-2">
-                        <img src="assets/images/brands/ikasu.png" alt="Ikasu"
-                            class="brand-logo img-fluid">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="video-section position-relative">
-            <div class="video-bg">
-                <img src="assets/images/video-thumbnail.png"
-                    alt="Video Background"
-                    class="w-100 h-100 object-fit-cover">
-            </div>
-
-            <div
-                class="video-overlay position-absolute top-0 start-0 w-100 h-100"></div>
-
-            <button
-                class="video-play-btn position-absolute top-50 start-50 translate-middle"
-                aria-label="Play Video">
-                <i class="bi bi-play-fill"></i>
-            </button>
-        </section>
-
-        <section class="gift-collection-section py-5">
-            <div class="container pt-5">
-                <div
-                    class="collection-card text-center position-relative overflow-hidden">
-                    <img src="assets/images/gift-collection.png" alt="Gifts"
-                        class="collection-bg w-100 h-100 object-fit-cover">
 
                     <div
-                        class="collection-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white">
-                        <i class="bi bi-book fs-1 mb-3"></i>
-                        <h2
-                            class="collection-title text-uppercase fs-1 mb-4">Our
-                            2024 Gifts<br>Collection</h2>
-                        <a href="#" class="btn btn-light">View Brochure</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        class="video-overlay position-absolute top-0 start-0 w-100 h-100"></div>
 
-        <footer class="site-footer pt-5" id="footer">
-            <!-- Dynamically load footer component here - main.js -->
-        </footer>
+                    <button
+                        class="video-play-btn position-absolute top-50 start-50 translate-middle"
+                        aria-label="Play Video">
+                        <i class="bi bi-play-fill"></i>
+                    </button>
+                </section>
+
+                <section class="gift-collection-section py-5">
+                    <div class="container pt-5">
+                        <div
+                            class="collection-card text-center position-relative overflow-hidden">
+                            <img src="assets/images/gift-collection.png"
+                                alt="Gifts"
+                                class="collection-bg w-100 h-100 object-fit-cover">
+
+                            <div
+                                class="collection-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white">
+                                <i class="bi bi-book fs-1 mb-3"></i>
+                                <h2
+                                    class="collection-title text-uppercase fs-1 mb-4">Our
+                                    2024 Gifts<br>Collection</h2>
+                                <a href="#" class="btn btn-light">View
+                                    Brochure</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <footer class="site-footer pt-5" id="footer">
+                <!-- Dynamically load footer component here - main.js -->
+            </footer>
+
+        </div>
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

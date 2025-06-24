@@ -1,7 +1,7 @@
 @mixin select-shared {
 	background: #fff;
-	border: none;
-	padding: 1.15rem 1.2rem;
+	border-radius: 0;
+	padding: 1rem;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 	appearance: none; // Hides default arrow (Chrome, Safari, Edge)
 	-webkit-appearance: none;

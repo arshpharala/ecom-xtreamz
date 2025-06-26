@@ -1,0 +1,33 @@
+.heading-section {
+  background: $bg-color;
+
+  .heading-row {
+    position: relative;
+    min-height: 60px; // ensures enough height for the button
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .section-title {
+    font-family: $font-family-base;
+    font-weight: 500;
+    color: #222;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 1; // ensures it stays above the button if overlapped
+  }
+
+  .left-tools {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    @media (max-width: 575px) {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
+  }
+}

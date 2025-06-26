@@ -1,0 +1,35 @@
+.contact-section {
+	background: #fff; // or $white if using variables
+	min-height: 440px;
+
+	.contact-main-row {
+		min-height: 370px; // Keeps content vertically balanced on larger screens
+		align-items: center;
+	}
+	.contact-title {
+		font-size: 2.8rem;
+		font-weight: 400;
+		letter-spacing: 0.01em;
+		color: #222;
+		@media (max-width: 991px) {
+			font-size: 2.1rem;
+		}
+		@media (max-width: 600px) {
+			font-size: 1.5rem;
+		}
+	}
+	.contact-address {
+		font-size: 1.18rem;
+		color: #222;
+		line-height: 1.65;
+		min-width: 240px;
+		@media (max-width: 991px) {
+			font-size: 1rem;
+		}
+		div {
+			font-size: 1.12rem;
+			font-weight: 400;
+			color: #444;
+		}
+	}
+}

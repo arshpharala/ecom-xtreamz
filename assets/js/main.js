@@ -5,6 +5,23 @@ $(document).ready(function () {
 	$("body").on("click", "#mobileNavToggle", function () {
 		$("#mobileNav").collapse("toggle");
 	});
+
+	$(".type-placeholder").each(function () {
+		const $input = $(this);
+		const originalText = $input.attr("placeholder") || "";
+		let i = 0;
+
+		(function type() {
+			if (i <= originalText.length) {
+				$input.attr(
+					"placeholder",
+					originalText.slice(0, i) + (i < originalText.length ? "|" : "")
+				);
+				i++;
+				setTimeout(type, 30 + Math.random() * 170);
+			}
+		})();
+	});
 });
 
 $(".btn-primary").on("click", function (e) {
@@ -42,4 +59,22 @@ window.addEventListener("scroll", () => {
 	} else {
 		header.classList.remove(toggleClass);
 	}
+});
+
+$(document).ready(function () {
+	const observer = new IntersectionObserver(
+		(entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					$(entry.target).addClass("in-view");
+					observer.unobserve(entry.target); // Animate only once
+				}
+			});
+		},
+		{ threshold: 0.1 }
+	);
+
+	$(".animate-on-scroll").each(function () {
+		observer.observe(this);
+	});
 });

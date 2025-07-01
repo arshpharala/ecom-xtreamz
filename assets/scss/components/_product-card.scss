@@ -25,7 +25,7 @@
 .product-card {
 	background: transparent;
 	padding: 1rem 0;
-	transition: box-shadow 0.2s, transform 0.18s;
+	transition: box-shadow 0.2s, transform 0.18s ease;
 
 	&:hover,
 	&:focus-within {
@@ -41,6 +41,8 @@
 			img {
 				filter: brightness(1.07);
 				transition: filter 0.15s;
+				transform: scale(1.2);
+				transition: transform 0.8s ease; // slow and smooth
 			}
 		}
 
@@ -64,9 +66,10 @@
 
 		img {
 			max-height: 300px;
-			min-height: 220px;
+			height: 220px;
 			width: 80% !important;
 			object-fit: contain;
+			transition: transform 0.18s ease;
 		}
 
 		.discount-offer {

@@ -1,7 +1,24 @@
 .btn {
 	border-radius: 0;
 	padding: 0.87rem 1.75rem;
-	letter-spacing: 0.1em;
+	letter-spacing: 0.075em;
+	transition: all 0.4s ease; // smooth animation
+	&:hover,
+	&:active,
+	&:focus {
+		transform: translateY(-2px); // slight lift
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); // soft shadow
+	}
+	&.no-animate {
+		transition: none;
+
+		&:hover,
+		&:active,
+		&:focus {
+			transform: none;
+			box-shadow: none;
+		}
+	}
 }
 
 .btn-primary {

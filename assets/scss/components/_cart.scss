@@ -1,22 +1,22 @@
 // cart.scss
 .cart-section {
-	background-color: $bg-color;
+	background-color: var(--color-background);
 
 	.section-title {
-		font-size: 1.5rem;
+		font-size: var(--font-size-7xl);
 		font-weight: 500;
-		font-family: $font-family-base;
+		font-family: var(--font-family-primary);
 		color: #222;
 	}
 
 	.cart-list {
-		background: $white;
+		background: var(--color-light);
 		border-radius: 8px;
 		min-height: 480px;
 	}
 
 	.cart-selectall {
-		font-size: 1.07rem;
+		font-size: var(--font-size-lg);
 		font-weight: 500;
 		color: #222;
 		margin-bottom: 1.5rem;
@@ -38,7 +38,7 @@
 			}
 		}
 		.cart-product-title {
-			font-size: 1.06rem;
+			font-size: var(--font-size-lg);
 			line-height: 1.4;
 			color: #232323;
 		}
@@ -48,8 +48,8 @@
 			.cart-qty-box {
 				.cart-qty-val {
 					padding: 10px 10px;
-					font-size: 1.2rem;
-					background: $bg-color;
+					font-size: var(--font-size-4xl);
+					background: var(--color-background);
 				}
 				.qty-btn {
 					width: 28px;
@@ -57,7 +57,7 @@
 					background: #fff;
 					border: 1px solid #d1d1d1;
 					border-radius: 0;
-					font-size: 1rem;
+					font-size: var(--font-size-md);
 					padding: 0;
 					margin: 0 0 1px 0;
 					transition: background 0.18s;
@@ -70,10 +70,10 @@
 			.btn-trash {
 				width: 45px;
 				height: 45px;
-				background: $bg-color;
+				background: var(--color-background);
 				border: none;
 				border-radius: 2px;
-				font-size: 1.7rem;
+				font-size:  var(--font-size-8xl);
 				margin-top: 10px;
 				transition: background 0.18s, color 0.18s;
 				display: flex;
@@ -93,7 +93,7 @@
 	.cart-summary {
 		border-radius: 8px;
 		min-width: 300px;
-		font-size: 1rem;
+		font-size: var(--font-size-md);
 
 		ul {
 			margin-bottom: 1.5rem;
@@ -141,7 +141,7 @@
 			.cart-qty-box {
 				min-width: 50px;
 				.cart-qty-val {
-					font-size: 1.1rem;
+					font-size: var(--font-size-lg);
 					padding: 6px 36px;
 				}
 				.qty-btn {
@@ -152,7 +152,7 @@
 			.btn-trash {
 				width: 48px;
 				height: 48px;
-				font-size: 1.4rem;
+				font-size: var(--font-size-6xl);
 				margin-top: 0;
 			}
 		}

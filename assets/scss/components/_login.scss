@@ -1,14 +1,14 @@
 // _login.scss
 
 .login-section {
-	background: $bg-color;
+	background: var(--color-background);
   min-height: 70.9vh;
 
 	.section-title {
-		font-family: $font-family-base;
+		font-family: var(--font-family-primary);
 		font-weight: 500;
 		margin: 0;
-		color: $dark;
+		color: var(--color-dark);
 	}
 
 	.login-boxes {
@@ -22,14 +22,14 @@
 	}
 
 	.login-signin-box {
-		background: $secondary;
+		background: var(--color-secondary);
 		min-height: 350px;
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 
 		.login-inp {
-			background: $white;
-			color: $dark;
+			background: var(--color-light);
+			color: var(--color-dark);
 			
 		}
 	}

@@ -29,3 +29,17 @@ $(".btn-primary").on("click", function (e) {
 		}, 1500);
 	});
 });
+
+// Sticky Header
+
+const header = document.querySelector("#header");
+const toggleClass = "is-sticky";
+
+window.addEventListener("scroll", () => {
+	const currentScroll = window.pageYOffset;
+	if (currentScroll > 150) {
+		header.classList.add(toggleClass);
+	} else {
+		header.classList.remove(toggleClass);
+	}
+});

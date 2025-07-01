@@ -1,15 +1,16 @@
 .browse-categories {
-  background-color: $bg-color;
+  background-color: var(--color-background);
   padding: 3rem 0;
 
   .section-title {
-    font-size: 1.5rem;
+    font-size: var(--font-size-7xl);
     font-weight: 500;
-    font-family: $font-family-base;
+    font-family: var(--font-family-primary);
     color: #222;
   }
 
   .category-icons {
+    gap: 2rem;
     .category-item {
       .category-icon {
         width: 40px;
@@ -31,9 +32,15 @@
     }
 
     .dot-separator {
-      font-size: 1.5rem;
+      font-size: var(--font-size-7xl);
       color: #ccc;
       user-select: none;
     }
   }
+
+  @media (max-width: 767.98px) {
+		.category-icons {
+			gap: 0.75rem;
+		}
+	}
 }

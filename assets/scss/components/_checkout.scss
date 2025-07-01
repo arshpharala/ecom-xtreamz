@@ -1,27 +1,27 @@
 .checkout-section {
-	background: $bg-color;
+	background: var(--color-background);
 
 	.page-title-checkout {
-		font-size: 2rem;
+		font-size: var(--font-size-9xl);
 		font-weight: 400;
 		letter-spacing: 0.01em;
 	}
 
 	.section-label {
-		font-size: 1.18rem;
+		font-size: var(--font-size-3xl);
 		font-weight: 700;
 		color: #232323;
 	}
 	.default-address-box {
-		background: $bg-color;
+		background: var(--color-background);
 		padding: 1rem 1.2rem;
 	}
 
 	.saved-card-box {
-		background: $bg-color;
+		background: var(--color-background);
 		padding: 0.8rem 1.2rem;
 		color: #232323;
-		font-size: 1rem;
+		font-size: var(--font-size-md);
 		margin-bottom: 0.5rem;
 	}
 
@@ -35,14 +35,14 @@
 		&:hover,
 		&.active,
 		.form-check-input:checked + & {
-			border-color: $primary;
+			border-color: var(--color-primary);
 			box-shadow: 0 0 0 2px #e1f1f4;
 		}
 	}
 	.payment-method-box .form-check-input {
 		margin-top: 0 !important;
 		margin-right: 1rem;
-		accent-color: $primary; // Optional: theme color for radio
+		accent-color: var(--color-primary);
 	}
 
 }
@@ -52,7 +52,7 @@
 		padding: 1.2rem !important;
 	}
 	.checkout-section .page-title-checkout {
-		font-size: 1.37rem;
+		font-size: var(--font-size-6xl);
 	}
 }
 @media (max-width: 767.98px) {

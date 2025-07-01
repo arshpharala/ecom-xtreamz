@@ -1,20 +1,20 @@
 .order-summary-section {
-	background-color: $bg-color;
+	background-color: var(--color-background);
 
 	.section-title {
-		font-size: 1.5rem;
+		font-size: var(--font-size-7xl);
 		font-weight: 500;
-		font-family: $font-family-base;
+		font-family: var(--font-family-primary);
 		color: #222;
 	}
 
 	.order-thankyou {
 		.order-thankyou-heading {
-			font-size: 3.1rem;
+			font-size: var(--font-size-13xl);
 			font-weight: 400;
 		}
 		.order-id {
-			color: $primary;
+			color: var(--color-primary);
 		}
 	}
 

@@ -1,34 +1,52 @@
 .main-header {
-  background-color: #fff;
-  .navbar-brand img {
-    max-height: 40px;
-  }
+  background-color: var(--color-light);
+  padding: 2rem 0;
+  width: 100%;
+
+  // .navbar-brand img {
+  //   // max-height: 40px;
+  // }
+
+  &.is-sticky {
+		position: fixed;
+    z-index: 9;
+		box-shadow: 0 5px 16px rgba(0, 0, 0, 0.1);
+		// opacity: 0.9;
+		animation: slideDown 0.35s ease-out;
+    padding: 1.5rem 0 !important;
+    img{
+      height: 2.5vh;
+    }
+
+
+	}
 
   .nav-link {
-    color: #333;
+    color: var(--color-dark);
     font-weight: 500;
     transition: color 0.3s;
+    font-size: var(--font-size-xl);
 
     &:hover {
-      color: $primary;
+      color: var(--color-primary);
     }
   }
 
   .search-wrapper input {
     min-width: 200px;
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
   }
 
   .icon-link {
-    color: #333;
+    color: var(--color-dark);
     position: relative;
 
     &:hover {
-      color: $primary;
+      color: var(--color-primary);
     }
 
     .badge-sm {
-      font-size: 0.65rem;
+      font-size: var(--font-size-sm);
       padding: 0.25em 0.4em;
     }
   }
@@ -41,7 +59,7 @@
         color: #333;
 
         &:hover {
-          color: $primary;
+          color: var(--color-primary);
         }
       }
     }

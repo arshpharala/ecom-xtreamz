@@ -1,42 +1,47 @@
-.btn-primary {
-	background-color: $primary !important;
-	border-color: $primary !important;
+.btn {
 	border-radius: 0;
-	padding: 0.85rem 3rem;
+	padding: 0.87rem 1.75rem;
 	letter-spacing: 0.1em;
+}
 
-	&:hover, &:active, &:focus {
-		background: $primary-hover !important;
-		border-color: $primary-hover !important;
-		color: $white !important;
+.btn-primary {
+	background-color: var(--color-primary);
+	color: var(--color-light);
+	border-color: var(--color-primary);
+
+	&:hover,
+	&:active,
+	&:focus {
+		background: var(--color-primary-dark) !important;
+		color: var(--color-light) !important;
+		border-color: var(--color-primary-dark) !important;
 	}
 }
 
 .btn-outline-primary {
-	background-color: $white !important;
-	color: $dark !important;
-	border-color: $primary !important;
-	border-radius: 0;
-	padding: 0.85rem 3rem;
-	letter-spacing: 0.1em;
+	background-color: var(--color-light);
+	color: var(--color-dark);
+	border-color: var(--color-primary);
 
-	&:hover, &:active, &:focus {
-		background: $primary-hover !important;
-		border-color: $primary-hover !important;
-		color: $white !important;
+	&:hover,
+	&:active,
+	&:focus {
+		background: var(--color-primary-dark) !important;
+		color: var(--color-light) !important;
+		border-color: var(--color-primary-dark) !important;
 	}
 }
 
 .btn-secondary {
-	background-color: $secondary !important;
-	border-color: $secondary !important;
-	border-radius: 0;
-	padding: 0.85rem 3rem;
-	letter-spacing: 0.1em;
+	background-color: var(--color-secondary);
+	color: var(--color-light);
+	border-color: var(--color-secondary);
 
-	&:hover, &:active, &:focus {
-		background: $secondary-hover !important;
-		border-color: $secondary-hover !important;
-		color: $white !important;
+	&:hover,
+	&:active,
+	&:focus {
+		background: var(--color-primary-dark) !important;
+		color: var(--color-light) !important;
+		border-color: var(--color-primary-dark) !important;
 	}
 }

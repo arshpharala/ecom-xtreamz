@@ -1,25 +1,25 @@
 .theme-select {
 	min-width: 140px;
-	font-size: 1rem;
+	font-size: var(--font-size-md);
 	font-weight: 500;
 	@include select-shared;
 
 	&:focus {
-		border-color: $primary;
+		border-color: var(--color-primary);
 		outline: 0;
-		box-shadow: 0 0 0 0.25rem $primary;
+		box-shadow: 0 0 0 0.25rem var(--color-primary);
 	}
 
 	option:checked {
-		background: $primary;
-		color: $white;
+		background: var(--color-primary);
+		color: var(--color-light);
 	}
 }
 
 .theme-input-group {
 	border: none;
 	background: transparent;
-	font-size: 1rem;
+	font-size: var(--font-size-md);
 	font-weight: 700;
 	padding: 1rem;
 	outline: none;
@@ -28,23 +28,23 @@
 
 .theme-input {
 	background: transparent;
-	font-size: 1rem;
+	font-size: var(--font-size-md);
 	padding: 1rem;
 	outline: none;
 	box-shadow: none !important;
 	border-radius: 0;
 	&:focus {
-		border-color: $primary;
+		border-color: var(--color-primary);
 		// outline: 0;
-		box-shadow: 0 0 0 0.25rem $primary;
+		box-shadow: 0 0 0 0.25rem var(--color-primary);
 	}
 }
 
 .theme-radio,
 .theme-checkbox {
 	&:checked {
-		background-color: $primary;
-		border-color: $primary;
+		background-color: var(--color-primary);
+		border-color: var(--color-primary);
 	}
 }
 
@@ -52,7 +52,7 @@
 	.cc-input-group {
 		border: none;
 		background: transparent;
-		font-size: 1rem;
+		font-size: var(--font-size-md);
 		font-weight: 700;
 		padding: 1rem;
 		outline: none;
@@ -60,7 +60,7 @@
 
 		.cc-button {
 			border: none;
-			font-size: 1.8rem;
+			font-size: var(--font-size-3xl);
 			color: #222;
 			padding-right: 1.4rem;
 			padding-left: 0;
@@ -69,7 +69,7 @@
 
 	.form-control:focus {
 		box-shadow: none;
-		border-color: #fff;
+		border-color: var(--color-light);
 	}
 }
 
@@ -82,7 +82,7 @@
 	.search-input {
 		border: none;
 		background: transparent;
-		font-size: 1rem;
+		font-size: var(--font-size-md);
 		font-weight: 700;
 		padding: 1rem;
 		outline: none;
@@ -91,20 +91,20 @@
 	.search-icon {
 		background: #fff;
 		border: none;
-		font-size: 1.2rem;
+		font-size: var(--font-size-4xl);
 		color: #222;
 		padding-right: 1.4rem;
 		padding-left: 0;
 	}
 	.form-control:focus {
 		box-shadow: none;
-		border-color: #fff;
+		border-color: var(--color-light);
 	}
 }
 
 .cc-form-check-input:checked {
-	background-color: $primary;
-	border-color: $primary;
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
 }
 
 .cc-price-range {
@@ -144,7 +144,7 @@
 		display: none;
 	}
 	.price-label {
-		font-size: 1rem;
+		font-size: var(--font-size-md);
 		font-weight: 500;
 		color: #222;
 		z-index: 2;

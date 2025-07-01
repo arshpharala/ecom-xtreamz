@@ -24,7 +24,7 @@
 		flex-grow: 1;
 		font-weight: 600;
 		color: #666;
-		font-size: 1rem;
+		font-size: var(--font-size-md);
 		letter-spacing: 0.05em;
 	}
 	.card-info span {
@@ -42,13 +42,13 @@
 	}
 	.btn-delete:hover {
 		background: #ff1744;
-		color: #fff;
+		color: var(--color-light);
 	}
 	.add-card-form .form-control {
 		border-radius: 0;
 		border: 1px solid #ddd;
 		padding: 0.75rem 1rem;
-		font-size: 1rem;
+		font-size: var(--font-size-md);
 		font-weight: 600;
 		color: #222;
 		letter-spacing: 0.05em;
@@ -70,7 +70,7 @@
 	}
 	.btn-save {
 		background-color: #5f9ea0;
-		color: #fff;
+		color: var(--color-light);
 		font-weight: 600;
 		letter-spacing: 0.05em;
 		border-radius: 0;

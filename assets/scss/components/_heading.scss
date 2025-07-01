@@ -1,5 +1,5 @@
 .heading-section {
-  background: $bg-color;
+  background: var(----color-background);
 
   .heading-row {
     position: relative;
@@ -10,7 +10,7 @@
   }
 
   .section-title {
-    font-family: $font-family-base;
+    font-family: var(--font-family-primary);
     font-weight: 500;
     color: #222;
     margin: 0;
@@ -27,7 +27,7 @@
     z-index: 2;
     @media (max-width: 575px) {
       padding: 0.5rem 1rem;
-      font-size: 1rem;
+      font-size: var(--font-size-md);
     }
   }
 }

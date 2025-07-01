@@ -38,7 +38,7 @@ $(document).ready(function () {
             <div class="product-title-box">
               <h6 class="product-title">${product.title}</h6>
             </div>
-            <div class="product-meta mt-auto d-flex justify-content-between align-items-center w-100 px-2">
+            <div class="product-meta mt-auto d-flex justify-content-between align-items-center w-100">
               <span class="price fs-4 fw-bold">${product.price}</span>
               <button class="btn cart-btn"><i class="bi bi-cart"></i></button>
             </div>

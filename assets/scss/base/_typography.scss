@@ -1,0 +1,31 @@
+// ===================================
+// Root Variables (Typography + Colors)
+// ===================================
+
+:root {
+
+	--font-family-primary: "Roboto", sans-serif;
+	--font-family-secondary: "Myriad Pro", sans-serif;
+
+	
+	--font-size-xs: 0.65rem; // Extra small (e.g. badges)
+	--font-size-sm: 0.875rem; // Small (e.g. small text)
+	--font-size-md: 1rem; // Base text (paragraph, inputs)
+	--font-size-lg: 1.06rem; // Slightly larger (cart titles)
+	--font-size-xl: 1.12rem; // Labels, form elements
+	--font-size-2xl: 1.15rem; // Product/order prices
+	--font-size-3xl: 1.18rem; // Medium emphasis text
+	--font-size-4xl: 1.2rem; // Button icons, form headers
+	--font-size-5xl: 1.25rem; // Search icons
+	--font-size-6xl: 1.37rem; // Mobile section titles
+	--font-size-7xl: 1.5rem; // Section headers
+	--font-size-8xl: 1.8rem; // Subtitles
+	--font-size-9xl: 2rem; // Page titles, CTA buttons
+	--font-size-10xl: 2.3rem; // Listing headers
+	--font-size-11xl: 2.5rem; // Section titles (sustainable)
+	--font-size-12xl: 2.8rem; // Contact titles
+	--font-size-13xl: 3.1rem; // Order thank you title
+	--font-size-14xl: 3.5rem; // Hero title
+	--font-size-15xl: 3.75rem; // Hero title
+	--font-size-16xl: 5em; // Large titles
+}

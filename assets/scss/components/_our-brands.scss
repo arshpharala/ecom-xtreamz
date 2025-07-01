@@ -1,9 +1,9 @@
 .our-brands-section {
-	background-color: $bg-color;
+	background-color: var(--color-background);
 
 	.section-title {
 		font-weight: 500;
-		font-family: $font-family-base;
+		font-family: var(--font-family-primary);
 		color: #222;
 	}
 

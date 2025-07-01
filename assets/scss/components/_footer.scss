@@ -1,5 +1,5 @@
 .site-footer {
-  background-color: $white;
+  background-color: var(--color-light);
 
   .footer-logo {
     max-width: 160px;
@@ -19,7 +19,7 @@
       margin-bottom: 0.5rem;
 
       a {
-        font-size: 0.875rem;
+        font-size: var(--font-size-sm);
         font-weight: 600;
         text-decoration: none;
         color: #111;
@@ -34,9 +34,9 @@
   }
 
   .footer-bottom {
-    font-size: 0.8rem;
+    font-size: var(--font-size-sm);
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    background-color: $dark;
+    background-color: var(--color-dark);
   }
 }

@@ -1,39 +1,38 @@
 .hero-section {
-	background: url("../images/banner.jpg") no-repeat center center;
+	background: url("../images/banner.jpg");
+	background-position: center 30%; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
 	background-size: cover;
-
-	min-height: 450px; // Safe minimum for mobile
-	height: 65vh; // Will scale with screen height
-	max-height: 700px; // Won't be too tall on desktop
-	display: flex;
-	align-items: center;
-	padding: 3rem 0;
+	width: 100%;
+	min-height: 520px; // Safe minimum for mobile
+	height: 75vh; // Will scale with screen height
+	max-height: 920px; // Won't be too tall on desktop
 
 	.hero-text {
 		max-width: 540px;
 
 		.hero-subtitle {
-			font-size: 1.8rem;
+			font-size: var(--font-size-10xl);
 			font-weight: 100;
 			color: rgba(255, 255, 255, 0.85);
 		}
 
 		.hero-title {
-			font-size: 3.5rem;
+			font-size: var(--font-size-16xl);
 			font-weight: 500;
 			line-height: 1.1;
-			color: #fff;
+			color: var(--color-light);
 		}
 
 		.hero-description {
-			font-size: 1rem;
+			font-size: var(--font-size-xl);
 			font-weight: 300;
 			color: rgba(255, 255, 255, 0.9);
 		}
 
 		.btn-light {
-			color: $primary;
-			padding: 14px 28px;
+			color: var(--color-primary);
+			font-size: var(--font-size-md);
 			box-shadow: 0 0.5rem 1rem rgba(59, 58, 58, 0.4);
 			border-radius: 8px;
 		}
@@ -41,7 +40,7 @@
 }
 
 .search-bar-wrapper {
-	background-color: $bg-color;
+	background-color: var(--color-background);
 	padding: 1.5rem 0;
 
 	.search-bar {
@@ -54,8 +53,8 @@
 		input {
 			flex: 1;
 			font-weight: 700;
-			color: $dark;
-			font-size: 1rem;
+			color: var(--color-dark);
+			font-size: var(--font-size-md);
 			padding: 1rem 0.75rem;
 			outline: none;
 			box-shadow: none;
@@ -63,27 +62,43 @@
 
 		button {
 			i {
-				font-size: 1.25rem;
+				font-size: var(--font-size-5xl);
 			}
 		}
 	}
 }
 
-@media (max-width: 991px) {  //Tablet and smaller screens
-  .hero-section {
-    height: 54vh;
-    min-height: 320px;
-    max-height: 430px;
-    padding: 2rem 0;
-    
-  }
+@media (max-width: 991px) {
+	//Tablet and smaller screens
+	.hero-section {
+		height: 54vh;
+		min-height: 320px;
+		max-height: 430px;
+		padding: 2rem 0;
+	}
 }
 
-@media (max-width: 600px) { // Mobile screens
-  .hero-section {
-    min-height: 400px;
-    height: auto;
-    max-height: none;
-    padding: 1.5rem 0;
-  }
+@media (max-width: 600px) {
+	// Mobile screens
+	.hero-section {
+		min-height: 400px;
+		height: auto;
+		max-height: none;
+		padding: 1.5rem 0;
+
+		.hero-text {
+			.hero-subtitle {
+				font-size: var(--font-size-7xl);
+			}
+
+			.hero-title {
+				font-size: var(--font-size-13xl);
+			}
+
+			.hero-description {
+				font-size: var(--font-size-md);
+			}
+
+		}
+	}
 }

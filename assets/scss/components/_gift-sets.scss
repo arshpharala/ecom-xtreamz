@@ -1,8 +1,8 @@
 .gift-set-section {
-	background-color: $bg-color;
+	background-color: var(--color-background);
 
 	.section-title {
-		font-family: $font-family-base;
+		font-family: var(--font-family-primary);
 		font-weight: 500;
 		margin: 0;
 		color: #222;
@@ -16,7 +16,7 @@
 		.gift-box {
 			position: relative;
 			overflow: hidden;
-			color: #fff;
+			color: var(--color-light); 
 			padding: 2rem;
 			display: flex;
 			flex-direction: column;
@@ -40,7 +40,7 @@
 			}
 
 			h2 {
-				font-size: 60px;
+				font-size: var(--font-size-15xl);
 			}
 
 			h2,

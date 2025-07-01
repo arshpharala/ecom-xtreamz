@@ -1,14 +1,14 @@
 .listing-header {
-	background: $bg-color;
+	background: var(--color-background);
 
 	.section-title {
-		font-size: 2.3rem;
+		font-size: var(--font-size-10xl);
 		font-weight: 400;
 		letter-spacing: -1px;
 	}
 
 	.sort-label {
-		font-size: 1.12rem;
+		font-size: var(--font-size-xl);
 		font-weight: 700;
 	}
 }

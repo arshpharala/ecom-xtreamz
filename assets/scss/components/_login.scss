@@ -2,7 +2,7 @@
 
 .login-section {
 	background: var(--color-background);
-  min-height: 70.9vh;
+	min-height: 70.9vh;
 
 	.section-title {
 		font-family: var(--font-family-primary);
@@ -30,14 +30,10 @@
 		.login-inp {
 			background: var(--color-light);
 			color: var(--color-dark);
-			
 		}
 	}
-}
 
-// Responsive
-@media (max-width: 767.98px) {
-	.login-section {
+	@media (max-width: #{$screen-md - 1}) {
 		.login-boxes {
 			flex-direction: column;
 		}

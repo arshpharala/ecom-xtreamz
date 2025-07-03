@@ -4,62 +4,80 @@
     "title": "BREDA - Insulated Bottle - Green",
     "price": "70 AED",
     "image": "assets/images/product.png",
-    "category": "Clothing"
+    "category": "Clothing",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   },
   {
     "id": 2,
     "title": "BREDA - Insulated Bottle - Green",
     "price": "70 AED",
     "image": "assets/images/product.png",
-    "category": "Clothing"
+    "category": "Clothing",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   },
   {
     "id": 3,
     "title": "BREDA - Insulated Bottle - Green",
     "price": "70 AED",
     "image": "assets/images/product.png",
-    "category": "Clothing"
+    "category": "Clothing",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   },
   {
     "id": 4,
     "title": "BREDA - Insulated Bottle - Green",
     "price": "70 AED",
     "image": "assets/images/product.png",
-    "category": "Clothing"
+    "category": "Clothing",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   },
   {
     "id": 5,
     "title": "BREDA - Insulated Bottle - Green",
     "price": "70 AED",
     "image": "assets/images/product.png",
-    "category": "Clothing"
+    "category": "Clothing",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   },
   {
     "id": 6,
     "title": "Custom Mug - Ceramic",
     "price": "45 AED",
-    "image": "assets/images/product.png",
-    "category": "Mugs"
+    "image": "assets/images/product-1.png",
+    "category": "Mugs",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   },
   {
     "id": 7,
     "title": "Custom Mug - Ceramic",
     "price": "45 AED",
-    "image": "assets/images/product.png",
-    "category": "Mugs"
+    "image": "assets/images/product-1.png",
+    "category": "Mugs",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   },
   {
     "id": 8,
     "title": "Custom Mug - Ceramic",
     "price": "45 AED",
-    "image": "assets/images/product.png",
-    "category": "Mugs"
+    "image": "assets/images/product-1.png",
+    "category": "Mugs",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   },
   {
     "id": 9,
     "title": "Eco Tote Bag",
     "price": "35 AED",
     "image": "assets/images/product.png",
-    "category": "Gift Bags"
+    "category": "Gift Bags",
+    "description": "1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality. 1pc G13 VR Headset - Immersive Virtual Reality Experience with High-Quality",
+    "link": "product-detail.html"
   }
 ]

@@ -5,11 +5,14 @@ $(document).ready(function () {
     nav: false,
     dots: false,
     autoHeight: false,
+    items : 4,
+    responsive: true,
     responsive: {
       0: { items: 1 },
-      576: { items: 2 },
-      768: { items: 3 },
-      992: { items: 4 },
+      576: { items: 1 },
+      768: { items: 2 },
+      992: { items: 3 },
+      1200: { items: 4 },
     }
   });
 
@@ -31,16 +34,26 @@ $(document).ready(function () {
     const html = filtered.map(product => {
       return `
         <div class="item" data-category="${product.category}">
-          <div class="product-card h-100 d-flex flex-column align-items-center text-center">
-            <div class="product-image-box mb-3">
-              <img src="${product.image}" alt="${product.title}" class="img-fluid">
+          <div class="product-card d-flex flex-column">
+            <div class="image-box">
+              <img src="${product.image}" alt="${product.title}"/>
             </div>
-            <div class="product-title-box">
-              <h6 class="product-title">${product.title}</h6>
-            </div>
-            <div class="product-meta mt-auto d-flex justify-content-between align-items-center w-100">
-              <span class="price fs-4 fw-bold">${product.price}</span>
-              <button class="btn cart-btn"><i class="bi bi-cart"></i></button>
+            <div class="image_overlay"></div>
+            <a href="${product.link}" class="overlay-button">View details</a>
+
+            <div class="stats-container">
+              <span class="product-title">${product.title}</span>
+              <div class="product-description">
+                  <p>
+                    ${product.description}
+                  </p>
+              </div>
+              <div class="product-meta">
+                <span class="price fs-4 fw-bold">${product.price}</span>
+                <button class="btn cart-btn">
+                  <i class="bi bi-cart"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>`;

@@ -1,61 +1,43 @@
- <div>
-    <div
-        class="container d-flex justify-content-between align-items-center">
-        <!-- Logo -->
-        <a href="/" class="navbar-brand d-flex align-items-center">
-            <img src="assets/images/logo.png" alt="Logo"
-                class="img-fluid">
-        </a>
 
-        <!-- Navigation (Desktop) -->
-        <nav class="main-nav d-none d-lg-block">
-            <ul class="nav">
-                <li class="nav-item"><a href="index.html"
-                        class="nav-link px-4">Home</a></li>
-                <li class="nav-item"><a href="about-us.html"
-                        class="nav-link px-4">About</a></li>
-                <li class="nav-item"><a href="products.html"
-                        class="nav-link px-4">Products</a></li>
-                <li class="nav-item"><a href="contact.html"
-                        class="nav-link px-4">Contact</a></li>
-            </ul>
-        </nav>
+  <div class="container d-flex justify-content-between align-items-center">
+    <!-- Logo -->
+    <a href="index.html" class="navbar-brand d-flex align-items-center">
+      <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
+    </a>
 
-        <!-- Icons -->
-        <div class="header-icons d-flex align-items-center gap-3">
+    <!-- Main Navigation (ALWAYS in DOM, hidden on mobile by CSS) -->
+    <nav class="main-nav">
+      <ul class="nav">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="about-us.html" class="nav-link">About</a></li>
+        <li class="nav-item"><a href="products.html" class="nav-link">Products</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
 
-            <!-- User -->
-            <a href="login.html" class="icon-link"><i
-                    class="bi bi-person fs-5"></i></a>
-
-            <!-- Cart -->
-            <a href="cart.html" class="icon-link position-relative">
-                <i class="bi bi-cart fs-5"></i>
-                <span
-                    class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm">2</span>
-            </a>
-
-            <!-- Mobile Nav Toggle -->
-            <button class="btn p-0 border-0 d-lg-none"
-                id="mobileNavToggle">
-                <i class="bi bi-list fs-4"></i>
-            </button>
-        </div>
+    <!-- Icons & Mobile Toggle -->
+    <div class="header-icons d-flex align-items-center gap-3">
+      <a href="login.html" class="icon-link"><i class="bi bi-person fs-5"></i></a>
+      <a href="cart.html" class="icon-link position-relative">
+        <i class="bi bi-cart fs-5"></i>
+        <span class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm">2</span>
+      </a>
+      <!-- Hamburger button, mobile only -->
+      <button class="btn p-0 border-0 d-lg-none no-animate" id="mobileNavToggle" aria-label="Open navigation">
+        <i class="bi bi-list fs-4"></i>
+      </button>
     </div>
+  </div>
 
-    <!-- Mobile Nav -->
-    <div class="mobile-nav d-lg-none collapse px-3 py-2 bg-light"
-        id="mobileNav">
-        <ul class="nav flex-column">
-            <li class="nav-item"><a href="index.html"
-                    class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="about-us.html"
-                    class="nav-link">About</a></li>
-            <li class="nav-item"><a href="products.html"
-                    class="nav-link">Products</a></li>
-            <li class="nav-item"><a href="#"
-                    class="nav-link">Contact</a></li>
-        </ul>
-    </div>
-
-</div>
+  <!-- Slide Menu and Mask (mobile only, always in DOM) -->
+  <div class="mobile-nav-drawer">
+    <nav class="mobile-nav">
+      <ul class="nav">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="about-us.html" class="nav-link">About</a></li>
+        <li class="nav-item"><a href="products.html" class="nav-link">Products</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-mask"></div>
+  </div>

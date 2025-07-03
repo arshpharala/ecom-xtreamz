@@ -117,4 +117,15 @@
 			}
 		}
 	}
+
+	@media (max-width: #{$screen-xl - 1}) {
+		.gift-set-grid {
+			.gift-left {
+				.img-left-big {
+					bottom: 86px;
+					left: 30%;
+				}
+			}
+		}
+	}
 }

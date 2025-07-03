@@ -44,23 +44,27 @@
 		margin-right: 1rem;
 		accent-color: var(--color-primary);
 	}
-
 }
 
-@media (max-width: 991px) {
-	.checkout-section .bg-white {
-		padding: 1.2rem !important;
-	}
-	.checkout-section .page-title-checkout {
-		font-size: var(--font-size-6xl);
+@media (max-width: #{$screen-lg - 1}) {
+	.checkout-section {
+		.bg-white {
+			padding: 1.2rem !important;
+		}
+		.page-title-checkout {
+			font-size: var(--font-size-6xl);
+		}
 	}
 }
-@media (max-width: 767.98px) {
-	.checkout-section .btn-outline-back {
-		width: 100%;
-		margin-bottom: 1rem;
-	}
-	.checkout-section .bg-white {
-		padding: 1rem !important;
+
+@media (max-width: #{$screen-md - 0.02}) {
+	.checkout-section {
+		.btn-outline-back {
+			width: 100%;
+			margin-bottom: 1rem;
+		}
+		.bg-white {
+			padding: 1rem !important;
+		}
 	}
 }

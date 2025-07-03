@@ -38,9 +38,15 @@
     }
   }
 
-  @media (max-width: 767.98px) {
+  
+  @media (max-width: #{$screen-md - 1}) {
 		.category-icons {
 			gap: 0.75rem;
+
+			.category-icon{
+				height: 30px !important;
+				width: 30px !important;
+			}
 		}
 	}
 }

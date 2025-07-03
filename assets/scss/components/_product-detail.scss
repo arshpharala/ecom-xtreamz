@@ -120,4 +120,40 @@
 		border-radius: 0%;
 		padding: 14px 28px;
 	}
+
+	@media (max-width: #{$screen-md - 1}) {
+		.main-image {
+			height: 30vh;
+		}
+
+		.thumbnail-carousel {
+			.thumb-wrapper {
+				img.thumb-item {
+					width: 23.9%;
+					height: 100px;
+				}
+			}
+			.thumb-nav {
+				height: 100px !important;
+			}
+		}
+	}
+
+	@media (max-width: #{$screen-sm - 1}) {
+		.main-image {
+			height: 40vh;
+		}
+
+		.thumbnail-carousel {
+			.thumb-wrapper {
+				img.thumb-item {
+					width: 23.9%;
+					height: 100px;
+				}
+			}
+			.thumb-nav {
+				height: 100px !important;
+			}
+		}
+	}
 }

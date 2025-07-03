@@ -1,33 +1,38 @@
 .heading-section {
-  background: var(----color-background);
+	background: var(----color-background);
 
-  .heading-row {
-    position: relative;
-    min-height: 60px; // ensures enough height for the button
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+	.heading-row {
+		position: relative;
+		min-height: 60px; // ensures enough height for the button
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-  .section-title {
-    font-family: var(--font-family-primary);
-    font-weight: 500;
-    color: #222;
-    margin: 0;
-    width: 100%;
-    text-align: center;
-    z-index: 1; // ensures it stays above the button if overlapped
-  }
+	.section-title {
+		font-family: var(--font-family-primary);
+		font-weight: 500;
+		color: #222;
+		width: 100%;
+		z-index: 1; // ensures it stays above the button if overlapped
+	}
 
-  .left-tools {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    @media (max-width: 575px) {
-      padding: 0.5rem 1rem;
-      font-size: var(--font-size-md);
-    }
-  }
+	.left-tools {
+		position: absolute;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 2;
+	}
+
+	@media (max-width: #{$screen-md - 1}) {
+			.heading-row{
+				margin-bottom: 0 !important;
+			}
+
+		.left-tools {
+			padding: 0.5rem 1rem;
+			font-size: var(--font-size-md);
+		}
+	}
 }

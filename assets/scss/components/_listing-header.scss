@@ -11,10 +11,8 @@
 		font-size: var(--font-size-xl);
 		font-weight: 700;
 	}
-}
 
-@media (max-width: 600px) {
-	.listing-header {
+	@media (max-width: #{$screen-md - 1}) {	
 		.row {
 			flex-direction: column;
 			gap: 1.3rem;

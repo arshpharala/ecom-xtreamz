@@ -1,5 +1,4 @@
 .sustainable-section {
-
 	background-color: var(--color-background);
 
 	.bg-beige {
@@ -13,36 +12,39 @@
 		color: #222;
 	}
 
-	.btn-sustainable {
-		background-color: #92c9cb;
-		color: var(--color-light);
-		padding: 12px 24px;
-		border-radius: 10px;
-		box-shadow: 0 10px 20px rgba(146, 201, 203, 0.3);
-		transition: all 0.3s ease-in-out;
-		font-weight: 500;
+	// Add spacing to the left text content
+	.sustainable-content {
+		padding-top: 3rem;
+		padding-bottom: 3rem;
+	}
 
-		&:hover {
-			background-color: #78b8bb;
-			box-shadow: 0 12px 24px rgba(146, 201, 203, 0.4);
+	// Image column as background
+	.sustainable-bg-image {
+		background-image: url('../images/sustainable.png');
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		min-height: 480px;
+	}
+
+
+	@media (max-width: #{$screen-xl - 1}) {
+		.sustainable-content {
+			.sustainable-heading {
+				font-size: var(--font-size-10xl);
+			}
 		}
 	}
 
-	.sustainable-image {
-		height: 100%;
-		img {
-			object-fit: cover;
-			height: 100%;
-		}
-	}
+	@media (max-width: #{$screen-md - 1}) {
+		.sustainable-content {
+			padding-top: 2rem;
+			padding-bottom: 2rem;
 
-	@media (max-width: 767.98px) {
-		.sustainable-heading {
-			font-size: var(--font-size-9xl);
+			.sustainable-heading {
+				font-size: var(--font-size-9xl);
+			}
 		}
 
-		.btn-sustainable {
-			padding: 10px 20px;
-		}
 	}
 }

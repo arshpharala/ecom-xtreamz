@@ -30,15 +30,15 @@
 		}
 		.form-select {
 			min-width: 100px;
-			font-size: var(--font-size-md)
+			font-size: var(--font-size-md);
 		}
 	}
-}
 
-@media (max-width: 991px) {
-	.sidebar-filters {
-		min-width: 100%;
-		border-right: none;
-		margin-bottom: 2rem;
+	@media (max-width: #{$screen-lg - 1} ) {
+		.sidebar-filters {
+			min-width: 100%;
+			border-right: none;
+			margin-bottom: 2rem;
+		}
 	}
 }

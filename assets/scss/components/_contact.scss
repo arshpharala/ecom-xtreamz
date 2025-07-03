@@ -1,33 +1,42 @@
 .contact-section {
 	.contact-main-row {
 		background: var(--color-light);
-		min-height: 370px; // Keeps content vertically balanced on larger screens
+		min-height: 370px;
 		align-items: center;
 	}
+
 	.contact-title {
 		font-size: var(--font-size-12xl);
 		font-weight: 400;
 		letter-spacing: 0.01em;
-		color: #222;
-		@media (max-width: 991px) {
-			font-size: var(--font-size-9xl);
-		}
-		@media (max-width: 600px) {
-			font-size: var(--font-size-7xl);
-		}
+		color: var(--color-text);
 	}
+
 	.contact-address {
 		font-size: var(--font-size-3xl);
-		color: #222;
+		color: var(--color-text);
 		line-height: 1.65;
 		min-width: 240px;
-		@media (max-width: 991px) {
-			font-size: var(--font-size-md);
-		}
+
 		div {
 			font-size: var(--font-size-xl);
 			font-weight: 400;
 			color: #444;
+		}
+	}
+
+	@media (max-width: #{$screen-lg - 1}) {
+		.contact-title {
+			font-size: var(--font-size-9xl);
+		}
+		.contact-address {
+			font-size: var(--font-size-md);
+		}
+	}
+
+	@media (max-width: #{$screen-sm - 1}) {
+		.contact-title {
+			font-size: var(--font-size-7xl);
 		}
 	}
 }

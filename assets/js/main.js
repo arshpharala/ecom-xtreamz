@@ -3,7 +3,20 @@ $(document).ready(function () {
 	$("#footer").load("components/footer-component.html"); // Load footer
 
 	$("body").on("click", "#mobileNavToggle", function () {
-		$("#mobileNav").collapse("toggle");
+		$("body").find(".mobile-nav-drawer").addClass("active");
+		$("body").addClass("has-active-menu");
+	});
+
+	$("body").on("click", ".nav-mask", function () {
+		$("body").find(".mobile-nav-drawer").removeClass("active");
+		$("body").removeClass("has-active-menu");
+	});
+
+	$(document).on("keydown", function (e) {
+		if (e.key === "Escape") {
+			$("body").find(".mobile-nav-drawer").removeClass("active");
+			$("body").removeClass("has-active-menu");
+		}
 	});
 
 	$(".type-placeholder").each(function () {
@@ -47,20 +60,6 @@ $(".btn-primary").on("click", function (e) {
 	});
 });
 
-// Sticky Header
-
-const header = document.querySelector("#header");
-const toggleClass = "is-sticky";
-
-window.addEventListener("scroll", () => {
-	const currentScroll = window.pageYOffset;
-	if (currentScroll > 150) {
-		header.classList.add(toggleClass);
-	} else {
-		header.classList.remove(toggleClass);
-	}
-});
-
 $(document).ready(function () {
 	const observer = new IntersectionObserver(
 		(entries) => {
@@ -77,4 +76,16 @@ $(document).ready(function () {
 	$(".animate-on-scroll").each(function () {
 		observer.observe(this);
 	});
+});
+
+// Sticky Header
+const $header = $("#header");
+const toggleClass = "is-sticky";
+$(window).on("scroll", function () {
+	const currentScroll = $(window).scrollTop();
+	if (currentScroll > 150) {
+		$header.addClass(toggleClass);
+	} else {
+		$header.removeClass(toggleClass);
+	}
 });

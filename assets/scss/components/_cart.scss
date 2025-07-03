@@ -52,8 +52,8 @@
 					background: var(--color-background);
 				}
 				.qty-btn {
-					width: 28px;
-					height: 28px;
+					width: 24px;
+					height: 24px;
 					background: #fff;
 					border: 1px solid #d1d1d1;
 					border-radius: 0;
@@ -68,12 +68,12 @@
 				}
 			}
 			.btn-trash {
-				width: 45px;
-				height: 45px;
+				width: 48px;
+				height: 48px;
 				background: var(--color-background);
 				border: none;
 				border-radius: 2px;
-				font-size:  var(--font-size-8xl);
+				font-size: var(--font-size-6xl);
 				margin-top: 10px;
 				transition: background 0.18s, color 0.18s;
 				display: flex;
@@ -110,50 +110,64 @@
 }
 
 // Responsive
-@media (max-width: 991px) {
-	.cart-section .cart-summary {
-		min-width: 100%;
-		margin-top: 2rem;
-	}
+@media (max-width: #{$screen-lg - 1}) {
+  .cart-section {
+    .cart-summary {
+      min-width: 100%;
+      margin-top: 2rem;
+    }
+  }
 }
-@media (max-width: 767px) {
-	.cart-section .cart-list {
-		padding: 1rem;
-	}
-	.cart-section .cart-summary {
-		padding: 1rem;
-	}
-	.cart-section .cart-selectall,
-	.cart-section .cart-item .form-check-input {
-		display: none !important;
-	}
-	.cart-section .cart-item {
-		.cart-img-box {
-			width: 56px;
-			height: 56px;
+
+@media (max-width: #{$screen-md - 1}) {
+	.cart-section {
+		.cart-list {
+			padding: 1rem;
 		}
-		.qty-delete-box {
+
+		.cart-summary {
+			padding: 1rem;
+		}
+
+		.cart-selectall,
+		.cart-item .form-check-input {
 			display: none !important;
 		}
-		.qty-delete-box-mobile {
-			display: flex !important;
-			margin-top: 0.5rem;
-			.cart-qty-box {
-				min-width: 50px;
-				.cart-qty-val {
-					font-size: var(--font-size-lg);
-					padding: 6px 36px;
-				}
-				.qty-btn {
-					width: 36px;
-					height: 36px;
-				}
+
+		.cart-item {
+			.cart-img-box {
+				width: 56px;
+				height: 56px;
 			}
-			.btn-trash {
-				width: 48px;
-				height: 48px;
-				font-size: var(--font-size-6xl);
-				margin-top: 0;
+
+			.qty-delete-box {
+				display: none !important;
+			}
+
+			.qty-delete-box-mobile {
+				display: flex !important;
+				margin-top: 0.5rem;
+
+				.cart-qty-box {
+					min-width: 50px;
+
+					.cart-qty-val {
+						font-size: var(--font-size-lg);
+						padding: 6px 36px;
+					}
+
+					.qty-btn {
+						width: 36px;
+						height: 36px;
+					}
+				}
+
+				.btn-trash {
+					width: 48px;
+					height: 48px;
+					font-size: var(--font-size-6xl);
+					margin-top: 0;
+				}
 			}
 		}
 	}

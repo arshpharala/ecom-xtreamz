@@ -13,6 +13,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
+	overflow-x: hidden;
 }
 
 main {
@@ -20,29 +21,30 @@ main {
 	background-color: var(--color-background);
 }
 
+.owl-stage-outer {
+	padding-bottom: 1.37rem;
+}
+
 .animate-on-scroll {
-	opacity: 0;
-	transform: translateY(0);
-	transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+  opacity: 0;
+  transform: translateY(0);
+  transition: opacity 0.9s ease-out, transform 0.9s ease-out;
 
-	&[data-animate="fade-up"] {
-		transform: translateY(80px);
-	}
+  &[data-animate="fade-up"]    { transform: translateY(80px); }
+  &[data-animate="fade-down"]  { transform: translateY(-80px); }
+  &[data-animate="fade-left"]  { transform: translateX(80px); }
+  &[data-animate="fade-right"] { transform: translateX(-80px); }
 
-	&[data-animate="fade-down"] {
-		transform: translateY(-80px);
-	}
+  &.in-view {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
 
-	&[data-animate="fade-left"] {
-		transform: translateX(80px);
-	}
 
-	&[data-animate="fade-right"] {
-		transform: translateX(-80px);
-	}
-
-	&.in-view {
-		opacity: 1;
-		transform: translate(0, 0);
+@media (max-width: #{$screen-sm - 1}) {
+	.py-5 {
+		padding-top: 1.5rem !important;
+		padding-bottom: 1.5rem !important;
 	}
 }

@@ -706,7 +706,7 @@ main {
 }
 .browse-categories .category-icons .category-item .category-icon.active {
   opacity: 1;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  filter: brightness(0) saturate(100%) invert(78%) sepia(15%) saturate(639%) hue-rotate(137deg) brightness(96%) contrast(92%);
 }
 .browse-categories .category-icons .category-item .category-icon:hover {
   opacity: 1;
@@ -1107,7 +1107,6 @@ main {
 }
 @media (max-width: 991px) {
   .video-section {
-    max-width: 98vw;
     aspect-ratio: 16/9;
     max-height: 350px;
   }

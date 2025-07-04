@@ -24,25 +24,47 @@
 		pointer-events: none;
 	}
 
-	.video-play-btn {
-		z-index: 2;
-		width: 64px;
-		height: 64px;
-		background-color: var(--color-light);
-		border: none;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: var(--font-size-9xl);
-		color: #008ba0;
-		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-		transition: transform 0.2s ease;
+.video-play-btn {
+	z-index: 2;
+	width: 64px;
+	height: 64px;
+	background-color: var(--color-light);
+	border: none;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: var(--font-size-9xl);
+	color: var(--color-accent);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+	transition: transform 0.2s ease;
+	position: relative;
 
-		&:hover {
-			transform: scale(1.1);
-		}
+	&:hover {
+		transform: scale(1.1);
 	}
+
+	&::before,
+	&::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%) scale(0.2);
+		width: 200px; // bigger than button
+		height: 200px;
+		border-radius: 50%;
+		background-color: rgba(0, 139, 160, 0.2);
+		opacity: 0;
+		z-index: -1;
+		animation: wavePulse 3s ease-in-out infinite;
+		pointer-events: none;
+	}
+
+	&::after {
+		animation-delay: 1.5s;
+	}
+}
 
 	@media (max-width: #{$screen-lg - 1}) {
 		aspect-ratio: 16 / 9;

@@ -1,26 +1,41 @@
 .our-brands-section {
-	background-color: var(--color-background);
+  background-color: var(--color-background);
 
-	.section-title {
-		font-weight: 500;
-		font-family: var(--font-family-primary);
-		color: #222;
-	}
+  .slider {
+    display: flex;
+    overflow: hidden;
+    white-space: nowrap;
 
-	.brand-logo {
-		max-height: 40px;
-		object-fit: contain;
-		transition: transform 0.8s ease; // slow and smooth
+    .logos {
+      display: flex;
+      animation: scrollBrands 30s linear infinite;
 
-		&:hover {
-			transform: scale(1.2);
-			transition: transform 0.8s ease; // slow and smooth
-		}
-	}
+      .brand-logo {
+        max-height: 40px;
+        margin: 0 4.5rem;
+        object-fit: contain;
+        transition: transform 0.5s ease;
 
-	@media (max-width: #{$screen-md - 1}) {
-		.brand-logo {
-			max-height: 30px;
-		}
-	}
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .brand-logo {
+          max-height: 30px;
+          margin: 0 1rem;
+        }
+      }
+    }
+  }
+}
+
+@keyframes scrollBrands {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }

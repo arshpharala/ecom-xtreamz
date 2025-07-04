@@ -10,7 +10,7 @@
     transition: color 0.2s ease;
 
     &:hover {
-      color: #008ba0;
+      color: var(--color-accent);
     }
   }
 
@@ -27,7 +27,7 @@
         transition: color 0.2s ease;
 
         &:hover {
-          color: #008ba0;
+          color: var(--color-accent);
         }
       }
     }

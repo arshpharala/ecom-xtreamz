@@ -38,7 +38,7 @@
 				cursor: pointer;
 
 				&.active {
-					border-color: #008ba0;
+					border-color: var(--color-accent);
 				}
 			}
 		}
@@ -103,7 +103,7 @@
 		cursor: pointer;
 
 		&.active {
-			border-color: #008ba0;
+			border-color: var(--color-accent);
 		}
 	}
 

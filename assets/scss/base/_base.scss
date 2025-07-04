@@ -63,6 +63,17 @@ main {
 	}
 }
 
+
+@keyframes scrollSmooth {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+
 @keyframes scrollLeft {
 	0% {
 		transform: translateX(0%);

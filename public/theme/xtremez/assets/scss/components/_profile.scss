@@ -1,0 +1,143 @@
+.profile-section {
+	background-color: var(--color-background);
+
+	.profile-sidebar {
+		font-size: var(--font-size-md);
+		color: #222;
+		a {
+			display: block;
+			padding: 0.5rem 1rem;
+			color: #222;
+			text-decoration: none;
+			border-left: 3px solid transparent;
+			transition: all 0.3s ease;
+			&.active {
+				color: var(--color-secondary);
+				border-left-color: var(--color-secondary);
+			}
+			&:hover {
+				color: var(--color-secondary);
+			}
+		}
+	}
+
+	.profile-main {
+		max-width: 800px;
+		margin: 0 auto;
+
+		.input-group {
+			border: 1px solid #ddd;
+			border-radius: 2px;
+			overflow: hidden;
+
+			.btn-edit {
+				background-color: #f5f5f5;
+				border: none;
+				width: 50px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #666;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+				&:hover {
+					background-color: #e0e0e0;
+					color: var(--color-primary);
+				}
+				i {
+					font-size: var(--font-size-4xl);
+				}
+			}
+		}
+
+		.gender-toggle {
+			border: 1px solid #ddd;
+			border-radius: 0;
+
+			.btn-outline-primary {
+				margin: 0.25rem !important;
+				padding: 0.75rem 2rem !important;
+				border: 0;
+				&.active {
+					background-color: var(--color-primary) !important;
+					color: var(--color-light) !important;
+					border-color: var(--color-primary);
+				}
+			}
+		}
+	}
+
+	.card-list-box {
+		.btn-delete-card {
+			background: #f5f5f5;
+			border: none;
+			color: #888;
+			font-size: var(--font-size-4xl);
+			border-radius: 0px;
+			&:hover {
+				background: #ffeaea;
+				color: #ff1744;
+			}
+		}
+	}
+
+	.order-list {
+		.order-item {
+			border-bottom: 2px dotted #ddd;
+
+			&:last-child {
+				border-bottom: none;
+			}
+
+			.order-img-box {
+				width: 64px;
+				height: 64px;
+				background: #e7f6fa;
+				border-radius: 2px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-right: 1.2rem;
+				.order-img {
+					max-width: 54px;
+					max-height: 54px;
+					object-fit: contain;
+				}
+			}
+			.order-title {
+				font-size: var(--font-size-xl);
+				color: #232323;
+			}
+			.order-price {
+				font-size: var(--font-size-2xl);
+			}
+		}
+	}
+
+	@media (max-width: #{$screen-sm - 1}) {
+
+		.profile-main{
+			padding: 0 !important;
+		}
+
+		.card-list-box {
+			.card-list {
+				padding: 0 !important;
+
+				div {
+					margin-left: 0 !important;
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 991.98px) {
+	.profile-sidebar {
+		display: none !important;
+	}
+	#profileContent {
+		display: none !important;
+	}
+}
+

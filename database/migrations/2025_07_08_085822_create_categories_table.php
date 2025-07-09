@@ -12,15 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('slug')->unique();
+            $table->string('icon')->nullable();
+            $table->uuid('parent_id')->nullable()->index();
+            $table->integer('position')->default(0);
+            $table->boolean('is_visible')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
+
 
         Schema::create('category_translations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->string('locale')->index();
+            $table->uuid('category_id')->index();
+            $table->string('locale', 5)->index();
             $table->string('name');
             $table->unique(['category_id', 'locale']);
         });

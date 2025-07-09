@@ -12,33 +12,43 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->uuid('category_id')->index();
+            $table->uuid('brand_id')->nullable()->index();
             $table->string('slug')->unique();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_new')->default(false);
+            $table->boolean('show_in_slider')->default(false);
+            $table->integer('position')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('product_translations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('locale')->index();
+            $table->uuid('product_id')->index();
+            $table->string('locale', 5)->index();
             $table->string('name');
             $table->text('description')->nullable();
             $table->unique(['product_id', 'locale']);
         });
 
         Schema::create('product_variants', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->uuid('product_id')->index();
+            $table->string('sku')->unique();
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('stock');
             $table->timestamps();
+            $table->softDeletes();
         });
 
+
         Schema::create('product_variant_attribute_value', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_variant_id')->constrained()->onDelete('cascade');
-            $table->foreignId('attribute_value_id')->constrained()->onDelete('cascade');
+            $table->uuid('product_variant_id');
+            $table->uuid('attribute_value_id');
+            $table->primary(['product_variant_id', 'attribute_value_id']);
         });
     }
 

@@ -3,10 +3,27 @@
 namespace App\Models\Catalog;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
-    protected $fillable = ['slug'];
+    use HasFactory, SoftDeletes, HasUuids;
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = ['slug', 'icon', 'parent_id', 'position', 'is_visible'];
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
 
     public function translations()
     {
@@ -22,5 +39,10 @@ class Category extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'category_attributes');
     }
 }

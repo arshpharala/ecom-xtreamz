@@ -3,11 +3,17 @@
 namespace App\Models\Catalog;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AttributeValue extends Model
 {
-    protected $fillable = ['attribute_id', 'value'];
+    use HasFactory, HasUuids;
 
+    protected $fillable = ['attribute_id', 'value'];
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
 
     public function attribute()

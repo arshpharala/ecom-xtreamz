@@ -11,20 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attributes', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('logo')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
-
-
-        Schema::create('attribute_values', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('attribute_id')->index();
-            $table->string('value');
-        });
-
     }
 
     /**
@@ -32,7 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attributes');
-        Schema::dropIfExists('attribute_values');
+        Schema::dropIfExists('brands');
     }
 };

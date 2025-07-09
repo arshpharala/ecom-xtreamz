@@ -21,7 +21,6 @@ class ProductVariantController extends Controller
 
             if (count($attrValueIds) === 0) continue;
 
-            // Check for duplicates
             $existing = $product->variants->first(function ($variant) use ($attrValueIds) {
                 return $variant->attributeValues->pluck('id')->sort()->values()->toArray() === collect($attrValueIds)->sort()->values()->toArray();
             });
@@ -41,6 +40,18 @@ class ProductVariantController extends Controller
 
         // Remove old variants
         $product->variants()->whereNotIn('id', $submittedCombinations)->delete();
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('attachments', 'public');
+                $product->attachments()->create([
+                    'file_path' => $path,
+                    'file_type' => $file->getMimeType(),
+                    'file_name' => $file->getClientOriginalName(),
+                ]);
+            }
+        }
+
 
         return response()->json([
             'message' => 'Variants saved successfully.',

@@ -1,5 +1,4 @@
 @extends('theme.adminlte.layouts.app')
-
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
@@ -10,8 +9,11 @@
     </div>
   </div>
 @endsection
-
 @section('content')
+  <div class="mb-2">
+    <button type="button" class="btn btn-danger btn-sm" id="bulk-delete">Delete Selected</button>
+    <button type="button" class="btn btn-success btn-sm" id="bulk-restore">Restore Selected</button>
+  </div>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -20,10 +22,13 @@
             <table class="table table-bordered data-table">
               <thead>
                 <tr>
+                  <th><input type="checkbox" id="select-all"></th>
                   <th>#</th>
                   <th>Name</th>
                   <th>Slug</th>
                   <th>Category</th>
+                  <th>Brand</th>
+                  <th>Status</th>
                   <th>Created At</th>
                   <th>Action</th>
                 </tr>
@@ -36,7 +41,6 @@
     </div>
   </div>
 @endsection
-
 @push('scripts')
   <script>
     $(function() {
@@ -46,11 +50,16 @@
         ajax: '{{ route('admin.catalog.products.index') }}',
         columns: [{
             data: 'id',
+            orderable: false,
+            searchable: false,
+            render: data => `<input type="checkbox" class="row-checkbox" value="${data}">`
+          },
+          {
+            data: 'id',
             name: 'id'
           },
           {
             data: 'name',
-            name: 'translations.name',
             orderable: false,
             searchable: false
           },
@@ -60,7 +69,16 @@
           },
           {
             data: 'category',
-            name: 'category.translation.name',
+            orderable: false,
+            searchable: false
+          },
+          {
+            data: 'brand',
+            orderable: false,
+            searchable: false
+          },
+          {
+            data: 'status',
             orderable: false,
             searchable: false
           },
@@ -70,11 +88,43 @@
           },
           {
             data: 'action',
-            name: 'action',
             orderable: false,
             searchable: false
           }
         ]
+      });
+
+      $('#select-all').on('click', function() {
+        $('.row-checkbox').prop('checked', this.checked);
+      });
+
+      $('#bulk-delete').on('click', function() {
+        let ids = $('.row-checkbox:checked').map(function() {
+          return $(this).val();
+        }).get();
+        if (ids.length === 0) return alert('No products selected!');
+        if (!confirm('Delete selected products?')) return;
+        $.post("{{ route('admin.catalog.products.bulk-delete') }}", {
+          ids,
+          _token: "{{ csrf_token() }}"
+        }, function(resp) {
+          $('.data-table').DataTable().ajax.reload();
+          alert(resp.message);
+        });
+      });
+
+      $('#bulk-restore').on('click', function() {
+        let ids = $('.row-checkbox:checked').map(function() {
+          return $(this).val();
+        }).get();
+        if (ids.length === 0) return alert('No products selected!');
+        $.post("{{ route('admin.catalog.products.bulk-restore') }}", {
+          ids,
+          _token: "{{ csrf_token() }}"
+        }, function(resp) {
+          $('.data-table').DataTable().ajax.reload();
+          alert(resp.message);
+        });
       });
     });
   </script>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttachmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\Catalog\ProductController;
@@ -9,6 +10,10 @@ use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group(['prefix' => '/common', 'as' => 'common.'], function () {
+    Route::resource('attachments', AttachmentController::class);
 });
 
 Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
@@ -27,7 +32,8 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
     Route::resource('attribute-families', CategoryController::class);
 
-    Route::resource('products.variants', ProductVariantController::class)->only(['index', 'store']);
+
+    Route::resource('product.variants', ProductVariantController::class);
 
 
     Route::resource('attributes', AttributeController::class);
@@ -37,8 +43,9 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
 
     Route::get('category/{id}/attributes', [CategoryController::class, 'attributesJson'])->name('category.attributes');
-
 });
+
+
 
 
 Route::resource('settings', SettingController::class);

@@ -16,7 +16,7 @@ class ProductVariant extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['product_id', 'sku', 'price', 'stock'];
+    protected $fillable = ['product_id', 'sku', 'price', 'stock', 'deleted_at'];
 
 
     public function product()

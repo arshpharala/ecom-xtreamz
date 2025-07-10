@@ -33,7 +33,7 @@ class UpdateProductRequest extends FormRequest
 
         return array_merge([
             'slug' => 'required|string|max:255|unique:products,slug,' . $productId,
-            'category_id' => 'required|exists:categories,id',
+            // 'category_id' => 'required|exists:categories,id',
             'brand_id' => 'nullable|exists:brands,id',
             'position' => 'nullable|integer',
             'is_active' => 'nullable|boolean',

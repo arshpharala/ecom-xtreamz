@@ -8,6 +8,7 @@ use App\Models\Catalog\Product;
 use App\Models\Catalog\Category;
 use App\Models\Catalog\Attribute;
 use App\Http\Controllers\Controller;
+use App\Models\Catalog\ProductVariant;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Catalog\ProductTranslation;
@@ -187,10 +188,12 @@ class ProductController extends Controller
         // For variant prefill
         $variants = $product->variants->map(function ($variant) {
             return [
+                'id' => $variant->id,
+                'product_id' => $variant->product_id,
                 'sku' => $variant->sku,
                 'price' => $variant->price,
                 'stock' => $variant->stock,
-                'attrs' => $variant->attributeValues->pluck('id', 'attribute_id')->toArray(),
+                'attributes' => $variant->attributeValues->pluck('id', 'attribute_id')->toArray(),
             ];
         })->toArray();
 
@@ -203,7 +206,6 @@ class ProductController extends Controller
         return view('theme.adminlte.catalog.products.edit', $data);
     }
 
-
     /**
      * Update the specified resource in storage.
      */
@@ -214,7 +216,7 @@ class ProductController extends Controller
         // Update main fields
         $product->update([
             'slug'        => $request->slug,
-            'category_id' => $request->category_id,
+            // 'category_id' => $request->category_id,
             'brand_id'    => $request->brand_id,
             'position'    => $request->position ?? 0,
             'is_active'        => $request->boolean('is_active'),
@@ -234,16 +236,9 @@ class ProductController extends Controller
             );
         }
 
-        // Remove old variants, save new ones
-        $product->variants()->delete();
-        foreach ($request->variants as $variantData) {
-            $variant = $product->variants()->create([
-                'sku'   => $variantData['sku'],
-                'price' => $variantData['price'],
-                'stock' => $variantData['stock'],
-            ]);
-            $variant->attributeValues()->sync(array_values($variantData['attributes']));
-        }
+
+        (new ProductVariantController())->store($request, $product->id);
+
 
         // Attachments (keep old, add new)
         if ($request->hasFile('attachments')) {

@@ -6,7 +6,7 @@
 <div class="card card-info mt-3" id="variant-manager-card">
     <div class="card-header">
         <h3 class="card-title">Product Variants</h3>
-        <button type="button" class="btn btn-sm btn-success float-right" id="add-variant-row">Add Variant</button>
+        <button type="button" class="btn btn-sm btn-success float-right" id="add-variant-row" onclick="getAside()" data-url="{{ route('admin.catalog.product.variants.create', $product->id) }}">Add Variant</button>
     </div>
     <div class="card-body p-2">
         <div id="variants-table">
@@ -21,6 +21,7 @@
             </div>
             <div id="variants-list">
                 @foreach ($currentVariants as $index => $variant)
+                    <input type="hidden" name="variants[{{ $index }}][id]" value="{{ $variant['id'] ?? '' }}">
                     <div class="row align-items-center variant-row mb-1" data-index="{{ $index }}">
                         <div class="col-md-2">
                             <input type="text" name="variants[{{ $index }}][sku]" class="form-control"
@@ -48,7 +49,10 @@
                             </div>
                         @endforeach
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-danger btn-sm remove-variant-row">×</button>
+                            @php
+                                $deleteUrl = route('admin.catalog.product.variants.destroy', ['product' => $variant['product_id'], 'variant' => $variant['id']]);
+                            @endphp
+                            <button type="button" class="btn btn-danger btn-sm remove-variant-row btn-delete" data-url="{{ $deleteUrl }}" data-refresh=false>×</button>
                         </div>
                     </div>
                 @endforeach
@@ -63,7 +67,7 @@ window.currentAttributes = @json($attributes);
 let variantIndex = {{ count($currentVariants) }};
 
 function buildVariantRow(index, variant = null) {
-    let row = `<div class="row align-items-center variant-row mb-1" data-index="${index}">`;
+    let row = `<div class="row align-items-center variant-row mb-1" data-index="${index}"><input type="hidden" name="variants[${index}][id]" class="form-control">`;
     row += `<div class="col-md-2"><input type="text" name="variants[${index}][sku]" class="form-control" value="${variant && variant.sku ? variant.sku : ''}" required></div>`;
     row += `<div class="col-md-2"><input type="number" name="variants[${index}][price]" class="form-control" value="${variant && variant.price ? variant.price : ''}" required></div>`;
     row += `<div class="col-md-2"><input type="number" name="variants[${index}][stock]" class="form-control" value="${variant && variant.stock ? variant.stock : ''}" required></div>`;
@@ -85,10 +89,7 @@ function buildVariantRow(index, variant = null) {
     return row;
 }
 
-$('#add-variant-row').on('click', function() {
-    $('#variants-list').append(buildVariantRow(variantIndex));
-    variantIndex++;
-});
+
 $(document).on('click', '.remove-variant-row', function() {
     $(this).closest('.variant-row').remove();
 });

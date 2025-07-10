@@ -1,98 +1,69 @@
-@extends('theme.adminlte.layouts.app')
+@foreach ($variants as $variant)
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Product Variants #{{ $loop->iteration }}</h3>
+      <div class="card-tools">
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Action
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#" onclick="getAside()"
+                data-url="{{ route('admin.catalog.product.variants.edit', ['product' => $product->id, 'variant' => $variant->id]) }}">Edit</a>
+            </li>
+            <li><a class="dropdown-item btn-delete" href="#"
+                data-url="{{ route('admin.catalog.product.variants.destroy', ['product' => $product->id, 'variant' => $variant->id]) }}">Delete</a>
+            </li>
+          </ul>
+        </div>
 
-@section('content-header')
-  <div class="row mb-2">
-    <div class="col-sm-6">
-      <h1>Manage Variants - {{ $product->translation()?->name }}</h1>
+      </div>
     </div>
-    <div class="col-sm-6">
-      <a href="{{ route('admin.catalog.products.index') }}" class="btn btn-secondary float-sm-right">Back to Products</a>
+    <div class="card-body p-0">
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>SKU</th>
+                  <td>{{ $variant->sku }}</td>
+                </tr>
+                <tr>
+                  <th>Price</th>
+                  <td>{{ $variant->price }}</td>
+                </tr>
+                <tr>
+                  <th>Stock</th>
+                  <td>{{ $variant->stock }}</td>
+                </tr>
+                @foreach ($variant->attributeValues as $attr)
+                  <tr>
+                    <th>{{ $attr->attribute->name }}</th>
+                    <td>{{ $attr->value }}</td>
+                  </tr>
+                @endforeach
+                <tr>
+                  <td colspan="2" class="uploaded-image-box" >
+                    @foreach ($variant->attachments as $attachment)
+                      <div class="uploaded-image">
+                        <img src="{{ asset('storage/' . $attachment->file_path) }}" class="img-thumbnail">
+                        <button type="button" class="delete-image-btn" data-id="{{ $attachment->id }}">
+                          &times;
+                        </button>
+                      </div>
+                    @endforeach
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-@endsection
-
-@section('content')
-  <form method="POST" action="{{ route('admin.catalog.products.variants.store', $product) }}" class="ajax-form">
-    @csrf
-    <div class="card">
-      <div class="card-body">
-        <div id="variant-repeater">
-          @foreach ($product->variants as $variant)
-            <div class="variant-row row mb-3">
-              @foreach ($attributes as $attribute)
-                <div class="col-md-2">
-                  <select name="variants[{{ $loop->parent->index ?? 0 }}][attributes][{{ $attribute->id }}]" class="form-control" required>
-                    <option value="">Select {{ $attribute->name }}</option>
-                    @foreach ($attribute->values as $value)
-                      <option value="{{ $value->id }}"
-                        @if ($variant->attributeValues->contains('id', $value->id)) selected @endif>
-                        {{ $value->value }}
-                      </option>
-                    @endforeach
-                  </select>
-                </div>
-              @endforeach
-
-              <div class="col-md-2">
-                <input type="number" name="variants[{{ $loop->index ?? 0 }}][price]" class="form-control" placeholder="Price" value="{{ $variant->price }}" required>
-              </div>
-              <div class="col-md-2">
-                <input type="number" name="variants[{{ $loop->index ?? 0 }}][stock]" class="form-control" placeholder="Stock" value="{{ $variant->stock }}" required>
-              </div>
-              <div class="col-md-1">
-                <button type="button" class="btn btn-danger remove-variant">×</button>
-              </div>
-            </div>
-          @endforeach
-        </div>
-
-        <button type="button" class="btn btn-info mt-3" id="add-variant">Add Variant</button>
-      </div>
-
-      <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Save Variants</button>
-      </div>
-    </div>
-  </form>
-@endsection
-
-@push('scripts')
-  <script>
-    let variantIndex = {{ $product->variants->count() }};
-
-    $('#add-variant').on('click', function () {
-      let row = `<div class="variant-row row mb-3">`;
-
-      @foreach ($attributes as $attribute)
-        row += `
-        <div class="col-md-2">
-          <select name="variants[${variantIndex}][attributes][{{ $attribute->id }}]" class="form-control" required>
-            <option value="">Select {{ $attribute->name }}</option>
-            @foreach ($attribute->values as $value)
-              <option value="{{ $value->id }}">{{ $value->value }}</option>
-            @endforeach
-          </select>
-        </div>`;
-      @endforeach
-
-      row += `
-        <div class="col-md-2">
-          <input type="number" name="variants[${variantIndex}][price]" class="form-control" placeholder="Price" required>
-        </div>
-        <div class="col-md-2">
-          <input type="number" name="variants[${variantIndex}][stock]" class="form-control" placeholder="Stock" required>
-        </div>
-        <div class="col-md-1">
-          <button type="button" class="btn btn-danger remove-variant">×</button>
-        </div>
-      </div>`;
-
-      $('#variant-repeater').append(row);
-      variantIndex++;
-    });
-
-    $(document).on('click', '.remove-variant', function () {
-      $(this).closest('.variant-row').remove();
-    });
-  </script>
-@endpush
+@endforeach

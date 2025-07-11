@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Catalog;
+namespace App\Http\Controllers\Admin\CMS;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AttributeFamilyController extends Controller
+class PageController extends Controller
 {
     /**
      * Display a listing of the resource.

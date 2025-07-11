@@ -15,8 +15,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('logo')->nullable();
+            $table->string('logo')->nullable(); // store path to logo (if needed)
+            $table->boolean('is_active')->default(1);
+            $table->integer('position')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

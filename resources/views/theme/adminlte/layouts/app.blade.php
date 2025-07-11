@@ -21,6 +21,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     href="{{ asset('theme/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
   <link rel="stylesheet" href="{{ asset('theme/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ asset('theme/adminlte/plugins/select2/css/select2.min.css') }}">
+  <link rel="stylesheet"
+    href="{{ asset('theme/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -90,6 +95,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="{{ asset('theme/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
   <script src="{{ asset('theme/adminlte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
   <script src="{{ asset('theme/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+  <!-- Select2 -->
+  <script src="{{ asset('theme/adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
 
   <!-- Custom JS -->
   <script src="{{ asset('assets/js/form.js') }}"></script>

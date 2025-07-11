@@ -39,17 +39,7 @@ class UpdateProductRequest extends FormRequest
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
             'is_new' => 'nullable|boolean',
-            'show_in_slider' => 'nullable|boolean',
-
-            'variants' => 'required|array|min:1',
-            'variants.*.sku' => 'required|string|max:255',
-            'variants.*.price' => 'required|numeric',
-            'variants.*.stock' => 'required|integer',
-            'variants.*.attributes' => 'required|array',
-            'variants.*.attributes.*' => 'required|exists:attribute_values,id',
-
-            'attachments' => 'nullable|array',
-            'attachments.*' => 'file|max:8192',
+            'show_in_slider' => 'nullable|boolean'
         ], $nameRules, $descRules);
     }
 }

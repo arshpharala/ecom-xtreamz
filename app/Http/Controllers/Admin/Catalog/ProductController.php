@@ -13,6 +13,8 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Catalog\ProductTranslation;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Seo\Keyword;
+use App\Models\Seo\Meta;
 
 class ProductController extends Controller
 {
@@ -24,10 +26,10 @@ class ProductController extends Controller
         if ($request->ajax()) {
             $locale = app()->getLocale();
 
-            $query = Product::with([
+            $query = Product::withTrashed()->with([
                 'translations',
                 'category.translations',
-                'brand' // If your Brand model is translatable; otherwise, just 'brand'
+                'brand'
             ]);
 
             return DataTables::of($query)
@@ -46,10 +48,6 @@ class ProductController extends Controller
                         : '-';
                 })
                 ->editColumn('brand', function ($row) use ($locale) {
-                    // If brand has translations
-                    if ($row->brand && $row->brand->translations->count()) {
-                        return $row->brand->translations->where('locale', $locale)->first()?->name ?? $row->brand->name;
-                    }
                     // Otherwise, just name
                     return $row->brand->name ?? '-';
                 })
@@ -59,12 +57,12 @@ class ProductController extends Controller
                         : '<span class="badge badge-secondary">Inactive</span>';
                 })
                 ->editColumn('created_at', function ($row) {
-                    return $row->created_at?->format('Y-m-d');
+                    return $row->created_at?->format('d-M-Y  h:m A');
                 })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.catalog.products.edit', $row->id);
                     $deleteUrl = route('admin.catalog.products.destroy', $row->id);
-                    return view('theme.adminlte.components.table-actions', compact('editUrl', 'deleteUrl'))->render();
+                    return view('theme.adminlte.components._table-actions', compact('editUrl', 'deleteUrl'))->render();
                 })
                 ->rawColumns(['status', 'action'])
                 ->make(true);
@@ -82,17 +80,17 @@ class ProductController extends Controller
     {
         $categories = Category::with(['translations'])->get();
         $brands         = Brand::all();
-        $attributes     = Attribute::all();
-
-        $categoryAttributes = [];
 
 
         $data['categories']     = $categories;
         $data['brands']         = $brands;
-        $data['attributes']     = $attributes;
-        $data['categoryAttributes']     = $categoryAttributes;
 
-        return view('theme.adminlte.catalog.products.create', $data);
+        $response['view'] = view('theme.adminlte.catalog.products.create', $data)->render();
+
+        return response()->json([
+            'success' => true,
+            'data' => $response
+        ]);
     }
 
     /**
@@ -121,27 +119,6 @@ class ProductController extends Controller
             ]);
         }
 
-        // 3. Variants
-        foreach ($request->variants as $variantData) {
-            $variant = $product->variants()->create([
-                'sku'   => $variantData['sku'],
-                'price' => $variantData['price'],
-                'stock' => $variantData['stock'],
-            ]);
-            $variant->attributeValues()->sync(array_values($variantData['attributes']));
-        }
-
-        // 4. Attachments
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $product->attachments()->create([
-                    'file_path' => $file->store('attachments', 'public'),
-                    'file_type' => $file->getMimeType(),
-                    'file_name' => $file->getClientOriginalName(),
-                ]);
-            }
-        }
-
         return response()->json([
             'message' => 'Product created successfully!',
             'redirect' => route('admin.catalog.products.edit', $product->id),
@@ -165,7 +142,6 @@ class ProductController extends Controller
         $defaultLocale = app()->getLocale();
         $product = Product::with([
             'translations',
-            'variants.attributeValues',
             'attachments',
             'category.attributes.values'
         ])->findOrFail($id);
@@ -173,35 +149,10 @@ class ProductController extends Controller
         $categories = Category::with('translations')->get();
         $brands     = Brand::all();
 
-        // For dynamic variants UI
-        $categoryAttributes = [];
-        if ($product->category) {
-            $categoryAttributes = $product->category->attributes->map(function ($attr) {
-                return [
-                    'id' => $attr->id,
-                    'name' => $attr->name,
-                    'values' => $attr->values->map(fn($v) => ['id' => $v->id, 'value' => $v->value]),
-                ];
-            })->toArray();
-        }
-
-        // For variant prefill
-        $variants = $product->variants->map(function ($variant) {
-            return [
-                'id' => $variant->id,
-                'product_id' => $variant->product_id,
-                'sku' => $variant->sku,
-                'price' => $variant->price,
-                'stock' => $variant->stock,
-                'attributes' => $variant->attributeValues->pluck('id', 'attribute_id')->toArray(),
-            ];
-        })->toArray();
 
         $data['product']            = $product;
         $data['categories']         = $categories;
         $data['brands']             = $brands;
-        $data['categoryAttributes'] = $categoryAttributes;
-        $data['variants']           = $variants;
 
         return view('theme.adminlte.catalog.products.edit', $data);
     }
@@ -236,26 +187,14 @@ class ProductController extends Controller
             );
         }
 
-
-        (new ProductVariantController())->store($request, $product->id);
-
-
-        // Attachments (keep old, add new)
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $product->attachments()->create([
-                    'file_path' => $file->store('attachments', 'public'),
-                    'file_type' => $file->getMimeType(),
-                    'file_name' => $file->getClientOriginalName(),
-                ]);
-            }
-        }
+        Meta::store($request, $product);
 
         return response()->json([
             'message' => 'Product updated successfully!',
             'redirect' => route('admin.catalog.products.edit', $product->id),
         ]);
     }
+
 
 
     /**

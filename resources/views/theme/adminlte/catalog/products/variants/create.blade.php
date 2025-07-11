@@ -21,14 +21,21 @@
             <label for="">SKU</label>
             <input type="text" name="sku" class="form-control" value="" required>
           </div>
+        </div>
+        <div class="col-6">
           <div class="form-group">
             <label for="">Price</label>
             <input type="number" name="price" class="form-control" value="" required>
           </div>
+        </div>
+        <div class="col-6">
           <div class="form-group">
             <label for="">Stock</label>
-            <input type="text" name="stock" class="form-control" value="" required>
+            <input type="number" name="stock" class="form-control" value="" required>
           </div>
+        </div>
+        <div class="col-12">
+
           @foreach ($attributes as $attribute)
             <div class="form-group">
               <label for="">{{ $attribute['name'] }}</label>
@@ -42,6 +49,33 @@
               </select>
             </div>
           @endforeach
+        </div>
+        <div class="col-6">
+
+            <div class="form-group">
+              <label for="length">Length</label>
+              <input type="number" name="length" class="form-control" step="0.2">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+              <label for="width">Width</label>
+              <input type="number" name="width" class="form-control" step="0.2">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+              <label for="height">Height</label>
+              <input type="number" name="height" class="form-control" step="0.2">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+              <label for="weight">Weight</label>
+              <input type="number" name="weight" class="form-control" step="0.2">
+            </div>
+        </div>
+        <div class="col-12">
 
           <!-- ...Other Fields... -->
           <div class="form-group">
@@ -69,7 +103,8 @@
   <!-- Fixed Buttons -->
   <div class="p-3 border-top flex-shrink-0 bg-white">
     <div class="d-flex flex-row justify-content-between">
-      <button type="button" class="btn btn-outline-secondary" data-widget="control-sidebar" data-slide="true">Cancel</button>
+      <button type="button" class="btn btn-outline-secondary" data-widget="control-sidebar"
+        data-slide="true">Cancel</button>
       <button type="submit" class="btn btn-secondary">Save</button>
     </div>
   </div>

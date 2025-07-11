@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProductVariantRequest extends FormRequest
+class UpdateBrandRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,14 +21,13 @@ class UpdateProductVariantRequest extends FormRequest
      */
     public function rules(): array
     {
-        $variantId = $this->route('variant') ?? $this->route('id') ?? $this->variant;
-
+        $id = $this->route('brand');
         return [
-            'sku' => 'required|string|max:255|unique:product_variants,sku,'.$variantId,
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'attributes' => 'required|array',
-            'attributes.*' => 'required|exists:attribute_values,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:brands,slug,' . $id . ',id',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
+            'is_active' => 'nullable|boolean',
+            'position' => 'nullable|integer|min:0'
         ];
     }
 }

@@ -9,7 +9,7 @@
       <h1>Edit Product</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <button type="button" class="btn btn-outline-success" id="add-variant-row" onclick="getAside()"
+      <button type="button" class="btn btn-outline-secondary" id="add-variant-row" onclick="getAside()"
         data-url="{{ route('admin.catalog.product.variants.create', $product->id) }}"> <i class="fa fa-plus"></i> Add
         Variant</button>
       <a href="{{ route('admin.catalog.products.index') }}" class="btn btn-secondary">Back to List</a>
@@ -28,7 +28,7 @@
     @method('PUT')
     <div class="row">
       <div class="col-md-8">
-        <div class="card card-primary">
+        <div class="card card-secondary">
           <div class="card-header">
             <h3 class="card-title">Product Details</h3>
           </div>
@@ -46,12 +46,6 @@
                 @endforeach
               </select>
             </div>
-            {{-- Slug --}}
-            <div class="form-group">
-              <label for="slug">Slug</label>
-              <input type="text" name="slug" class="form-control" value="{{ old('slug', $product->slug) }}"
-                required>
-            </div>
 
             {{-- Brand Select --}}
             <div class="form-group">
@@ -61,12 +55,20 @@
                 @foreach ($brands as $brand)
                   <option value="{{ $brand->id }}"
                     {{ old('brand_id', $product->brand_id) == $brand->id ? 'selected' : '' }}>
-                    {{ $brand->translations->where('locale', app()->getLocale())->first()?->name ?? $brand->name }}
+                    {{ $brand->name }}
                   </option>
                 @endforeach
               </select>
 
             </div>
+
+            {{-- Slug --}}
+            <div class="form-group">
+              <label for="slug">Slug</label>
+              <input type="text" name="slug" class="form-control" value="{{ old('slug', $product->slug) }}"
+                required>
+            </div>
+
             {{-- Name and Description fields for ALL LANGUAGES --}}
             @foreach ($locales as $locale)
               <div class="form-group">
@@ -83,13 +85,10 @@
           </div>
         </div>
 
+        @include('theme.adminlte.components._metas', ['model' => $product])
+
       </div>
       <div class="col-md-4">
-
-
-        <div id="product-variants">
-
-        </div>
 
         <div class="card card-secondary">
           <div class="card-header">
@@ -126,6 +125,12 @@
             </div>
           </div>
         </div>
+
+        <div id="product-variants">
+
+        </div>
+
+
       </div>
     </div>
     <div class="mt-3">

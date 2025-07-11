@@ -23,7 +23,7 @@
               <thead>
                 <tr>
                   <th><input type="checkbox" id="select-all"></th>
-                  <th>#</th>
+                  {{-- <th>#</th> --}}
                   <th>Name</th>
                   <th>Slug</th>
                   <th>Status</th>
@@ -52,10 +52,10 @@
             searchable: false,
             render: data => `<input type="checkbox" class="row-checkbox" value="${data}">`
           },
-          {
-            data: 'id',
-            name: 'id'
-          },
+        //   {
+        //     data: 'id',
+        //     name: 'id'
+        //   },
           {
             data: 'name',
             orderable: false,

@@ -18,15 +18,22 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $locale = app()->getLocale();
+
             $query = Category::withTrashed()->with('translations')->select('id', 'slug', 'icon', 'parent_id', 'position', 'is_visible', 'deleted_at', 'created_at');
             return DataTables::of($query)
-                ->addColumn('name', fn($cat) => $cat->translations->first()?->name ?? '')
-                ->addColumn('status', fn($cat) => $cat->deleted_at ? '<span class="badge badge-danger">Deleted</span>' : '<span class="badge badge-success">Active</span>')
-                ->addColumn('action', function ($cat) {
-                    $editUrl = route('admin.catalog.categories.edit', $cat->id);
-                    $deleteUrl = route('admin.catalog.categories.destroy', $cat->id);
-                    $restoreUrl = route('admin.catalog.categories.restore', $cat->id);
-                    return view('theme.adminlte.components.table-actions', compact('editUrl', 'deleteUrl', 'restoreUrl', 'cat'))->render();
+                ->editColumn('name', function ($row) use ($locale) {
+                    return $row->translations->where('locale', $locale)->first()?->name ?? $row->slug;
+                })
+                ->addColumn('status', fn($row) => $row->deleted_at ? '<span class="badge badge-danger">Deleted</span>' : '<span class="badge badge-success">Active</span>')
+                ->addColumn('action', function ($row) {
+                    $editUrl = route('admin.catalog.categories.edit', $row->id);
+                    $deleteUrl = route('admin.catalog.categories.destroy', $row->id);
+                    $restoreUrl = route('admin.catalog.categories.restore', $row->id);
+                    return view('theme.adminlte.components._table-actions', compact('editUrl', 'deleteUrl', 'restoreUrl', 'row'))->render();
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at?->format('d-M-Y  h:m A');
                 })
                 ->rawColumns(['action', 'status'])
                 ->make(true);
@@ -163,17 +170,5 @@ class CategoryController extends Controller
             'message'   => 'Categories restored successfully.',
             'redirect'  => route('admin.catalog.categories.index'),
         ]);
-    }
-
-    public function attributesJson($id)
-    {
-        $category = Category::with('attributes.values')->findOrFail($id);
-        return response()->json($category->attributes->map(function ($attr) {
-            return [
-                'id' => $attr->id,
-                'name' => $attr->name,
-                'values' => $attr->values->map(fn($v) => ['id' => $v->id, 'value' => $v->value]),
-            ];
-        }));
     }
 }

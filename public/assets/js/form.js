@@ -118,6 +118,7 @@ $(document).ready(function () {
         const button = $(this);
         const url = button.data("url");
         const refresh = button.data("refresh");
+        const removeObject = button.data("remove");
 
         Swal.fire({
             title: "Are you sure?",
@@ -152,6 +153,10 @@ $(document).ready(function () {
                                 } else {
                                     location.reload();
                                 }
+                            }
+
+                            if (removeObject) {
+                                $(removeObject).remove();
                             }
                         });
                     },

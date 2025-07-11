@@ -64,12 +64,6 @@
                   <p>Invoices</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Attribute Families</p>
-                </a>
-              </li>
             </ul>
           </li>
           <li class="nav-item">
@@ -100,15 +94,15 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('admin.catalog.attribute-families.index') }}" class="nav-link">
+                <a href="{{ route('admin.catalog.brands.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Attribute Families</p>
+                  <p>Brands</p>
                 </a>
               </li>
             </ul>
           </li>
           <li class="nav-item">
-            <a href="{{ route('admin.settings.index') }}" class="nav-link">
+            <a href="{{ route('admin.cms.settings.index') }}" class="nav-link">
               <i class="nav-icon fas fa-tools"></i>
               <p>
                 Configure

@@ -25,7 +25,7 @@
               <thead>
                 <tr>
                   <th><input type="checkbox" id="select-all"></th>
-                  <th>#</th>
+                  {{-- <th>#</th> --}}
                   <th>Name</th>
                   <th>Created At</th>
                   <th>Action</th>
@@ -54,10 +54,11 @@
             render: function(data, type, row) {
               return `<input type="checkbox" class="row-checkbox" value="${data}">`;
             }
-          }, {
-            data: 'id',
-            name: 'id'
           },
+        //   {
+        //     data: 'id',
+        //     name: 'id'
+        //   },
           {
             data: 'name',
             name: 'name'

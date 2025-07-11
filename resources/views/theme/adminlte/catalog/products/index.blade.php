@@ -4,8 +4,9 @@
     <div class="col-sm-6">
       <h1 class="m-0">Products</h1>
     </div>
-    <div class="col-sm-6">
-      <a href="{{ route('admin.catalog.products.create') }}" class="btn btn-primary float-sm-right">Create Product</a>
+    <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
+      <button data-url="{{ route('admin.catalog.products.create') }}" type="button" class="btn btn-primary"
+        onclick="getAside()">Create Product</button>
     </div>
   </div>
 @endsection
@@ -23,7 +24,7 @@
               <thead>
                 <tr>
                   <th><input type="checkbox" id="select-all"></th>
-                  <th>#</th>
+                  {{-- <th>#</th> --}}
                   <th>Name</th>
                   <th>Slug</th>
                   <th>Category</th>
@@ -54,10 +55,10 @@
             searchable: false,
             render: data => `<input type="checkbox" class="row-checkbox" value="${data}">`
           },
-          {
-            data: 'id',
-            name: 'id'
-          },
+        //   {
+        //     data: 'id',
+        //     name: 'id'
+        //   },
           {
             data: 'name',
             orderable: false,

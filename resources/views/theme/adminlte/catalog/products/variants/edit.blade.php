@@ -22,14 +22,20 @@
             <label for="">SKU</label>
             <input type="text" name="sku" class="form-control" value="{{ $variant->sku }}" required>
           </div>
+        </div>
+        <div class="col-6">
           <div class="form-group">
             <label for="">Price</label>
             <input type="number" name="price" class="form-control" value="{{ $variant->price }}" required>
           </div>
+        </div>
+        <div class="col-6">
           <div class="form-group">
             <label for="">Stock</label>
-            <input type="text" name="stock" class="form-control" value="{{ $variant->stock }}" required>
+            <input type="number" name="stock" class="form-control" value="{{ $variant->stock }}" required>
           </div>
+        </div>
+        <div class="col-12">
           @foreach ($attributes as $attribute)
             <div class="form-group">
               <label>{{ $attribute['name'] }}</label>
@@ -43,7 +49,33 @@
               </select>
             </div>
           @endforeach
+        </div>
+        <div class="col-6">
 
+          <div class="form-group">
+            <label for="length">Length</label>
+            <input type="number" name="length" class="form-control" value="{{ $variant->shipping->length ?? null }}" step="0.2">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="width">Width</label>
+            <input type="number" name="width" class="form-control" value="{{ $variant->shipping->width ?? null }}" step="0.2">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="height">Height</label>
+            <input type="number" name="height" class="form-control" value="{{ $variant->shipping->height ?? null }}" step="0.2">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="weight">Weight</label>
+            <input type="number" name="weight" class="form-control" value="{{ $variant->shipping->weight ?? null }}" step="0.2">
+          </div>
+        </div>
+        <div class="col-12">
 
           <!-- ...Other Fields... -->
           <div class="form-group">
@@ -59,14 +91,16 @@
               <div class="form-group">
                 <label>Existing Images</label>
                 <div class="uploaded-image-box">
-                    @foreach ($variant->attachments as $attachment)
-                      <div class="uploaded-image">
-                        <img src="{{ asset('storage/' . $attachment->file_path) }}" class="img-thumbnail">
-                        <button type="button" class="delete-image-btn" data-id="{{ $attachment->id }}">
-                          &times;
-                        </button>
-                      </div>
-                    @endforeach
+                  @foreach ($variant->attachments as $attachment)
+                    <div class="uploaded-image" id="image_{{ $attachment->id }}">
+                      <img src="{{ asset('storage/' . $attachment->file_path) }}" class="img-thumbnail">
+                      <button type="button" class="delete-image-btn btn-delete" data-refresh="false"
+                        data-remove="#image_{{ $attachment->id }}" data-id="{{ $attachment->id }}"
+                        data-url="{{ route('admin.cms.attachments.destroy', $attachment->id) }}">
+                        &times;
+                      </button>
+                    </div>
+                  @endforeach
                 </div>
               </div>
 

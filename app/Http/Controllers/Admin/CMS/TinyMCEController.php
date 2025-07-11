@@ -1,6 +1,6 @@
 <?php
 
-namespace Webkul\Admin\Http\Controllers;
+namespace Webkul\Admin\Http\Controllers\CMS;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;

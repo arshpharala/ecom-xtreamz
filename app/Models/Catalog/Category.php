@@ -2,6 +2,7 @@
 
 namespace App\Models\Catalog;
 
+use App\Trait\HasMeta;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
-    use HasFactory, SoftDeletes, HasUuids;
+    use HasFactory, SoftDeletes, HasUuids, HasMeta;
     public $incrementing = false;
     protected $keyType = 'string';
 

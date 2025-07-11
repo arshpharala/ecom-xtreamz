@@ -24,6 +24,12 @@ class ProductVariant extends Model
         return $this->belongsTo(Product::class);
     }
 
+
+    public function shipping()
+    {
+        return $this->hasOne(ProductVariantShipping::class);
+    }
+
     public function attributeValues()
     {
         return $this->belongsToMany(AttributeValue::class, 'product_variant_attribute_value');

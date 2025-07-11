@@ -1,19 +1,17 @@
 <?php
 
-use App\Http\Controllers\Admin\AttachmentController;
+use App\Http\Controllers\Admin\CMS\AttachmentController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\CMS\SettingController;
 use App\Http\Controllers\Admin\Catalog\ProductController;
 use App\Http\Controllers\Admin\Catalog\CategoryController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
+use App\Http\Controllers\Admin\Catalog\BrandController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
+use App\Http\Controllers\Admin\CMS\PageController;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::group(['prefix' => '/common', 'as' => 'common.'], function () {
-    Route::resource('attachments', AttachmentController::class);
 });
 
 Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
@@ -30,9 +28,6 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
     Route::post('products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('products.bulk-delete');
     Route::post('products/bulk-restore', [ProductController::class, 'bulkRestore'])->name('products.bulk-restore');
 
-    Route::resource('attribute-families', CategoryController::class);
-
-
     Route::resource('product.variants', ProductVariantController::class);
 
 
@@ -41,11 +36,16 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
     Route::post('attributes/bulk-delete', [AttributeController::class, 'bulkDelete'])->name('attributes.bulk-delete');
     Route::post('attributes/bulk-restore', [AttributeController::class, 'bulkRestore'])->name('attributes.bulk-restore');
 
+    Route::resource('brands', BrandController::class);
+    Route::delete('brands/{product}/restore', [BrandController::class, 'restore'])->name('brands.restore');
+});
 
-    Route::get('category/{id}/attributes', [CategoryController::class, 'attributesJson'])->name('category.attributes');
+
+Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
+    Route::resource('attachments', AttachmentController::class);
+    Route::resource('settings', SettingController::class);
+    Route::resource('pages', PageController::class);
 });
 
 
 
-
-Route::resource('settings', SettingController::class);

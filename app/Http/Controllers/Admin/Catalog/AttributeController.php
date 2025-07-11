@@ -26,7 +26,10 @@ class AttributeController extends Controller
                     $editUrl = route('admin.catalog.attributes.edit', $row->id);
                     $deleteUrl = route('admin.catalog.attributes.destroy', $row->id);
                     $restoreUrl = route('admin.catalog.attributes.restore', $row->id);
-                    return view('theme.adminlte.components.table-actions', compact('editUrl', 'deleteUrl', 'restoreUrl', 'row'))->render();
+                    return view('theme.adminlte.components._table-actions', compact('editUrl', 'deleteUrl', 'restoreUrl', 'row'))->render();
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at?->format('d-M-Y  h:m A');
                 })
                 ->rawColumns(['action', 'status'])
                 ->make(true);

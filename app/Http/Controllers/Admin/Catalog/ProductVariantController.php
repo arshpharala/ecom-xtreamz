@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog\ProductVariant;
 use App\Http\Requests\StoreProductVariantRequest;
+use App\Http\Requests\UpdateProductVariantRequest;
 
 class ProductVariantController extends Controller
 {
@@ -76,6 +77,16 @@ class ProductVariantController extends Controller
 
             $variant->attributeValues()->sync(array_values($request['attributes']));
 
+            $variant->shipping()->updateOrCreate(
+                [],
+                [
+                    'length' => $request['length'],
+                    'width'  => $request['width'],
+                    'height' => $request['height'],
+                    'weight' => $request['weight'],
+                ]
+            );
+
             // Attachments (keep old, add new)
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
@@ -124,6 +135,58 @@ class ProductVariantController extends Controller
         return response()->json([
             'success' => true,
             'data' => $response
+        ]);
+    }
+
+    public function update(UpdateProductVariantRequest $request, $productId, $id)
+    {
+
+        $product    = Product::findOrFail($productId);
+        $variant    = ProductVariant::whereProductId($productId)->findOrFail($id);
+
+        DB::beginTransaction();
+
+        try {
+            $variant->sku           = $request['sku'];
+            $variant->price         = $request['price'];
+            $variant->stock         = $request['stock'];
+            // $variant->deleted_at    = null;
+            $variant->save();
+
+            $variant->attributeValues()->sync(array_values($request['attributes']));
+
+            $variant->shipping()->updateOrCreate(
+                [],
+                [
+                    'length' => $request['length'],
+                    'width'  => $request['width'],
+                    'height' => $request['height'],
+                    'weight' => $request['weight'],
+                ]
+            );
+
+
+            // Attachments (keep old, add new)
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $variant->attachments()->create([
+                        'file_path' => $file->store('attachments', 'public'),
+                        'file_type' => $file->getMimeType(),
+                        'file_name' => $file->getClientOriginalName(),
+                    ]);
+                }
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Variant Updated Successfully.',
+            'redirect' => route('admin.catalog.products.edit', ['product' => $productId])
         ]);
     }
 

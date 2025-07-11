@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin\CMS;
 
-use App\Http\Controllers\Controller;
+use App\Models\CMS\Page;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Yajra\DataTables\Facades\DataTables;
 
 class PageController extends Controller
 {
@@ -12,7 +14,26 @@ class PageController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->ajax()) {
+
+            $query = Page::query();
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($row) {
+                    // Show restore or delete depending on soft delete state
+                    $editUrl = route('admin.cms.pages.edit', $row->id);
+                    $deleteUrl = route('admin.cms.pages.destroy', $row->id);
+                    $restoreUrl = route('admin.cms.pages.restore', $row->id);
+                    return view('theme.adminlte.components._table-actions', compact('editUrl', 'deleteUrl', 'restoreUrl', 'row'))->render();
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at?->format('d-M-Y  h:m A');
+                })
+                ->rawColumns(['action', 'status'])
+                ->make(true);
+        }
+
+        return view('theme.adminlte.cms.pages.index');
     }
 
     /**
@@ -59,6 +80,14 @@ class PageController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
+    {
+        //
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     */
+    public function restore(string $id)
     {
         //
     }

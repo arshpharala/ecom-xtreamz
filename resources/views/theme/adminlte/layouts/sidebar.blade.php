@@ -102,6 +102,14 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a href="{{ route('admin.cms.pages.index') }}" class="nav-link">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>
+                CMS
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ route('admin.cms.settings.index') }}" class="nav-link">
               <i class="nav-icon fas fa-tools"></i>
               <p>

@@ -22,7 +22,6 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
     Route::post('categories/bulk-restore', [CategoryController::class, 'bulkRestore'])->name('categories.bulk-restore');
 
 
-
     Route::resource('products', ProductController::class);
     Route::delete('products/{product}/restore', [ProductController::class, 'restore'])->name('products.restore');
     Route::post('products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('products.bulk-delete');
@@ -44,7 +43,10 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
     Route::resource('attachments', AttachmentController::class);
     Route::resource('settings', SettingController::class);
+
+
     Route::resource('pages', PageController::class);
+    Route::delete('pages/{product}/restore', [PageController::class, 'restore'])->name('pages.restore');
 });
 
 

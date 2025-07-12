@@ -109,13 +109,29 @@
               </p>
             </a>
           </li>
+
           <li class="nav-item">
-            <a href="{{ route('admin.cms.settings.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-tools"></i>
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-shopping-bag"></i>
               <p>
-                Configure
+                Setting
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.cms.locales.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Locale</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.cms.settings.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Configuration</p>
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </nav>

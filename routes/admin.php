@@ -8,11 +8,10 @@ use App\Http\Controllers\Admin\Catalog\CategoryController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
 use App\Http\Controllers\Admin\Catalog\BrandController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
+use App\Http\Controllers\Admin\CMS\LocaleController;
 use App\Http\Controllers\Admin\CMS\PageController;
+use App\Http\Controllers\Admin\CMS\TinyMCEController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
@@ -44,9 +43,15 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
     Route::resource('attachments', AttachmentController::class);
     Route::resource('settings', SettingController::class);
 
+    Route::resource('locales', LocaleController::class);
+    Route::delete('locales/{product}/restore', [LocaleController::class, 'restore'])->name('locales.restore');
+
 
     Route::resource('pages', PageController::class);
     Route::delete('pages/{product}/restore', [PageController::class, 'restore'])->name('pages.restore');
+
+    Route::post('upload/tinymce', [TinyMCEController::class, 'upload'])->name('upload.tinymce');
+
 });
 
 

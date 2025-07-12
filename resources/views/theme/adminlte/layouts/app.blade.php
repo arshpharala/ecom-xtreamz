@@ -37,6 +37,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('theme/adminlte/dist/css/adminlte.min.css') }}">
 
+  <style>
+    .tox-editor-header .tox-promotion-button {
+      display: none !important;
+    }
+
+    .select2-selection__choice, .select2-results__option.select2-results__option--highlighted {
+      background-color: #6c757d !important;
+    }
+  </style>
+
   @stack('head')
 
 </head>
@@ -97,6 +107,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="{{ asset('theme/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
   <!-- Select2 -->
   <script src="{{ asset('theme/adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+
+  <script src="https://cdn.tiny.cloud/1/famobjodlzrv0gavv8gfmkqynbthat5bz5p8mp3u95hwv1ef/tinymce/7/tinymce.min.js"
+    referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      selector: 'textarea.tinymce-editor',
+      plugins: 'advlist autolink lists link image charmap preview anchor pagebreak table code fullscreen',
+      toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code fullscreen',
+      images_upload_url: "{{ route('admin.cms.upload.tinymce', ['_token' => csrf_token()]) }}",
+      images_upload_credentials: true,
+      height: 400,
+      branding: false,
+      relative_urls: false,
+      remove_script_host: false,
+      convert_urls: true,
+      promotion: false
+      // Use the default TinyMCE handler (no need for custom images_upload_handler!)
+    });
+  </script>
+
+
 
   <!-- Custom JS -->
   <script src="{{ asset('assets/js/form.js') }}"></script>

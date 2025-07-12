@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\CMS\Locale;
+
 if (!function_exists('setting')) {
     function setting($key, $default = null)
     {
@@ -10,6 +12,6 @@ if (!function_exists('setting')) {
 
 if (!function_exists('active_locals')) {
     function active_locals(){
-        return config('app.supported_locales');
+        return Locale::pluck('code')->toArray();
     }
 }

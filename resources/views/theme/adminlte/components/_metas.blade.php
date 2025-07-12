@@ -4,13 +4,13 @@
   @foreach ($locales as $locale)
     @php $meta = $model?->metaForLocale($locale); @endphp
 
-    <div class="col-md-6 col-12">
+    <div class="{{ $grid ?? 'col-md-6 col-12' }}">
       <div class="card card-secondary">
         <div class="card-header">
           <h3 class="card-title">Meta ({{ strtoupper($locale) }})</h3>
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse">
-              <i class="fas fa-plus"></i>
+              <i class="fas fa-minus"></i>
             </button>
           </div>
         </div>

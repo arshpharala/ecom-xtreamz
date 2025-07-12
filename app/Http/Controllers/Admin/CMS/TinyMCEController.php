@@ -1,6 +1,6 @@
 <?php
 
-namespace Webkul\Admin\Http\Controllers\CMS;
+namespace App\Http\Controllers\Admin\CMS;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -43,8 +43,9 @@ class TinyMCEController extends Controller
             return [];
         }
 
+
         return [
-            'file'      => $path = request()->file('file')->store($this->storagePath),
+            'file'      => $path = request()->file('file')->store($this->storagePath, 'public'),
             'file_name' => request()->file('file')->getClientOriginalName(),
             'file_url'  => Storage::url($path),
         ];

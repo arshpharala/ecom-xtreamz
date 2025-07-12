@@ -25,7 +25,12 @@ class AppServiceProvider extends ServiceProvider
 
     protected function registerAdminRoutes()
     {
-        Route::middleware(['web', 'auth'])
+        Route::middleware(['web'])
+            ->prefix('admin')
+            ->as('admin.')
+            ->group(base_path('routes/admin-auth.php'));
+
+        Route::middleware(['web', 'auth:admin'])
             ->prefix('admin')
             ->as('admin.')
             ->group(base_path('routes/admin.php'));

@@ -16,7 +16,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <form action="{{ route('admin.settings.store') }}" method="POST" enctype="multipart/form-data" class="ajax-form">
+      <form action="{{ route('admin.cms.settings.store') }}" method="POST" enctype="multipart/form-data" class="ajax-form">
         @csrf
 
         <div class="row">

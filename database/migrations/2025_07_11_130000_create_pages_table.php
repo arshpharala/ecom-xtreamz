@@ -12,12 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pages', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('slug')->unique();
             $table->boolean('is_active')->default(1);
             $table->integer('position')->default(0);
             $table->timestamps();
             $table->softDeletes();
+        });
+
+        Schema::create('page_translations', function (Blueprint $table) {
+            $table->id();
+            $table->uuid('page_id')->index();
+            $table->string('locale', 5)->index();
+            $table->string('title');
+            $table->longText('content')->nullable();
+            $table->timestamps();
+            $table->unique(['page_id', 'locale']);
         });
     }
 
@@ -27,5 +37,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('pages');
+        Schema::dropIfExists('page_translations');
     }
 };

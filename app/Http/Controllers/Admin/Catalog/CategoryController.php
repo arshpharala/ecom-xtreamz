@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Catalog\Category;
 use App\Models\Catalog\Attribute;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -60,6 +61,11 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $validated = $request->validated();
+
+        if ($request->hasFile('icon')) {
+            $data['icon'] = $request->file('icon')->store('categories', 'public');
+        }
+
         $category = Category::create([
             'slug'       => $validated['slug'],
             'icon'       => $validated['icon'] ?? null,
@@ -109,13 +115,27 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
         $category = Category::withTrashed()->findOrFail($id);
+
+        if ($request->hasFile('icon')) {
+
+            if ($category->icon && Storage::disk('public')->exists($category->icon)) {
+                Storage::disk('public')->delete($category->icon);
+            }
+            $validated['icon'] = $request->file('icon')->store('categories', 'public');
+        } else {
+            unset($validated['icon']);
+        }
+
+
         $category->update([
             'slug'       => $validated['slug'],
-            'icon'       => $validated['icon'] ?? null,
+            'icon'       => $validated['icon'] ?? $category->icon,
             'parent_id'  => $validated['parent_id'] ?? null,
             'position'   => $validated['position'] ?? 0,
             'is_visible' => $validated['is_visible'] ?? false,
         ]);
+
+
         foreach ($validated['name'] as $locale => $name) {
             $translation = $category->translations()->firstOrNew(['locale' => $locale]);
             $translation->name = $name;

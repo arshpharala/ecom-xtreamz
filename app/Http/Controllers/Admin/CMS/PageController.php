@@ -127,7 +127,47 @@ class PageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'slug' => 'required|string|unique:pages,slug,' . $id . ',id',
+            'position' => 'nullable|integer',
+            'is_active' => 'nullable|boolean',
+            'title' => 'required|array',
+            'title.*' => 'required|string|max:255',
+            'content' => 'nullable|array',
+        ]);
+
+        $page = Page::findOrFail($id);
+
+        DB::beginTransaction();
+
+        try {
+            $page->update([
+                'slug'      => $data['slug'],
+                'position'  => $data['position'] ?? 0,
+                'is_active' => $request->has('is_active') ?? 0,
+            ]);
+
+            foreach (active_locals() as $locale) {
+                $translation            = $page->translations()->firstOrNew(['locale' => $locale]);
+                $translation->title     = $data['title'][$locale] ?? '';
+                $translation->content   = $data['content'][$locale] ?? '';
+
+                $page->translations()->save($translation);
+            }
+
+            Meta::store($request, $page);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+
+        return response()->json([
+            'message' => 'Page updated successfully.',
+            'redirect' => route('admin.cms.pages.index')
+        ]);
     }
 
     /**

@@ -21,7 +21,8 @@
         <div class="card-header">
           <h3 class="card-title">Edit Category</h3>
         </div>
-        <form action="{{ route('admin.catalog.categories.update', $category->id) }}" method="POST" class="ajax-form">
+        <form action="{{ route('admin.catalog.categories.update', $category->id) }}" method="POST" class="ajax-form"
+          enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <div class="card-body">
@@ -36,15 +37,6 @@
               @enderror
             </div>
 
-            {{-- Icon --}}
-            <div class="form-group">
-              <label for="icon">Icon (optional)</label>
-              <input type="text" name="icon" class="form-control @error('icon') is-invalid @enderror"
-                value="{{ old('icon', $category->icon) }}">
-              @error('icon')
-                <span class="text-danger">{{ $message }}</span>
-              @enderror
-            </div>
 
             {{-- Parent Category --}}
             <div class="form-group">
@@ -76,6 +68,19 @@
                 @enderror
               </div>
             @endforeach
+
+            {{-- Icon --}}
+            <div class="form-group">
+              <label>Icon</label>
+
+              <input type="file" name="icon" class="form-control" accept="image/*">
+
+              @if (isset($category) && $category->icon)
+                <div class="mt-2">
+                  <img src="{{ asset('storage/' . $category->icon) }}" class="img-lg img-thumbnail">
+                </div>
+              @endif
+            </div>
 
           </div>
           <div class="card-footer text-right">

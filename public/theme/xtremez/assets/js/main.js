@@ -1,6 +1,6 @@
 $(document).ready(function () {
-	$("#header").load("components/header-component.html"); // Load header
-	$("#footer").load("components/footer-component.html"); // Load footer
+	// $("#header").load("components/header-component.html"); // Load header
+	// $("#footer").load("components/footer-component.html"); // Load footer
 
 	$("body").on("click", "#mobileNavToggle", function () {
 		$("body").find(".mobile-nav-drawer").addClass("active");

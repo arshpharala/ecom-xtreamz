@@ -853,9 +853,6 @@ main {
   min-height: 330px;
   position: relative;
 }
-.product-card .image-box img {
-  width: auto;
-}
 .product-card .image-box .offer-badge {
   background: var(--color-secondary);
   color: var(--color-light);

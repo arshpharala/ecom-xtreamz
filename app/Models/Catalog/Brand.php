@@ -22,4 +22,8 @@ class Brand extends Model
         'is_active',
         'position'
     ];
+
+    function scopeActive($builder){
+        $builder->where('brands.is_active', 1);
+    }
 }

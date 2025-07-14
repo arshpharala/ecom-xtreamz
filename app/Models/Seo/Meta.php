@@ -37,7 +37,7 @@ class Meta extends Model
 
 
             $keywordIds = [];
-            foreach ($metaData['meta_keywords'] as $word) {
+            foreach ($metaData['meta_keywords'] ?? [] as $word) {
                 $word = trim($word);
                 if ($word) {
                     $keyword = Keyword::firstOrCreate(['keyword' => $word]);

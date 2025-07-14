@@ -15,3 +15,8 @@ if (!function_exists('active_locals')) {
         return Locale::pluck('code')->toArray();
     }
 }
+if (!function_exists('active_currency')) {
+    function active_currency(){
+        return 'AED';
+    }
+}

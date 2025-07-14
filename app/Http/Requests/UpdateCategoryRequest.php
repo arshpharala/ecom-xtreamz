@@ -26,7 +26,7 @@ class UpdateCategoryRequest extends FormRequest
             'slug'      => 'required|string|unique:categories,slug,' . $id . ',id',
             'name'      => 'required|array',
             'name.*'    => 'required|string|max:255',
-            'icon'      => 'nullable|string|max:255',
+            'icon'      => 'nullable|image|max:2048',
             'parent_id' => 'nullable|uuid|exists:categories,id',
             'attributes' => 'nullable|array',
             'attributes.*' => 'uuid|exists:attributes,id',

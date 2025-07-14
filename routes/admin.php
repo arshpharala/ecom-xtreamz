@@ -12,6 +12,9 @@ use App\Http\Controllers\Admin\CMS\LocaleController;
 use App\Http\Controllers\Admin\CMS\PageController;
 use App\Http\Controllers\Admin\CMS\TinyMCEController;
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
@@ -51,8 +54,4 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
     Route::delete('pages/{product}/restore', [PageController::class, 'restore'])->name('pages.restore');
 
     Route::post('upload/tinymce', [TinyMCEController::class, 'upload'])->name('upload.tinymce');
-
 });
-
-
-

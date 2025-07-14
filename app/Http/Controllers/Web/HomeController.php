@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers\Web;
+
+use App\Http\Controllers\Controller;
+use App\Models\Catalog\Brand;
+use App\Models\Catalog\Category;
+use App\Models\CMS\Page;
+use Illuminate\Http\Request;
+
+class HomeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $locale     = app()->getLocale();
+        $categories = Category::leftJoin('category_translations', function ($join) use ($locale) {
+            $join->on('category_translations.category_id', 'categories.id')->where('locale', $locale);
+        })
+            ->select('categories.id', 'categories.slug', 'categories.icon', 'categories.created_at', 'category_translations.name')
+            ->orderBy('categories.position')
+            ->limit(6)
+            ->get();
+
+        request()->merge([
+            'category_id' => Category::where('slug', 'gift-sets')->value('id')
+        ]);
+
+        $giftSetProducts = (new ProductController())->getProducts()->getData()->data->products ?? [];
+
+
+        $brands = Brand::whereNotNull('logo')->active()->orderBy('position')->get();
+
+
+        $data['locale']     = $locale;
+        $data['categories'] = $categories;
+        $data['brands']     = $brands;
+        $data['giftSetProducts'] = $giftSetProducts;
+
+
+        return view('theme.xtremez.home', $data);
+    }
+
+
+    public function page()
+    {
+        $locale = app()->getLocale();
+
+        $slug = request()->segments(1);
+        $page = Page::select(
+            'pages.id',
+            'page_translations.title',
+            'page_translations.content'
+        )
+            ->leftJoin('page_translations', function ($join) use ($locale) {
+                $join->on('page_translations.page_id', 'pages.id')->where('page_translations.locale', $locale);
+            })
+            ->whereSlug($slug)->firstOrFail();
+
+        $data['page'] = $page ?? '';
+
+        return view('theme.xtremez.page', $data);
+    }
+}

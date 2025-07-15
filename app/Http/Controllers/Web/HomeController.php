@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
-use App\Models\Catalog\Brand;
-use App\Models\Catalog\Category;
 use App\Models\CMS\Page;
 use Illuminate\Http\Request;
+use App\Models\Catalog\Brand;
+use App\Models\Catalog\Category;
+use App\Http\Controllers\Controller;
+use App\Repositories\ProductRepository;
 
 class HomeController extends Controller
 {
@@ -24,12 +25,9 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
-        request()->merge([
-            'category_id' => Category::where('slug', 'gift-sets')->value('id')
-        ]);
 
-        $giftSetProducts = (new ProductController())->getProducts()->getData()->data->products ?? [];
-
+        $giftSetProducts = (new ProductRepository())->getGiftProducts();
+        
 
         $brands = Brand::whereNotNull('logo')->active()->orderBy('position')->get();
 

@@ -21,17 +21,9 @@ Route::middleware('guest')->group(function () {
 
 Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('get-products', [ProductController::class, 'getProducts'])->name('get-products');
+    Route::get('category/{category}/attributes', [ProductController::class, 'getCategoryAttributes'])->name('category.attributes');
+    Route::get('product/{product}/variant/{variant}', [ProductController::class, 'getVariant'])->name('product.variant');
 });
 
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
 
 require __DIR__ . '/auth.php';

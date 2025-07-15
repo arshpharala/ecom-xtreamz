@@ -12,7 +12,7 @@
             <ul class="nav">
               <li class="nav-item"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
               <li class="nav-item"><a href="{{ route('about-us') }}" class="nav-link">About</a></li>
-              <li class="nav-item"><a href="products.html" class="nav-link">Products</a></li>
+              <li class="nav-item"><a href="{{ route('products') }}" class="nav-link">Products</a></li>
               <li class="nav-item"><a href="{{ route('contact-us') }}" class="nav-link">Contact</a></li>
             </ul>
           </nav>
@@ -37,7 +37,7 @@
             <ul class="nav">
               <li class="nav-item"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
               <li class="nav-item"><a href="{{ route('about-us') }}" class="nav-link">About</a></li>
-              <li class="nav-item"><a href="products.html" class="nav-link">Products</a></li>
+              <li class="nav-item"><a href="{{ route('products') }}" class="nav-link">Products</a></li>
               <li class="nav-item"><a href="{{ route('contact-us') }}" class="nav-link">Contact</a></li>
             </ul>
           </nav>

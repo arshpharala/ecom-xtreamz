@@ -69,31 +69,6 @@
       </div>
     </section>
 
-    <!-- <section class="hero-section d-flex align-items-center">
-                                                  <div class="container">
-                                                      <div class="row">
-                                                          <div
-                                                              class="col-lg-6 text-white hero-text animate-on-scroll"
-                                                              data-animate="fade-up">
-                                                              <h2 class="hero-subtitle">Corporate</h2>
-                                                              <h1 class="hero-title">Gift Items</h1>
-                                                              <p class="hero-description">
-                                                                  Xtremez is the Middle East's largest and
-                                                                  leading
-                                                                  corporate gifts
-                                                                  supplier and solution provider,
-                                                                  with deep expertise in branded merchandise,
-                                                                  corporate giveaways
-                                                                  and promotional gifts and giveaways.
-                                                              </p>
-                                                              <a href="#"
-                                                                  class="btn btn-light btn-lg mt-3">Browse
-                                                                  More</a>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </section> -->
-
     <!-- Search Section -->
     <div class="search-bar-wrapper">
       <div class="container">
@@ -126,7 +101,7 @@
           data-animate="fade-up">
 
           @foreach ($categories as $category)
-            <div class="category-item" data-category="{{ $category->name }}">
+            <div class="category-item" data-category-id="{{ $category->id }}" data-category="{{ $category->name }}">
               <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }} icon"
                 class="category-icon {{ $loop->first ? 'active' : '' }}">
             </div>
@@ -163,25 +138,23 @@
         <div class="row g-0 gift-set-grid">
           <!-- LEFT: Full-height box -->
           <div class="col-lg-6 animate-on-scroll" data-animate="fade-right">
-            <div class="gift-box h-100 gift-left position-relative  p-4">
-              <div class="z-2 px-3">
-                <h2 class="mb-3">Gift Set</h2>
+            @foreach (collect($giftSetProducts)->take(1) as $product)
+              <div class="gift-box h-100 gift-left position-relative  p-4">
+                <div class="z-2 px-3">
+                  <h2 class="mb-3">Gift Set</h2>
 
-              </div>
-              <div class="z-2 d-flex justify-content-between px-3">
-                <p class="fs-5 fw-semibold mt-3">
-                  SKROSS - Gift Set of Powerbank,
-                  Travel
-                  Adapter & Charging
-                  Cable
-                </p>
-                <p class="fs-2 fw-normal mt-3 z-2 align-self-end">89
-                  AED</p>
+                </div>
+                <div class="z-2 d-flex justify-content-between px-3">
+                  <p class="fs-5 fw-semibold mt-3">
+                    {{ $product->name }}
+                  </p>
+                  <p class="fs-2 fw-normal mt-3 z-2 align-self-end"> {{ active_currency() }} {{ $product->price }}
+                  </p>
 
+                </div>
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="gift-img img-left-big">
               </div>
-              <img src="{{ asset('theme/xtremez/assets/images/gift-set-left.png') }}" alt="Gift Set"
-                class="gift-img img-left-big">
-            </div>
+            @endforeach
           </div>
 
           <!-- RIGHT: Two stacked half-height boxes -->
@@ -192,18 +165,18 @@
                   class="gift-box gift-right-half bg-lightblue flex-fill position-relative text-white p-4 d-flex flex-column justify-content-between">
                   <div class="z-2 px-4">
                     <p class="fs-5 fw-bold my-3">{{ $product->name }}</p>
-                    <p class="fs-2 fw-normal">{{ $product->price }} {{ active_currency() }}</p>
+                    <p class="fs-2 fw-normal">{{ active_currency() }} {{ $product->price }} </p>
                   </div>
-                  <img src="{{ asset($product->image) }}" alt="TWS" class="gift-img img-right-small">
+                  <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="gift-img img-right-small">
                 </div>
               @else
                 <!-- Bottom box -->
                 <div
                   class="gift-box gift-right-half bg-tan flex-fill position-relative text-white p-4 d-flex flex-column justify-content-between">
-                  <img src="{{ asset($product->image) }}" alt="Gift Box" class="gift-img img-left-small">
+                  <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="gift-img img-left-small">
                   <div class="z-2 text-start px-4">
                     <p class="fs-5 fw-bold my-3">{{ $product->name }}</p>
-                    <p class="fs-2 fw-normal">{{ $product->price }} {{ active_currency() }}</p>
+                    <p class="fs-2 fw-normal">{{ active_currency() }} {{ $product->price }} </p>
                   </div>
                 </div>
               @endif
@@ -226,272 +199,7 @@
 
     <section class="product-section py-5 animate-on-scroll" data-animate="fade-up">
       <div class="container">
-        <div class="row g-4">
-          <!-- Product Card Start -->
-          <div class="col-12 col-sm-6 col-md-6  col-lg-4 col-xl-3">
-            <div class="product-card d-flex flex-column">
-              <div class="image-box">
-                <img src="{{ asset('theme/xtremez/assets/images/product-1.png') }}" alt />
-              </div>
-              <div class="image_overlay">
-              </div>
-              <div class="overlay-button">View
-                details</div>
-              <div class="stats-container">
-                <span class="product-title">BREDA -
-                  CHANGE Collection
-                  Insulated Water
-                  Bottle - Green</span>
-                <div class="product-description">
-                  <p>
-                    1pc G13 VR Headset - Immersive
-                    Virtual Reality
-                    Experience with High-Quality
-                  </p>
-                </div>
-                <!-- Price + Cart -->
-                <div class="product-meta">
-                  <span class="price fs-4 fw-bold">70
-                    AED</span>
-                  <button class="btn cart-btn">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card End -->
-          <!-- Product Card Start -->
-          <div class="col-12 col-sm-6 col-md-6  col-lg-4 col-xl-3">
-            <div class="product-card d-flex flex-column">
-              <div class="image-box">
-                <img src="{{ asset('theme/xtremez/assets/images/product-1.png') }}" alt />
-              </div>
-              <div class="image_overlay"></div>
-              <div class="overlay-button">View
-                details</div>
-              <div class="stats-container">
-                <span class="product-title">BREDA -
-                  CHANGE Collection
-                  Insulated Water
-                  Bottle - Green</span>
-                <div class="product-description">
-                  <p>
-                    1pc G13 VR Headset - Immersive
-                    Virtual Reality
-                    Experience with High-Quality
-                  </p>
-                </div>
-                <!-- Price + Cart -->
-                <div class="product-meta">
-                  <span class="price fs-4 fw-bold">70
-                    AED</span>
-                  <button class="btn cart-btn">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card End -->
-          <!-- Product Card Start -->
-          <div class="col-12 col-sm-6 col-md-6  col-lg-4 col-xl-3">
-            <div class="product-card d-flex flex-column">
-              <div class="image-box">
-                <img src="{{ asset('theme/xtremez/assets/images/product-1.png') }}" alt />
-              </div>
-              <div class="image_overlay"></div>
-              <div class="overlay-button">View
-                details</div>
-              <div class="stats-container">
-                <span class="product-title">BREDA -
-                  CHANGE Collection
-                  Insulated Water
-                  Bottle - Green</span>
-                <div class="product-description">
-                  <p>
-                    1pc G13 VR Headset - Immersive
-                    Virtual Reality
-                    Experience with High-Quality
-                  </p>
-                </div>
-                <!-- Price + Cart -->
-                <div class="product-meta">
-                  <span class="price fs-4 fw-bold">70
-                    AED</span>
-                  <button class="btn cart-btn">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card End -->
-          <!-- Product Card Start -->
-          <div class="col-12 col-sm-6 col-md-6  col-lg-4 col-xl-3">
-            <div class="product-card d-flex flex-column">
-              <div class="image-box">
-                <img src="{{ asset('theme/xtremez/assets/images/product-1.png') }}" alt />
-              </div>
-              <div class="image_overlay"></div>
-              <div class="overlay-button">View
-                details</div>
-              <div class="stats-container">
-                <span class="product-title">BREDA -
-                  CHANGE Collection
-                  Insulated Water
-                  Bottle - Green</span>
-                <div class="product-description">
-                  <p>
-                    1pc G13 VR Headset - Immersive
-                    Virtual Reality
-                    Experience with High-Quality
-                  </p>
-                </div>
-                <!-- Price + Cart -->
-                <div class="product-meta">
-                  <span class="price fs-4 fw-bold">70
-                    AED</span>
-                  <button class="btn cart-btn">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card End -->
-          <!-- Product Card Start -->
-          <div class="col-12 col-sm-6 col-md-6  col-lg-4 col-xl-3">
-            <div class="product-card d-flex flex-column">
-              <div class="image-box">
-                <img src="{{ asset('theme/xtremez/assets/images/product-1.png') }}" alt />
-              </div>
-              <div class="image_overlay"></div>
-              <div class="overlay-button">View
-                details</div>
-              <div class="stats-container">
-                <span class="product-title">BREDA -
-                  CHANGE Collection
-                  Insulated Water
-                  Bottle - Green</span>
-                <div class="product-description">
-                  <p>
-                    1pc G13 VR Headset - Immersive
-                    Virtual Reality
-                    Experience with High-Quality
-                  </p>
-                </div>
-                <!-- Price + Cart -->
-                <div class="product-meta">
-                  <span class="price fs-4 fw-bold">70
-                    AED</span>
-                  <button class="btn cart-btn">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card End -->
-          <!-- Product Card Start -->
-          <div class="col-12 col-sm-6 col-md-6  col-lg-4 col-xl-3">
-            <div class="product-card d-flex flex-column">
-              <div class="image-box">
-                <img src="{{ asset('theme/xtremez/assets/images/product-1.png') }}" alt />
-              </div>
-              <div class="image_overlay"></div>
-              <div class="overlay-button">View
-                details</div>
-              <div class="stats-container">
-                <span class="product-title">BREDA -
-                  CHANGE Collection
-                  Insulated Water
-                  Bottle - Green</span>
-                <div class="product-description">
-                  <p>
-                    1pc G13 VR Headset - Immersive
-                    Virtual Reality
-                    Experience with High-Quality
-                  </p>
-                </div>
-                <!-- Price + Cart -->
-                <div class="product-meta">
-                  <span class="price fs-4 fw-bold">70
-                    AED</span>
-                  <button class="btn cart-btn">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card End -->
-          <!-- Product Card Start -->
-          <div class="col-12 col-sm-6 col-md-6  col-lg-4 col-xl-3">
-            <div class="product-card d-flex flex-column">
-              <div class="image-box">
-                <img src="{{ asset('theme/xtremez/assets/images/product-1.png') }}" alt />
-              </div>
-              <div class="image_overlay"></div>
-              <div class="overlay-button">View
-                details</div>
-              <div class="stats-container">
-                <span class="product-title">BREDA -
-                  CHANGE Collection
-                  Insulated Water
-                  Bottle - Green</span>
-                <div class="product-description">
-                  <p>
-                    1pc G13 VR Headset - Immersive
-                    Virtual Reality
-                    Experience with High-Quality
-                  </p>
-                </div>
-                <!-- Price + Cart -->
-                <div class="product-meta">
-                  <span class="price fs-4 fw-bold">70
-                    AED</span>
-                  <button class="btn cart-btn">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card End -->
-          <!-- Product Card Start -->
-          <div class="col-12 col-sm-6 col-md-6  col-lg-4 col-xl-3">
-            <div class="product-card d-flex flex-column">
-              <div class="image-box">
-                <img src="{{ asset('theme/xtremez/assets/images/product-1.png') }}" alt />
-              </div>
-              <div class="image_overlay"></div>
-              <div class="overlay-button">View
-                details</div>
-              <div class="stats-container">
-                <span class="product-title">BREDA -
-                  CHANGE Collection
-                  Insulated Water
-                  Bottle - Green</span>
-                <div class="product-description">
-                  <p>
-                    1pc G13 VR Headset - Immersive
-                    Virtual Reality
-                    Experience with High-Quality
-                  </p>
-                </div>
-                <!-- Price + Cart -->
-                <div class="product-meta">
-                  <span class="price fs-4 fw-bold">70
-                    AED</span>
-                  <button class="btn cart-btn">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Product Card End -->
+        <div class="row g-4" id="featured-products">
         </div>
       </div>
     </section>
@@ -515,13 +223,13 @@
             </div>
           </div>
           <!-- <div class="col-md-6">
-                                                              <div class="sustainable-image animate-on-scroll"
-                                                                  data-animate="fade-left">
-                                                                  <img src="assets/images/sustainable.png"
-                                                                      alt="Sustainable Products"
-                                                                      class="img-fluid w-100 h-100 object-fit-cover">
-                                                              </div>
-                                                          </div> -->
+                                                                                          <div class="sustainable-image animate-on-scroll"
+                                                                                              data-animate="fade-left">
+                                                                                              <img src="assets/images/sustainable.png"
+                                                                                                  alt="Sustainable Products"
+                                                                                                  class="img-fluid w-100 h-100 object-fit-cover">
+                                                                                          </div>
+                                                                                      </div> -->
 
         </div>
       </div>
@@ -551,42 +259,42 @@
     </section>
 
     <!-- <section class="our-brands-section pb-5">
-                                                  <div class="container text-center">
-                                                      <div
-                                                          class="row justify-content-center align-items-center g-4 py-5">
-                                                          <div class="col-4 col-md-2 animate-on-scroll"
-                                                              data-animate="fade-up">
-                                                              <img src="{{ asset('theme/xtremez/assets/images/brands/adidas.png') }}"
-                                                                  alt="Adidas"
-                                                                  class="brand-logo img-fluid">
-                                                          </div>
-                                                          <div class="col-4 col-md-2  animate-on-scroll"
-                                                              data-animate="fade-up">
-                                                              <img src="{{ asset('theme/xtremez/assets/images/brands/boss.png') }}"
-                                                                  alt="Boss"
-                                                                  class="brand-logo img-fluid">
-                                                          </div>
-                                                          <div class="col-4 col-md-2  animate-on-scroll"
-                                                              data-animate="fade-up">
-                                                              <img src="{{ asset('theme/xtremez/assets/images/brands/chanel.png') }}"
-                                                                  alt="Chanel"
-                                                                  class="brand-logo img-fluid">
-                                                          </div>
-                                                          <div class="col-4 col-md-2  animate-on-scroll"
-                                                              data-animate="fade-up">
-                                                              <img src="{{ asset('theme/xtremez/assets/images/brands/boss.png') }}"
-                                                                  alt="Boss 2"
-                                                                  class="brand-logo img-fluid">
-                                                          </div>
-                                                          <div class="col-4 col-md-2  animate-on-scroll"
-                                                              data-animate="fade-up">
-                                                              <img src="{{ asset('theme/xtremez/assets/images/brands/ikasu.png') }}"
-                                                                  alt="Ikasu"
-                                                                  class="brand-logo img-fluid">
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                              </section> -->
+                                                                              <div class="container text-center">
+                                                                                  <div
+                                                                                      class="row justify-content-center align-items-center g-4 py-5">
+                                                                                      <div class="col-4 col-md-2 animate-on-scroll"
+                                                                                          data-animate="fade-up">
+                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/adidas.png') }}"
+                                                                                              alt="Adidas"
+                                                                                              class="brand-logo img-fluid">
+                                                                                      </div>
+                                                                                      <div class="col-4 col-md-2  animate-on-scroll"
+                                                                                          data-animate="fade-up">
+                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/boss.png') }}"
+                                                                                              alt="Boss"
+                                                                                              class="brand-logo img-fluid">
+                                                                                      </div>
+                                                                                      <div class="col-4 col-md-2  animate-on-scroll"
+                                                                                          data-animate="fade-up">
+                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/chanel.png') }}"
+                                                                                              alt="Chanel"
+                                                                                              class="brand-logo img-fluid">
+                                                                                      </div>
+                                                                                      <div class="col-4 col-md-2  animate-on-scroll"
+                                                                                          data-animate="fade-up">
+                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/boss.png') }}"
+                                                                                              alt="Boss 2"
+                                                                                              class="brand-logo img-fluid">
+                                                                                      </div>
+                                                                                      <div class="col-4 col-md-2  animate-on-scroll"
+                                                                                          data-animate="fade-up">
+                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/ikasu.png') }}"
+                                                                                              alt="Ikasu"
+                                                                                              class="brand-logo img-fluid">
+                                                                                      </div>
+                                                                                  </div>
+                                                                              </div>
+                                                                          </section> -->
 
     <section class="video-section position-relative py-5">
       <div class="video-container">
@@ -627,6 +335,11 @@
 @endsection
 
 @push('scripts')
+  <script>
+    // Laravel route passed to JS
+    window.ajaxProductURL = "{{ route('ajax.get-products') }}";
+    window.activeCategoryId = "{{ $activeCategory->id ?? '' }}";
+  </script>
   <!-- Owl Carousel JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
   <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
@@ -641,6 +354,32 @@
         animateOut: 'fadeOut',
         animateIn: 'fadeIn'
       });
+
+
+      loadFeaturedProducts();
+
     });
+
+    function loadFeaturedProducts() {
+      $.ajax({
+        url: "{{ route('ajax.get-products', ['is_featured' => true]) }}",
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+          if (response.success && response.data?.products?.length) {
+            const html = response.data.products.map((product) =>
+              render_product_card(product, "col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3")
+            );
+            $("#featured-products").html(html);
+          } else {
+            $("#featured-products").html(`<p class="text-muted">No featured products found.</p>`);
+          }
+        },
+        error: function() {
+          console.error("Failed to load featured products");
+          $("#featured-products").html(`<p class="text-danger">Error loading products.</p>`);
+        },
+      });
+    }
   </script>
 @endpush

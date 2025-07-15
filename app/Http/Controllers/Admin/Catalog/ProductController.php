@@ -28,6 +28,7 @@ class ProductController extends Controller
 
             $query = Product::withTrashed()->with([
                 'translations',
+                'variants',
                 'category.translations',
                 'brand'
             ]);
@@ -52,9 +53,16 @@ class ProductController extends Controller
                     return $row->brand->name ?? '-';
                 })
                 ->editColumn('status', function ($row) {
-                    return $row->is_active
-                        ? '<span class="badge badge-success">Active</span>'
-                        : '<span class="badge badge-secondary">Inactive</span>';
+
+                    if($row->deleted_at){
+                        $status = '<span class="badge badge-danger">Deleted</span>';
+                    }elseif($row->is_active){
+                        $status = '<span class="badge badge-success">Active</span>';
+                    }else{
+                        $status = '<span class="badge badge-secondary">Inactive</span>';
+                    }
+
+                    return $status;
                 })
                 ->editColumn('created_at', function ($row) {
                     return $row->created_at?->format('d-M-Y  h:m A');

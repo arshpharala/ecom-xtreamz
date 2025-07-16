@@ -19,9 +19,12 @@
 
     .thumbnail-carousel {
         position: relative;
+        min-width: 100%;
 
         .thumb-wrapper {
             display: flex;
+            flex: 1;
+            min-width: 100%;
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
@@ -31,7 +34,7 @@
             }
 
             img.thumb-item {
-                // width: 23.9%;
+                width: 23.9%;
                 height: 127px;
                 object-fit: contain;
                 border: 2px solid transparent;

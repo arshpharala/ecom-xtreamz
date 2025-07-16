@@ -1,128 +1,167 @@
 $(function () {
-    const baseCurrency = $('meta[name="currency"]').attr("content");
-    const productId = $('meta[name="product-id"]').attr("content");
-    let currentVariantId = $('meta[name="variant-id"]').attr("content");
+    let qty = parseInt($("#qtyInput").val()) || 1;
 
-    let basePrice = 0;
+    function updatePriceDisplay() {
+        const unitPrice = parseFloat(window.basePrice);
+        const total = unitPrice * qty;
+        $("#priceDisplay").text(
+            `${$("meta[name='currency']").attr("content")} ${total.toFixed(2)}`
+        );
+    }
 
-    // STEP 1: Get selected attributes
     function getSelectedAttributes() {
         const selected = {};
         $(".variant-option.active").each(function () {
-            selected[$(this).data("attribute")] = $(this).data("value");
+            selected[$(this).data("attr")] = $(this).data("value");
         });
         return selected;
     }
 
-    // STEP 2: Auto-select valid combination
-    function autoSelectCombination(attrs) {
-        $.get("/ajax/match-variant", {
-            product_id: productId,
-            attribute_values: Object.values(attrs),
-        }).done((res) => {
-            if (!res.variant_id) return;
-
-            // Update URL
-            const url = new URL(window.location.href);
-            url.searchParams.set("variant", res.variant_id);
-            history.replaceState(null, "", url.toString());
-
-            // Load full variant
-            loadVariant(res.variant_id);
+    function findMatchingVariant(partialSelection) {
+        const variants = window.allVariants;
+        return variants.find((variant) => {
+            return Object.entries(partialSelection).every(
+                ([key, val]) => variant.combination[key] === val
+            );
         });
     }
 
-    // STEP 3: Load full variant content (image, price, etc.)
-    function loadVariant(variantId) {
-        $.get(`/ajax/products/${productId}/variant`, {
-            variant: variantId,
-        }).done((res) => {
-            const variant = res.data.variant;
+    function updateSelectedAttributesFromVariant(variant) {
+        if (!variant || !variant.combination) return;
 
-            currentVariantId = variant.id;
-            basePrice = variant.price;
-
-            // Update price
-            const qty = parseInt($("#qtyInput").val()) || 1;
-            $(".price").text(`${baseCurrency} ${(basePrice * qty).toFixed(2)}`);
-
-            // Update image
-            $("#zoomImage").attr("src", variant.images[0]);
-
-            let thumbs = variant.images
-                .map(
-                    (img, i) =>
-                        `<img src="${img}" data-large="${img}" class="thumb-item ${
-                            i === 0 ? "active" : ""
-                        } me-2" />`
-                )
-                .join("");
-
-            $(".thumb-wrapper").html(thumbs);
-
-            // Thumbnail click
-            $(".thumb-item").on("click", function () {
-                $("#zoomImage").attr("src", $(this).data("large"));
-                $(".thumb-item").removeClass("active");
-                $(this).addClass("active");
-            });
-
-            // Highlight matching attribute combination
-            highlightAttributes(variant.attributes);
-        });
-    }
-
-    // STEP 4: Highlight the selected attribute values
-    function highlightAttributes(attributes) {
         $(".variant-option").removeClass("active");
 
-        attributes.forEach((attr) => {
+        for (const [attr, value] of Object.entries(variant.combination)) {
             $(
-                `.variant-option[data-attribute="${slugify(
-                    attr.attribute
-                )}"][data-value="${attr.value}"]`
+                `.variant-option[data-attr="${attr}"][data-value="${value}"]`
             ).addClass("active");
+        }
+    }
+
+    function updateVariantDisplay(variant) {
+        window.basePrice = parseFloat(variant.price);
+        window.currentVariantId = variant.variant_id;
+
+        $("#priceDisplay").text(
+            `${$("meta[name='currency']").attr("content")} ${variant.price}`
+        );
+        $(".product-description p").html(variant.description || "");
+
+        if (variant.images.length) {
+            $("#zoomImage").attr("src", variant.images[0]);
+            const thumbs = variant.images.map(
+                (src, idx) =>
+                    `<img src="${src}" data-large="${src}" class="thumb-item ${
+                        idx === 0 ? "active" : ""
+                    } me-2"/>`
+            );
+            $(".thumb-wrapper").html(thumbs.join(""));
+        }
+
+        if (variant.shipping) {
+            $(".specs-table")
+                .find("#product-qty-per-carton")
+                .text(`${variant.shipping.qty_per_carton ?? "NA"} pcs`);
+            $(".specs-table")
+                .find("#product-carton-gross-weight")
+                .text(`${variant.shipping.weight ?? "NA"} kgs`);
+            $(".specs-table")
+                .find("#product-carton-dimenssions")
+                .text(
+                    `${variant.shipping.length ?? "NA"} x ${
+                        variant.shipping.width ?? "NA"
+                    } x ${variant.shipping.height ?? "NA"} cm`
+                );
+            $(".specs-table")
+                .find("#product-sku")
+                .text(`${variant.sku ?? "NA"}`);
+        }
+
+        updatePriceDisplay();
+    }
+
+    function fetchVariant(selectedAttributes) {
+        const productId = $('meta[name="product-id"]').attr("content");
+
+        $.ajax({
+            url: `/ajax/variants/resolve`,
+            method: "GET",
+            data: {
+                product_id: productId,
+                attributes: selectedAttributes,
+            },
+            success: function (response) {
+                updateSelectedAttributesFromVariant(response);
+                updateVariantDisplay(response);
+                updateUrlVariantId(response.variant_id); // optional
+            },
+            error: function () {
+                alert("This combination is currently not available.");
+            },
         });
     }
 
-    // STEP 5: On attribute click, update selection and auto-match
-    $(document).on("click", ".variant-option", function () {
-        const attr = $(this).data("attribute");
-        const val = $(this).data("value");
+    function updateUrlVariantId(variantId) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("variant", variantId);
+        history.pushState({}, "", url);
+    }
 
-        // Remove current active from group
-        $(`.variant-option[data-attribute="${attr}"]`).removeClass("active");
-        $(this).addClass("active");
+    $(function () {
+        // Init qty price on load
+        updatePriceDisplay();
 
-        const selectedAttrs = getSelectedAttributes();
-        autoSelectCombination(selectedAttrs);
+        $("#qtyPlus").click(() => {
+            qty += 1;
+            $("#qtyInput").val(qty);
+            updatePriceDisplay();
+        });
+
+        $("#qtyMinus").click(() => {
+            qty = qty > 1 ? qty - 1 : 1;
+            $("#qtyInput").val(qty);
+            updatePriceDisplay();
+        });
+
+        $("#qtyInput").on("input", function () {
+            qty = parseInt($(this).val()) || 1;
+            updatePriceDisplay();
+        });
+
+        // Initial selection highlight
+        $(".variant-option").each(function () {
+            const attr = $(this).data("attr"),
+                val = $(this).data("value");
+            if (window.selectedAttributes[attr] === val) {
+                $(this).addClass("active");
+            }
+        });
+
+        // Variant switch
+        $(document).on("click", ".variant-option", function () {
+            const attr = $(this).data("attr");
+            const value = $(this).data("value");
+
+            // 1. Get current selection
+            let currentSelection = getSelectedAttributes();
+
+            // 2. Rebuild object with latest clicked attribute last
+            const updatedSelection = {};
+            Object.entries(currentSelection).forEach(([k, v]) => {
+                if (k !== attr) updatedSelection[k] = v;
+            });
+            updatedSelection[attr] = value;
+
+            fetchVariant(updatedSelection);
+        });
+
+        // Thumbnail switching
+        $(document).on("click", ".thumb-item", function () {
+            $(".thumb-item").removeClass("active");
+            $(this).addClass("active");
+
+            const largeImg = $(this).data("large");
+            $("#zoomImage").attr("src", largeImg);
+        });
     });
-
-    // STEP 6: Quantity +/- handling
-    $("#qtyPlus").click(() => updateQty(1));
-    $("#qtyMinus").click(() => updateQty(-1));
-    $("#qtyInput").on("input", () => updateQty(0, true));
-
-    function updateQty(change = 0, fromInput = false) {
-        let qty = parseInt($("#qtyInput").val()) || 1;
-        qty = fromInput ? qty : Math.max(1, qty + change);
-        $("#qtyInput").val(qty);
-
-        const total = qty * basePrice;
-        $(".price").text(`${baseCurrency} ${total.toFixed(2)}`);
-    }
-
-    // STEP 7: Slug helper for matching data-attribute
-    function slugify(str) {
-        return str
-            .toString()
-            .toLowerCase()
-            .replace(/\s+/g, "-")
-            .replace(/[^\w\-]+/g, "")
-            .replace(/\-\-+/g, "-")
-            .trim();
-    }
-
-    // Init
-    if (currentVariantId) loadVariant(currentVariantId);
 });

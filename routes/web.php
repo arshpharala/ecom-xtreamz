@@ -23,9 +23,8 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('get-products', [ProductController::class, 'getProducts'])->name('get-products');
     Route::get('category/{category}/attributes', [ProductController::class, 'getCategoryAttributes'])->name('category.attributes');
 
+    Route::get('/variants/resolve', [ProductController::class, 'resolve']);
 
-    Route::get('products/{product}/variant', [ProductController::class, 'getVariantByAttributes']);
-    Route::get('match-variant', [ProductController::class, 'matchVariant']);
 });
 
 

@@ -1,57 +1,14 @@
 @extends('theme.xtremez.layouts.app')
 @push('head')
-  <meta name="variant-id" content="{{ $productVarient->variant_id }}">
-  <meta name="product-id" content="{{ $productVarient->product_id }}">
+  <meta name="variant-id" content="{{ $productVariant->variant_id }}">
+  <meta name="product-id" content="{{ $productVariant->product_id }}">
   <meta name="currency" content="{{ active_currency() }}">
-  <script>
-    window.variantMap = @json($variantMap);
-  </script>
 
 
   <!-- Owl Carousel CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
-
-  <style>
-    .option-box {
-      padding: 6px 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      cursor: pointer;
-      min-width: 48px;
-      text-align: center;
-      transition: all 0.2s ease-in-out;
-      background-color: #fff;
-    }
-
-    .option-box:hover {
-      border-color: #333;
-    }
-
-    .option-box.active {
-      border-color: #000;
-      font-weight: bold;
-    }
-
-    .option-text {
-      display: inline-block;
-      font-size: 14px;
-      color: #333;
-    }
-
-    .color-swatch {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 2px solid #ccc;
-      cursor: pointer;
-    }
-
-    .color-swatch.active {
-      border: 2px solid #000;
-    }
-  </style>
 @endpush
 
 @section('breadcrumb')
@@ -65,8 +22,8 @@
               All Products
             </a>
           </li>
-          <li class="breadcrumb-item active text-white" aria-current="page" title="{{ $productVarient->name }}">
-            {{ $productVarient->name }}
+          <li class="breadcrumb-item active text-white" aria-current="page" title="{{ $productVariant->name }}">
+            {{ $productVariant->name }}
           </li>
         </ol>
       </nav>
@@ -80,7 +37,7 @@
 
       <!-- Mobile Title -->
       <h2 class="fs-2 mb-4 d-lg-none">
-        {{ $productVarient->name }}
+        {{ $productVariant->name }}
       </h2>
 
       <div class="row gx-5">
@@ -88,7 +45,7 @@
         <!-- Left: Image Gallery -->
         <div class="col-12 col-lg-6">
           <div class="main-image position-relative bg-white">
-            <img id="zoomImage" src="{{ asset('storage/' . $productVarient->file_path) }}" alt="Product Image"
+            <img id="zoomImage" src="{{ asset('storage/' . $productVariant->file_path) }}" alt="Product Image"
               class="img-fluid w-75 mx-auto d-block">
           </div>
 
@@ -97,7 +54,7 @@
               <i class="bi bi-chevron-left fs-2 text-black"></i>
             </button>
             <div class="thumb-wrapper d-flex overflow-auto">
-              @foreach ($productVarient->attachments as $image)
+              @foreach ($productVariant->attachments as $image)
                 <img src="{{ asset('storage/' . $image->file_path) }}"
                   data-large="{{ asset('storage/' . $image->file_path) }}"
                   class="thumb-item {{ $loop->first ? 'active' : '' }} me-2" />
@@ -114,17 +71,17 @@
 
           <!-- Desktop Title -->
           <h2 class="fs-2 mb-3 d-none d-lg-block">
-            {{ $productVarient->name }}
+            {{ $productVariant->name }}
           </h2>
 
           <div class="product-description bg-white p-5 mb-4">
             <strong>Product Description:</strong>
-            <p>
-              {!! $productVarient->description !!}
-            </p>
+            <div>
+              {!! $productVariant->description !!}
+            </div>
           </div>
 
-          <div class="price fs-3 py-3">{{ active_currency() }} {{ $productVarient->price }}</div>
+          <div class="price fs-3 py-3" id="priceDisplay">{{ active_currency() }} {{ $productVariant->price }}</div>
 
           <div class="d-flex align-items-center justify-content-start gap-4 py-3 flex-wrap product-options">
             <!-- Quantity -->
@@ -142,28 +99,26 @@
             <!-- Divider -->
             <div class="vr-line d-none d-md-block"></div>
 
-            @foreach ($attributes as $attribute)
-              @php
-                $isColor = Str::lower($attribute['name']) === 'color';
-                $attrSlug = Str::slug($attribute['name']);
-              @endphp
-
-              <div class="d-flex align-items-center gap-3 flex-wrap w-100 attribute-wrapper">
-                <div class="w-100" data-attribute="{{ $attrSlug }}">
-                  <label class="form-label mb-1">{{ $attribute['name'] }}</label>
-
-                  <div class="attribute-options d-flex gap-2 py-2 flex-wrap">
-                    @foreach ($attribute['values'] as $val)
-                      @php $bg = $isColor ? "style=background:{$val}" : ''; @endphp
-
-                      <div class="variant-option border {{ $isColor ? 'color-swatch' : 'option-box' }}"
-                        data-attribute="{{ $attrSlug }}" data-value="{{ $val }}" {!! $bg !!}>
-                        @unless ($isColor)
-                          <span class="option-text">{{ $val }}</span>
-                        @endunless
-                      </div>
-                    @endforeach
-                  </div>
+            <!-- Dynamic Attributes -->
+            <!-- Dynamic Attributes -->
+            @foreach ($attributes as $slug => $attr)
+              <div class="attribute-groupd-flex align-items-center gap-3" data-attr="{{ $slug }}">
+                <label class="form-label mb-1">{{ $attr['name'] }}</label>
+                <div class="d-flex flex-wrap gap-2 attribute-options">
+                  @foreach ($attr['values'] as $val)
+                    @php
+                      $isColor = Str::lower($attr['name']) === 'color';
+                      $isActive = isset($selected[$slug]) && $selected[$slug] === $val;
+                    @endphp
+                    <div
+                      class="variant-option {{ $isColor ? 'color-swatch' : 'option-box' }} {{ $isActive ? 'active' : '' }}"
+                      data-value="{{ $val }}" data-attr="{{ $slug }}"
+                      style="{{ $isColor ? "background:$val;" : '' }}">
+                      @unless ($isColor)
+                        <span class="option-text">{{ $val }}</span>
+                      @endunless
+                    </div>
+                  @endforeach
                 </div>
               </div>
             @endforeach
@@ -182,17 +137,17 @@
                   <div class="color-swatch" style="background: #d5b3a2;"></div>
                 </div>
               </div>
-            </div>
-          </div> --}}
-
-            <div class="d-flex gap-3 py-3">
-              <button class="btn btn-cart flex-fill">Buy Now</button>
-              <button class="btn btn-buy flex-fill">Add to Cart</button>
-            </div>
-
+            </div> --}}
           </div>
+
+          <div class="d-flex gap-3 py-3">
+            <button class="btn btn-cart flex-fill">Buy Now</button>
+            <button class="btn btn-buy flex-fill">Add to Cart</button>
+          </div>
+
         </div>
       </div>
+    </div>
   </section>
 
   <section class="product-specifications pb-5">
@@ -212,7 +167,7 @@
           <tbody>
             <tr>
               <td class="">Brand</td>
-              <td>{{ $productVarient->brand_name ?? 'NA' }}</td>
+              <td id="product-brand">{{ $productVariant->brand_name ?? 'NA' }}</td>
             </tr>
           </tbody>
           <thead>
@@ -223,23 +178,24 @@
           <tbody>
             <tr>
               <td class="">Qty per Carton</td>
-              <td>{{ $productVarient->shipping?->qty_per_carton ?? 'NA' }} pcs</td>
+              <td id="product-qty-per-carton">{{ $productVariant->shipping?->qty_per_carton ?? 'NA' }} pcs</td>
             </tr>
             <tr>
               <td class="">Carton Gross Weight</td>
-              <td>
-                {{ $productVarient->shipping?->weight }}
+              <td id="product-carton-gross-weight">
+                {{ $productVariant->shipping?->weight }}
                 kgs
               </td>
             </tr>
             <tr>
               <td class="">Carton Dimensions (cm)</td>
-              <td>{{ $productVarient->shipping?->length }} x {{ $productVarient->shipping?->width }} x
-                {{ $productVarient->shipping?->height }} cm</td>
+              <td id="product-carton-dimenssions">{{ $productVariant->shipping?->length }} x
+                {{ $productVariant->shipping?->width }} x
+                {{ $productVariant->shipping?->height }} cm</td>
             </tr>
             <tr>
               <td class="">HS / Commodity Code</td>
-              <td>48201000</td>
+              <td id="product-sku">{{ $productVariant->sku ?? 'NA' }}</td>
             </tr>
           </tbody>
         </table>
@@ -262,7 +218,7 @@
         </div>
       </div>
 
-      <div id="product-carousel" class="owl-carousel owl-theme"></div>
+      <div id="product-carousel" class="owl-carousel owl-theme category-item" data-category-id="{{ $productVariant->category_id }}"></div>
 
     </div>
   </section>
@@ -271,7 +227,15 @@
 
 @push('scripts')
   <script>
-    window.productId = "{{ $productVarient->product_id }}";
+    window.allVariants = @json($allVariants);
+    window.selectedAttributes = @json($selected);
+
+    window.currentVariantId = "{{ $productVariant->id }}";
+    window.basePrice = {{ $productVariant->price }};
+
+
+    window.ajaxProductURL = "{{ route('ajax.get-products') }}";
+    window.activeCategoryId = "{{ $productVariant->category_id }}";
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>

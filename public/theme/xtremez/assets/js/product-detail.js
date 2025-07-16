@@ -1,4 +1,9 @@
 $(function () {
+    const thumbItemWidth = $(".thumb-item").outerWidth(true);
+    const $thumbWrapper = $(".thumb-wrapper");
+    const $prevBtn = $("#thumbPrev");
+    const $nextBtn = $("#thumbNext");
+    const visibleCount = 4;
     let qty = parseInt($("#qtyInput").val()) || 1;
 
     function updatePriceDisplay() {
@@ -107,61 +112,92 @@ $(function () {
         history.pushState({}, "", url);
     }
 
-    $(function () {
-        // Init qty price on load
+    // Init qty price on load
+    updatePriceDisplay();
+
+    $("#qtyPlus").click(() => {
+        qty += 1;
+        $("#qtyInput").val(qty);
         updatePriceDisplay();
-
-        $("#qtyPlus").click(() => {
-            qty += 1;
-            $("#qtyInput").val(qty);
-            updatePriceDisplay();
-        });
-
-        $("#qtyMinus").click(() => {
-            qty = qty > 1 ? qty - 1 : 1;
-            $("#qtyInput").val(qty);
-            updatePriceDisplay();
-        });
-
-        $("#qtyInput").on("input", function () {
-            qty = parseInt($(this).val()) || 1;
-            updatePriceDisplay();
-        });
-
-        // Initial selection highlight
-        $(".variant-option").each(function () {
-            const attr = $(this).data("attr"),
-                val = $(this).data("value");
-            if (window.selectedAttributes[attr] === val) {
-                $(this).addClass("active");
-            }
-        });
-
-        // Variant switch
-        $(document).on("click", ".variant-option", function () {
-            const attr = $(this).data("attr");
-            const value = $(this).data("value");
-
-            // 1. Get current selection
-            let currentSelection = getSelectedAttributes();
-
-            // 2. Rebuild object with latest clicked attribute last
-            const updatedSelection = {};
-            Object.entries(currentSelection).forEach(([k, v]) => {
-                if (k !== attr) updatedSelection[k] = v;
-            });
-            updatedSelection[attr] = value;
-
-            fetchVariant(updatedSelection);
-        });
-
-        // Thumbnail switching
-        $(document).on("click", ".thumb-item", function () {
-            $(".thumb-item").removeClass("active");
-            $(this).addClass("active");
-
-            const largeImg = $(this).data("large");
-            $("#zoomImage").attr("src", largeImg);
-        });
     });
+
+    $("#qtyMinus").click(() => {
+        qty = qty > 1 ? qty - 1 : 1;
+        $("#qtyInput").val(qty);
+        updatePriceDisplay();
+    });
+
+    $("#qtyInput").on("input", function () {
+        qty = parseInt($(this).val()) || 1;
+        updatePriceDisplay();
+    });
+
+    // Initial selection highlight
+    $(".variant-option").each(function () {
+        const attr = $(this).data("attr"),
+            val = $(this).data("value");
+        if (window.selectedAttributes[attr] === val) {
+            $(this).addClass("active");
+        }
+    });
+
+    // Variant switch
+    $(document).on("click", ".variant-option", function () {
+        const attr = $(this).data("attr");
+        const value = $(this).data("value");
+
+        // 1. Get current selection
+        let currentSelection = getSelectedAttributes();
+
+        // 2. Rebuild object with latest clicked attribute last
+        const updatedSelection = {};
+        Object.entries(currentSelection).forEach(([k, v]) => {
+            if (k !== attr) updatedSelection[k] = v;
+        });
+        updatedSelection[attr] = value;
+
+        fetchVariant(updatedSelection);
+    });
+
+    function updateThumbNav() {
+        const scrollLeft = $thumbWrapper.scrollLeft();
+        const maxScroll =
+            $thumbWrapper[0].scrollWidth - $thumbWrapper.outerWidth();
+
+        const hasOverflow = $thumbWrapper.children().length > visibleCount;
+        $prevBtn.toggle(hasOverflow && scrollLeft > 5);
+        $nextBtn.toggle(hasOverflow && scrollLeft < maxScroll - 5);
+    }
+
+    function getThumbWidth() {
+        const $first = $thumbWrapper.find(".thumb-item").first();
+        return $first.outerWidth(true);
+    }
+
+    $nextBtn.on("click", () => {
+        const w = getThumbWidth();
+        $thumbWrapper.animate({ scrollLeft: "+=" + w }, 200, updateThumbNav);
+    });
+
+    $prevBtn.on("click", () => {
+        const w = getThumbWidth();
+        $thumbWrapper.animate({ scrollLeft: "-=" + w }, 200, updateThumbNav);
+    });
+
+    $thumbWrapper.on("scroll resize", updateThumbNav);
+    $(window).on("resize", updateThumbNav);
+    updateThumbNav();
+
+    // Thumbnail switching
+    $(document).on("click", ".thumb-item", function () {
+        $(".thumb-item").removeClass("active");
+        $(this).addClass("active");
+
+        const largeImg = $(this).data("large");
+        $("#zoomImage").attr("src", largeImg);
+    });
+
+    // Recalculate on resize
+    $(window).on("resize", updateThumbNav);
+    updateThumbNav();
 });

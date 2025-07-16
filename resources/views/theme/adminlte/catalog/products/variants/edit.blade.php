@@ -19,14 +19,15 @@
 
         <div class="col-12">
           <div class="form-group">
-            <label for="">SKU</label>
+            <label for="">SKU / Product Code</label>
             <input type="text" name="sku" class="form-control" value="{{ $variant->sku }}" required>
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="">Price</label>
-            <input type="number" name="price" class="form-control" value="{{ $variant->price }}" required>
+            <input type="number" name="price" class="form-control" step="0.01" value="{{ $variant->price }}"
+              required>
           </div>
         </div>
         <div class="col-6">
@@ -54,25 +55,35 @@
 
           <div class="form-group">
             <label for="length">Length</label>
-            <input type="number" name="length" class="form-control" value="{{ $variant->shipping->length ?? null }}" step="0.2">
+            <input type="number" name="length" class="form-control" step="0.01"
+              value="{{ $variant->shipping->length ?? null }}">
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="width">Width</label>
-            <input type="number" name="width" class="form-control" value="{{ $variant->shipping->width ?? null }}" step="0.2">
+            <input type="number" name="width" class="form-control" step="0.01"
+              value="{{ $variant->shipping->width ?? null }}">
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="height">Height</label>
-            <input type="number" name="height" class="form-control" value="{{ $variant->shipping->height ?? null }}" step="0.2">
+            <input type="number" name="height" class="form-control" step="0.01"
+              value="{{ $variant->shipping->height ?? null }}">
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
-            <label for="weight">Weight</label>
-            <input type="number" name="weight" class="form-control" value="{{ $variant->shipping->weight ?? null }}" step="0.2">
+            <label for="weight">Weight (kgs)</label>
+            <input type="number" name="weight" class="form-control" step="0.01"
+              value="{{ $variant->shipping->weight ?? null }}">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="weight">Qty (per carton)</label>
+            <input type="number" name="qty_per_carton" class="form-control" value="{{ $variant->shipping->qty_per_carton ?? null }}">
           </div>
         </div>
         <div class="col-12">
@@ -83,8 +94,7 @@
             <div class="upload__box">
               <div class="upload__btn-box">
                 <label class="upload__btn btn btn-outline-primary">Upload images
-                  <input type="file" name="attachments[]" multiple data-max_length="5" class="upload__inputfile"
-                    accept="image/*" />
+                  <input type="file" name="attachments[]" multiple data-max_length="5" class="upload__inputfile"  accept="image/*" />
                 </label>
               </div>
               <div class="upload__img-wrap uploaded-image-box"></div>

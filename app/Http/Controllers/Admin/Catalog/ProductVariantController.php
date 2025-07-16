@@ -69,10 +69,10 @@ class ProductVariantController extends Controller
 
             $variant = ProductVariant::withTrashed()->firstOrNew(['product_id' => $productId, 'id' => $request['id'] ?? null]);
 
-            $variant->sku = $request['sku'];
-            $variant->price = $request['price'];
-            $variant->stock = $request['stock'];
-            $variant->deleted_at = null;
+            $variant->sku           = $request['sku'];
+            $variant->price         = $request['price'];
+            $variant->stock         = $request['stock'];
+            $variant->deleted_at    = null;
             $variant->save();
 
             $variant->attributeValues()->sync(array_values($request['attributes']));
@@ -80,10 +80,11 @@ class ProductVariantController extends Controller
             $variant->shipping()->updateOrCreate(
                 [],
                 [
-                    'length' => $request['length'],
-                    'width'  => $request['width'],
-                    'height' => $request['height'],
-                    'weight' => $request['weight'],
+                    'length'            => $request['length'],
+                    'width'             => $request['width'],
+                    'height'            => $request['height'],
+                    'weight'            => $request['weight'],
+                    'qty_per_carton'    => $request['qty_per_carton'],
                 ]
             );
 
@@ -158,10 +159,11 @@ class ProductVariantController extends Controller
             $variant->shipping()->updateOrCreate(
                 [],
                 [
-                    'length' => $request['length'],
-                    'width'  => $request['width'],
-                    'height' => $request['height'],
-                    'weight' => $request['weight'],
+                    'length'            => $request['length'],
+                    'width'             => $request['width'],
+                    'height'            => $request['height'],
+                    'weight'            => $request['weight'],
+                    'qty_per_carton'    => $request['qty_per_carton'],
                 ]
             );
 

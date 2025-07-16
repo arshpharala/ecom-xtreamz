@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('width')->nullable();
             $table->decimal('height')->nullable();
             $table->decimal('weight')->nullable();
+            $table->decimal('qty_per_carton')->nullable();
             $table->timestamps();
         });
     }

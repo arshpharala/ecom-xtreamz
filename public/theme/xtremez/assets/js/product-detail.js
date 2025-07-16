@@ -1,63 +1,128 @@
 $(function () {
-	const $mainImage = $("#zoomImage");
-	const thumbItemWidth = $(".thumb-item").outerWidth(true);
-	const $thumbWrapper = $(".thumb-wrapper");
-	const $prevBtn = $("#thumbPrev");
-	const $nextBtn = $("#thumbNext");
-	const visibleCount = 4;
+    const baseCurrency = $('meta[name="currency"]').attr("content");
+    const productId = $('meta[name="product-id"]').attr("content");
+    let currentVariantId = $('meta[name="variant-id"]').attr("content");
 
-	function updateThumbNav() {
-		const scrollLeft = $thumbWrapper.scrollLeft();
-		const maxScroll = $thumbWrapper[0].scrollWidth - $thumbWrapper.outerWidth();
+    let basePrice = 0;
 
-		const hasOverflow = $thumbWrapper.children().length > visibleCount;
-		$prevBtn.toggle(hasOverflow && scrollLeft > 5);
-		$nextBtn.toggle(hasOverflow && scrollLeft < maxScroll - 5);
-	}
+    // STEP 1: Get selected attributes
+    function getSelectedAttributes() {
+        const selected = {};
+        $(".variant-option.active").each(function () {
+            selected[$(this).data("attribute")] = $(this).data("value");
+        });
+        return selected;
+    }
 
-	function getThumbWidth() {
-		const $first = $thumbWrapper.find(".thumb-item").first();
-		return $first.outerWidth(true);
-	}
+    // STEP 2: Auto-select valid combination
+    function autoSelectCombination(attrs) {
+        $.get("/ajax/match-variant", {
+            product_id: productId,
+            attribute_values: Object.values(attrs),
+        }).done((res) => {
+            if (!res.variant_id) return;
 
-	$nextBtn.on("click", () => {
-		const w = getThumbWidth();
-		$thumbWrapper.animate({ scrollLeft: "+=" + w }, 200, updateThumbNav);
-	});
+            // Update URL
+            const url = new URL(window.location.href);
+            url.searchParams.set("variant", res.variant_id);
+            history.replaceState(null, "", url.toString());
 
-	$prevBtn.on("click", () => {
-		const w = getThumbWidth();
-		$thumbWrapper.animate({ scrollLeft: "-=" + w }, 200, updateThumbNav);
-	});
+            // Load full variant
+            loadVariant(res.variant_id);
+        });
+    }
 
-	$thumbWrapper.on("scroll resize", updateThumbNav);
-	$(window).on("resize", updateThumbNav);
-	updateThumbNav();
+    // STEP 3: Load full variant content (image, price, etc.)
+    function loadVariant(variantId) {
+        $.get(`/ajax/products/${productId}/variant`, {
+            variant: variantId,
+        }).done((res) => {
+            const variant = res.data.variant;
 
-	// Swap main image on thumbnail click
-	$(".thumb-item").on("click", function () {
-		const largeImg = $(this).data("large");
-		$(".thumb-item").removeClass("active");
-		$(this).addClass("active");
+            currentVariantId = variant.id;
+            basePrice = variant.price;
 
-		$mainImage.attr("src", largeImg).attr("data-zoom-image", largeImg);
-	});
+            // Update price
+            const qty = parseInt($("#qtyInput").val()) || 1;
+            $(".price").text(`${baseCurrency} ${(basePrice * qty).toFixed(2)}`);
 
-	// Recalculate on resize
-	$(window).on("resize", updateThumbNav);
-	updateThumbNav();
+            // Update image
+            $("#zoomImage").attr("src", variant.images[0]);
 
-	// Quantity controls
-	$("#qtyPlus").click(() => {
-		$("#qtyInput").val((i, val) => +val + 1);
-	});
-	$("#qtyMinus").click(() => {
-		$("#qtyInput").val((i, val) => (val > 1 ? +val - 1 : 1));
-	});
+            let thumbs = variant.images
+                .map(
+                    (img, i) =>
+                        `<img src="${img}" data-large="${img}" class="thumb-item ${
+                            i === 0 ? "active" : ""
+                        } me-2" />`
+                )
+                .join("");
 
-	// Color swatch active toggle
-	$(".color-swatch").on("click", function () {
-		$(".color-swatch").removeClass("active");
-		$(this).addClass("active");
-	});
+            $(".thumb-wrapper").html(thumbs);
+
+            // Thumbnail click
+            $(".thumb-item").on("click", function () {
+                $("#zoomImage").attr("src", $(this).data("large"));
+                $(".thumb-item").removeClass("active");
+                $(this).addClass("active");
+            });
+
+            // Highlight matching attribute combination
+            highlightAttributes(variant.attributes);
+        });
+    }
+
+    // STEP 4: Highlight the selected attribute values
+    function highlightAttributes(attributes) {
+        $(".variant-option").removeClass("active");
+
+        attributes.forEach((attr) => {
+            $(
+                `.variant-option[data-attribute="${slugify(
+                    attr.attribute
+                )}"][data-value="${attr.value}"]`
+            ).addClass("active");
+        });
+    }
+
+    // STEP 5: On attribute click, update selection and auto-match
+    $(document).on("click", ".variant-option", function () {
+        const attr = $(this).data("attribute");
+        const val = $(this).data("value");
+
+        // Remove current active from group
+        $(`.variant-option[data-attribute="${attr}"]`).removeClass("active");
+        $(this).addClass("active");
+
+        const selectedAttrs = getSelectedAttributes();
+        autoSelectCombination(selectedAttrs);
+    });
+
+    // STEP 6: Quantity +/- handling
+    $("#qtyPlus").click(() => updateQty(1));
+    $("#qtyMinus").click(() => updateQty(-1));
+    $("#qtyInput").on("input", () => updateQty(0, true));
+
+    function updateQty(change = 0, fromInput = false) {
+        let qty = parseInt($("#qtyInput").val()) || 1;
+        qty = fromInput ? qty : Math.max(1, qty + change);
+        $("#qtyInput").val(qty);
+
+        const total = qty * basePrice;
+        $(".price").text(`${baseCurrency} ${total.toFixed(2)}`);
+    }
+
+    // STEP 7: Slug helper for matching data-attribute
+    function slugify(str) {
+        return str
+            .toString()
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^\w\-]+/g, "")
+            .replace(/\-\-+/g, "-")
+            .trim();
+    }
+
+    // Init
+    if (currentVariantId) loadVariant(currentVariantId);
 });

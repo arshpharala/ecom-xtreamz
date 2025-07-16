@@ -18,14 +18,14 @@
 
         <div class="col-12">
           <div class="form-group">
-            <label for="">SKU</label>
+            <label for="">SKU / Product Code</label>
             <input type="text" name="sku" class="form-control" value="" required>
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="">Price</label>
-            <input type="number" name="price" class="form-control" value="" required>
+            <input type="number" name="price" class="form-control" step="0.01" value="" required>
           </div>
         </div>
         <div class="col-6">
@@ -54,36 +54,42 @@
 
             <div class="form-group">
               <label for="length">Length</label>
-              <input type="number" name="length" class="form-control" step="0.2">
+              <input type="number" name="length" class="form-control" step="0.01">
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
               <label for="width">Width</label>
-              <input type="number" name="width" class="form-control" step="0.2">
+              <input type="number" name="width" class="form-control" step="0.01">
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
               <label for="height">Height</label>
-              <input type="number" name="height" class="form-control" step="0.2">
+              <input type="number" name="height" class="form-control" step="0.01">
             </div>
         </div>
         <div class="col-6">
             <div class="form-group">
-              <label for="weight">Weight</label>
-              <input type="number" name="weight" class="form-control" step="0.2">
+              <label for="weight">Weight (kgs)</label>
+              <input type="number" name="weight" class="form-control" step="0.01">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+              <label for="weight">Qty (per carton)</label>
+              <input type="number" name="qty_per_carton" class="form-control">
             </div>
         </div>
         <div class="col-12">
 
           <!-- ...Other Fields... -->
           <div class="form-group">
-            <label>Variant Images</label>
+            <label>Variant Images <small>(min:3)</small></label>
             <div class="upload__box">
               <div class="upload__btn-box">
                 <label class="upload__btn btn btn-outline-primary">Upload images
-                  <input type="file" name="attachments[]" multiple data-max_length="5" class="upload__inputfile"
+                  <input type="file" name="attachments[]" multiple data-min-length="3" min="3" data-max_length="5" class="upload__inputfile"
                     accept="image/*" />
                 </label>
               </div>

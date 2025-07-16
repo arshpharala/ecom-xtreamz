@@ -22,7 +22,10 @@ Route::middleware('guest')->group(function () {
 Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('get-products', [ProductController::class, 'getProducts'])->name('get-products');
     Route::get('category/{category}/attributes', [ProductController::class, 'getCategoryAttributes'])->name('category.attributes');
-    Route::get('product/{product}/variant/{variant}', [ProductController::class, 'getVariant'])->name('product.variant');
+
+
+    Route::get('products/{product}/variant', [ProductController::class, 'getVariantByAttributes']);
+    Route::get('match-variant', [ProductController::class, 'matchVariant']);
 });
 
 

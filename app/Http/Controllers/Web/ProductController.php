@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Catalog\Brand;
 use Illuminate\Http\Response;
@@ -102,13 +103,12 @@ class ProductController extends Controller
     {
         $variantId = $request->query('variant');
 
-        $product = ProductVariant::withJoins()
-        ->select([
+        $variant = ProductVariant::withJoins()
+            ->select([
                 'products.id as product_id',
                 'products.slug',
                 'products.category_id',
                 'products.position',
-                'product_variants.id',
                 'product_variants.id as variant_id',
                 'product_variants.price',
                 'product_variants.stock',
@@ -122,25 +122,71 @@ class ProductController extends Controller
             ->where('product_variants.id', $variantId)
             ->firstOrFail();
 
+        $variant->load([
+            'attachments',
+            'attributeValues.attribute',
+            'shipping',
+            'product.variants.attributeValues.attribute',
+        ]);
 
-            $data['product'] = $product->load('attachments');
+        // Prepare variant map (for JS)
+        $variantMap = [];
+        foreach ($variant->product->variants as $v) {
+            $keyed = [];
+            foreach ($v->attributeValues as $attrVal) {
+                $keyed[Str::slug($attrVal->attribute->name)] = $attrVal->value;
+            }
+            $variantMap[$v->id] = $keyed;
+        }
 
-        return view('theme.xtremez.product-detail', $data);
+        // Group attributes for display
+        $groupedAttributes = [];
+
+        foreach ($variant->product->variants as $v) {
+            foreach ($v->attributeValues as $av) {
+                $slug = Str::slug($av->attribute->name);
+
+                if (!isset($groupedAttributes[$slug])) {
+                    $groupedAttributes[$slug] = [
+                        'name' => $av->attribute->name,
+                        'values' => [],
+                    ];
+                }
+
+                $groupedAttributes[$slug]['values'][] = $av->value;
+            }
+        }
+
+        // Convert to clean collection and remove duplicates
+        $attributes = collect($groupedAttributes)->map(function ($attr) {
+            return [
+                'name' => $attr['name'],
+                'values' => collect($attr['values'])->unique()->values()
+            ];
+        })->values();
+
+        return view('theme.xtremez.product-detail', [
+            'productVarient' => $variant,
+            'attributes' => $attributes,
+            'variantMap' => $variantMap,
+        ]);
     }
 
-    function getVariant(string $productId, string $uuid)
+    public function getVariantByAttributes(Request $request, string $productId)
     {
-        $variant = ProductVariant::with([
-            'attributeValues.attribute',
-            'attachments',
-            'shipping',
-        ])->findOrFail($uuid);
+        $selected = $request->get('attribute_values', []);
+
+        $variant = ProductVariant::with(['attributeValues.attribute', 'attachments', 'shipping'])
+            ->where('product_id', $productId)
+            ->whereHas('attributeValues', function ($q) use ($selected) {
+                $q->whereIn('attribute_value_id', $selected);
+            }, '=', count($selected))
+            ->firstOrFail();
 
         return response()->json([
             'data' => [
                 'variant' => [
                     'id' => $variant->id,
-                    'name' => $variant->name,
                     'sku' => $variant->sku,
                     'price' => $variant->price,
                     'stock' => $variant->stock,
@@ -153,6 +199,32 @@ class ProductController extends Controller
             ],
         ]);
     }
+
+    public function matchVariant(Request $request)
+    {
+        $productId = $request->get('product_id');
+        $selectedIds = $request->get('attribute_values', []);
+
+        // Get all variants of the product
+        $variants = ProductVariant::where('product_id', $productId)
+            ->with('attributeValues:id') // Eager load only IDs
+            ->get();
+
+        // Find the variant that matches all selected attribute value IDs
+        $variant = $variants->first(function ($variant) use ($selectedIds) {
+            $variantAttrIds = $variant->attributeValues->pluck('id')->sort()->values()->all();
+            return $variantAttrIds === collect($selectedIds)->sort()->values()->all();
+        });
+
+        return response()->json([
+            'variant_id' => $variant?->id,
+        ]);
+    }
+
+
+
+
+
 
 
 

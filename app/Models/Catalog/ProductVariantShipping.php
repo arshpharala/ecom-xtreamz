@@ -15,5 +15,6 @@ class ProductVariantShipping extends Model
         'width',
         'height',
         'weight',
+        'qty_per_carton',
     ];
 }

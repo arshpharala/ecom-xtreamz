@@ -233,6 +233,7 @@
     window.currentVariantId = "{{ $productVariant->id }}";
     window.basePrice = {{ $productVariant->price }};
 
+    window.ajaxVarianrURL = "{{ route('ajax.variants.resolve') }}";
 
     window.ajaxProductURL = "{{ route('ajax.get-products') }}";
     window.activeCategoryId = "{{ $productVariant->category_id }}";

@@ -84,7 +84,7 @@ $(function () {
         const productId = $('meta[name="product-id"]').attr("content");
 
         $.ajax({
-            url: `/ajax/variants/resolve`,
+            url: window.ajaxVarianrURL, // already defined in <script>
             method: "GET",
             data: {
                 product_id: productId,

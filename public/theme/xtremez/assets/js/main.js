@@ -2,6 +2,12 @@ $(document).ready(function () {
     // $("#header").load("components/header-component.html"); // Load header
     // $("#footer").load("components/footer-component.html"); // Load footer
 
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
     $("body").on("click", "#mobileNavToggle", function () {
         $("body").find(".mobile-nav-drawer").addClass("active");
         $("body").addClass("has-active-menu");

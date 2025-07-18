@@ -141,8 +141,10 @@
           </div>
 
           <div class="d-flex gap-3 py-3">
-            <button class="btn btn-cart flex-fill">Buy Now</button>
-            <button class="btn btn-buy flex-fill">Add to Cart</button>
+            <button class="btn btn-cart flex-fill  buy-now-btn" data-variant-id="{{ $productVariant->id }}"
+              data-qty-selector="#qtyInput">Buy Now</button>
+            <button class="btn btn-buy flex-fill add-to-cart-btn" data-variant-id="{{ $productVariant->id }}"
+              data-qty-selector="#qtyInput">Add to Cart</button>
           </div>
 
         </div>
@@ -218,7 +220,8 @@
         </div>
       </div>
 
-      <div id="product-carousel" class="owl-carousel owl-theme category-item" data-category-id="{{ $productVariant->category_id }}"></div>
+      <div id="product-carousel" class="owl-carousel owl-theme category-item"
+        data-category-id="{{ $productVariant->category_id }}"></div>
 
     </div>
   </section>
@@ -243,4 +246,5 @@
 
   <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/product-detail.js') }}"></script>
+  <script src="{{ asset('theme/xtremez/assets/js/cart.js') }}"></script>
 @endpush

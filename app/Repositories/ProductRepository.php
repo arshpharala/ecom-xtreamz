@@ -30,21 +30,7 @@ class ProductRepository
         $query = ProductVariant::withJoins()
             ->withFilters($filters)
             ->applySorting($filters['sort_by'] ?? null)
-            ->select([
-                'products.id as product_id',
-                'products.slug',
-                'products.category_id',
-                'products.position',
-                'product_variants.id as variant_id',
-                'product_variants.price',
-                'product_variants.stock',
-                'product_translations.name',
-                'product_translations.description',
-                'brands.name as brand_name',
-                'category_translations.name as category_name',
-                'main_attachment.file_path',
-                'main_attachment.file_name'
-            ]);
+            ->withSelection();
 
         // Handle pagination
         if (Request::has('page')) {
@@ -58,7 +44,7 @@ class ProductRepository
         });
     }
 
-    protected function transformProduct($product)
+    public function transformProduct($product)
     {
         $product->link = route('products.show', ['slug' => $product->slug, 'variant' => $product->variant_id]);
         $product->image = $product->file_path ? asset('storage/' . $product->file_path) : null;

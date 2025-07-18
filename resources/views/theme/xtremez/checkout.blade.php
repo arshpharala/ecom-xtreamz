@@ -1,0 +1,228 @@
+@extends('theme.xtremez.layouts.app')
+
+@push('head')
+  <script src="https://js.stripe.com/v3/"></script>
+@endpush
+
+@section('breadcrumb')
+  <section class="breadcrumb-bar py-2">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 py-2">
+          <li class="breadcrumb-item">
+            <a href="#" class="text-white" title="Home">
+              <!-- <i class="bi bi-house"></i> -->
+              Home
+            </a>
+          </li>
+          <li class="breadcrumb-item active text-white" aria-current="page" title="My Cart">
+            My Cart
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+@endsection
+
+@section('content')
+  <section class="heading-section py-5">
+    <div class="container">
+      <div class="heading-row position-relative">
+        <div class="left-tools">
+          <button type="button" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-2"></i>
+            <span class="d-none d-md-inline">
+              BACK
+            </span>
+          </button>
+        </div>
+        <h2 class="section-title fs-1 text-center m-0">Checkout</h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="checkout-section pb-5">
+    <div class="container">
+      <!-- Main Grid -->
+      <div class="row gx-4 gy-4">
+        <!-- Billing Address -->
+        <div class="col-lg-6">
+          <div class="fw-bold mb-3 section-label">Billing
+            Address</div>
+          <div class="bg-white p-4 mb-4 shadow-sm">
+            <div class="fw-bold mb-3">Default
+              Address</div>
+            <div class="mb-5">
+
+              <div class="default-address-box">
+                <div class="form-check ">
+                  <input class="form-check-input theme-radio mt-4" type="radio" name="addressRadio" id="defaultAddress">
+                  <label class="form-check-label w-100 ms-4" for="defaultAddress">
+                    <div class>
+                      No 3, Building Number
+                      3,<br>
+                      International city<br>
+                      Dubai, United Arab
+                      Emirates
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+            <form class="mt-5">
+              <div class="fw-semibold mb-2">Add New
+                Address</div>
+              <div class="mb-3">
+                <label class="form-label">Full
+                  Name</label>
+                <input type="text" class="form-control theme-input" placeholder="Enter your name">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Mobile
+                  Number</label>
+                <input type="text" class="form-control theme-input" placeholder="Enter your mobile no">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Province</label>
+                <select class="form-select theme-select">
+                  <option selected>Select your
+                    province</option>
+                  <option>Dubai</option>
+                  <option>Abu Dhabi</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">City</label>
+                <select class="form-select theme-select">
+                  <option selected>Select your
+                    city</option>
+                  <option>Dubai</option>
+                  <option>Ajman</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Area</label>
+                <select class="form-select theme-select">
+                  <option selected>Select your
+                    area</option>
+                  <option>International
+                    City</option>
+                  <option>Business Bay</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control theme-input" placeholder="House no / building / street / area">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Landmark
+                  (Optional)</label>
+                <textarea class="form-control theme-input" placeholder="E.g. beside train station"></textarea>
+
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Payment Method -->
+        <div class="col-lg-6">
+          <div class="fw-bold mb-3 section-label">Payment
+            Method</div>
+          <div class="bg-white p-4 mb-4 shadow-sm">
+            <div class="fw-bold mb-3">Saved
+              Payment
+              Method</div>
+            <!-- Saved Payment -->
+            <div class="mb-5 saved-card-box">
+              <label class="form-label mb-2 ms-4">Card
+                Number</label>
+              <div class="form-check">
+                <input class="form-check-input theme-radio mt-4" type="radio" name="savedCard" id="savedCard1">
+                <label class="form-check-label w-100 bg-white border p-3" for="savedCard1">
+                  <div class="saved-card-detail d-flex align-items-center justify-content-between">
+                    <span>49** **** ****
+                      **21</span>
+                    <img src="{{ asset('theme/xtremez/assets/icons/mastercard.png') }}" alt="Mastercard" width="38" />
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Payment Type -->
+            <div class="mb-4">
+              <label class="form-label mb-2">Pay
+                With</label>
+
+              <div class="py-1">
+                <!-- Wrap the radio in a label and use flex utilities for alignment -->
+                <label class="form-check-label payment-method-box d-flex align-items-center w-100 mb-0 p-3" for="payCard"
+                  style="cursor:pointer;">
+                  <input class="form-check-input theme-radio me-3" type="radio" name="paymentType" id="payCard"
+                    checked style="margin-left:0;">
+                  <span class="flex-grow-1">Credit
+                    / Debit
+                    Card</span>
+                  <span class="d-flex align-items-center gap-2">
+                    <img src="{{ asset('theme/xtremez/assets/icons/visa.png') }}" alt="Visa" width="32">
+                    <img src="{{ asset('theme/xtremez/assets/icons/mastercard.png') }}" alt="Mastercard"
+                      width="32">
+                    <img src="{{ asset('theme/xtremez/assets/icons/amex.png') }}" alt="Amex" width="32">
+                  </span>
+                </label>
+
+              </div>
+
+              <div class="py-1">
+                <!-- Wrap the radio in a label and use flex utilities for alignment -->
+                <label class="form-check-label payment-method-box d-flex align-items-center w-100 mb-0 p-3"
+                  for="payPaypal"cursor:pointer;">
+                  <input class="form-check-input theme-radio me-3" type="radio" name="paymentType" id="payPaypal"
+                    checked style="margin-left:0;">
+                  <span class="flex-grow-1">Paypal</span>
+                  <span class="d-flex align-items-center gap-2">
+                    <img src="{{ asset('theme/xtremez/assets/icons/paypal.webp') }}" alt="PayPal" width="32">
+                  </span>
+                </label>
+
+              </div>
+
+            </div>
+            <!-- Add New Card -->
+            <form>
+              <div class="fw-semibold mb-2">Add new
+                Card</div>
+
+              <div class="input-group border mb-3">
+
+                <input type="text" class="form-control theme-input border-0" placeholder="Card number">
+
+                <span class="input-group-text border-0 bg-white pe-2">
+                  <img src="{{ asset('theme/xtremez/assets/icons/mastercard.png') }}" alt="Mastercard"
+                    width="34" />
+                </span>
+              </div>
+
+              <div class="mb-3 row gx-2">
+                <div class="col">
+                  <input type="text" class="form-control theme-input" placeholder="Expiration Date">
+                </div>
+                <div class="col-4">
+                  <input type="text" class="form-control theme-input" placeholder="CVV">
+                </div>
+              </div>
+              <div class="mb-4">
+                <input type="text" class="form-control theme-input" placeholder="Name on card">
+              </div>
+              <a href="order-summary.html" class="btn btn-place-order btn-secondary w-100">
+                PLACE YOUR ORDER
+              </a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+@endsection
+
+@push('scripts')
+@endpush

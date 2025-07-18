@@ -68,6 +68,25 @@ class ProductVariant extends Model
             });
     }
 
+    public function scopeWithSelection($query)
+    {
+        return $query->select([
+            'products.id as product_id',
+            'products.slug',
+            'products.category_id',
+            'products.position',
+            'product_variants.id as variant_id',
+            'product_variants.price',
+            'product_variants.stock',
+            'product_translations.name',
+            'product_translations.description',
+            'brands.name as brand_name',
+            'category_translations.name as category_name',
+            'main_attachment.file_path',
+            'main_attachment.file_name'
+        ]);
+    }
+
     public function scopeWithFilters($query, $filters)
     {
         return $query
@@ -103,5 +122,4 @@ class ProductVariant extends Model
             default => $query->orderBy('products.position'),
         };
     }
-
 }

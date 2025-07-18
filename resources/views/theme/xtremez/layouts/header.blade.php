@@ -20,7 +20,7 @@
           <!-- Icons & Mobile Toggle -->
           <div class="header-icons d-flex align-items-center gap-3">
             <a href="{{ route('login') }}" class="icon-link"><i class="bi bi-person fs-5"></i></a>
-            <a href="cart.html" class="icon-link position-relative">
+            <a href="{{ route('cart.index') }}" class="icon-link position-relative">
               <i class="bi bi-cart fs-5"></i>
               <span class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm">2</span>
             </a>

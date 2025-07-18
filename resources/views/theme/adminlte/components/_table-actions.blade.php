@@ -1,11 +1,16 @@
 <div class="d-flex gap-2">
+
+  @if (!empty($showUrl))
+    <a href="{{ $showUrl }}" class="btn btn-sm btn-secondary">Show</a>
+  @endif
+
   @if (empty($row->deleted_at))
     @if (!empty($editUrl))
       @if (!empty($editSidebar))
-      <button data-url="{{ $editUrl }}" type="button" class="btn btn-sm btn-secondary"  onclick="getAside()">Edit</button>
-
+        <button data-url="{{ $editUrl }}" type="button" class="btn btn-sm btn-secondary"
+          onclick="getAside()">Edit</button>
       @else
-      <a href="{{ $editUrl }}" class="btn btn-sm btn-secondary">Edit</a>
+        <a href="{{ $editUrl }}" class="btn btn-sm btn-secondary">Edit</a>
       @endif
 
     @endif

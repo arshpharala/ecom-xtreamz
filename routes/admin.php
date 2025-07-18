@@ -11,10 +11,11 @@ use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\CMS\LocaleController;
 use App\Http\Controllers\Admin\CMS\PageController;
 use App\Http\Controllers\Admin\CMS\TinyMCEController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Sales\CustomerController;
+use App\Http\Controllers\Admin\Sales\OrderController;
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
@@ -39,6 +40,15 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
     Route::resource('brands', BrandController::class);
     Route::delete('brands/{product}/restore', [BrandController::class, 'restore'])->name('brands.restore');
+});
+
+
+Route::group(['prefix' => '/sales', 'as' => 'sales.'], function () {
+    Route::resource('orders', OrderController::class);
+    Route::delete('orders/{order}/restore', [OrderController::class, 'restore'])->name('orders.restore');
+
+    Route::resource('customers', CustomerController::class);
+
 });
 
 

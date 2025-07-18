@@ -4,12 +4,7 @@
     <div class="col-sm-6">
       <h1 class="m-0">Setting</h1>
     </div>
-    <div class="col-sm-6">
-        <div class="d-flex flex-row gap-2 justify-content-end">
-            <button class="btn btn-primary">Discard</button>
-            <button class="btn btn-primary">Save</button>
-        </div>
-    </div>
+
   </div>
 @endsection
 @section('content')
@@ -104,6 +99,12 @@
 
           </div>
         </div><!-- end row -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary px-5">Save</button>
+            </div>
+        </div>
       </form>
 
     </div>

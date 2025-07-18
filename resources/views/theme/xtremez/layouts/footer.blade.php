@@ -44,7 +44,7 @@
 
         <!-- Bottom Bar -->
         <div class="footer-bottom text-white text-center py-4 mt-4">
-          <small>COPYRIGHT 2024 - XTREMEZ | ALL RIGHTS RESERVED</small>
+          <small>{{ setting('copyright', 'COPYRIGHT 2024 - XTREMEZ | ALL RIGHTS RESERVED') }}</small>
         </div>
         </div>
 

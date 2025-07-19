@@ -31,6 +31,10 @@ Route::post('login', [LoginController::class, 'store'])->name('login');
 Route::prefix('/customers')->name('customers.')->middleware('auth')->group(function () {
 
     Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
+    Route::get('profile/tab/{tab}', [ProfileController::class, 'loadTab'])->name('profile.tab');
+
+    Route::post('profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('password/update', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
 

@@ -215,7 +215,7 @@
                 </span>
               </div>
             </form>
-            <a class="btn btn-secondary btn-checkout w-100" href="checkout.html">
+            <a class="btn btn-secondary btn-checkout w-100" href="{{ route('checkout') }}">
               CHECKOUT <img src="{{ 'theme/xtremez/assets/icons/right-arrow.png' }}" alt="arrow-icon" class="ms-1">
             </a>
           </div>

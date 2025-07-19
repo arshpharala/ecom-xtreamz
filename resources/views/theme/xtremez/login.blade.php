@@ -54,21 +54,22 @@
             <!-- Sign In -->
             <div class="col-md-6 login-signin-box d-flex flex-column justify-content-center p-5">
               <h3 class="mb-4 fw-bold text-white" style="font-size: 2rem;">Sign In</h3>
-              <form>
+              <form action="{{ route('login') }}" method="POST" class="ajax-form">
+                @csrf
                 <div class="mb-3">
-                  <input type="text" class="form-control login-inp theme-input" placeholder="Your Name">
+                  <input type="text" name="email" class="form-control login-inp theme-input" placeholder="Your Name">
                 </div>
                 <div class="mb-3">
-                  <input type="password" class="form-control login-inp theme-input" placeholder="Your Password">
+                  <input type="password" name="password" class="form-control login-inp theme-input" placeholder="Your Password">
                 </div>
                 <div class="py-2 d-flex align-items-center">
                   <input type="checkbox" class="form-check-input me-2 theme-checkbox" id="rememberMe">
-                  <label class="form-check-label text-white text-uppercase small" for="rememberMe"
+                  <label class="form-check-label text-white text-uppercase small" for="rememberMe" name="remember"
                     style="letter-spacing: 0.1em;">Remember
                     me</label>
                 </div>
-                <a href="profile.html" class="btn btn-primary w-100 mt-5">SIGN
-                  IN</a>
+                <button type="submit" class="btn btn-primary w-100 mt-5">SIGN
+                  IN</button>
               </form>
             </div>
           </div>

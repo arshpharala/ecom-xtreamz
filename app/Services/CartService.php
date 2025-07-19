@@ -91,7 +91,7 @@ class CartService
     // Count total items
     public function getItemCount()
     {
-        return collect($this->getItems())->sum('qty');
+        return count($this->getItems());
     }
 
     // Get subtotal (total without tax/fees)

@@ -22,4 +22,25 @@ class Page extends Model
     {
         return $this->hasMany(PageTranslation::class);
     }
+
+    function scopeWithJoins($query)
+    {
+        $locale = app()->getLocale();
+
+        return $query->leftJoin('page_translations', function ($join) use ($locale) {
+            $join->on('page_translations.page_id', 'pages.id')->where('page_translations.locale', $locale);
+        })->leftJoin('metas', function ($join) use ($locale) {
+            $join->on('metas.metable_id', 'pages.id')->on('metas.metable_type', Page::class)->where('metas.locale', $locale);
+        });
+    }
+
+    public function scopeWithSelection($query)
+    {
+        return $query->select([
+            'pages.id',
+            'page_translations.title',
+            'page_translations.content',
+            'meta.content',
+        ]);
+    }
 }

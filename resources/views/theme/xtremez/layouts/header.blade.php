@@ -19,10 +19,14 @@
 
           <!-- Icons & Mobile Toggle -->
           <div class="header-icons d-flex align-items-center gap-3">
+            @auth
+            <a href="{{ route('customers.profile') }}" class="icon-link"><i class="bi bi-person fs-5"></i></a>
+            @else
             <a href="{{ route('login') }}" class="icon-link"><i class="bi bi-person fs-5"></i></a>
+            @endauth
             <a href="{{ route('cart.index') }}" class="icon-link position-relative">
               <i class="bi bi-cart fs-5"></i>
-              <span class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm">2</span>
+              <span class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm">{{ cart_items_count() }}</span>
             </a>
             <!-- Hamburger button, mobile only -->
             <button class="btn p-0 border-0 d-lg-none no-animate" id="mobileNavToggle" aria-label="Open navigation">

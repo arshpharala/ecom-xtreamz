@@ -36,7 +36,7 @@ $(function () {
 
 	// Load HTML component into given target
 	function loadTabContent(tabId, $target, callback = null) {
-		const path = `components/profile/${tabId}.html`;
+		const path = `/theme/xtremez/components/profile/${tabId}.html`;
 		$.ajax({
 			url: path,
 			method: "GET",

@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\CartController;
-use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\CheckoutController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('about-us', [HomeController::class, 'page'])->name('about-us');
@@ -19,17 +19,24 @@ Route::get('products/{slug}', [ProductController::class, 'show'])->name('product
 Route::resource('cart', CartController::class);
 
 
-Route::get('/checkout/guest', [CheckoutController::class, 'showGuestForm'])->name('checkout.guest');
+Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/guest', [CheckoutController::class, 'processGuestOrder'])->name('checkout.guest.process');
 
 Route::get('/order-summary/{order}', [CheckoutController::class, 'thankYou'])->name('order.summary');
 
 
-Route::get('checkout', [CheckoutController::class, 'show'])->name('checkout');
-Route::post('checkout', [CheckoutController::class, 'process'])->name('checkout.process');
-
-
 Route::get('login', [LoginController::class, 'create'])->name('login');
+Route::post('login', [LoginController::class, 'store'])->name('login');
+
+Route::prefix('/customers')->name('customers.')->middleware('auth')->group(function () {
+
+    Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
+});
+
+
+Route::group(['middelware' => 'auth'], function () {
+    Route::post('checkout/process', [CheckoutController::class, 'processAuthenticatedOrder'])->name('checkout.process');
+});
 
 
 Route::prefix('ajax/')->name('ajax.')->group(function () {

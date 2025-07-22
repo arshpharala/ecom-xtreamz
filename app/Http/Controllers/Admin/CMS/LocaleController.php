@@ -97,7 +97,7 @@ class LocaleController extends Controller
         $data['directions'] = $directions;
         $data['locale']      = $locale;
 
-        $response['view'] = view('theme.adminlte.cms.locale.edit', $data)->render();
+        $response['view'] = view('theme.adminlte.cms.locales.edit', $data)->render();
 
         return response()->json([
             'success' => true,

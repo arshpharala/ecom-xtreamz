@@ -58,7 +58,13 @@ class CartController extends Controller
             $variant->price
         );
 
-        return response()->json(['success' => true]);
+        $variant->cart_item = $this->cart->getItem($variant->id);
+
+        return response()->json([
+            'success' => true,
+            'variant' => $variant,
+            'cart' => $this->cart->get()
+        ]);
     }
 
     public function update(Request $request, $variantId)
@@ -70,13 +76,32 @@ class CartController extends Controller
 
         $variant = ProductVariant::findOrFail($variantId);
 
-        $this->cart->update($variantId, $request->qty);
-        return response()->json(['success' => true]);
+        if (!$this->cart->getItem($variant->id)) {
+            $this->cart->add(
+                $variant->id,
+                $request->qty,
+                $variant->price
+            );
+        } else {
+            $this->cart->update($variantId, $request->qty);
+        }
+
+
+        $variant->cart_item = $this->cart->getItem($variant->id);
+
+        return response()->json([
+            'success' => true,
+            'variant' => $variant,
+            'cart' => $this->cart->get()
+        ]);
     }
 
     public function destroy(string $variantId)
     {
         $this->cart->remove($variantId);
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'cart' => $this->cart->get()
+        ]);
     }
 }

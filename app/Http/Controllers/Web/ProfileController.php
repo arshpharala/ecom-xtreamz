@@ -18,10 +18,14 @@ class ProfileController extends Controller
     public function loadTab(string $tab)
     {
         $data = [];
+        $user = auth()->user();
 
         switch ($tab) {
             case 'profile':
-                $data['user'] = auth()->user();
+                $data['user'] = $user;
+                break;
+            case 'order':
+                $data['user'] = $user->load('orders.lineItems');
                 break;
 
             default:

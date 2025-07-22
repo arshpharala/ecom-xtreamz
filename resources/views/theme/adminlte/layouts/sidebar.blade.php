@@ -107,28 +107,32 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="{{ route('admin.cms.pages.index') }}" class="nav-link">
-              <i class="nav-icon fas fa-file-alt"></i>
-              <p>
-                CMS
-              </p>
-            </a>
-          </li>
 
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-shopping-bag"></i>
               <p>
-                Setting
+                CMS
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
+                <a href="{{ route('admin.cms.pages.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pages</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('admin.cms.locales.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Locale</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.cms.currencies.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Currencies</p>
                 </a>
               </li>
               <li class="nav-item">

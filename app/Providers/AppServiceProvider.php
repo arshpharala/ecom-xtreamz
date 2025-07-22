@@ -21,11 +21,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerAdminRoutes();
+        $this->registerRoutes();
     }
 
-    protected function registerAdminRoutes()
+    protected function registerRoutes()
     {
+        Route::middleware(['web'])
+            ->group(base_path('routes/auth.php'));
+
         Route::middleware(['web'])
             ->prefix('admin')
             ->as('admin.')

@@ -26,7 +26,7 @@
             @endauth
             <a href="{{ route('cart.index') }}" class="icon-link position-relative">
               <i class="bi bi-cart fs-5"></i>
-              <span class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm">{{ cart_items_count() }}</span>
+              <span class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm" id="cart-items-count">{{ cart_items_count() }}</span>
             </a>
             <!-- Hamburger button, mobile only -->
             <button class="btn p-0 border-0 d-lg-none no-animate" id="mobileNavToggle" aria-label="Open navigation">

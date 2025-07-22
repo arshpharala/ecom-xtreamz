@@ -4,14 +4,46 @@ $(function () {
     const $prevBtn = $("#thumbPrev");
     const $nextBtn = $("#thumbNext");
     const visibleCount = 4;
-    let qty = parseInt($("#qtyInput").val()) || 1;
+    const productSelector = $(".product-detail");
+
+    productSelector.on("click", ".qty-btn", function () {
+        const isPlus = $(this).hasClass("plus");
+        let qty = parseInt($("#qtyInput").val()) || 1;
+        const newQty = isPlus ? qty + 1 : Math.max(1, qty - 1);
+
+        $("#qtyInput").val(newQty);
+        productSelector.data("qty", newQty);
+        productSelector.attr("data-qty", newQty);
+
+        updateCartVariantQty(window.variant.id, newQty, function (res) {
+            if (res.variant) {
+                updateCartCount(res.cart);
+                window.variant = res.variant;
+                updatePriceDisplay();
+            } else {
+                alert("Unable to update variant.");
+            }
+        });
+    });
 
     function updatePriceDisplay() {
-        const unitPrice = parseFloat(window.basePrice);
-        const total = unitPrice * qty;
-        $("#priceDisplay").text(
-            `${$("meta[name='currency']").attr("content")} ${total.toFixed(2)}`
-        );
+        try {
+            let price = parseFloat(window.variant?.price) || 0;
+            let subtotal = parseFloat(window.variant?.cart_item?.subtotal);
+
+            const total = !isNaN(subtotal) ? subtotal : price;
+
+            $("#priceDisplay").text(
+                `${$("meta[name='currency']").attr("content")} ${total.toFixed(
+                    2
+                )}`
+            );
+        } catch (err) {
+            console.error("Error updating price display:", err);
+            $("#priceDisplay").text(
+                `${$("meta[name='currency']").attr("content")} --`
+            );
+        }
     }
 
     function getSelectedAttributes() {
@@ -43,9 +75,44 @@ $(function () {
         }
     }
 
-    function updateVariantDisplay(variant) {
+    function updateCartButtonState(variant) {
+        const isInCart = !!variant?.cart_item;
+
+        const $addBtn = $(".add-to-cart-btn");
+
+        if (isInCart) {
+            $addBtn.find(".add-to-cart").hide();
+            $addBtn.find(".added-to-cart").show();
+            $addBtn.addClass("in-cart");
+        } else {
+            $addBtn.find(".add-to-cart").show();
+            $addBtn.find(".added-to-cart").hide();
+            $addBtn.removeClass("in-cart");
+        }
+    }
+
+    function updateVariantDisplay() {
+        let variant = window.variant;
         window.basePrice = parseFloat(variant.price);
         window.currentVariantId = variant.variant_id;
+
+        try {
+            const variantId = variant?.variant_id;
+            const qty = variant?.cart_item?.qty ?? 1;
+
+            if (variantId) {
+                // Update variant-id for all relevant buttons
+                $(".buy-now-btn, .add-to-cart-btn, .cart-item")
+                    .data("variant-id", variantId)
+                    .attr("data-variant-id", variantId);
+            }
+
+            // Update qty only for cart-item
+            $("#qtyInput").val(qty);
+            $(".cart-item").data("qty", qty).attr("data-qty", qty);
+        } catch (err) {
+            console.error("Error updating variant button attributes:", err);
+        }
 
         $("#priceDisplay").text(
             `${$("meta[name='currency']").attr("content")} ${variant.price}`
@@ -82,6 +149,8 @@ $(function () {
                 .text(`${variant.sku ?? "NA"}`);
         }
 
+        updateCartButtonState(variant);
+
         updatePriceDisplay();
     }
 
@@ -96,9 +165,10 @@ $(function () {
                 attributes: selectedAttributes,
             },
             success: function (response) {
+                window.variant = response;
                 updateSelectedAttributesFromVariant(response);
-                updateVariantDisplay(response);
-                updateUrlVariantId(response.variant_id); // optional
+                updateVariantDisplay();
+                updateUrlVariantId();
             },
             error: function () {
                 alert("This combination is currently not available.");
@@ -106,31 +176,31 @@ $(function () {
         });
     }
 
-    function updateUrlVariantId(variantId) {
+    function updateUrlVariantId() {
         const url = new URL(window.location.href);
-        url.searchParams.set("variant", variantId);
+        url.searchParams.set("variant", window.variant.id);
         history.pushState({}, "", url);
     }
 
     // Init qty price on load
-    updatePriceDisplay();
+    // updatePriceDisplay();
 
-    $("#qtyPlus").click(() => {
-        qty += 1;
-        $("#qtyInput").val(qty);
-        updatePriceDisplay();
-    });
+    // $("#qtyPlus").click(() => {
+    //     qty += 1;
+    //     $("#qtyInput").val(qty);
+    //     updatePriceDisplay();
+    // });
 
-    $("#qtyMinus").click(() => {
-        qty = qty > 1 ? qty - 1 : 1;
-        $("#qtyInput").val(qty);
-        updatePriceDisplay();
-    });
+    // $("#qtyMinus").click(() => {
+    //     qty = qty > 1 ? qty - 1 : 1;
+    //     $("#qtyInput").val(qty);
+    //     updatePriceDisplay();
+    // });
 
-    $("#qtyInput").on("input", function () {
-        qty = parseInt($(this).val()) || 1;
-        updatePriceDisplay();
-    });
+    // $("#qtyInput").on("input", function () {
+    //     qty = parseInt($(this).val()) || 1;
+    //     updatePriceDisplay();
+    // });
 
     // Initial selection highlight
     $(".variant-option").each(function () {

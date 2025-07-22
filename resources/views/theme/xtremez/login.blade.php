@@ -37,15 +37,16 @@
             <div class="col-md-6 bg-white p-5 d-flex flex-column justify-content-center login-signup-box">
               <h3 class="mb-4 fw-bold" style="font-size: 2rem;">Sign
                 Up</h3>
-              <form>
+              <form action="{{ route('register') }}" method="POST" class="ajax-form">
+                @csrf
                 <div class="mb-3">
-                  <input type="text" class="form-control theme-input" placeholder="Your Name">
+                  <input type="text" class="form-control theme-input" name="name" placeholder="Your Name" autocomplete="off">
                 </div>
                 <div class="mb-3">
-                  <input type="email" class="form-control theme-input" placeholder="Your email">
+                  <input type="email" class="form-control theme-input" name="email" placeholder="Your email" autocomplete="off">
                 </div>
                 <div class="mb-4">
-                  <input type="password" class="form-control theme-input" placeholder="Password">
+                  <input type="password" class="form-control theme-input" name="password" placeholder="Password" autocomplete="off">
                 </div>
                 <button type="submit" class="btn btn-secondary w-100">SIGN
                   UP</button>

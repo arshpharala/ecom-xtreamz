@@ -1,124 +1,173 @@
-$(function () {
-    // Select All
-    $("#selectAll").on("change", function () {
-        const checked = $(this).is(":checked");
-        $(".cart-item:visible .form-check-input").prop("checked", checked);
+$("#selectAll").on("change", function () {
+    const checked = $(this).is(":checked");
+    $(".cart-item:visible .form-check-input").prop("checked", checked);
+});
+
+// Sync checkbox with Select All
+$(".cart-items").on("change", ".form-check-input", function () {
+    const $checkboxes = $(".cart-item:visible .form-check-input");
+    const total = $checkboxes.length;
+    const checked = $checkboxes.filter(":checked").length;
+    $("#selectAll").prop("checked", checked === total);
+});
+
+$(".cart-items").on("click", ".qty-btn", function () {
+    const $cartItem = $(this).closest(".cart-item");
+    const variantId = $cartItem.data("variant-id");
+    const $qtyBox = $cartItem.find(".cart-qty-val");
+
+    let qty = $cartItem.data("qty") || 1;
+    const isPlus = $(this).hasClass("plus");
+    const newQty = isPlus ? qty + 1 : Math.max(1, qty - 1);
+
+    $cartItem.data("qty", newQty);
+    $qtyBox.text(newQty);
+
+    updateCartVariantQty(variantId, newQty, function (res) {
+        updateCartCount(res.cart);
     });
+});
 
-    // Sync checkbox with Select All
-    $(".cart-items").on("change", ".form-check-input", function () {
-        const $checkboxes = $(".cart-item:visible .form-check-input");
-        const total = $checkboxes.length;
-        const checked = $checkboxes.filter(":checked").length;
-        $("#selectAll").prop("checked", checked === total);
+// Delete Item
+$(".cart-items").on("click", ".btn-trash", function () {
+    const $cartItem = $(this).closest(".cart-item");
+    const variantId = $cartItem.data("variant-id");
+
+    $.ajax({
+        url: `/cart/${variantId}`,
+        method: "DELETE",
+        success: function (res) {
+            $cartItem.remove();
+            syncSelectAll();
+
+            updateCartCount(res.cart);
+        },
     });
+});
 
-    // Update Qty
-    $(".cart-items").on("click", ".qty-btn", function () {
-        const $cartItem = $(this).closest(".cart-item");
-        const variantId = $cartItem.data("variant-id");
-        const $qtyBox = $cartItem.find(".cart-qty-val");
-        let qty = $cartItem.data("qty");
+// function updateQuantity(variantId, qty, $qtyBox) {
+//     $.ajax({
+//         url: `/cart/${variantId}`,
+//         method: "PUT",
+//         data: {
+//             variant_id: variantId,
+//             qty: qty,
+//         },
+//         success: function (res) {
+//             $qtyBox.text(qty);
+//             $qtyBox.val(qty);
 
-        const isPlus = $(this).hasClass("plus");
-        const newQty = isNaN(qty) ? 1 : isPlus ? qty + 1 : Math.max(1, qty - 1);
+//             // const $cartItem = $qtyBox.closest(".cart-item");
+//             // const unitPrice = parseFloat($cartItem.data("price"));
 
-        $qtyBox.text(newQty);
-        $cartItem.data("qty", newQty);
-        updateQuantity(variantId, newQty, $qtyBox);
+//             // if (!isNaN(unitPrice)) {
+//             //     const totalPrice = (unitPrice * qty).toFixed(2);
+//             // }
+
+//             updateCartCount(res.cart);
+//         },
+//     });
+// }
+
+// Shared function
+function updateCartVariantQty(variantId, qty, onSuccess = null) {
+    $.ajax({
+        url: `/cart/${variantId}`,
+        method: "PUT",
+        data: { variant_id: variantId, qty: qty },
+        success: function (res) {
+            if (typeof onSuccess === "function") {
+                onSuccess(res);
+            }
+        },
+        error: function () {
+            alert("Failed to update quantity.");
+        },
     });
+}
 
-    // Delete Item
-    $(".cart-items").on("click", ".btn-trash", function () {
-        const $cartItem = $(this).closest(".cart-item");
-        const variantId = $cartItem.data("variant-id");
+function updateCartCount(cart) {
+    $("body").find("#cart-items-count").text(cart.count);
+    $("body")
+        .find(".cart-total")
+        .text(`${cart.total.toFixed(2)} AED`);
+    $("body")
+        .find(".cart-sub-total")
+        .text(`${cart.subTotal.toFixed(2)} AED`);
+    $("body")
+        .find(".cart-taxes")
+        .text(`${cart.tax.toFixed(2)} AED`);
+}
 
-        $.ajax({
-            url: `/cart/${variantId}`,
-            method: "DELETE",
-            success: function () {
-                $cartItem.remove();
-                syncSelectAll();
-            },
-        });
+function syncSelectAll() {
+    const $checkboxes = $(".cart-item:visible .form-check-input");
+    const total = $checkboxes.length;
+    const checked = $checkboxes.filter(":checked").length;
+    $("#selectAll").prop("checked", checked === total);
+}
+
+function addToCart(variantId, qty, callback) {
+    $.ajax({
+        url: "/cart",
+        method: "POST",
+        data: {
+            variant_id: variantId,
+            qty: qty,
+        },
+        success: function (res) {
+            if (res.success) {
+                updateCartCount(res.cart);
+                callback(true);
+            } else {
+                callback(false);
+            }
+        },
+        error: function () {
+            callback(false);
+        },
     });
+}
 
-    function updateQuantity(variantId, qty, $qtyBox) {
-        $.ajax({
-            url: `/cart/${variantId}`,
-            method: "PUT",
-            data: {
-                variant_id: variantId,
-                qty: qty,
-            },
-            success: function () {
-                $qtyBox.text(qty);
 
-                const $cartItem = $qtyBox.closest(".cart-item");
-                const unitPrice = parseFloat($cartItem.data("price"));
-                if (!isNaN(unitPrice)) {
-                    const totalPrice = (unitPrice * qty).toFixed(2);
-                    $cartItem.find(".item-total").text(`${totalPrice} AED`);
-                }
-            },
-        });
+$(document).on("click", ".add-to-cart-btn", function () {
+    const $btn = $(this);
+
+    if ($btn.find(".added-to-cart").is(":visible")) {
+        console.log("Already in cart. Quantity can be updated on cart page.");
+        return;
     }
 
-    function syncSelectAll() {
-        const $checkboxes = $(".cart-item:visible .form-check-input");
-        const total = $checkboxes.length;
-        const checked = $checkboxes.filter(":checked").length;
-        $("#selectAll").prop("checked", checked === total);
-    }
+    const variantId = $btn.attr("data-variant-id");
+    const qty = parseInt($($btn.data("qty-selector")).val()) || 1;
 
-    $(function () {
-        function addToCart(variantId, qty, callback) {
-            $.ajax({
-                url: "/cart",
-                method: "POST",
-                data: {
-                    variant_id: variantId,
-                    qty: qty,
-                },
-                success: function (res) {
-                    if (res.success) {
-                        callback(true);
-                    } else {
-                        callback(false);
-                    }
-                },
-                error: function () {
-                    callback(false);
-                },
-            });
+    addToCart(variantId, qty, function (success) {
+        if (success) {
+            $btn.find(".add-to-cart").hide();
+            $btn.find(".added-to-cart").show();
+        } else {
+            alert("Failed to add to cart.");
         }
+    });
+});
 
-        // Add to Cart Button
-        $(document).on("click", ".add-to-cart-btn", function () {
-            const variantId = $(this).data("variant-id");
-            const qty = parseInt($($(this).data("qty-selector")).val()) || 1;
+$(document).on("click", ".buy-now-btn", function () {
+    const $btn = $(this);
+    const variantId = $btn.data("variant-id");
+    const qty = parseInt($($btn.data("qty-selector")).val()) || 1;
 
-            addToCart(variantId, qty, function (success) {
-                if (success) {
-                    alert("Product added to cart!");
-                } else {
-                    alert("Failed to add to cart.");
-                }
-            });
-        });
+    const isAlreadyInCart = $btn.hasClass("in-cart");
 
-        // Buy Now Button
-        $(document).on("click", ".buy-now-btn", function () {
-            const variantId = $(this).data("variant-id");
-            const qty = parseInt($($(this).data("qty-selector")).val()) || 1;
+    if (isAlreadyInCart) {
+        window.location.href = "/cart";
+        return;
+    }
 
-            addToCart(variantId, qty, function (success) {
-                if (success) {
-                    window.location.href = "/cart";
-                } else {
-                    alert("Failed to proceed.");
-                }
-            });
-        });
+    addToCart(variantId, qty, function (success) {
+        if (success) {
+            $btn.addClass("in-cart");
+            window.location.href = "/cart";
+        } else {
+            alert("Failed to proceed.");
+        }
     });
 });

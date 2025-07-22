@@ -11,14 +11,17 @@ use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog\ProductVariant;
 use App\Repositories\ProductRepository;
+use App\Services\CartService;
 
 class ProductController extends Controller
 {
     protected $repository;
+    protected $cart;
 
-    public function __construct(ProductRepository $repository)
+    public function __construct(ProductRepository $repository, CartService $cart)
     {
         $this->repository = $repository;
+        $this->cart = $cart;
     }
 
     function index()
@@ -84,6 +87,7 @@ class ProductController extends Controller
             $variant->load(['product.translations', 'attachments', 'attributeValues.attribute', 'shipping']);
 
             return response()->json([
+                'id' => $variant->id,
                 'variant_id' => $variant->id,
                 'sku' => $variant->sku,
                 'slug' => $variant->product->slug,
@@ -97,6 +101,7 @@ class ProductController extends Controller
                 'combination' => collect($variant->attributeValues)->mapWithKeys(function ($val) {
                     return [Str::slug($val->attribute->name) => $val->value];
                 }),
+                'cart_item' => $this->cart->getItem($variant->id)
             ]);
         }
 
@@ -107,7 +112,7 @@ class ProductController extends Controller
 
     protected function getProductVariant($variantId)
     {
-        return ProductVariant::withJoins()
+        $variant =  ProductVariant::withJoins()
             ->select([
                 'products.id as product_id',
                 'products.slug',
@@ -127,6 +132,10 @@ class ProductController extends Controller
             ])
             ->where('product_variants.id', $variantId)
             ->firstOrFail();
+
+        $variant->cart_item = (object) $this->cart->getItem($variant->id);
+
+        return $variant;
     }
 
     protected function getProductWithAttributes($productId)
@@ -179,6 +188,7 @@ class ProductController extends Controller
                 'price' => $variant->price,
                 'stock' => $variant->stock,
                 'image' => $variant->attachments->first()?->file_path,
+                'cart_item' => $this->cart->getItem($variant->id)
             ];
         }
 

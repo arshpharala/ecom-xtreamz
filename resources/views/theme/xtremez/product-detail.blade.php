@@ -32,7 +32,8 @@
 @endsection
 
 @section('content')
-  <section class="product-detail py-5">
+  <section class="product-detail py-5" data-variant-id="{{ $productVariant->id }}"
+    data-price="{{ $productVariant->price }}" data-qty="{{ $productVariant->cart_item->qty ?? 1 }}">
     <div class="container">
 
       <!-- Mobile Title -->
@@ -80,8 +81,8 @@
               {!! $productVariant->description !!}
             </div>
           </div>
-
-          <div class="price fs-3 py-3" id="priceDisplay">{{ active_currency() }} {{ $productVariant->price }}</div>
+          <div class="price fs-3 py-3" id="priceDisplay">{{ active_currency() }}
+            {{ number_format($productVariant->cart_item->subtotal ?? $productVariant->price, 2) }}</div>
 
           <div class="d-flex align-items-center justify-content-start gap-4 py-3 flex-wrap product-options">
             <!-- Quantity -->
@@ -89,9 +90,12 @@
               <div>
                 <label class="form-label mb-0">Quantity</label>
                 <div class="qty-wrapper d-flex align-items-center">
-                  <i class="bi bi-dash-circle qty-btn" id="qtyMinus"></i>
-                  <input type="text" id="qtyInput" class="qty-input py-1" value="1" />
-                  <i class="bi bi-plus-circle qty-btn" id="qtyPlus"></i>
+                  {{-- <i class="bi bi-dash-circle qty-btn minus" id="qtyMinus"></i> --}}
+                  <i class="bi bi-dash-circle qty-btn minus"></i>
+                  <input type="text" id="qtyInput" class="qty-input py-1"
+                    value="{{ $productVariant->cart_item->qty ?? 1 }}" />
+                  <i class="bi bi-plus-circle qty-btn plus"></i>
+                  {{-- <i class="bi bi-plus-circle qty-btn plus" id="qtyPlus"></i> --}}
                 </div>
               </div>
             </div>
@@ -141,10 +145,17 @@
           </div>
 
           <div class="d-flex gap-3 py-3">
-            <button class="btn btn-cart flex-fill  buy-now-btn" data-variant-id="{{ $productVariant->id }}"
+            <button class="btn btn-cart flex-fill buy-now-btn {{ !empty($productVariant->cart_item->qty) ? 'in-cart' : '' }}" data-variant-id="{{ $productVariant->id }}"
               data-qty-selector="#qtyInput">Buy Now</button>
             <button class="btn btn-buy flex-fill add-to-cart-btn" data-variant-id="{{ $productVariant->id }}"
-              data-qty-selector="#qtyInput">Add to Cart</button>
+              data-qty-selector="#qtyInput">
+              <span class="add-to-cart" style="{{ empty($productVariant->cart_item->qty) ? '' : 'display:none' }}">
+                Add to Cart
+              </span>
+              <span class="added-to-cart" style="{{ empty($productVariant->cart_item->qty) ? 'display:none' : '' }}">
+                Added to Cart
+              </span>
+            </button>
           </div>
 
         </div>
@@ -233,6 +244,8 @@
     window.allVariants = @json($allVariants);
     window.selectedAttributes = @json($selected);
 
+    window.variant = @json($productVariant);
+
     window.currentVariantId = "{{ $productVariant->id }}";
     window.basePrice = {{ $productVariant->price }};
 
@@ -245,6 +258,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
-  <script src="{{ asset('theme/xtremez/assets/js/product-detail.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/cart.js') }}"></script>
+  <script src="{{ asset('theme/xtremez/assets/js/product-detail.js') }}"></script>
 @endpush

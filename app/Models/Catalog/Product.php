@@ -42,6 +42,12 @@ class Product extends Model
         return $this->hasMany(ProductTranslation::class);
     }
 
+    public function translation()
+    {
+        return $this->hasOne(ProductTranslation::class)->where('locale', app()->getLocale());
+    }
+
+
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);

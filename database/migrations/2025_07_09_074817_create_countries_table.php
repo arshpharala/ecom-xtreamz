@@ -18,12 +18,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('currencies', function (Blueprint $table) {
-            $table->string('code', 3)->primary(); // ISO-3
-            $table->string('name');
-            $table->decimal('exchange_rate', 12, 6)->default(1.0);
-            $table->timestamps();
-        });
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 
 class CartService
@@ -20,6 +21,18 @@ class CartService
         throw new \BadMethodCallException("Method {$method} does not exist.");
     }
 
+    public function get(): Collection
+    {
+        $cart = [
+            'subTotal' => $this->getSubTotal(),
+            'tax'   => $this->getTax(),
+            'total' => $this->getTotal(),
+            'count' => $this->getItemCount(),
+            'items' => $this->getItems(),
+        ];
+
+        return collect($cart);
+    }
 
     // Get all cart items
     public function getItems()
@@ -91,7 +104,8 @@ class CartService
     // Count total items
     public function getItemCount()
     {
-        return count($this->getItems());
+        $cart = $this->getItems();
+        return array_sum(array_column($cart, 'qty'));
     }
 
     // Get subtotal (total without tax/fees)
@@ -101,9 +115,16 @@ class CartService
         return array_sum(array_column($cart, 'subtotal'));
     }
 
+    // Get total tax (tax/fees)
+    public function getTax()
+    {
+        return array_sum(array_map(fn($item) => $item['options']['tax'] ?? 0, $this->getItems()));
+    }
+
+
     // Get total (can be extended for tax, shipping etc.)
     public function getTotal()
     {
-        return $this->getSubtotal();
+        return $this->getSubtotal() + $this->getTax();
     }
 }

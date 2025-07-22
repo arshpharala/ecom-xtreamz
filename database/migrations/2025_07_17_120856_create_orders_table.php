@@ -16,11 +16,11 @@ return new class extends Migration
             $table->uuid('order_number')->unique();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('billing_address_id')->nullable()->constrained()->onDelete('set null');
-
             $table->string('email')->nullable(); // for guests
             $table->enum('payment_method', ['card', 'paypal']);
             $table->string('payment_status')->default('pending');
             $table->string('stripe_payment_intent_id')->nullable();
+            $table->integer('currency_id')->nullable();
             $table->decimal('total', 10, 2);
             $table->timestamps();
             $table->softDeletes();

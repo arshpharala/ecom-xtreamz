@@ -2,6 +2,7 @@
 
 namespace App\Models\Cart;
 
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,13 +18,25 @@ class Order extends Model
         'payment_method',
         'payment_status',
         'stripe_payment_intent_id',
+        'sub_total',
+        'tax',
         'total'
     ];
 
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'billing_address_id');
+    }
+
     public function billingAddress()
     {
-        return $this->belongsTo(BillingAddress::class, 'billing_address_id');
+        return $this->belongsTo(Address::class, 'billing_address_id');
     }
+
+    // public function billingAddress()
+    // {
+    //     return $this->belongsTo(BillingAddress::class, 'billing_address_id');
+    // }
 
     public function lineItems()
     {

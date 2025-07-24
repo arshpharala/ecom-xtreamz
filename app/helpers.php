@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CMS\Country;
 use App\Models\CMS\Locale;
 use App\Services\CartService;
 
@@ -11,20 +12,37 @@ if (!function_exists('setting')) {
 }
 
 
+if (!function_exists('cart')) {
+    function cart()
+    {
+        return (new CartService())->get();
+    }
+}
+
 if (!function_exists('cart_items_count')) {
-    function cart_items_count(){
+    function cart_items_count()
+    {
         return (new CartService())->getItemCount();
     }
 }
 
 if (!function_exists('active_locals')) {
-    function active_locals(){
+    function active_locals()
+    {
         return Locale::pluck('code')->toArray();
     }
 }
 
 if (!function_exists('active_currency')) {
-    function active_currency(){
+    function active_currency()
+    {
         return 'AED';
+    }
+}
+
+if (!function_exists('active_country')) {
+    function active_country()
+    {
+        return Country::first(); // for now send like this
     }
 }

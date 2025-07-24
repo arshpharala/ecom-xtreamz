@@ -40,18 +40,17 @@
               <div class="col-6">
                 <div class="fw-bold">Billing address</div>
                 <div>
-                  {{ $order->billingAddress->address }}<br>
-                  {{ $order->billingAddress->landmark }}<br>
-                  {{ $order->billingAddress->city }}, {{ $order->billingAddress->province }}
+                  {{ $order->address->address }}<br>
+                  {{ $order->address->landmark }}<br>
+                  {{ $order->address->city->name }}, {{ $order->address->province->name }}
                 </div>
               </div>
               <div class="col-6">
                 <div class="fw-bold">Shipping address</div>
                 <div>
-                  {{-- Same as billing for now --}}
-                  {{ $order->billingAddress->address }}<br>
-                  {{ $order->billingAddress->landmark }}<br>
-                  {{ $order->billingAddress->city }}, {{ $order->billingAddress->province }}
+                  {{ $order->address->address }}<br>
+                  {{ $order->address->landmark }}<br>
+                  {{ $order->address->city->name }}, {{ $order->address->province->name }}
                 </div>
               </div>
             </div>

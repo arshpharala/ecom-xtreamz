@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Address;
 use App\Models\Cart\Order;
 use App\Models\Cart\UserCard;
 use Laravel\Cashier\Billable;
@@ -62,6 +63,11 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 
     public function billingAddresses()

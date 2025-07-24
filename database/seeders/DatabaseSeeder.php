@@ -16,7 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             UserSeeder::class,
-            LocaleSeeder::class
+            LocaleSeeder::class,
+            CurrencySeeder::class,
+            UAEGeoSeeder::class
         ]);
     }
 }

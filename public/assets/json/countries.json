@@ -1,0 +1,83 @@
+{
+  "UAE": [
+    {
+      "emirate": "Abu Dhabi",
+      "cities": [
+        {
+          "name": "Abu Dhabi",
+          "areas": ["Al Maryah Island", "Al Raha", "Al Khalidiyah", "Al Khalifa Street"]
+        },
+        {
+          "name": "Al Ain",
+          "areas": ["Al Jimi", "Al Mutared", "Al Hili"]
+        }
+      ]
+    },
+    {
+      "emirate": "Dubai",
+      "cities": [
+        {
+          "name": "Dubai",
+          "areas": ["Deira", "Bur Dubai", "Marina", "Jumeirah", "Downtown"]
+        },
+        {
+          "name": "Hatta",
+          "areas": ["Hatta Village", "Hatta Wadi Hub"]
+        },
+        {
+          "name": "Jebel Ali",
+          "areas": ["JAFZA", "Jebel Ali Village"]
+        }
+      ]
+    },
+    {
+      "emirate": "Sharjah",
+      "cities": [
+        {
+          "name": "Sharjah",
+          "areas": ["Al Majaz", "Al Nahda", "Al Khan"]
+        }
+      ]
+    },
+    {
+      "emirate": "Ajman",
+      "cities": [
+        {
+          "name": "Ajman",
+          "areas": ["Ajman Corniche", "Al Nuaimiya"]
+        }
+      ]
+    },
+    {
+      "emirate": "Umm Al Quwain",
+      "cities": [
+        {
+          "name": "Umm Al Quwain",
+          "areas": ["UAQ Free Zone", "Sinaiya"]
+        }
+      ]
+    },
+    {
+      "emirate": "Ras Al Khaimah",
+      "cities": [
+        {
+          "name": "Ras Al Khaimah",
+          "areas": ["Al Nakheel", "Al Hamra"]
+        },
+        {
+          "name": "Dibba Al Hisn",
+          "areas": ["Dibba Corniche"]
+        }
+      ]
+    },
+    {
+      "emirate": "Fujairah",
+      "cities": [
+        {
+          "name": "Fujairah",
+          "areas": ["Fujairah City Centre", "Masafi", "Khor Fakkan"]
+        }
+      ]
+    }
+  ]
+}

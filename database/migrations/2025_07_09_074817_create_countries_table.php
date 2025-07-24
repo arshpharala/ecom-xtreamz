@@ -12,12 +12,34 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('countries', function (Blueprint $table) {
-            $table->string('code', 2)->primary(); // ISO-2
+            $table->id();
+            $table->string('code', 2)->unique();
             $table->string('name');
-            $table->string('currency_code', 3);
+            $table->integer('currency_id');
+            $table->string('icon');
             $table->timestamps();
         });
 
+        Schema::create('provinces', function (Blueprint $table) {
+            $table->id();
+            $table->integer('country_id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('cities', function (Blueprint $table) {
+            $table->id();
+            $table->integer('province_id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('areas', function (Blueprint $table) {
+            $table->id();
+            $table->integer('city_id');
+            $table->string('name');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -26,5 +48,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('countries');
+        Schema::dropIfExists('provinces');
+        Schema::dropIfExists('cities');
+        Schema::dropIfExists('areas');
     }
 };

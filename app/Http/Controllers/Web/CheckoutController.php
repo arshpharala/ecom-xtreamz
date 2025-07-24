@@ -3,28 +3,30 @@
 namespace App\Http\Controllers\Web;
 
 use Stripe\Stripe;
-use Stripe\Customer;
 use Stripe\PaymentIntent;
 use App\Models\Cart\Order;
 use Illuminate\Support\Str;
+use App\Models\CMS\Province;
 use Illuminate\Http\Request;
-use App\Models\Cart\UserCard;
 use App\Services\CartService;
 use App\Services\StripeService;
-use App\Models\Cart\OrderLineItem;
 use App\Models\Cart\BillingAddress;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\AddressRepository;
+use App\Http\Requests\StoreAuthenticatedOrderRequest;
 
 class CheckoutController extends Controller
 {
     protected $cart;
     protected $stripe;
+    protected $addressRepository;
 
     public function __construct()
     {
-        $this->cart = new CartService();
-        $this->stripe = new StripeService();
+        $this->cart                 = new CartService();
+        $this->stripe               = new StripeService();
+        $this->addressRepository    = new AddressRepository(app());
     }
 
     function checkout(Request $request)
@@ -40,6 +42,7 @@ class CheckoutController extends Controller
 
     public function showGuestForm()
     {
+        $data['provinces'] = Province::where('country_id', 1)->get();
         return view('theme.xtremez.checkout-guest');
     }
 
@@ -124,24 +127,25 @@ class CheckoutController extends Controller
     }
 
 
-
     public function showAuthForm(Request $request)
     {
-        $user = $request->user();
-        $addresses = $user->billingAddresses()->latest()->get();
-        $cards = $user->cards()->latest()->get();
+        $user                   = $request->user();
+        $data['user']           = $user;
+        $data['addresses']      = $user->addresses()->latest()->get();
+        $data['cards']          = $user->cards()->latest()->get();
+        $data['provinces']      = Province::where('country_id', 1)->get();
 
-        return view('theme.xtremez.checkout-auth', compact('addresses', 'cards', 'user'));
+        return view('theme.xtremez.checkout-auth', $data);
     }
 
-    public function processAuthenticatedOrder(Request $request)
+    public function processAuthenticatedOrder(StoreAuthenticatedOrderRequest $request)
     {
-        $user = $request->user();
+        abort_if($this->cart->getItemCount() == 0, 'Cart is empty.');
 
-        $this->validateCheckout($request);
+        $user       = $request->user();
+        $address    = $this->getOrCreateAddress($request, $user);
+        $order      = $this->createOrder($user, $address->id, $request->payment_method);
 
-        $address = $this->getOrCreateBillingAddress($request, $user);
-        $order = $this->createOrder($user, $address->id, $request->payment_method);
         $this->storeLineItems($order);
 
         return match ($request->payment_method) {
@@ -151,51 +155,40 @@ class CheckoutController extends Controller
         };
     }
 
-    protected function validateCheckout(Request $request)
-    {
-        $request->validate([
-            'payment_method' => 'required|in:card,paypal',
-            'card_name' => 'required_without:saved_card_id|string',
-            'card_token' => 'nullable|string',
-            'saved_card_id' => 'nullable|exists:user_cards,id',
-            'saved_address_id' => 'nullable|exists:billing_addresses,id',
-            'name' => 'required_without:saved_address_id|string',
-            'phone' => 'required_without:saved_address_id|string',
-            'province' => 'required_without:saved_address_id|string',
-            'city' => 'required_without:saved_address_id|string',
-            'area' => 'required_without:saved_address_id|string',
-            'address' => 'required_without:saved_address_id|string',
-            'landmark' => 'nullable|string',
-        ]);
-    }
-
-    protected function getOrCreateBillingAddress(Request $request, $user)
+    protected function getOrCreateAddress(Request $request, $user)
     {
         if ($request->filled('saved_address_id')) {
-            return $user->billingAddresses()->findOrFail($request->saved_address_id);
+            return $user->addresses()->findOrFail($request->saved_address_id);
         }
 
-        return $user->billingAddresses()->create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'province' => $request->province,
-            'city' => $request->city,
-            'area' => $request->area,
-            'address' => $request->address,
-            'landmark' => $request->landmark,
-        ]);
+        $obj = [
+            'user_id'       => $user->id,
+            'email'         => $request->email ?? $user->email,
+            'name'          => $request->name,
+            'phone'         => $request->phone,
+            'country_id'    => active_country()->id,
+            'province_id'   => $request->province_id,
+            'city_id'       => $request->city_id,
+            'area_id'       => $request->area_id,
+            'address'       => $request->address,
+            'landmark'      => $request->landmark,
+        ];
+
+        return $this->addressRepository->create($obj);
     }
 
-    protected function createOrder($user, $billingAddressId, $paymentMethod)
+    protected function createOrder($user, $addressId, $paymentMethod)
     {
         return Order::create([
-            'order_number' => Str::uuid(),
-            'user_id' => $user->id,
-            'billing_address_id' => $billingAddressId,
-            'email' => $user->email,
-            'payment_method' => $paymentMethod,
-            'payment_status' => 'pending',
-            'total' => $this->cart->getTotal(),
+            'order_number'          => Str::uuid(),
+            'user_id'               => $user->id,
+            'billing_address_id'    => $addressId,
+            'email'                 => $user->email,
+            'payment_method'        => $paymentMethod,
+            'payment_status'        => 'pending',
+            'sub_total'             => $this->cart->getSubTotal(),
+            'tax'                   => $this->cart->getTax(),
+            'total'                 => $this->cart->getTotal(),
         ]);
     }
 
@@ -203,45 +196,39 @@ class CheckoutController extends Controller
     {
         foreach ($this->cart->getItems() as $variantId => $item) {
             $order->lineItems()->create([
-                'product_variant_id' => $variantId,
-                'quantity' => $item['qty'],
-                'price' => $item['price'],
-                'subtotal' => $item['subtotal'],
+                'product_variant_id'    => $variantId,
+                'quantity'              => $item['qty'],
+                'price'                 => $item['price'],
+                'subtotal'              => $item['subtotal'],
             ]);
         }
     }
 
     public function handleStripePayment(Request $request, Order $order, $user, $total)
     {
-        $stripe = new StripeService();
+        $stripe     = new StripeService();
 
         $stripe->ensureStripeCustomer($user);
-
-        $stripe->syncBillingAddress($user, [
-            'name'     => $request->name ?? $user->name,
-            'phone'    => $request->phone ?? '',
-            'province' => $request->province ?? '',
-            'city'     => $request->city ?? '',
-            'address'  => $request->address ?? '',
-        ]);
-
+        $stripe->syncBillingAddress($user, $order->address);
 
         if ($request->filled('saved_card_id')) {
 
-            $card = $user->cards()->findOrFail($request->saved_card_id);
-            $intent = $stripe->chargeSavedCard($user, $card->card_token, $total, ['order_id' => $order->id]);
+            $card       = $user->cards()->findOrFail($request->saved_card_id);
+            $intent     = $stripe->chargeSavedCard($user, $card->card_token, $total, ['order_id' => $order->id]);
 
             if (isset($intent['requires_action']) && $intent['requires_action']) {
+
                 return response()->json([
-                    'requires_action' => true,
-                    'clientSecret' => $intent['client_secret'],
-                    'order_id' => $order->id,
+                    'requires_action'       => true,
+                    'clientSecret'          => $intent['client_secret'],
+                    'order_id'              => $order->id,
+                    'order_number'          => $order->order_number,
                 ]);
             }
 
             $order->update([
-                'stripe_payment_intent_id' => $intent->id,
-                'payment_status' => $intent->status === 'succeeded' ? 'paid' : 'pending',
+                'stripe_payment_intent_id'  => $intent->id,
+                'payment_status'            => $intent->status === 'succeeded' ? 'paid' : 'pending',
             ]);
 
             if ($intent->status !== 'succeeded') {
@@ -249,21 +236,20 @@ class CheckoutController extends Controller
             }
 
             $this->cart->clear();
+
             return redirect()->route('order.summary', $order->id);
         }
 
 
-        // If no saved card, use Stripe Elements (JS)
-
         $intent = $stripe->createIntentForNewCard($user, $total, ['order_id' => $order->id]);
         $order->update(['stripe_payment_intent_id' => $intent->id]);
-
 
         $this->cart->clear();
 
         return response()->json([
-            'clientSecret' => $intent->client_secret,
-            'order_id' => $order->id,
+            'clientSecret'  => $intent->client_secret,
+            'order_id'      => $order->id,
+            'order_number'  => $order->order_number,
         ]);
     }
 
@@ -275,11 +261,16 @@ class CheckoutController extends Controller
         ]);
 
         $this->cart->clear();
+
         return redirect()->route('order.summary', $order->id);
     }
 
-    public function thankYou(Order $order)
+    public function thankYou(string $orderNumber)
     {
-        return view('theme.xtremez.order-confirmation', compact('order'));
+        $data['order']  = Order::where('order_number', $orderNumber)->firstOrFail();
+
+        $this->cart->clear();
+
+        return view('theme.xtremez.order-confirmation', $data);
     }
 }

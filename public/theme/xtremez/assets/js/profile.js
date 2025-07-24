@@ -42,6 +42,11 @@ $(function () {
             method: "GET",
             success: function (res) {
                 $target.html(res.data.view);
+
+                if (typeof initStripeCardForm === "function") {
+                    initStripeCardForm(); // run after DOM is ready
+                }
+
                 if (typeof callback === "function") callback();
             },
             error: function () {

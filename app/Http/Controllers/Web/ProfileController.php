@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
+use Stripe\Stripe;
+use Stripe\Customer;
+use Stripe\PaymentMethod;
 use Illuminate\Http\Request;
+use App\Services\StripeService;
 use App\Http\Controllers\Controller;
+use App\Models\CMS\Province;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\ValidationException;
@@ -12,6 +17,7 @@ class ProfileController extends Controller
 {
     public function profile()
     {
+        $user = auth()->user();
         return view('theme.xtremez.customers.profile');
     }
 
@@ -21,11 +27,12 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         switch ($tab) {
-            case 'profile':
-                $data['user'] = $user;
-                break;
             case 'order':
-                $data['user'] = $user->load('orders.lineItems');
+                $user = $user->load('orders.lineItems');
+                break;
+            case 'address':
+                $user = $user->load('addresses');
+                $data['provinces'] = Province::where('country_id', 1)->get();
                 break;
 
             default:
@@ -33,6 +40,8 @@ class ProfileController extends Controller
                 break;
         }
 
+
+        $data['user'] = $user;
 
         $view = "theme.xtremez.components.profile.$tab";
         if (!View::exists($view)) {

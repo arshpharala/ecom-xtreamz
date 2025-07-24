@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Address;
 use Stripe\Stripe;
+use App\Models\User;
 use Stripe\Customer;
 use Stripe\PaymentIntent;
-use App\Models\User;
+use Stripe\PaymentMethod;
 
 class StripeService
 {
@@ -25,20 +27,20 @@ class StripeService
         }
     }
 
-    public function syncBillingAddress(User $user, array $address): void
+    public function syncBillingAddress(User $user, Address $address): void
     {
         if (!$user->stripe_id) return;
 
         Customer::update($user->stripe_id, [
             'address' => [
-                'line1'       => $address['address'],
-                'city'        => $address['city'],
-                'state'       => $address['province'],
-                'postal_code' => '00000',
-                'country'     => 'AE',
+                'line1'       => $address->address,
+                'city'        => $address->city->name,
+                'state'       => $address->province->name,
+                'postal_code' => $address->postal_code ?? '00000',
+                'country'     => $address->country->code,
             ],
-            'name'    => $address['name'],
-            'phone'   => $address['phone'] ?? null,
+            'name'    => $address->name,
+            'phone'   => $address->phone ?? null,
         ]);
     }
 
@@ -74,5 +76,25 @@ class StripeService
                 'client_secret' => $e->getError()->payment_intent->client_secret ?? null,
             ];
         }
+    }
+
+    public function saveCardForUser(User $user, string $paymentMethodId): void
+    {
+        $this->ensureStripeCustomer($user); // Ensures stripe_id
+
+        $paymentMethod = PaymentMethod::retrieve($paymentMethodId);
+        $paymentMethod->attach(['customer' => $user->stripe_id]);
+
+        // Set as default
+        Customer::update($user->stripe_id, [
+            'invoice_settings' => [
+                'default_payment_method' => $paymentMethodId,
+            ]
+        ]);
+    }
+
+    public function deleteCardForUser(User $user, string $paymentMethodId): void
+    {
+        PaymentMethod::retrieve($paymentMethodId)->detach();
     }
 }

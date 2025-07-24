@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\CheckoutController;
+use App\Http\Controllers\Web\Profile\AddressController;
 
 Route::get('/',                                         [HomeController::class, 'index'])->name('home');
 Route::get('about-us',                                  [HomeController::class, 'page'])->name('about-us');
@@ -28,6 +29,7 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('get-products',                          [ProductController::class, 'getProducts'])->name('get-products');
     Route::get('category/{category}/attributes',        [ProductController::class, 'getCategoryAttributes'])->name('category.attributes');
     Route::get('/variants/resolve',                     [ProductController::class, 'resolve'])->name('variants.resolve');
+
+    Route::get('cities/{province}',                     [AddressController::class, 'getCities'])->name('province.cities');
+    Route::get('areas/{city}',                          [AddressController::class, 'getAreas'])->name('city.areas');
 });
-
-

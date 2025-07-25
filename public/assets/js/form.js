@@ -21,10 +21,13 @@ function handleFormSubmission(formSelector) {
         const formData = new FormData(this);
 
         // If there's an image upload box on this form, append only images currently in preview
-        if (typeof window.imgArray !== 'undefined' && window.imgArray.length > 0) {
-            formData.delete('attachments[]');
+        if (
+            typeof window.imgArray !== "undefined" &&
+            window.imgArray.length > 0
+        ) {
+            formData.delete("attachments[]");
             window.imgArray.forEach((file) => {
-                formData.append('attachments[]', file);
+                formData.append("attachments[]", file);
             });
         }
 
@@ -49,55 +52,11 @@ function handleFormSubmission(formSelector) {
 
                 form[0].reset();
                 // Clear previews and reset imgArray for this upload box
-                $('.upload__img-wrap').empty();
+                $(".upload__img-wrap").empty();
                 window.imgArray = [];
             },
             error: function (xhr) {
-                if (xhr.status === 422) {
-                    const errors = xhr.responseJSON.errors;
-
-                    Swal.fire({
-                        icon: "error",
-                        title: "Validation Error",
-                        text:
-                            xhr.responseJSON.message ||
-                            "Please fix the form errors below.",
-                        timer: 3000,
-                    });
-
-                    $.each(errors, function (field, messages) {
-                        let input = form.find(`[name="${field}"]`);
-
-                        if (input.length === 0 && field.includes(".")) {
-                            const flatName = field
-                                .replace(/\./g, "\\.")
-                                .replace(/\[\]/g, "");
-                            input = form.find(`[name="${flatName}"]`);
-                        }
-
-                        if (input.length) {
-                            input.addClass("is-invalid");
-                            if (!input.next(".invalid-feedback").length) {
-                                input.after(
-                                    `<div class="invalid-feedback">${messages[0]}</div>`
-                                );
-                            }
-
-                            // Remove error dynamically when typing or changing
-                            input.on("input change", function () {
-                                $(this).removeClass("is-invalid");
-                                $(this).next(".invalid-feedback").remove();
-                            });
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Server Error",
-                        text: "Something went wrong. Please try again.",
-                    });
-                    console.error(xhr);
-                }
+                handleValidationErrors(xhr, form);
             },
             complete: function () {
                 submitBtn.prop("disabled", false).html(originalText);
@@ -106,6 +65,54 @@ function handleFormSubmission(formSelector) {
     });
 }
 
+function handleValidationErrors(xhr, form) {
+    if (xhr.status === 422 && xhr.responseJSON?.errors) {
+        const errors = xhr.responseJSON.errors;
+
+        Swal.fire({
+            icon: "error",
+            title: "Validation Error",
+            text:
+                xhr.responseJSON.message || "Please fix the form errors below.",
+            timer: 3000,
+        });
+
+        $.each(errors, function (field, messages) {
+            let input = form.find(`[name="${field}"]`);
+
+            // Handle nested fields like "address.city"
+            if (input.length === 0 && field.includes(".")) {
+                const flatName = field
+                    .replace(/\./g, "\\.")
+                    .replace(/\[\]/g, "");
+                input = form.find(`[name="${flatName}"]`);
+            }
+
+            if (input.length) {
+                input.addClass("is-invalid");
+
+                if (!input.next(".invalid-feedback").length) {
+                    input.after(
+                        `<div class="invalid-feedback">${messages[0]}</div>`
+                    );
+                }
+
+                // Remove error dynamically on change
+                input.on("input change", function () {
+                    $(this).removeClass("is-invalid");
+                    $(this).next(".invalid-feedback").remove();
+                });
+            }
+        });
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "Server Error",
+            text: "Something went wrong. Please try again.",
+        });
+        console.error(xhr);
+    }
+}
 
 $(document).ready(function () {
     $("form.ajax-form").each(function () {

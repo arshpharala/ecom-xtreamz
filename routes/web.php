@@ -16,14 +16,15 @@ Route::get('products',                                  [ProductController::clas
 Route::get('products/{slug}',                           [ProductController::class, 'show'])->name('products.show');
 
 Route::resource('cart',                                 CartController::class);
+
 Route::get('checkout',                                  [CheckoutController::class, 'checkout'])->name('checkout');
-Route::post('/checkout/guest',                          [CheckoutController::class, 'processGuestOrder'])->name('checkout.guest.process');
+Route::post('checkout',                                 [CheckoutController::class, 'processOrder'])->name('checkout');
+
+Route::post('/paypal/create',                           [CheckoutController::class, 'processOrder'])->name('paypal.create');
+Route::post('/paypal/capture',                          [CheckoutController::class, 'capturePaypalOrder'])->name('paypal.capture');
+
 
 Route::get('/order-summary/{order}',                    [CheckoutController::class, 'thankYou'])->name('order.summary');
-
-Route::middleware('auth')->group(function () {
-    Route::post('checkout/process',                     [CheckoutController::class, 'processAuthenticatedOrder'])->name('checkout.process');
-});
 
 Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('get-products',                          [ProductController::class, 'getProducts'])->name('get-products');

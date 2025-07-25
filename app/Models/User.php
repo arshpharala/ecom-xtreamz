@@ -30,6 +30,7 @@ class User extends Authenticatable
         'is_active',
         'last_login_at',
         'password_changed_at',
+        'stripe_id',
     ];
 
     /**

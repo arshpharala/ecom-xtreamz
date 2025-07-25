@@ -3,30 +3,38 @@
 namespace App\Http\Controllers\Web;
 
 use Stripe\Stripe;
+use App\Models\User;
 use Stripe\PaymentIntent;
 use App\Models\Cart\Order;
 use Illuminate\Support\Str;
 use App\Models\CMS\Province;
 use Illuminate\Http\Request;
 use App\Services\CartService;
+use App\Services\Paypal\PaypalService;
 use App\Services\StripeService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Models\Cart\BillingAddress;
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\AddressRepository;
-use App\Http\Requests\StoreAuthenticatedOrderRequest;
+use App\Http\Requests\StoreOrderRequest;
+use App\Models\CMS\Currency;
 
 class CheckoutController extends Controller
 {
     protected $cart;
     protected $stripe;
     protected $addressRepository;
+    protected $userRepository;
 
     public function __construct()
     {
         $this->cart                 = new CartService();
         $this->stripe               = new StripeService();
         $this->addressRepository    = new AddressRepository(app());
+        $this->userRepository       = new UserRepository(app());
     }
 
     function checkout(Request $request)
@@ -43,89 +51,8 @@ class CheckoutController extends Controller
     public function showGuestForm()
     {
         $data['provinces'] = Province::where('country_id', 1)->get();
-        return view('theme.xtremez.checkout-guest');
+        return view('theme.xtremez.checkout-guest', $data);
     }
-
-    public function processGuestOrder(Request $request)
-    {
-        $data = $request->validate([
-            'email'     => 'nullable|email',
-            'name'      => 'required|string',
-            'phone'     => 'required|string',
-            'province'  => 'required|string',
-            'city'      => 'required|string',
-            'area'      => 'required|string',
-            'address'   => 'required|string',
-            'landmark'  => 'nullable|string',
-            'payment_method' => 'required|in:card,paypal',
-            'card_name' => 'nullable|string',
-        ]);
-
-        // Save billing address
-        $billingAddress = BillingAddress::create([
-            'user_id' => auth()->id(),
-            ...$data,
-        ]);
-
-        $total = $this->cart->getTotal();
-        $cartItems = $this->cart->getItems();
-
-        // Create order
-        $order = Order::create([
-            'order_number'         => Str::uuid(),
-            'billing_address_id'   => $billingAddress->id,
-            'email'                => $data['email'] ?? null,
-            'payment_method'       => $data['payment_method'],
-            'payment_status'       => 'pending',
-            'total'                => $total,
-        ]);
-
-        foreach ($cartItems as $variantId => $item) {
-            $order->lineItems()->create([
-                'product_variant_id' => $variantId,
-                'quantity'           => $item['qty'],
-                'price'              => $item['price'],
-                'subtotal'           => $item['subtotal'],
-            ]);
-        }
-
-        if ($data['payment_method'] === 'card') {
-            Stripe::setApiKey(env('STRIPE_SECRET'));
-
-            $intent = PaymentIntent::create([
-                'amount'   => (int) ($total * 100),
-                'currency' => active_currency(), // e.g., 'aed'
-                'automatic_payment_methods' => [
-                    'enabled' => true,
-                    'allow_redirects' => 'never',
-                ],
-                'metadata' => [
-                    'order_id' => $order->id,
-                    'email'    => $order->email ?? 'guest',
-                ],
-            ]);
-
-            // Store intent ID in order (payment still pending)
-            $order->update([
-                'stripe_payment_intent_id' => $intent->id,
-                'payment_status'           => 'pending',
-            ]);
-
-            return response()->json([
-                'clientSecret' => $intent->client_secret,
-                'order_id'     => $order->id,
-            ]);
-        }
-
-        // If PayPal: mark pending and return success
-        $this->cart->clear();
-
-        return response()->json([
-            'status'   => 'paypal-selected',
-            'order_id' => $order->id,
-        ]);
-    }
-
 
     public function showAuthForm(Request $request)
     {
@@ -138,22 +65,46 @@ class CheckoutController extends Controller
         return view('theme.xtremez.checkout-auth', $data);
     }
 
-    public function processAuthenticatedOrder(StoreAuthenticatedOrderRequest $request)
+    public function processOrder(StoreOrderRequest $request)
     {
         abort_if($this->cart->getItemCount() == 0, 'Cart is empty.');
 
-        $user       = $request->user();
-        $address    = $this->getOrCreateAddress($request, $user);
-        $order      = $this->createOrder($user, $address->id, $request->payment_method);
+        DB::beginTransaction();
 
-        $this->storeLineItems($order);
+        try {
+            $user    = Auth::check() ? $request->user() : $this->createUser($request);
+            $address = $this->getOrCreateAddress($request, $user);
+            $order   = $this->createOrder($user, $address->id, $request->payment_method);
+            $this->storeLineItems($order);
 
-        return match ($request->payment_method) {
-            'card' => $this->handleStripePayment($request, $order, $user, $this->cart->getTotal()),
-            'paypal' => $this->handlePaypalStub($order),
-            default => abort(400, 'Invalid payment method')
-        };
+            $response = match ($request->payment_method) {
+                'card'   => $this->handleStripePayment($request, $order, $user),
+                'paypal' => $this->handlePaypalPayment($request, $order, $user), // replace stub
+                default => abort(400, 'Invalid payment method'),
+            };
+
+            DB::commit();
+
+            return $response;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th; // rethrow the exception to be handled by the global exception handler
+        }
     }
+
+
+    function createUser($request)
+    {
+        $data = [
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => bcrypt(Str::uuid()),
+            'is_active' => 0
+        ];
+
+        return $this->userRepository->create($data);
+    }
+
 
     protected function getOrCreateAddress(Request $request, $user)
     {
@@ -186,6 +137,7 @@ class CheckoutController extends Controller
             'email'                 => $user->email,
             'payment_method'        => $paymentMethod,
             'payment_status'        => 'pending',
+            'currency_id'           => Currency::where('code', active_currency())->value('id'),
             'sub_total'             => $this->cart->getSubTotal(),
             'tax'                   => $this->cart->getTax(),
             'total'                 => $this->cart->getTotal(),
@@ -204,7 +156,7 @@ class CheckoutController extends Controller
         }
     }
 
-    public function handleStripePayment(Request $request, Order $order, $user, $total)
+    public function handleStripePayment(Request $request, Order $order, $user)
     {
         $stripe     = new StripeService();
 
@@ -241,7 +193,7 @@ class CheckoutController extends Controller
         }
 
 
-        $intent = $stripe->createIntentForNewCard($user, $total, ['order_id' => $order->id]);
+        $intent = $stripe->createIntentForNewCard($user, $order->total, ['order_id' => $order->id]);
         $order->update(['stripe_payment_intent_id' => $intent->id]);
 
         $this->cart->clear();
@@ -253,17 +205,39 @@ class CheckoutController extends Controller
         ]);
     }
 
-
-    protected function handlePaypalStub(Order $order)
+    protected function handlePaypalPayment(Request $request, Order $order, $user)
     {
+        session(['paypal_temp_order_id' => $order->id]);
+
+        $paypal = new PaypalService();
+        $paypalOrder = $paypal->createOrder($order->currency->code ?? active_currency(), $order->total);
+
+        return response()->json(['id' => $paypalOrder->id]);
+    }
+
+
+
+    public function capturePaypalOrder(Request $request, PaypalService $paypal): JsonResponse
+    {
+        $paypalResponse = $paypal->captureOrder($request->order_id);
+
+        if (!$paypalResponse || $paypalResponse->status !== 'COMPLETED') {
+            return response()->json(['message' => 'Capture failed'], 422);
+        }
+
+        $orderId = session('paypal_temp_order_id');
+        $order = Order::findOrFail($orderId);
+
         $order->update([
-            'payment_status' => 'paid',
+            'payment_status'       => 'paid',
+            'external_reference'   => $paypalResponse->id,
         ]);
 
         $this->cart->clear();
 
-        return redirect()->route('order.summary', $order->id);
+        return response()->json(['redirect' => route('order.summary', $order->id)]);
     }
+
 
     public function thankYou(string $orderNumber)
     {

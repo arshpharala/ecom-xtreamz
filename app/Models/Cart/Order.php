@@ -2,7 +2,9 @@
 
 namespace App\Models\Cart;
 
+use App\Models\User;
 use App\Models\Address;
+use App\Models\CMS\Currency;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,10 +20,21 @@ class Order extends Model
         'payment_method',
         'payment_status',
         'stripe_payment_intent_id',
+        'currency_id',
         'sub_total',
         'tax',
         'total'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 
     public function address()
     {

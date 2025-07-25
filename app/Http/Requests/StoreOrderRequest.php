@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAuthenticatedOrderRequest extends FormRequest
+class StoreOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +26,6 @@ class StoreAuthenticatedOrderRequest extends FormRequest
     {
         return [
             'payment_method'    => 'required|in:card,paypal',
-            'card_name'         => 'required_without:saved_card_id|string',
             'card_token'        => 'nullable|string',
             'saved_card_id'     => 'nullable|exists:user_cards,id',
             'saved_address_id'  => 'nullable|exists:addresses,id',
@@ -34,6 +36,23 @@ class StoreAuthenticatedOrderRequest extends FormRequest
             'area_id'           => 'required_without:saved_address_id|nullable|exists:areas,id',
             'address'           => 'required_without:saved_address_id|string|max:1000',
             'landmark'          => 'nullable|string|max:500',
+            'email'             => Auth::check() ? 'nullable|email' : 'required|email',
+
         ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        $validator->sometimes('card_name', 'required|string', function ($input) {
+            return $input->payment_method === 'card' && empty($input->saved_card_id);
+        });
+
+        $validator->after(function ($validator) {
+            if (!Auth::check() && $this->filled('email')) {
+                if (User::where('email', $this->input('email'))->exists()) {
+                    $validator->errors()->add('email', 'An account already exists with this email. Please log in to continue.');
+                }
+            }
+        });
     }
 }

@@ -227,7 +227,4 @@
 
 
 @push('scripts')
-  <script></script>
-
-  <script src="{{ asset('theme/xtremez/assets/js/cart.js') }}"></script>
 @endpush

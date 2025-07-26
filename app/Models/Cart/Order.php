@@ -19,7 +19,7 @@ class Order extends Model
         'email',
         'payment_method',
         'payment_status',
-        'stripe_payment_intent_id',
+        'external_reference',
         'currency_id',
         'sub_total',
         'tax',

@@ -1,78 +1,91 @@
 .btn {
-	border-radius: 0;
-	padding: 0.87rem 1.75rem;
-	letter-spacing: 0.075em;
-	transition: all 0.4s ease; // smooth animation
-	&:hover,
-	&:active,
-	&:focus {
-		transform: translateY(-2px); // slight lift
-		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); // soft shadow
-	}
-	&.no-animate {
-		transition: none;
+    border-radius: 0;
+    padding: 0.87rem 1.75rem;
+    letter-spacing: 0.075em;
+    transition: all 0.4s ease; // smooth animation
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible,
+    &:disabled {
+        transform: translateY(-2px); // slight lift
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); // soft shadow
+    }
+    &.no-animate {
+        transition: none;
 
-		&:hover,
-		&:active,
-		&:focus {
-			transform: none;
-			box-shadow: none;
-		}
-	}
+        &:hover,
+        &:active,
+        &:focus,
+        &:focus-visible,
+        &:disabled {
+            transform: none;
+            box-shadow: none;
+        }
+    }
 }
 
 .btn-primary {
-	background-color: var(--color-primary);
-	color: var(--color-light);
-	border-color: var(--color-primary);
+    background-color: var(--color-primary) !important;
+    color: var(--color-light);
+    border-color: var(--color-primary);
 
-	&:hover,
-	&:active,
-	&:focus {
-		background: var(--color-primary-dark) !important;
-		color: var(--color-light) !important;
-		border-color: var(--color-primary-dark) !important;
-	}
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible,
+    &:disabled,
+    &.disabled {
+        background: var(--color-primary-dark) !important;
+        color: var(--color-light) !important;
+        border-color: var(--color-primary-dark) !important;
+    }
 }
 
 .btn-outline-primary {
-	background-color: var(--color-light);
-	color: var(--color-dark);
-	border-color: var(--color-primary);
+    background-color: var(--color-light) !important;
+    color: var(--color-dark);
+    border-color: var(--color-primary);
 
-	&:hover,
-	&:active,
-	&:focus {
-		background: var(--color-primary-dark) !important;
-		color: var(--color-light) !important;
-		border-color: var(--color-primary-dark) !important;
-	}
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible,
+    &:disabled {
+        background: var(--color-primary-dark) !important;
+        color: var(--color-light) !important;
+        border-color: var(--color-primary-dark) !important;
+    }
 }
 
 .btn-secondary {
-	background-color: var(--color-secondary);
-	color: var(--color-light);
-	border-color: var(--color-secondary);
+    background-color: var(--color-secondary) !important;
+    color: var(--color-light);
+    border-color: var(--color-secondary);
 
-	&:hover,
-	&:active,
-	&:focus {
-		background: var(--color-primary-dark) !important;
-		color: var(--color-light) !important;
-		border-color: var(--color-primary-dark) !important;
-	}
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible,
+    &:disabled {
+        background: var(--color-primary-dark) !important;
+        color: var(--color-light) !important;
+        border-color: var(--color-primary-dark) !important;
+    }
 }
 
 .btn-secondary-light {
-	background-color: var(--color-secondary-light);
-	color: var(--color-light);
-	border-color: var(--color-secondary-light);
+    background-color: var(--color-secondary-light) !important;
+    color: var(--color-light);
+    border-color: var(--color-secondary-light);
 
-	&:hover,
-	&:active,
-	&:focus {
-		background: var(--color-secondary) !important;
-		color: var(--color-light) !important;
-		border-color: var(--color-secondary) !important;
-	}
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible,
+    &:disabled {
+        background: var(--color-secondary) !important;
+        color: var(--color-light) !important;
+        border-color: var(--color-secondary) !important;
+    }
 }

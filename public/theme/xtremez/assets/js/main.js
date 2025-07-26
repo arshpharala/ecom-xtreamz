@@ -130,8 +130,10 @@ function render_product_card(product, grid = false) {
                         </div>
                         <div class="product-meta">
                             <span class="price fs-4 fw-bold">${product.currency} ${product.price}</span>
-                            <button class="btn cart-btn">
-                                <i class="bi bi-cart"></i>
+                            <button class="btn cart-btn add-to-cart-btn" data-variant-id="${product.id}">
+                                <i class="bi bi-cart add-to-cart" style="${product.is_in_cart ? 'display:none;' : ''}"></i>
+                                <i class="bi bi-cart-check added-to-cart" style="${product.is_in_cart ? '' : 'display:none;'}"></i>
+
                             </button>
                         </div>
                     </div>

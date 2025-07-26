@@ -4,13 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Catalog\Product;
 use App\Models\Catalog\ProductVariant;
+use App\Services\CartService;
 use Illuminate\Support\Facades\Request;
 
 class ProductRepository
 {
     public function getFiltered($perPage = 12)
     {
-        $locale = app()->getLocale();
         $filters = Request::only([
             'is_featured',
             'show_in_slider',
@@ -34,22 +34,25 @@ class ProductRepository
 
         // Handle pagination
         if (Request::has('page')) {
-            return $query->paginate($perPage)->through(function ($product) {
-                return $this->transformProduct($product);
+            return $query->paginate($perPage)->through(function ($productVariant) {
+                return $this->transform($productVariant);
             });
         }
 
-        return $query->limit($perPage)->get()->map(function ($product) {
-            return $this->transformProduct($product);
+        return $query->limit($perPage)->get()->map(function ($productVariant) {
+            return $this->transform($productVariant);
         });
     }
 
-    public function transformProduct($product)
+    public function transform($productVariant)
     {
-        $product->link = route('products.show', ['slug' => $product->slug, 'variant' => $product->variant_id]);
-        $product->image = $product->file_path ? asset('storage/' . $product->file_path) : null;
-        $product->currency = active_currency();
-        return $product;
+        $productVariant->link       = route('products.show', ['slug' => $productVariant->slug, 'variant' => $productVariant->id]);
+        $productVariant->image      = $productVariant->file_path ? asset('storage/' . $productVariant->file_path) : null;
+        $productVariant->currency   = active_currency();
+        $productVariant->cart_item  = (new CartService())->getItem($productVariant->id);
+        $productVariant->is_in_cart = $productVariant->cart_item ? true : false;
+
+        return $productVariant;
     }
 
 
@@ -73,7 +76,7 @@ class ProductRepository
                     'name' => $variant->name,
                     'price' => $variant->price,
                     'image' => $variant->file_path ? 'storage/' . $variant->file_path : 'default.jpg',
-                    'link' => route('products.show', ['slug' => $variant->slug, 'varient' => $variant->variant_id])
+                    'link' => route('products.show', ['slug' => $variant->slug, 'varient' => $variant->id])
                 ];
             });
     }
@@ -92,12 +95,12 @@ class ProductRepository
             ->first();
     }
 
-    public function findVariantOrFirst(Product $product, ?string $variantId): ?ProductVariant
+    public function findVariantOrFirst(Product $productVariant, ?string $variantId): ?ProductVariant
     {
         if ($variantId) {
-            return $product->variants->where('id', $variantId)->first();
+            return $productVariant->variants->where('id', $variantId)->first();
         }
 
-        return $product->variants->first();
+        return $productVariant->variants->first();
     }
 }

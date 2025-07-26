@@ -129,57 +129,64 @@ main {
   letter-spacing: 0.075em;
   transition: all 0.4s ease;
 }
-.btn:hover, .btn:active, .btn:focus {
+.btn:hover, .btn:active, .btn:focus, .btn:focus-visible, .btn:disabled {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 .btn.no-animate {
   transition: none;
 }
-.btn.no-animate:hover, .btn.no-animate:active, .btn.no-animate:focus {
+.btn.no-animate:hover, .btn.no-animate:active, .btn.no-animate:focus, .btn.no-animate:focus-visible, .btn.no-animate:disabled {
   transform: none;
   box-shadow: none;
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
+  background-color: var(--color-primary) !important;
   color: var(--color-light);
   border-color: var(--color-primary);
 }
-.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus, .btn-primary:focus-visible {
   background: var(--color-primary-dark) !important;
   color: var(--color-light) !important;
   border-color: var(--color-primary-dark) !important;
 }
+.btn-primary:disabled, .btn-primary.disabled {
+  background-color: var(--color-primary-dark) !important;
+  color: var(--color-light) !important;
+  border-color: var(--color-primary-dark) !important;
+  opacity: 0.65;
+  pointer-events: none;
+}
 
 .btn-outline-primary {
-  background-color: var(--color-light);
+  background-color: var(--color-light) !important;
   color: var(--color-dark);
   border-color: var(--color-primary);
 }
-.btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:focus {
+.btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:focus, .btn-outline-primary:focus-visible, .btn-outline-primary:disabled {
   background: var(--color-primary-dark) !important;
   color: var(--color-light) !important;
   border-color: var(--color-primary-dark) !important;
 }
 
 .btn-secondary {
-  background-color: var(--color-secondary);
+  background-color: var(--color-secondary) !important;
   color: var(--color-light);
   border-color: var(--color-secondary);
 }
-.btn-secondary:hover, .btn-secondary:active, .btn-secondary:focus {
+.btn-secondary:hover, .btn-secondary:active, .btn-secondary:focus, .btn-secondary:focus-visible, .btn-secondary:disabled {
   background: var(--color-primary-dark) !important;
   color: var(--color-light) !important;
   border-color: var(--color-primary-dark) !important;
 }
 
 .btn-secondary-light {
-  background-color: var(--color-secondary-light);
+  background-color: var(--color-secondary-light) !important;
   color: var(--color-light);
   border-color: var(--color-secondary-light);
 }
-.btn-secondary-light:hover, .btn-secondary-light:active, .btn-secondary-light:focus {
+.btn-secondary-light:hover, .btn-secondary-light:active, .btn-secondary-light:focus, .btn-secondary-light:focus-visible, .btn-secondary-light:disabled {
   background: var(--color-secondary) !important;
   color: var(--color-light) !important;
   border-color: var(--color-secondary) !important;

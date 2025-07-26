@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->nullable(); // for guests
             $table->enum('payment_method', ['card', 'paypal']);
             $table->string('payment_status')->default('pending');
-            $table->string('stripe_payment_intent_id')->nullable();
+            $table->string('external_reference')->nullable();
             $table->integer('currency_id')->nullable();
             $table->decimal('sub_total', 10, 2);
             $table->decimal('tax', 10, 2);

@@ -64,12 +64,11 @@
 
   @stack('scripts')
 
-
-
   <!-- custom JS -->
   <script src="{{ asset('theme/xtremez/assets/js/main.js') }}"></script>
-
+  <script src="{{ asset('theme/xtremez/assets/js/cart.js') }}"></script>
   <script src="{{ asset('assets/js/form.js') }}"></script>
+
 
 </body>
 

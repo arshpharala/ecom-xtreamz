@@ -68,7 +68,6 @@ class CheckoutController extends Controller
     public function processOrder(StoreOrderRequest $request)
     {
         abort_if($this->cart->getItemCount() == 0, 'Cart is empty.');
-
         DB::beginTransaction();
 
         try {
@@ -179,7 +178,7 @@ class CheckoutController extends Controller
             }
 
             $order->update([
-                'stripe_payment_intent_id'  => $intent->id,
+                'external_reference'        => $intent->id,
                 'payment_status'            => $intent->status === 'succeeded' ? 'paid' : 'pending',
             ]);
 
@@ -194,7 +193,7 @@ class CheckoutController extends Controller
 
 
         $intent = $stripe->createIntentForNewCard($user, $order->total, ['order_id' => $order->id]);
-        $order->update(['stripe_payment_intent_id' => $intent->id]);
+        $order->update(['external_reference' => $intent->id]);
 
         $this->cart->clear();
 
@@ -205,23 +204,76 @@ class CheckoutController extends Controller
         ]);
     }
 
+    public function confirmStripePayment(Request $request)
+    {
+        $request->validate([
+            'order_id'     => 'required|integer',
+            'payment_intent_id' => 'required|string',
+        ]);
+
+        $order = Order::findOrFail($request->order_id);
+
+        // Optionally fetch payment intent from Stripe to double-check
+        $intent = \Stripe\PaymentIntent::retrieve($request->payment_intent_id);
+
+        if ($intent->status !== 'succeeded') {
+            return response()->json(['message' => 'Payment not completed.'], 422);
+        }
+
+        $order->update([
+            'payment_status' => 'paid',
+            'external_reference' => $intent->id,
+        ]);
+
+        $this->cart->clear();
+
+        return response()->json([
+            'redirect' => route('order.summary', $order->order_number),
+        ]);
+    }
+
+
     protected function handlePaypalPayment(Request $request, Order $order, $user)
     {
         session(['paypal_temp_order_id' => $order->id]);
 
         $paypal = new PaypalService();
-        $paypalOrder = $paypal->createOrder($order->currency->code ?? active_currency(), $order->total);
 
-        return response()->json(['id' => $paypalOrder->id]);
+        $order = $paypal->createOrder([
+            'purchase_units' => [
+                [
+                    'amount' => [
+                        'currency_code' => env('PAYPAL_CURRENCY'),
+                        'value'         => price_convert($order->total, active_currency(), env('PAYPAL_CURRENCY')),
+                    ]
+                ]
+            ]
+        ]);
+
+        $orderId = $order['id'];
+        $approvalLink = collect($order['links'])->firstWhere('rel', 'approve')['href'];
+
+        if (!$approvalLink) {
+            return response()->json(['message' => 'Failed to create PayPal order'], 422);
+        }
+
+        return response()->json(['id' => $orderId]);
     }
 
 
 
     public function capturePaypalOrder(Request $request, PaypalService $paypal): JsonResponse
     {
+        $request->validate([
+            'order_id' => 'required|string',
+        ]);
+        if (!$request->order_id) {
+            return response()->json(['message' => 'Order ID is required'], 422);
+        }
+
         $paypalResponse = $paypal->captureOrder($request->order_id);
 
-        if (!$paypalResponse || $paypalResponse->status !== 'COMPLETED') {
+        if (!$paypalResponse || $paypalResponse['status'] !== 'COMPLETED') {
             return response()->json(['message' => 'Capture failed'], 422);
         }
 
@@ -230,12 +282,12 @@ class CheckoutController extends Controller
 
         $order->update([
             'payment_status'       => 'paid',
-            'external_reference'   => $paypalResponse->id,
+            'external_reference'   => $paypalResponse['id'],
         ]);
 
         $this->cart->clear();
 
-        return response()->json(['redirect' => route('order.summary', $order->id)]);
+        return response()->json(['redirect' => route('order.summary', $order->order_number)]);
     }
 
 

@@ -9,18 +9,6 @@ class CartService
 {
     protected $sessionKey = 'cart';
 
-    // Handle static calls like CartService::getTotal()
-    public static function __callStatic($method, $args)
-    {
-        $instance = new static();
-
-        if (method_exists($instance, $method)) {
-            return $instance->$method(...$args);
-        }
-
-        throw new \BadMethodCallException("Method {$method} does not exist.");
-    }
-
     public function get(): Collection
     {
         $cart = [

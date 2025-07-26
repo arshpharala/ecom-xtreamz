@@ -222,15 +222,6 @@
             <div class="sustainable-image animate-on-scroll" data-animate="fade-left">
             </div>
           </div>
-          <!-- <div class="col-md-6">
-                                                                                          <div class="sustainable-image animate-on-scroll"
-                                                                                              data-animate="fade-left">
-                                                                                              <img src="assets/images/sustainable.png"
-                                                                                                  alt="Sustainable Products"
-                                                                                                  class="img-fluid w-100 h-100 object-fit-cover">
-                                                                                          </div>
-                                                                                      </div> -->
-
         </div>
       </div>
     </section>
@@ -258,43 +249,6 @@
       </div>
     </section>
 
-    <!-- <section class="our-brands-section pb-5">
-                                                                              <div class="container text-center">
-                                                                                  <div
-                                                                                      class="row justify-content-center align-items-center g-4 py-5">
-                                                                                      <div class="col-4 col-md-2 animate-on-scroll"
-                                                                                          data-animate="fade-up">
-                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/adidas.png') }}"
-                                                                                              alt="Adidas"
-                                                                                              class="brand-logo img-fluid">
-                                                                                      </div>
-                                                                                      <div class="col-4 col-md-2  animate-on-scroll"
-                                                                                          data-animate="fade-up">
-                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/boss.png') }}"
-                                                                                              alt="Boss"
-                                                                                              class="brand-logo img-fluid">
-                                                                                      </div>
-                                                                                      <div class="col-4 col-md-2  animate-on-scroll"
-                                                                                          data-animate="fade-up">
-                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/chanel.png') }}"
-                                                                                              alt="Chanel"
-                                                                                              class="brand-logo img-fluid">
-                                                                                      </div>
-                                                                                      <div class="col-4 col-md-2  animate-on-scroll"
-                                                                                          data-animate="fade-up">
-                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/boss.png') }}"
-                                                                                              alt="Boss 2"
-                                                                                              class="brand-logo img-fluid">
-                                                                                      </div>
-                                                                                      <div class="col-4 col-md-2  animate-on-scroll"
-                                                                                          data-animate="fade-up">
-                                                                                          <img src="{{ asset('theme/xtremez/assets/images/brands/ikasu.png') }}"
-                                                                                              alt="Ikasu"
-                                                                                              class="brand-logo img-fluid">
-                                                                                      </div>
-                                                                                  </div>
-                                                                              </div>
-                                                                          </section> -->
 
     <section class="video-section position-relative py-5">
       <div class="video-container">
@@ -343,6 +297,7 @@
   <!-- Owl Carousel JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
   <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
+
   <script>
     $(document).ready(function() {
       $('.hero-carousel').owlCarousel({

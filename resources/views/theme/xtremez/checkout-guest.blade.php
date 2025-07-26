@@ -2,7 +2,7 @@
 
 @push('head')
   <meta name="stripe-key" content="{{ env('STRIPE_KEY') }}">
-  <script src="https://www.paypal.com/sdk/js?client-id={{ env('PAYPAL_CLIENT_ID') }}&currency={{ active_currency() }}">
+  <script src="https://www.paypal.com/sdk/js?client-id={{ env('PAYPAL_CLIENT_ID') }}&currency={{ env('PAYPAL_CURRENCY') }}">
   </script>
   <script src="https://js.stripe.com/v3/"></script>
 @endpush

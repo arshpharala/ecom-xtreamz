@@ -3,69 +3,160 @@
 namespace App\Services\Paypal;
 
 use GuzzleHttp\Client as GuzzleClient;
-use PaypalServerSdkLib\Environment;
-use PaypalServerSdkLib\Models\OAuthToken;
-use PaypalServerSdkLib\Models\Builders\OAuthTokenBuilder;
-use PaypalServerSdkLib\PaypalServerSdkClientBuilder;
+use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class PaypalClient
 {
-    protected static ?OAuthToken $token = null;
+    protected $client;
+    protected $clientId;
+    protected $clientSecret;
+    protected $baseUri;
+    protected $mode;
 
-    public static function build()
+    public function __construct()
     {
-        $clientId = env('PAYPAL_CLIENT_ID');
-        $secret   = env('PAYPAL_SECRET');
-        $mode     = env('PAYPAL_MODE', 'sandbox');
+        $this->clientId     = env('PAYPAL_CLIENT_ID');
+        $this->clientSecret = env('PAYPAL_SECRET');
+        $this->mode         = env('PAYPAL_MODE', 'sandbox');
+        $this->baseUri      = env('PAYPAL_BASE_URI', $this->mode === 'sandbox'
+            ? 'https://api-m.sandbox.paypal.com'
+            : 'https://api-m.paypal.com');
 
-        // Set environment
-        $env = $mode === 'production'
-            ? Environment::PRODUCTION
-            : Environment::SANDBOX;
-
-        // Fetch token if not cached or expired
-        if (!self::$token || self::isTokenExpired()) {
-            self::$token = self::generateAccessToken($clientId, $secret, $env);
-        }
-
-        // Build SDK client with manual token injection
-        return PaypalServerSdkClientBuilder::init()
-            ->oAuthToken(self::$token)
-            ->environment($env)
-            ->build();
+        $this->client = $this->buildClient();
     }
 
-    protected static function generateAccessToken(string $clientId, string $secret, string $env): OAuthToken
+    protected function buildClient(): GuzzleClient
     {
-        $baseUrl = $env === Environment::PRODUCTION
-            ? 'https://api-m.paypal.com'
-            : 'https://api-m.sandbox.paypal.com';
-
-        $http = new GuzzleClient([
-            'verify' => false
-        ]);
-        $response = $http->post("{$baseUrl}/v1/oauth2/token", [
-            'auth' => [$clientId, $secret],
-
-            'form_params' => [
-                'grant_type' => 'client_credentials',
+        return new GuzzleClient([
+            'base_uri' => $this->baseUri,
+            'verify'   => app()->environment('production'),
+            'headers' => [
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
+                'Authorization' => 'Bearer ' . $this->getAccessToken(),
             ],
         ]);
-
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        return OAuthTokenBuilder::init($data['access_token'], $data['token_type'])
-            ->expiresIn($data['expires_in'])
-            ->scope($data['scope'] ?? null)
-            ->build();
     }
 
-    protected static function isTokenExpired(): bool
+    public function get(string $endpoint, array $query = [])
     {
-        return true; // Always fetch a new token for simplicity, or implement your own logic
-        $expiry = self::$token?->getExpiresIn() ?? 0;
-        $fetchedAt = session('paypal_token_fetched_at', now()->subHour());
+        return $this->request('GET', $endpoint, [
+            'query' => $query,
+        ]);
+    }
 
-        return now()->diffInSeconds($fetchedAt) >= ($expiry - 60); // 60s buffer
+    public function post(string $endpoint, array $body = [], array $query = []): array
+    {
+        $options = [];
+
+        if (!empty($query)) {
+            $options['query'] = $query;
+        }
+
+        if (!empty($body)) {
+            $options['json'] = $body;
+        }
+
+        return $this->request('POST', $endpoint, $options);
+    }
+
+
+    public function put(string $endpoint, array $body = [], array $query = [])
+    {
+        return $this->request('PUT', $endpoint, [
+            'query' => $query,
+            'json'  => $body,
+        ]);
+    }
+
+    public function patch(string $endpoint, array $body = [], array $query = [])
+    {
+        return $this->request('PATCH', $endpoint, [
+            'query' => $query,
+            'json'  => $body,
+        ]);
+    }
+
+    public function delete(string $endpoint, array $body = [], array $query = [])
+    {
+        return $this->request('DELETE', $endpoint, [
+            'query' => $query,
+            'json'  => $body,
+        ]);
+    }
+
+    protected function request(string $method, string $endpoint, array $options = [])
+    {
+        try {
+            $response = $this->client->request($method, $endpoint, $options);
+            return json_decode($response->getBody(), true);
+        } catch (ClientException $e) {
+            $status = $e->getResponse()?->getStatusCode();
+            $body   = $e->getResponse()?->getBody()?->getContents();
+            Log::error("PayPal $method request failed", [
+                'endpoint' => $endpoint,
+                'status'   => $status,
+                'body'     => $body,
+            ]);
+            throw new \RuntimeException("PayPal $method request failed: HTTP $status");
+        }
+    }
+
+    protected function getAccessToken(): string
+    {
+        $token = Cache::get('paypal_access_token');
+
+        if ($token && isset($token['access_token']) && !$this->isTokenExpired($token)) {
+            return $token['access_token'];
+        }
+
+        return $this->requestNewToken();
+    }
+
+    protected function requestNewToken(): string
+    {
+        try {
+            $client = new GuzzleClient([
+                'base_uri' => $this->baseUri,
+                'auth'     => [$this->clientId, $this->clientSecret],
+                'headers'  => [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                    'Accept'       => 'application/json',
+                ],
+                'verify' => app()->environment('production'),
+            ]);
+
+            $response = $client->post('/v1/oauth2/token', [
+                'form_params' => ['grant_type' => 'client_credentials'],
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+
+            if (empty($data['access_token']) || empty($data['expires_in'])) {
+                throw new \RuntimeException('Invalid token response from PayPal');
+            }
+
+            $data['fetched_at'] = now();
+            Cache::put('paypal_access_token', $data, now()->addSeconds($data['expires_in'] - 60));
+
+            return $data['access_token'];
+        } catch (ClientException $e) {
+            $status = $e->getResponse()?->getStatusCode();
+            $body   = $e->getResponse()?->getBody()?->getContents();
+            Log::error('PayPal token request failed', [
+                'status' => $status,
+                'body'   => $body,
+            ]);
+            throw new \RuntimeException("PayPal token request failed: HTTP $status");
+        }
+    }
+
+    protected function isTokenExpired(array $token): bool
+    {
+        $fetchedAt = $token['fetched_at'] ?? now()->subMinutes(70);
+        $expiresIn = $token['expires_in'] ?? 0;
+        return now()->diffInSeconds($fetchedAt) >= ($expiresIn - 60);
     }
 }

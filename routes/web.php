@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\ProductController;
-use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\Profile\AddressController;
 
@@ -23,6 +22,9 @@ Route::post('checkout',                                 [CheckoutController::cla
 Route::post('/paypal/create',                           [CheckoutController::class, 'processOrder'])->name('paypal.create');
 Route::post('/paypal/capture',                          [CheckoutController::class, 'capturePaypalOrder'])->name('paypal.capture');
 
+Route::post('/stripe/create-intent',                    [CheckoutController::class, 'createStripeIntent'])->name('stripe.create-intent');
+Route::post('/stripe/confirm-payment',                  [CheckoutController::class, 'confirmStripePayment'])->name('stripe.confirm-payment');
+
 
 Route::get('/order-summary/{order}',                    [CheckoutController::class, 'thankYou'])->name('order.summary');
 
@@ -34,3 +36,4 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('cities/{province}',                     [AddressController::class, 'getCities'])->name('province.cities');
     Route::get('areas/{city}',                          [AddressController::class, 'getAreas'])->name('city.areas');
 });
+

@@ -200,7 +200,6 @@ class ProductController extends Controller
         $query = ProductVariant::with(['product.translations', 'attachments', 'attributeValues.attribute', 'shipping'])
             ->where('product_id', $productId);
 
-        // Full match attempt
         foreach ($attributes as $attr => $val) {
             $query->whereHas('attributeValues', function ($q) use ($attr, $val) {
                 $q->where('value', $val)
@@ -213,7 +212,6 @@ class ProductController extends Controller
         $exact = $query->first();
         if ($exact) return $exact;
 
-        // Fallback: only match last clicked attribute
         $lastAttr = array_key_last($attributes);
         $lastValue = $attributes[$lastAttr];
 
@@ -227,15 +225,6 @@ class ProductController extends Controller
             })
             ->first();
     }
-
-
-
-
-
-
-
-
-
 
     public function getProducts()
     {

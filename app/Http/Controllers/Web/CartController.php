@@ -31,7 +31,7 @@ class CartController extends Controller
             ->whereIn('product_variants.id', $variantIds)
             ->get()
             ->map(function ($variant) use ($items, $repository) {
-                $transform          = $repository->transformProduct($variant);
+                $transform          = $repository->transform($variant);
                 $transform->qty     = $items[$variant->variant_id]['qty'] ?? 1;
                 return $transform;
             });

@@ -258,6 +258,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
-  <script src="{{ asset('theme/xtremez/assets/js/cart.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/product-detail.js') }}"></script>
 @endpush

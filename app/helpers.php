@@ -46,3 +46,37 @@ if (!function_exists('active_country')) {
         return Country::first(); // for now send like this
     }
 }
+
+if (!function_exists('exchange_rate')) {
+    /**
+     * Get exchange rate from one currency to another.
+     *
+     * @param string $from
+     * @param string $to
+     * @return float
+     */
+    function exchange_rate($from, $to)
+    {
+        return 0.27; // AED to USD
+    }
+}
+
+if (!function_exists('price_convert')) {
+    /**
+     * Convert price from one currency to another.
+     *
+     * @param mixed $amount
+     * @param string $from
+     * @param string $to
+     * @return float
+     */
+    function price_convert($amount, $from, $to)
+    {
+        if ($from === $to) {
+            return $amount;
+        }
+
+        $rate = exchange_rate($from, $to);
+        return round($amount * $rate, 2);
+    }
+}

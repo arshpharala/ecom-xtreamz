@@ -71,6 +71,7 @@ class ProductVariant extends Model
     public function scopeWithSelection($query)
     {
         return $query->select([
+            'product_variants.id as id',
             'products.id as product_id',
             'products.slug',
             'products.category_id',

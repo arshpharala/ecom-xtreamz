@@ -2,66 +2,37 @@
 
 namespace App\Services\Paypal;
 
-use PaypalServerSdkLib\Models\CheckoutPaymentIntent;
-use PaypalServerSdkLib\Models\Builders\OrderRequestBuilder;
-use PaypalServerSdkLib\Models\Builders\AmountWithBreakdownBuilder;
-use PaypalServerSdkLib\Models\Builders\PurchaseUnitRequestBuilder;
-
 class PaypalService extends PaypalClient
 {
-    protected $client;
-
     public function __construct()
     {
-        // parent::__construct();
-        $this->client = self::build();
+        parent::__construct();
     }
 
-    public function createOrder($currency, $amount)
+    public function createOrder(array $data = []): array
     {
-        $requestBody = OrderRequestBuilder::init(
-            CheckoutPaymentIntent::CAPTURE,
-            [
-                PurchaseUnitRequestBuilder::init(
-                    AmountWithBreakdownBuilder::init(
-                        $currency,
-                        number_format($amount, 2, '.', '')
-                    )->build()
-                )->build()
-            ]
-        )->build();
+        $payload = array_merge([
+            'intent' => 'CAPTURE',
+            'purchase_units' => [],
+            'application_context' => [
+                'brand_name'          => config('app.name'),
+                'shipping_preference' => 'NO_SHIPPING',
+                'user_action'         => 'PAY_NOW',
+                'return_url'          => route('api.paypal.success'),
+                'cancel_url'          => route('api.paypal.cancel'),
+            ],
+        ], $data);
 
-        $response = $this->client->getOrdersController()->createOrder([
-            'body'    => $requestBody,
-            'prefer'  => 'return=representation',
-        ]);
-
-        if ($response->isSuccess()) {
-            return $response->getResult(); // Includes order ID and links
-        }
-
-        throw new \Exception('Failed to create PayPal order: ' . json_encode($response->getResult()));
+        return $this->post('/v2/checkout/orders', $payload);
     }
 
-    public function captureOrder(string $paypalOrderId)
+    public function captureOrder(string $orderId): array
     {
-        $response = $this->client->getOrdersController()->captureOrder(['id' => $paypalOrderId]);
-
-        if ($response->isSuccess()) {
-            return $response->getResult(); // Captured payment details
-        }
-
-        throw new \Exception('Failed to capture PayPal order: ' . json_encode($response->getResult()));
+        return $this->post("/v2/checkout/orders/{$orderId}/capture");
     }
 
-    public function verifyOrder(string $paypalOrderId)
+    public function getOrderDetails(string $orderId): array
     {
-        $response = $this->client->getOrdersController()->getOrder(['id' => $paypalOrderId]);
-
-        if ($response->isSuccess()) {
-            return $response->getResult(); // Full order details
-        }
-
-        throw new \Exception('Failed to verify PayPal order: ' . json_encode($response->getResult()));
+        return $this->get("/v2/checkout/orders/{$orderId}");
     }
 }

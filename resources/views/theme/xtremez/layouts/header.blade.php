@@ -18,15 +18,37 @@
           </nav>
 
           <!-- Icons & Mobile Toggle -->
-          <div class="header-icons d-flex align-items-center gap-3">
+          <div class="header-icons d-flex align-self-baseline gap-3">
             @auth
-            <a href="{{ route('customers.profile') }}" class="icon-link"><i class="bi bi-person fs-5"></i></a>
+              <div class="dropdown">
+                <button class="border-0 bg-transparent d-flex align-items-center gap-2" id="userMenuButton"
+                  data-bs-toggle="dropdown" aria-expanded="false" aria-label="User menu">
+                  <i class="bi bi-person fs-5"></i>
+                  <i class="bi bi-chevron-down fs-6"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userMenuButton">
+                  <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('customers.profile') }}">
+                      <i class="bi bi-person-circle"></i> Profile
+                    </a>
+                  </li>
+                  <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                      @csrf
+                      <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                      </button>
+                    </form>
+                  </li>
+                </ul>
+              </div>
             @else
-            <a href="{{ route('login') }}" class="icon-link"><i class="bi bi-person fs-5"></i></a>
+              <a href="{{ route('login') }}" class="icon-link"><i class="bi bi-person fs-5"></i></a>
             @endauth
-            <a href="{{ route('cart.index') }}" class="icon-link position-relative">
+            <a href="{{ route('cart.index') }}" class="icon-link position-relative align-items-baseline">
               <i class="bi bi-cart fs-5"></i>
-              <span class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm" id="cart-items-count">{{ cart_items_count() }}</span>
+              <span class="badge bg-primary position-absolute top-0 start-100 translate-middle badge-sm"
+                id="cart-items-count">{{ cart_items_count() }}</span>
             </a>
             <!-- Hamburger button, mobile only -->
             <button class="btn p-0 border-0 d-lg-none no-animate" id="mobileNavToggle" aria-label="Open navigation">

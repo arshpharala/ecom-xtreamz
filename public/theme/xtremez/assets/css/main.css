@@ -146,17 +146,10 @@ main {
   color: var(--color-light);
   border-color: var(--color-primary);
 }
-.btn-primary:hover, .btn-primary:active, .btn-primary:focus, .btn-primary:focus-visible {
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus, .btn-primary:focus-visible, .btn-primary:disabled, .btn-primary.disabled {
   background: var(--color-primary-dark) !important;
   color: var(--color-light) !important;
   border-color: var(--color-primary-dark) !important;
-}
-.btn-primary:disabled, .btn-primary.disabled {
-  background-color: var(--color-primary-dark) !important;
-  color: var(--color-light) !important;
-  border-color: var(--color-primary-dark) !important;
-  opacity: 0.65;
-  pointer-events: none;
 }
 
 .btn-outline-primary {
@@ -859,6 +852,9 @@ main {
   justify-content: center;
   min-height: 330px;
   position: relative;
+}
+.product-card .image-box img {
+  height: 280px;
 }
 .product-card .image-box .offer-badge {
   background: var(--color-secondary);
@@ -2018,6 +2014,10 @@ main {
 
 .bg-primary {
   background-color: var(--color-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary) !important;
 }
 
 /*# sourceMappingURL=main.css.map */

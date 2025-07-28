@@ -31,10 +31,9 @@ class Category extends Model
         return $this->hasMany(CategoryTranslation::class);
     }
 
-    public function translation($locale = null)
+    public function translation()
     {
-        $locale = $locale ?? app()->getLocale();
-        return $this->translations->where('locale', $locale)->first();
+        return $this->hasOne(CategoryTranslation::class)->where('locale', app()->getLocale());
     }
 
     public function products()

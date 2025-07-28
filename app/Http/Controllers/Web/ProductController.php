@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Web;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Catalog\Brand;
+use App\Services\CartService;
 use Illuminate\Http\Response;
 use App\Models\Catalog\Product;
 use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
+use App\Repositories\PageRepository;
 use App\Models\Catalog\ProductVariant;
 use App\Repositories\ProductRepository;
-use App\Services\CartService;
 
 class ProductController extends Controller
 {
@@ -26,7 +27,6 @@ class ProductController extends Controller
 
     function index()
     {
-
         $locale     = app()->getLocale();
         $categories = Category::leftJoin('category_translations', function ($join) use ($locale) {
             $join->on('category_translations.category_id', 'categories.id')->where('locale', $locale);
@@ -51,24 +51,19 @@ class ProductController extends Controller
         $data['categories'] = $categories;
         $data['brands']     = $brands;
 
-        return view('theme.xtremez.products', $data);;
+        return view('theme.xtremez.products.index', $data);;
     }
-
-
-
 
     public function show($slug, Request $request)
     {
-        $variantId = $request->query('variant');
-
+        $variantId      = $request->query('variant');
         $productVariant = $this->getProductVariant($variantId);
-        $product = $this->getProductWithAttributes($productVariant->product_id);
+        $product        = $this->getProductWithAttributes($productVariant->product_id);
+        $attributes     = $this->extractAttributesFromVariants($product);
+        $selected       = $this->getSelectedAttributes($productVariant);
+        $allVariants    = $this->formatAllVariants($product);
 
-        $attributes = $this->extractAttributesFromVariants($product);
-        $selected = $this->getSelectedAttributes($productVariant);
-        $allVariants = $this->formatAllVariants($product);
-
-        return view('theme.xtremez.product-detail', compact(
+        return view('theme.xtremez.products.show', compact(
             'productVariant',
             'attributes',
             'selected',
@@ -84,56 +79,34 @@ class ProductController extends Controller
         $variant = $this->resolveVariant($productId, $attributes);
 
         if ($variant) {
-            $variant->load(['product.translations', 'attachments', 'attributeValues.attribute', 'shipping']);
 
-            return response()->json([
-                'id' => $variant->id,
-                'variant_id' => $variant->id,
-                'sku' => $variant->sku,
-                'slug' => $variant->product->slug,
-                'name' => $variant->product->translation?->name ?? '',
-                'description' => $variant->product->translation?->description ?? '',
-                'price' => $variant->price,
-                'stock' => $variant->stock,
-                'images' => $variant->attachments->map(fn($a) => asset('storage/' . $a->file_path)),
-                'file_path' => $variant->attachments->first()?->file_path,
-                'shipping' => $variant->shipping,
-                'combination' => collect($variant->attributeValues)->mapWithKeys(function ($val) {
-                    return [Str::slug($val->attribute->name) => $val->value];
-                }),
-                'cart_item' => $this->cart->getItem($variant->id)
-            ]);
+            $variant = ProductVariant::withJoins()
+                ->withSelection()
+                ->where('product_variants.id', $variant->id)
+                ->with('shipping', 'attachments')
+                ->firstOrFail();
+
+            $variant = $this->repository->transform($variant);
+
+            $variant->images = $variant->attachments->map(fn($a) => asset('storage/' . $a->file_path));
+            $variant->combination = collect($variant->attributeValues)->mapWithKeys(function ($val) {
+                return [Str::slug($val->attribute->name) => $val->value];
+            });
+
+            return $variant;
         }
 
         return response()->json(['message' => 'No variant found'], 404);
     }
 
-
-
     protected function getProductVariant($variantId)
     {
         $variant =  ProductVariant::withJoins()
-            ->select([
-                'products.id as product_id',
-                'products.slug',
-                'products.category_id',
-                'products.position',
-                'product_variants.id',
-                'product_variants.id as variant_id',
-                'product_variants.sku',
-                'product_variants.price',
-                'product_variants.stock',
-                'product_translations.name',
-                'product_translations.description',
-                'brands.name as brand_name',
-                'category_translations.name as category_name',
-                'main_attachment.file_path',
-                'main_attachment.file_name'
-            ])
+            ->withSelection()
             ->where('product_variants.id', $variantId)
             ->firstOrFail();
 
-        $variant->cart_item = (object) $this->cart->getItem($variant->id);
+        $variant = $this->repository->transform($variant);
 
         return $variant;
     }
@@ -197,8 +170,7 @@ class ProductController extends Controller
 
     protected function resolveVariant($productId, $attributes)
     {
-        $query = ProductVariant::with(['product.translations', 'attachments', 'attributeValues.attribute', 'shipping'])
-            ->where('product_id', $productId);
+        $query = ProductVariant::where('product_id', $productId);
 
         foreach ($attributes as $attr => $val) {
             $query->whereHas('attributeValues', function ($q) use ($attr, $val) {
@@ -215,8 +187,7 @@ class ProductController extends Controller
         $lastAttr = array_key_last($attributes);
         $lastValue = $attributes[$lastAttr];
 
-        return ProductVariant::with(['product.translations', 'attachments', 'attributeValues.attribute', 'shipping'])
-            ->where('product_id', $productId)
+        return ProductVariant::where('product_id', $productId)
             ->whereHas('attributeValues', function ($q) use ($lastAttr, $lastValue) {
                 $q->where('value', $lastValue)
                     ->whereHas('attribute', function ($q2) use ($lastAttr) {
@@ -264,5 +235,14 @@ class ProductController extends Controller
         });
 
         return response()->json(['success' => true, 'attributes' => $data]);
+    }
+
+    function clearance()
+    {
+        $slug           = request()->segment(1);
+        $page           = (new PageRepository())->findOrFailBySlug($slug);
+        $data['page']   = $page;
+
+        return view('theme.xtremez.products.clearance', $data);
     }
 }

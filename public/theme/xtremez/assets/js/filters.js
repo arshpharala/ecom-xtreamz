@@ -177,7 +177,7 @@ $(function () {
             success: function (res) {
                 if (res.success) {
                     renderProducts(res.data.products);
-                    renderPagination(res.data.pagination);
+                    render_pagination(res.data.pagination);
                 }
             },
         });
@@ -199,23 +199,9 @@ $(function () {
         });
     }
 
-    // ===============================
-    // 8. Render Pagination UI
-    // ===============================
-    function renderPagination(pagination) {
-        const $pagination = $(".pagination");
-        $pagination.empty();
-
-        for (let i = 1; i <= pagination.last_page; i++) {
-            const active = i === pagination.current_page ? "active" : "";
-            $pagination.append(
-                `<li class="page-item ${active}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`
-            );
-        }
-    }
 
     // ===============================
-    // 9. Render Attribute Filters Dynamically
+    // 8. Render Attribute Filters Dynamically
     // ===============================
     function renderDynamicAttributeFilters(attributes) {
         const $container = $("#dynamic-attribute-filters");
@@ -226,7 +212,7 @@ $(function () {
 
         attributes.forEach((attr) => {
             const key = `attr_${attr.id}`;
-            activeAttributeKeys.push(key); // ✅ Store active keys for URL cleaning
+            activeAttributeKeys.push(key);
 
             const selectedValue = urlParams.get(key) || "";
 

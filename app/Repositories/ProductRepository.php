@@ -18,6 +18,7 @@ class ProductRepository
             'brand_id',
             'price_min',
             'price_max',
+            'offer',
             'search',
             'sort_by'
         ]);
@@ -30,6 +31,9 @@ class ProductRepository
         $query = ProductVariant::withJoins()
             ->withFilters($filters)
             ->applySorting($filters['sort_by'] ?? null)
+            ->with(['offers' => function ($query) {
+                $query->active();
+            }])
             ->withSelection();
 
         // Handle pagination
@@ -52,8 +56,41 @@ class ProductRepository
         $productVariant->cart_item  = (new CartService())->getItem($productVariant->id);
         $productVariant->is_in_cart = $productVariant->cart_item ? true : false;
 
+        $productVariant->offer_data = $this->transformOffer($productVariant);
+
         return $productVariant;
     }
+
+    protected function transformOffer($variant)
+    {
+        $offer = $variant->activeOffer();
+
+        if (!$offer) {
+            return [
+                'has_offer'         => false,
+                'discounted_price'  => null,
+                'label'             => null,
+                'title'             => null,
+            ];
+        }
+
+        $discountedPrice = null;
+        if ($offer->discount_type === 'percent') {
+            $discountedPrice    = round($variant->price * (1 - $offer->discount_value / 100), 2);
+            $label              = "{$offer->discount_value}% OFF";
+        } elseif ($offer->discount_type === 'fixed') {
+            $discountedPrice    = max(0, $variant->price - $offer->discount_value);
+            $label              = "{$offer->discount_value} " . active_currency() . " OFF";
+        }
+
+        return [
+            'has_offer'         => true,
+            'discounted_price'  => $discountedPrice,
+            'label'             => $label,
+            'title'             => $offer->translation->title ?? '',
+        ];
+    }
+
 
 
     public function getGiftProducts($categorySlug = 'gift-bags', $limit = 3)

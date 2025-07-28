@@ -1,59 +1,99 @@
 @foreach ($variants as $variant)
-  <div class="card shadow-sm mb-3 border-0">
-    <div class="card-header bg-white py-2" style="border-bottom:1px solid #e9ecef;">
-      <div class="card-title">
-        <span class="h6 mb-0 text-secondary">{{ $variant->sku }}</span>
-        <span class="badge badge-light ml-2">{{ config('app.currency', 'AED') }} {{ $variant->price }} </span>
+  <div class="card shadow-sm mb-4 border rounded-lg">
+    <div class="card-header bg-light  py-2 px-3">
+      <div class= "card-title">
+        <h6 class="mb-0 text-primary font-weight-bold">{{ $variant->sku }}</h6>
+        <small class="text-muted">{{ config('app.currency', 'AED') }} {{ number_format($variant->price, 2) }}</small>
       </div>
       <div class="card-tools">
-          <div class="dropdown">
-            <a href="#" class="text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="dropdown pe-3">
+            <a href="#" class="text-secondary" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-ellipsis-v"></i>
             </a>
-            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#" onclick="getAside()"
-                data-url="{{ route('admin.catalog.product.variants.edit', ['product' => $product->id, 'variant' => $variant->id]) }}">Edit</a></li>
-              <li><a class="dropdown-item btn-delete" href="#"
-                data-url="{{ route('admin.catalog.product.variants.destroy', ['product' => $product->id, 'variant' => $variant->id]) }}">Delete</a></li>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <li>
+                <a class="dropdown-item" href="#" onclick="getAside()"
+                   data-url="{{ route('admin.catalog.product.variant.offers.index', ['product' => $product->id, 'variant' => $variant->id]) }}">
+                  <i class="fas fa-tags text-info mr-1"></i> Manage Offer
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#" onclick="getAside()"
+                   data-url="{{ route('admin.catalog.product.variants.edit', ['product' => $product->id, 'variant' => $variant->id]) }}">
+                  <i class="fas fa-edit text-warning mr-1"></i> Edit
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item btn-delete" href="#"
+                   data-url="{{ route('admin.catalog.product.variants.destroy', ['product' => $product->id, 'variant' => $variant->id]) }}">
+                  <i class="fas fa-trash-alt text-danger mr-1"></i> Delete
+                </a>
+              </li>
             </ul>
           </div>
 
       </div>
     </div>
-    <div class="card-body py-2 px-3">
 
-      <div class="d-flex flex-wrap align-items-center mb-2">
-        <span class="text-muted small mr-3">
-          <i class="fas fa-box"></i> Stock: <strong>{{ $variant->stock }}</strong>
-        </span>
+    <div class="card-body px-3 py-2">
+
+      {{-- Stock & Shipping --}}
+      <div class="mb-2 text-muted small">
+        <i class="fas fa-box"></i> Stock: <strong>{{ $variant->stock }}</strong>
         @if($variant->shipping)
-          <span class="text-muted small mr-2">
-            <i class="fas fa-cube"></i>
-            L: <b>{{ $variant->shipping->length ?? '-' }}</b> /
-            W: <b>{{ $variant->shipping->width ?? '-' }}</b> /
-            H: <b>{{ $variant->shipping->height ?? '-' }}</b>
-          </span>
-          <span class="text-muted small mr-2">
-            <i class="fas fa-weight-hanging"></i>
-            <b>{{ $variant->shipping->weight ?? '-' }}</b> kg
-          </span>
+          | <i class="fas fa-cube"></i>
+          L: <b>{{ $variant->shipping->length ?? '-' }}</b> /
+          W: <b>{{ $variant->shipping->width ?? '-' }}</b> /
+          H: <b>{{ $variant->shipping->height ?? '-' }}</b>
+          | <i class="fas fa-weight-hanging"></i>
+          {{ $variant->shipping->weight ?? '-' }} kg
         @endif
       </div>
 
-      <div class="mb-2 border-top pt-2">
-        <div class="d-flex flex-wrap">
-          @foreach ($variant->attributeValues as $attr)
-            <span class="badge badge-pill badge-primary mr-1 mb-1">
-              {{ $attr->attribute->name }}: {{ $attr->value }}
-            </span>
-          @endforeach
-        </div>
+      {{-- Attributes --}}
+      <div class="mb-2 d-flex flex-wrap">
+        @foreach ($variant->attributeValues as $attr)
+          <span class="badge bg-primary text-white mr-2 mb-2">
+            {{ $attr->attribute->name }}: {{ $attr->value }}
+          </span>
+        @endforeach
       </div>
 
+      {{-- Linked Offers --}}
+      @if ($variant->offers->count())
+        <div class="mt-2 border-top pt-2">
+          <h6 class="text-muted mb-2"><i class="fas fa-tags"></i> Linked Offer(s)</h6>
+          @foreach ($variant->offers as $offer)
+            <div class="bg-light p-2 rounded mb-2">
+              <div class="font-weight-bold text-dark">{{ $offer->translation->title }}</div>
+              <div class="text-muted small">
+                @if ($offer->discount_type === 'percent')
+                  {{ $offer->discount_value }}% Off
+                @else
+                  {{ $offer->discount_value }} {{ config('app.currency', 'AED') }} Off
+                @endif
+              </div>
+              @if ($offer->starts_at || $offer->ends_at)
+                <div class="text-muted small">
+                  Valid:
+                  @if ($offer->starts_at)
+                    <span>from {{ $offer->starts_at->format('d-M-Y  h:m A')}}</span>
+                  @endif
+                  @if ($offer->ends_at)
+                    <span> to {{ $offer->ends_at->format('d-M-Y  h:m A')}}</span>
+                  @endif
+                </div>
+              @endif
+            </div>
+          @endforeach
+        </div>
+      @endif
+
+      {{-- Attachments --}}
       @if ($variant->attachments->count())
-        <div class="mt-2 d-flex flex-wrap align-items-center" style="gap: 10px;">
+        <div class="mt-3 d-flex flex-wrap" style="gap: 8px;">
           @foreach ($variant->attachments as $attachment)
-              <img src="{{ asset('storage/' . $attachment->file_path) }}" class="img-thumbnail img-md">
+            <img src="{{ asset('storage/' . $attachment->file_path) }}" class="img-thumbnail img-md" style="width: 80px; height: 80px; object-fit: cover;">
           @endforeach
         </div>
       @endif

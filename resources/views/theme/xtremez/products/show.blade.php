@@ -33,7 +33,7 @@
 
 @section('content')
   <section class="product-detail py-5" data-variant-id="{{ $productVariant->id }}"
-    data-price="{{ $productVariant->price }}" data-qty="{{ $productVariant->cart_item->qty ?? 1 }}">
+    data-price="{{ $productVariant->price }}" data-qty="{{ $productVariant->cart_item['qty'] ?? 1 }}">
     <div class="container">
 
       <!-- Mobile Title -->
@@ -81,8 +81,22 @@
               {!! $productVariant->description !!}
             </div>
           </div>
-          <div class="price fs-3 py-3" id="priceDisplay">{{ active_currency() }}
-            {{ number_format($productVariant->cart_item->subtotal ?? $productVariant->price, 2) }}</div>
+          @php
+            $hasOffer = isset($productVariant->offer_data['has_offer']) && $productVariant->offer_data['has_offer'];
+            $discountedPrice = $productVariant->offer_data['discounted_price'] ?? null;
+          @endphp
+
+          <div class="price fs-3 py-3" id="priceDisplay">
+            @if ($hasOffer)
+              <span class="text-danger fw-bold">{{ active_currency() }} {{ number_format($discountedPrice, 2) }}</span>
+              <span class="text-muted text-decoration-line-through ms-2">
+                {{ active_currency() }} {{ number_format($productVariant->price, 2) }}
+              </span>
+              <span class="badge bg-secondary ms-2">{{ $productVariant->offer_data['label'] }}</span>
+            @else
+              <span>{{ active_currency() }} {{ number_format($productVariant->price, 2) }}</span>
+            @endif
+          </div>
 
           <div class="d-flex align-items-center justify-content-start gap-4 py-3 flex-wrap product-options">
             <!-- Quantity -->
@@ -93,7 +107,7 @@
                   {{-- <i class="bi bi-dash-circle qty-btn minus" id="qtyMinus"></i> --}}
                   <i class="bi bi-dash-circle qty-btn minus"></i>
                   <input type="text" id="qtyInput" class="qty-input py-1"
-                    value="{{ $productVariant->cart_item->qty ?? 1 }}" />
+                    value="{{ $productVariant->cart_item['qty'] ?? 1 }}" />
                   <i class="bi bi-plus-circle qty-btn plus"></i>
                   {{-- <i class="bi bi-plus-circle qty-btn plus" id="qtyPlus"></i> --}}
                 </div>
@@ -145,14 +159,15 @@
           </div>
 
           <div class="d-flex gap-3 py-3">
-            <button class="btn btn-cart flex-fill buy-now-btn {{ !empty($productVariant->cart_item->qty) ? 'in-cart' : '' }}" data-variant-id="{{ $productVariant->id }}"
-              data-qty-selector="#qtyInput">Buy Now</button>
+            <button
+              class="btn btn-cart flex-fill buy-now-btn {{ !empty($productVariant->cart_item['qty']) ? 'in-cart' : '' }}"
+              data-variant-id="{{ $productVariant->id }}" data-qty-selector="#qtyInput">Buy Now</button>
             <button class="btn btn-buy flex-fill add-to-cart-btn" data-variant-id="{{ $productVariant->id }}"
               data-qty-selector="#qtyInput">
-              <span class="add-to-cart" style="{{ empty($productVariant->cart_item->qty) ? '' : 'display:none' }}">
+              <span class="add-to-cart" style="{{ empty($productVariant->cart_item['qty']) ? '' : 'display:none' }}">
                 Add to Cart
               </span>
-              <span class="added-to-cart" style="{{ empty($productVariant->cart_item->qty) ? 'display:none' : '' }}">
+              <span class="added-to-cart" style="{{ empty($productVariant->cart_item['qty']) ? 'display:none' : '' }}">
                 Added to Cart
               </span>
             </button>

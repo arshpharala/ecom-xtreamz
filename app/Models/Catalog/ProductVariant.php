@@ -40,6 +40,18 @@ class ProductVariant extends Model
         return $this->morphMany(Attachment::class, 'attachable');
     }
 
+    public function offers()
+    {
+        return $this->belongsToMany(Offer::class, 'offer_product_variants');
+    }
+
+    public function activeOffer()
+    {
+        return $this->offers()
+            ->active()
+            ->first();
+    }
+
     public function scopeWithJoins($query)
     {
         $locale = app()->getLocale();
@@ -74,13 +86,17 @@ class ProductVariant extends Model
             'product_variants.id as id',
             'products.id as product_id',
             'products.slug',
-            'products.category_id',
-            'products.position',
+            'product_variants.sku',
             'product_variants.id as variant_id',
-            'product_variants.price',
-            'product_variants.stock',
             'product_translations.name',
             'product_translations.description',
+            'product_variants.price',
+            'product_variants.stock',
+            
+
+            'products.category_id',
+            'products.position',
+
             'brands.name as brand_name',
             'category_translations.name as category_name',
             'main_attachment.file_path',
@@ -98,7 +114,12 @@ class ProductVariant extends Model
             ->when($filters['price_min'] ?? null, fn($q, $v) => $q->where('product_variants.price', '>=', $v))
             ->when($filters['price_max'] ?? null, fn($q, $v) => $q->where('product_variants.price', '<=', $v))
             ->when($filters['search'] ?? null, fn($q, $v) => $q->where('product_translations.name', 'like', "%$v%"))
-            ->when(!empty($filters['attributes']), fn($q) => $q->filterByAttributes($filters['attributes']));
+            ->when(!empty($filters['attributes']), fn($q) => $q->filterByAttributes($filters['attributes']))
+            ->when(
+                $filters['offer'] ?? null,
+                fn($q) =>
+                $q->whereHas('offers', fn($q2) => $q2->active())
+            );
     }
 
     public function scopeFilterByAttributes($query, $attributes)

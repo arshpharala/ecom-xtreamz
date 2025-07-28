@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Catalog\Brand;
 use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
+use App\Repositories\PageRepository;
 use App\Repositories\ProductRepository;
 
 class HomeController extends Controller
@@ -27,7 +28,7 @@ class HomeController extends Controller
 
 
         $giftSetProducts = (new ProductRepository())->getGiftProducts();
-        
+
 
         $brands = Brand::whereNotNull('logo')->active()->orderBy('position')->get();
 
@@ -44,20 +45,11 @@ class HomeController extends Controller
 
     public function page()
     {
-        $locale = app()->getLocale();
+        $slug = request()->segment(1);
 
-        $slug = request()->segments(1);
-        $page = Page::select(
-            'pages.id',
-            'page_translations.title',
-            'page_translations.content'
-        )
-            ->leftJoin('page_translations', function ($join) use ($locale) {
-                $join->on('page_translations.page_id', 'pages.id')->where('page_translations.locale', $locale);
-            })
-            ->whereSlug($slug)->firstOrFail();
+        $page = (new PageRepository())->findOrFailBySlug($slug);
 
-        $data['page'] = $page ?? '';
+        $data['page'] = $page;
 
         return view('theme.xtremez.page', $data);
     }

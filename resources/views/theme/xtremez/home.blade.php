@@ -72,11 +72,11 @@
     <!-- Search Section -->
     <div class="search-bar-wrapper">
       <div class="container">
-        <form action="search.html" method="get">
+        <form action="{{ route('search') }}" method="get">
 
           <div class="search-bar d-flex align-items-center shadow  animate-on-scroll" data-animate="fade-down">
             <input type="text" class="form-control border-0 type-placeholder" name="q"
-              placeholder="Search Products">
+              placeholder="Search Products" required>
             <button class="btn btn-link text-dark p-0 pe-3 no-animate">
               <i class="bi bi-search fs-2"></i>
             </button>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\Profile\AddressController;
@@ -11,8 +12,11 @@ Route::get('/',                                         [HomeController::class, 
 Route::get('about-us',                                  [HomeController::class, 'page'])->name('about-us');
 Route::get('contact-us',                                [HomeController::class, 'page'])->name('contact-us');
 
+Route::get('clearance',                                 [ProductController::class, 'clearance'])->name('clearance');
 Route::get('products',                                  [ProductController::class, 'index'])->name('products');
 Route::get('products/{slug}',                           [ProductController::class, 'show'])->name('products.show');
+
+Route::get('search',                                    [SearchController::class, 'search'])->name('search');
 
 Route::resource('cart',                                 CartController::class);
 
@@ -36,4 +40,3 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('cities/{province}',                     [AddressController::class, 'getCities'])->name('province.cities');
     Route::get('areas/{city}',                          [AddressController::class, 'getAreas'])->name('city.areas');
 });
-

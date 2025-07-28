@@ -61,42 +61,41 @@ class ProductController extends Controller
         $product        = $this->getProductWithAttributes($productVariant->product_id);
         $attributes     = $this->extractAttributesFromVariants($product);
         $selected       = $this->getSelectedAttributes($productVariant);
-        $allVariants    = $this->formatAllVariants($product);
+        // $allVariants    = $this->formatAllVariants($product);
 
         return view('theme.xtremez.products.show', compact(
             'productVariant',
             'attributes',
             'selected',
-            'allVariants'
+            // 'allVariants'
         ));
     }
 
     public function resolve(Request $request)
     {
-        $productId = $request->input('product_id');
+        $productId  = $request->input('product_id');
         $attributes = $request->input('attributes', []);
 
         $variant = $this->resolveVariant($productId, $attributes);
 
-        if ($variant) {
+        if (!$variant) {
+            return response()->json(['message' => 'No variant found'], 404);
+        }
 
-            $variant = ProductVariant::withJoins()
-                ->withSelection()
-                ->where('product_variants.id', $variant->id)
-                ->with('shipping', 'attachments')
-                ->firstOrFail();
+        $variant = ProductVariant::withJoins()
+            ->withSelection()
+            ->where('product_variants.id', $variant->id)
+            ->with(['shipping', 'attachments', 'attributeValues.attribute', 'offers'])
+            ->firstOrFail();
 
-            $variant = $this->repository->transform($variant);
-
-            $variant->images = $variant->attachments->map(fn($a) => asset('storage/' . $a->file_path));
-            $variant->combination = collect($variant->attributeValues)->mapWithKeys(function ($val) {
+        $variant                = $this->repository->transform($variant);
+        $variant->images        = $variant->attachments->map(fn($a) => asset('storage/' . $a->file_path));
+        $variant->combination   = collect($variant->attributeValues)
+            ->mapWithKeys(function ($val) {
                 return [Str::slug($val->attribute->name) => $val->value];
             });
 
-            return $variant;
-        }
-
-        return response()->json(['message' => 'No variant found'], 404);
+        return response()->json($variant);
     }
 
     protected function getProductVariant($variantId)

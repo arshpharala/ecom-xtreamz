@@ -26,22 +26,78 @@ $(function () {
         });
     });
 
+    // function updatePriceDisplay() {
+    //     try {
+    //         let price = parseFloat(window.variant?.price) || 0;
+    //         let subtotal = parseFloat(window.variant?.cart_item?.subtotal);
+
+    //         const total = !isNaN(subtotal) ? subtotal : price;
+
+    //         $("#priceDisplay").text(
+    //             `${$("meta[name='currency']").attr("content")} ${total.toFixed(
+    //                 2
+    //             )}`
+    //         );
+    //     } catch (err) {
+    //         console.error("Error updating price display:", err);
+    //         $("#priceDisplay").text(
+    //             `${$("meta[name='currency']").attr("content")} --`
+    //         );
+    //     }
+    // }
+
     function updatePriceDisplay() {
         try {
-            let price = parseFloat(window.variant?.price) || 0;
-            let subtotal = parseFloat(window.variant?.cart_item?.subtotal);
+            const variant = window.variant;
+            const currency = $("meta[name='currency']").attr("content");
 
-            const total = !isNaN(subtotal) ? subtotal : price;
-
-            $("#priceDisplay").text(
-                `${$("meta[name='currency']").attr("content")} ${total.toFixed(
-                    2
-                )}`
+            const hasOffer = variant?.offer_data?.has_offer === true;
+            const discountedPrice = parseFloat(
+                variant?.offer_data?.discounted_price || 0
             );
+            const originalPrice = parseFloat(variant?.price || 0);
+            const offerLabel = variant?.offer_data?.label || "";
+            const subtotal = parseFloat(variant?.cart_item?.subtotal);
+
+            let html = "";
+
+            // 1. Show cart subtotal if available
+            if (!isNaN(subtotal)) {
+                html += `<span class="text-danger fw-bold">${currency} ${subtotal.toFixed(
+                    2
+                )}</span>`;
+
+                if (
+                    hasOffer &&
+                    discountedPrice > 0 &&
+                    subtotal < originalPrice
+                ) {
+                    html += `<span class="text-muted text-decoration-line-through ms-2">${currency} ${originalPrice.toFixed(
+                        2
+                    )}</span>`;
+                    html += `<span class="badge bg-secondary ms-2">${offerLabel}</span>`;
+                }
+
+                // 2. If no cart subtotal, show discounted offer
+            } else if (hasOffer && discountedPrice > 0) {
+                html += `<span class="text-danger fw-bold">${currency} ${discountedPrice.toFixed(
+                    2
+                )}</span>`;
+                html += `<span class="text-muted text-decoration-line-through ms-2">${currency} ${originalPrice.toFixed(
+                    2
+                )}</span>`;
+                html += `<span class="badge bg-secondary ms-2">${offerLabel}</span>`;
+
+                // 3. Fallback to base price
+            } else {
+                html += `<span>${currency} ${originalPrice.toFixed(2)}</span>`;
+            }
+
+            $("#priceDisplay").html(html);
         } catch (err) {
             console.error("Error updating price display:", err);
-            $("#priceDisplay").text(
-                `${$("meta[name='currency']").attr("content")} --`
+            $("#priceDisplay").html(
+                `<span>${$("meta[name='currency']").attr("content")} --</span>`
             );
         }
     }
@@ -54,14 +110,14 @@ $(function () {
         return selected;
     }
 
-    function findMatchingVariant(partialSelection) {
-        const variants = window.allVariants;
-        return variants.find((variant) => {
-            return Object.entries(partialSelection).every(
-                ([key, val]) => variant.combination[key] === val
-            );
-        });
-    }
+    // function findMatchingVariant(partialSelection) {
+    //     const variants = window.allVariants;
+    //     return variants.find((variant) => {
+    //         return Object.entries(partialSelection).every(
+    //             ([key, val]) => variant.combination[key] === val
+    //         );
+    //     });
+    // }
 
     function updateSelectedAttributesFromVariant(variant) {
         if (!variant || !variant.combination) return;
@@ -114,9 +170,6 @@ $(function () {
             console.error("Error updating variant button attributes:", err);
         }
 
-        $("#priceDisplay").text(
-            `${$("meta[name='currency']").attr("content")} ${variant.price}`
-        );
         $(".product-description p").html(variant.description || "");
 
         if (variant.images.length) {

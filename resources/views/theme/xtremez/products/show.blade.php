@@ -256,7 +256,7 @@
 
 @push('scripts')
   <script>
-    window.allVariants = @json($allVariants);
+    {{-- window.allVariants = @json($allVariants); --}}
     window.selectedAttributes = @json($selected);
 
     window.variant = @json($productVariant);

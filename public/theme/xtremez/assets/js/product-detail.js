@@ -19,7 +19,7 @@ $(function () {
             if (res.variant) {
                 updateCartCount(res.cart);
                 window.variant = res.variant;
-                updatePriceDisplay();
+                // updatePriceDisplay(); // Do not update price here
             } else {
                 alert("Unable to update variant.");
             }
@@ -62,24 +62,25 @@ $(function () {
             let html = "";
 
             // 1. Show cart subtotal if available
-            if (!isNaN(subtotal)) {
-                html += `<span class="text-danger fw-bold">${currency} ${subtotal.toFixed(
-                    2
-                )}</span>`;
+            // if (!isNaN(subtotal)) {
+            //     html += `<span class="text-danger fw-bold">${currency} ${subtotal.toFixed(
+            //         2
+            //     )}</span>`;
 
-                if (
-                    hasOffer &&
-                    discountedPrice > 0 &&
-                    subtotal < originalPrice
-                ) {
-                    html += `<span class="text-muted text-decoration-line-through ms-2">${currency} ${originalPrice.toFixed(
-                        2
-                    )}</span>`;
-                    html += `<span class="badge bg-secondary ms-2">${offerLabel}</span>`;
-                }
+            //     if (
+            //         hasOffer &&
+            //         discountedPrice > 0 &&
+            //         subtotal < originalPrice
+            //     ) {
+            //         html += `<span class="text-muted text-decoration-line-through ms-2">${currency} ${originalPrice.toFixed(
+            //             2
+            //         )}</span>`;
+            //         html += `<span class="badge bg-secondary ms-2">${offerLabel}</span>`;
+            //     }
 
-                // 2. If no cart subtotal, show discounted offer
-            } else if (hasOffer && discountedPrice > 0) {
+            //     // 2. If no cart subtotal, show discounted offer
+            // } else
+                if (hasOffer && discountedPrice > 0) {
                 html += `<span class="text-danger fw-bold">${currency} ${discountedPrice.toFixed(
                     2
                 )}</span>`;

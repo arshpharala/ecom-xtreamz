@@ -11,6 +11,9 @@ class Offer extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
+    public $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'title',
         'description',

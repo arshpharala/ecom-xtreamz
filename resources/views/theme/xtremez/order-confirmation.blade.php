@@ -15,7 +15,7 @@
       <div class="bg-white p-5 mb-4 text-center order-thankyou">
         <h1 class="mb-2 order-thankyou-heading">Thank You {{ $order->billingAddress->name ?? 'Guest' }}!</h1>
         <div class="fs-4 fw-light">
-          Your <span class="order-id">#{{ $order->order_number }}</span> is completed successfully
+          Your <span class="order-id">#{{ $order->reference_number }}</span> is completed successfully
         </div>
       </div>
 

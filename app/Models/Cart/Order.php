@@ -13,6 +13,7 @@ class Order extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'reference_number',
         'order_number',
         'user_id',
         'billing_address_id',
@@ -25,6 +26,33 @@ class Order extends Model
         'tax',
         'total'
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($order) {
+            if (empty($order->reference_number)) {
+                $order->reference_number = static::generateOrderNumber();
+            }
+        });
+    }
+
+    public static function generateOrderNumber(): string
+    {
+        $prefix = 'ORD';
+
+        $lastOrder = static::withTrashed()
+            ->where('reference_number', 'like', "$prefix-%")
+            ->orderByDesc('reference_number')
+            ->first();
+
+        $nextNumber = 1;
+
+        if ($lastOrder && preg_match('/ORD-(\d+)$/', $lastOrder->reference_number, $matches)) {
+            $nextNumber = (int) $matches[1] + 1;
+        }
+
+        return $prefix . '-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+    }
 
     public function user()
     {

@@ -29,11 +29,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ asset('theme/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
 
   <!-- SweetAlert2 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet" />
   <!-- SweetAlert2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('theme/adminlte/dist/css/adminlte.min.css') }}">
 
@@ -42,7 +44,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       display: none !important;
     }
 
-    .select2-selection__choice, .select2-results__option.select2-results__option--highlighted {
+    .select2-selection__choice,
+    .select2-results__option.select2-results__option--highlighted {
       background-color: #6c757d !important;
     }
   </style>

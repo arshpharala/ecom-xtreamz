@@ -45,7 +45,43 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-shopping-bag"></i>
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                User Management
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('admin.auth.admins.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Users</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.auth.roles.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Roles</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.auth.permissions.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Permissions</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.auth.modules.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Modules</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-search-dollar"></i>
               <p>
                 Sales
                 <i class="right fas fa-angle-left"></i>
@@ -60,16 +96,16 @@
               </li>
               <li class="nav-item">
                 <a href="{{ route('admin.sales.customers.index') }}" class="nav-link">
-                  <i class="far fa-users nav-icon"></i>
+                  <i class="far fa-circle nav-icon"></i>
                   <p>Customers</p>
                 </a>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Invoices</p>
                 </a>
-              </li>
+              </li> --}}
             </ul>
           </li>
           <li class="nav-item">
@@ -116,7 +152,7 @@
 
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-shopping-bag"></i>
+              <i class="nav-icon fas fa-poll"></i>
               <p>
                 CMS
                 <i class="right fas fa-angle-left"></i>

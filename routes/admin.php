@@ -2,8 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CMS\PageController;
+use App\Http\Controllers\Admin\Auth\RoleController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Auth\AdminController;
 use App\Http\Controllers\Admin\CMS\LocaleController;
+use App\Http\Controllers\Admin\Auth\ModuleController;
 use App\Http\Controllers\Admin\CMS\SettingController;
 use App\Http\Controllers\Admin\CMS\TinyMCEController;
 use App\Http\Controllers\Admin\Sales\OrderController;
@@ -12,13 +15,30 @@ use App\Http\Controllers\Admin\Catalog\BrandController;
 use App\Http\Controllers\Admin\Catalog\OfferController;
 use App\Http\Controllers\Admin\CMS\AttachmentController;
 use App\Http\Controllers\Admin\Sales\CustomerController;
+use App\Http\Controllers\Admin\Auth\PermissionController;
 use App\Http\Controllers\Admin\Catalog\ProductController;
 use App\Http\Controllers\Admin\Catalog\CategoryController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
 
-Route::get('/dashboard',                                    [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
+    Route::get('/',                     'dashboard')->name('dashboard');
+    Route::get('/metrics',              'metrics')->name('dashboard.metrics');
+    Route::get('/sales-chart',          'salesChart')->name('dashboard.sales-chart');
+    Route::get('/recent-orders',        'recentOrders')->name('dashboard.recent-orders');
+    Route::get('/top-products',         'topProducts')->name('dashboard.top-products');
+    Route::get('/new-customers',        'newCustomers')->name('dashboard.new-customers');
+    Route::get('/payment-methods',      'paymentMethodBreakdown')->name('dashboard.payment-methods');
+});
+
+Route::group(['prefix' => '/auth', 'as' => 'auth.'], function () {
+
+    Route::resource('modules',                             ModuleController::class);
+    Route::resource('permissions',                         PermissionController::class);
+    Route::resource('roles',                               RoleController::class);
+    Route::resource('admins',                              AdminController::class);
+});
 
 Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
@@ -35,7 +55,7 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
 
     Route::resource('product.variants',                     ProductVariantController::class);
-    
+
     Route::resource('product.variant.offers',               ProductVariantOfferController::class);
 
 

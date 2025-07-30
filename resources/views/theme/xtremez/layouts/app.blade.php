@@ -55,7 +55,7 @@
   </div>
 
   <script>
-    const appUrl = "{!! env('APP_URL') !!}";
+    const appUrl = "{{ env('APP_URL') }}";
   </script>
 
   <!-- jQuery -->

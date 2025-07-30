@@ -247,8 +247,11 @@ class ProductController extends Controller
 
     function featured()
     {
-        $slug           = request()->segment(1);
-        $page           = (new PageRepository())->findOrFailBySlug($slug);
+        $slug               = request()->segment(1);
+        $page               = (new PageRepository())->findOrFailBySlug($slug);
+        $giftSetProducts    = (new ProductRepository())->getGiftProducts();
+
+        $data['giftSetProducts']   = $giftSetProducts;
         $data['page']   = $page;
 
         return view('theme.xtremez.products.featured', $data);

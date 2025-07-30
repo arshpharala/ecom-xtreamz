@@ -25,7 +25,7 @@
                   corporate giveaways and promotional
                   gifts and giveaways.
                 </p>
-                <a href="#" class="btn btn-light btn-lg mt-3">Browse
+                <a href="{{ route('products') }}" class="btn btn-light btn-lg mt-3">Browse
                   More</a>
               </div>
             </div>
@@ -40,7 +40,7 @@
 
         </div>
         <!-- Slide 2 -->
-        <div class="hero-slide" style="background-image: url({{ asset('theme/xtremez/assets/images/banner-2.jpg') }});">
+        {{-- <div class="hero-slide" style="background-image: url({{ asset('theme/xtremez/assets/images/banner-2.jpg') }});">
           <div class="container">
             <div class="row">
               <div class="col-lg-6 text-white hero-text">
@@ -64,7 +64,7 @@
             <div><span>Innovative</span></div>
             <div><span>Sustainable</span></div>
           </div>
-        </div>
+        </div> --}}
         <!-- Add more .hero-slide divs as needed -->
       </div>
     </section>
@@ -212,7 +212,7 @@
           <div class="sustainable-content-section col-md-5 px-lg-5 text-center text-md-start">
             <div class="sustainable-content px-3 px-xl-5 animate-on-scroll" data-animate="fade-right">
               <h2 class="sustainable-heading fw-bold mb-4">Sustainable<br>Products</h2>
-              <a href="#" class="btn btn-secondary rounded-2">View
+              <a href="{{ route('products') }}" class="btn btn-secondary rounded-2">View
                 Items</a>
             </div>
           </div>

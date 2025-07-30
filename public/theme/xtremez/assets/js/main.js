@@ -201,3 +201,4 @@ $(document).on("change", "#city-select", function () {
         });
     }
 });
+

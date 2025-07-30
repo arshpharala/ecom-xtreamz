@@ -4,7 +4,7 @@
         <div class="container d-flex justify-content-between align-items-center">
           <!-- Logo -->
           <a href="{{ route('home') }}" class="navbar-brand d-flex align-items-center">
-            <img src="{{ asset('theme/xtremez/assets/images/logo.png') }}" alt="Logo" class="img-fluid">
+            <img src="{{ asset(setting('site_logo', 'theme/xtremez/assets/images/logo.png')) }}" alt="{{ setting('site_title', 'Xtremez') }}" class="img-fluid">
           </a>
 
           <!-- Main Navigation (ALWAYS in DOM, hidden on mobile by CSS) -->

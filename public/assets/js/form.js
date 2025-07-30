@@ -197,3 +197,8 @@ function getAside() {
         },
     });
 }
+
+$(".select2").select2({
+    placeholder: "Select Option",
+    width: "100%",
+});

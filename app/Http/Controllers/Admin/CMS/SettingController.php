@@ -41,6 +41,8 @@ class SettingController extends Controller
             }
         }
 
+        cache()->forget('app_settings');
+
         return response()->json([
             'message' => 'Settings updated successfully.',
             'redirect' => url()->current(),

@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Auth\PermissionController;
 use App\Http\Controllers\Admin\Catalog\ProductController;
 use App\Http\Controllers\Admin\Catalog\CategoryController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
+use App\Http\Controllers\Admin\Catalog\CouponController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
 
@@ -69,6 +70,8 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
 
     Route::resource('offers',                               OfferController::class);
     Route::delete('offers/{offer}/restore',                 [OfferController::class, 'restore'])->name('offers.restore');
+
+    Route::resource('coupons',                              CouponController::class);
 });
 
 

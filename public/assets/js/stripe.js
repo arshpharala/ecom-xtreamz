@@ -5,7 +5,7 @@ card.mount("#card-element");
 
 $(document).ready(function () {
     const $form = $("#checkout-form");
-    const $submitBtn = $("#place-order-btn");
+    const $submitBtn = $("#place-order-button");
     const originalBtnText = $submitBtn.html();
 
     $form.on("submit", function (e) {

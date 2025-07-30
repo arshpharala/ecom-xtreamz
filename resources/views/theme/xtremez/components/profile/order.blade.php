@@ -10,10 +10,10 @@
               <div class="order-item d-flex align-items-center justify-content-between py-3">
                 <div class="d-flex align-items-center">
                   <div class="order-img-box me-3">
-                    <img src="assets/images/product.png" alt="Product" class="order-img">
+                    <img src="{{ $item->productVariant->getThumbnail() }}" alt="Product" class="order-img">
                   </div>
                   <div class="order-title fw-medium">
-                    {{ $item->variant->product->translation->name ?? null }}
+                    {{ $item->productVariant->product->translation->name ?? null }}
                   </div>
                 </div>
                 <div class="order-price fw-bold text-nowrap">{{ $item->subtotal }}

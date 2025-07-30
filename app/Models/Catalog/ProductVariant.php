@@ -92,7 +92,7 @@ class ProductVariant extends Model
             'product_translations.description',
             'product_variants.price',
             'product_variants.stock',
-            
+
 
             'products.category_id',
             'products.position',
@@ -143,5 +143,15 @@ class ProductVariant extends Model
             'newest' => $query->orderBy('products.created_at', 'desc'),
             default => $query->orderBy('products.position'),
         };
+    }
+
+    function getThumbnail()
+    {
+        $attachment = $this->attachments->first();
+
+        if ($attachment) {
+            return asset('storage/'. $attachment->file_path);
+        }
+        return asset('assets/images/no-image.jpg'); // Default image if no thumbnail is set
     }
 }

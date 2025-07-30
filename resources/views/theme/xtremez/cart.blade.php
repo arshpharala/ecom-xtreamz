@@ -43,150 +43,60 @@
       <div class="row gx-4 gy-4">
         <!-- Cart List -->
         <div class="col-md-12 col-lg-7 col-xl-8">
-
           <div class="cart-list bg-white p-4">
+            @if ($variants->isNotEmpty())
+              <div class="cart-items">
+                <!-- Cart Item Start -->
+                @foreach ($variants as $variant)
+                  <div class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3"
+                    data-variant-id="{{ $variant->variant_id }}" data-price="{{ $variant->price }}"
+                    data-qty="{{ $variant->qty }}">
+                    <div class="col-auto d-none d-md-flex align-items-center">
+                      <input type="checkbox" class="cc-form-check-input form-check-input me-2" />
+                    </div>
 
-            <div class="cart-items">
-              <!-- Cart Item Start -->
-              @foreach ($variants as $variant)
-                <div class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3"
-                  data-variant-id="{{ $variant->variant_id }}" data-price="{{ $variant->price }}"
-                  data-qty="{{ $variant->qty }}">
-                  <div class="col-auto d-none d-md-flex align-items-center">
-                    <input type="checkbox" class="cc-form-check-input form-check-input me-2" />
-                  </div>
+                    <div class="col-4 col-md-4 cart-img-box">
+                      <img src="{{ asset($variant->image) }}" class="cart-img" alt="{{ $variant->name }}" />
+                    </div>
 
-                  <div class="col-4 col-md-4 cart-img-box">
-                    <img src="{{ asset($variant->image) }}" class="cart-img" alt="{{ $variant->name }}" />
-                  </div>
+                    <div class="col-9 col-md-6 cart-product-title d-flex align-self-start">
+                      <span class="fw-bold m-4">
+                        {{ $variant->name }}
+                      </span>
+                    </div>
 
-                  <div class="col-9 col-md-6 cart-product-title d-flex align-self-start">
-                    <span class="fw-bold m-4">
-                      {{ $variant->name }}
-                    </span>
-                  </div>
-
-                  <div class="align-items-end col-md col-xl d-md-flex d-none flex-column">
-                    <div class="qty-delete-box d-flex flex-row gap-2">
-                      <div class="cart-qty-box d-flex flex-column">
-                        <div class="cart-qty-val text-center">{{ $variant->qty }}</div>
-                        <button class="btn btn-trash"><i class="bi bi-trash"></i></button>
+                    <div class="align-items-end col-md col-xl d-md-flex d-none flex-column">
+                      <div class="qty-delete-box d-flex flex-row gap-2">
+                        <div class="cart-qty-box d-flex flex-column">
+                          <div class="cart-qty-val text-center">{{ $variant->qty }}</div>
+                          <button class="btn btn-trash"><i class="bi bi-trash"></i></button>
+                        </div>
+                        <div class="d-flex cart-qty-box flex-column">
+                          <button class="btn qty-btn plus border border-1"><i class="bi bi-plus"></i></button>
+                          <button class="btn qty-btn minus border border-1"><i class="bi bi-dash"></i></button>
+                        </div>
                       </div>
-                      <div class="d-flex cart-qty-box flex-column">
-                        <button class="btn qty-btn plus border border-1"><i class="bi bi-plus"></i></button>
-                        <button class="btn qty-btn minus border border-1"><i class="bi bi-dash"></i></button>
+                    </div>
+
+                    <div class="col-12 d-flex d-md-none mt-2">
+                      <div class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
+                        <div class="cart-qty-box d-flex align-items-center">
+                          <button class="btn qty-btn minus"><i class="bi bi-dash"></i></button>
+                          <div class="cart-qty-val text-center">{{ $variant->qty }}</div>
+                          <button class="btn qty-btn plus"><i class="bi bi-plus"></i></button>
+                        </div>
+                        <button class="btn btn-trash ms-2"><i class="bi bi-trash"></i></button>
                       </div>
                     </div>
                   </div>
+                @endforeach
 
-                  <div class="col-12 d-flex d-md-none mt-2">
-                    <div class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
-                      <div class="cart-qty-box d-flex align-items-center">
-                        <button class="btn qty-btn minus"><i class="bi bi-dash"></i></button>
-                        <div class="cart-qty-val text-center">{{ $variant->qty }}</div>
-                        <button class="btn qty-btn plus"><i class="bi bi-plus"></i></button>
-                      </div>
-                      <button class="btn btn-trash ms-2"><i class="bi bi-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
-              @endforeach
-
-              <!-- Cart Item End -->
-              {{-- <!-- Cart Item Start -->
-              <div class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3">
-                <!-- Select on desktop -->
-                <div class="col-auto d-none d-md-flex align-items-center">
-                  <input type="checkbox" class="cc-form-check-input form-check-input me-2" />
-                </div>
-                <!-- Image + Title (all screens) -->
-                <div class="col-4 col-md-4 cart-img-box">
-                  <img src="assets/images/product.png" class="cart-img" alt="Product" />
-                </div>
-                <div class="col-9 col-md-6 cart-product-title d-flex align-self-start">
-                  <span class="fw-bold m-4">High polo tshirt black color -
-                    Beezeeforch</span>
-                </div>
-                <!-- Qty + Delete desktop -->
-                <div class="align-items-end col-md col-xl d-md-flex d-none flex-column">
-                  <div class="qty-delete-box d-flex flex-row gap-2">
-                    <div class="cart-qty-box d-flex flex-column">
-                      <div class="cart-qty-val text-center">1</div>
-                      <button class="btn btn-trash">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                    </div>
-                    <div class="d-flex cart-qty-box flex-column">
-                      <button class="btn qty-btn plus border border-1"><i class="bi bi-plus"></i></button>
-
-                      <button class="btn qty-btn minus border border-1"><i class="bi bi-dash"></i></button>
-                    </div>
-
-                  </div>
-                </div>
-                <!-- Qty + Delete mobile -->
-                <div class="col-12 d-flex d-md-none mt-2">
-                  <div class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
-                    <div class="cart-qty-box d-flex align-items-center">
-                      <button class="btn qty-btn minus"><i class="bi bi-dash"></i></button>
-                      <div class="cart-qty-val text-center">1</div>
-                      <button class="btn qty-btn plus"><i class="bi bi-plus"></i></button>
-                    </div>
-                    <button class="btn btn-trash ms-2">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </div>
-                </div>
               </div>
-              <!-- Cart Item End -->
-              <!-- Cart Item Start -->
-              <div class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3">
-                <!-- Select on desktop -->
-                <div class="col-auto d-none d-md-flex align-items-center">
-                  <input type="checkbox" class="cc-form-check-input form-check-input me-2" />
-                </div>
-                <!-- Image + Title (all screens) -->
-                <div class="col-4 col-md-4 cart-img-box">
-                  <img src="assets/images/product.png" class="cart-img" alt="Product" />
-                </div>
-                <div class="col-9 col-md-6 cart-product-title d-flex align-self-start">
-                  <span class="fw-bold m-4">High polo tshirt black color -
-                    Beezeeforch</span>
-                </div>
-                <!-- Qty + Delete desktop -->
-                <div class="align-items-end col-md col-xl d-md-flex d-none flex-column">
-                  <div class="qty-delete-box d-flex flex-row gap-2">
-                    <div class="cart-qty-box d-flex flex-column">
-                      <div class="cart-qty-val text-center">1</div>
-                      <button class="btn btn-trash">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                    </div>
-                    <div class="d-flex cart-qty-box flex-column">
-                      <button class="btn qty-btn plus border border-1"><i class="bi bi-plus"></i></button>
-
-                      <button class="btn qty-btn minus border border-1"><i class="bi bi-dash"></i></button>
-                    </div>
-
-                  </div>
-                </div>
-                <!-- Qty + Delete mobile -->
-                <div class="col-12 d-flex d-md-none mt-2">
-                  <div class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
-                    <div class="cart-qty-box d-flex align-items-center">
-                      <button class="btn qty-btn minus"><i class="bi bi-dash"></i></button>
-                      <div class="cart-qty-val text-center">1</div>
-                      <button class="btn qty-btn plus"><i class="bi bi-plus"></i></button>
-                    </div>
-                    <button class="btn btn-trash ms-2">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </div>
-                </div>
+            @else
+              <div class="d-flex justify-content-around align-middle" style="min-height: 400px">
+                <img src="{{ asset('assets/images/empty-cart.png') }}" class="w-50" alt="Empty Cart">
               </div>
-              <!-- Cart Item End --> --}}
-
-            </div>
+            @endif
           </div>
         </div>
         <!-- Cart Summary -->

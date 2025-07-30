@@ -72,7 +72,7 @@ $(".cart-items").on("click", ".btn-trash", function () {
 // Shared function
 function updateCartVariantQty(variantId, qty, onSuccess = null) {
     $.ajax({
-        url: `/cart/${variantId}`,
+        url: `${appUrl}/cart/${variantId}`,
         method: "PUT",
         data: { variant_id: variantId, qty: qty },
         success: function (res) {

@@ -54,6 +54,10 @@
     @include('theme.xtremez.layouts.footer')
   </div>
 
+  <script>
+    const appUrl = "{!! env('APP_URL') !!}";
+  </script>
+
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 

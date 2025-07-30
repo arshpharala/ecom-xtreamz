@@ -34,7 +34,7 @@ $(".cart-items").on("click", ".btn-trash", function () {
     const variantId = $cartItem.data("variant-id");
 
     $.ajax({
-        url: `/cart/${variantId}`,
+        url: `${appUrl}/cart/${variantId}`,
         method: "DELETE",
         success: function (res) {
             $cartItem.remove();

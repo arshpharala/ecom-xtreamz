@@ -108,7 +108,7 @@ function syncSelectAll() {
 
 function addToCart(variantId, qty, callback) {
     $.ajax({
-        url: "/cart",
+        url: `${appUrl}/cart`,
         method: "POST",
         data: {
             variant_id: variantId,

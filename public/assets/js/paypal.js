@@ -8,7 +8,7 @@ paypal
             const formData = new FormData(form[0]);
 
             return $.ajax({
-                url: "/paypal/create",
+                url: `${appUrl}/paypal/create`,
                 method: "POST",
                 data: formData,
                 processData: false,
@@ -40,7 +40,7 @@ paypal
             captureData.append("order_id", data.orderID);
 
             return $.ajax({
-                url: "/paypal/capture",
+                url: `${appUrl}/paypal/capture`,
                 method: "POST",
                 data: captureData,
                 processData: false,

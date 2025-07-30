@@ -36,7 +36,7 @@ $(function () {
 
     // Load HTML component into given target
     function loadTabContent(tabId, $target, callback = null) {
-        const path = `/customers/profile/tab/${tabId}`;
+        const path = `${appUrl}/customers/profile/tab/${tabId}`;
         $.ajax({
             url: path,
             method: "GET",

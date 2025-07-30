@@ -20,11 +20,12 @@
   <link rel="canonical" href="https://www.xtremez.com/" />
 
   <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('theme/xtremez/assets/icons/apple-touch-icon.png') }}" />
-  <link rel="icon" type="image/png" sizes="32x32"
+  <link rel="apple-touch-icon" sizes="180x180"
+    href="{{ asset(setting('site_favicon', 'theme/xtremez/assets/icons/apple-touch-icon.png')) }}" />
+  {{-- <link rel="icon" type="image/png" sizes="32x32"
     href="{{ asset('theme/xtremez/assets/icons//favicon-32x32.png') }}">
   <link rel="icon" type="image/png" sizes="16x16"
-    href="{{ asset('theme/xtremez/assets/icons//favicon-16x16.png') }}">
+    href="{{ asset('theme/xtremez/assets/icons//favicon-16x16.png') }}"> --}}
 
 
   @stack('head')

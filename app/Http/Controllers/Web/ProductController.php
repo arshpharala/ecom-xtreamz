@@ -244,4 +244,13 @@ class ProductController extends Controller
 
         return view('theme.xtremez.products.clearance', $data);
     }
+
+    function featured()
+    {
+        $slug           = request()->segment(1);
+        $page           = (new PageRepository())->findOrFailBySlug($slug);
+        $data['page']   = $page;
+
+        return view('theme.xtremez.products.featured', $data);
+    }
 }

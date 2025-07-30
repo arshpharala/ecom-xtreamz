@@ -11,8 +11,10 @@ use App\Http\Controllers\Web\Profile\AddressController;
 Route::get('/',                                         [HomeController::class, 'index'])->name('home');
 Route::get('about-us',                                  [HomeController::class, 'page'])->name('about-us');
 Route::get('contact-us',                                [HomeController::class, 'page'])->name('contact-us');
+Route::get('policy',                                    [HomeController::class, 'page'])->name('policy');
 
 Route::get('clearance',                                 [ProductController::class, 'clearance'])->name('clearance');
+Route::get('featured',                                  [ProductController::class, 'featured'])->name('featured');
 Route::get('products',                                  [ProductController::class, 'index'])->name('products');
 Route::get('products/{slug}',                           [ProductController::class, 'show'])->name('products.show');
 

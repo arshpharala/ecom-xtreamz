@@ -49,6 +49,13 @@
                     <img src="{{ asset('storage/' . setting('site_logo')) }}" class="mt-2" width="100">
                   @endif
                 </div>
+                <div class="mb-4">
+                  <h5 class="mb-3">Footer Logo</h5>
+                  <input type="file" class="form-control" name="site_footer_logo" accept="image/*">
+                  @if (setting('site_footer_logo'))
+                    <img src="{{ asset('storage/' . setting('site_footer_logo')) }}" class="mt-2" width="100">
+                  @endif
+                </div>
 
                 <div class="mb-4">
                   <h5 class="mb-3">Favicon</h5>

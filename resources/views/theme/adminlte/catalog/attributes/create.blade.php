@@ -3,11 +3,11 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Create Attribute</h1>
+      <h1>@lang('crud.create_title', ['name' => 'Attribute'])</h1>
     </div>
     <div class="col-sm-6">
       <a href="{{ route('admin.catalog.attributes.index') }}" class="btn btn-secondary float-sm-right">
-        Back to List
+        @lang('crud.back_to_list', ['name' => 'Attribute'])
       </a>
     </div>
   </div>
@@ -16,7 +16,7 @@
 @section('content')
   <div class="row">
     <div class="col-md-5 col-sm-12">
-      <div class="card card-primary">
+      <div class="card card-secondary">
         <div class="card-header">
           <h3 class="card-title">Attribute Details</h3>
         </div>
@@ -46,7 +46,7 @@
           </div>
 
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Create Attribute</button>
+            <button type="submit" class="btn btn-secondary">@lang('crud.create')</button>
           </div>
         </form>
       </div>

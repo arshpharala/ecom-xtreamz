@@ -3,26 +3,26 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Edit Category</h1>
+      <h1>@lang('crud.edit_title', ['name' => 'Category'])</h1>
     </div>
     <div class="col-sm-6">
       <a href="{{ route('admin.catalog.categories.index') }}" class="btn btn-secondary float-sm-right">
-        Back to List
+        @lang('crud.back_to_list', ['name' => 'Category'])
       </a>
     </div>
   </div>
 @endsection
 
 @section('content')
-  <div class="row">
-    {{-- Main Content --}}
-    <div class="col-md-8">
-      <div class="card card-secondary">
-        <div class="card-header">
-          <h3 class="card-title">Edit Category</h3>
-        </div>
-        <form action="{{ route('admin.catalog.categories.update', $category->id) }}" method="POST" class="ajax-form"
-          enctype="multipart/form-data">
+  <form action="{{ route('admin.catalog.categories.update', $category->id) }}" method="POST" class="ajax-form"
+    enctype="multipart/form-data">
+    <div class="row">
+      {{-- Main Content --}}
+      <div class="col-md-8">
+        <div class="card card-secondary">
+          <div class="card-header">
+            <h3 class="card-title">Edit Category</h3>
+          </div>
           @csrf
           @method('PUT')
           <div class="card-body">
@@ -84,66 +84,67 @@
 
           </div>
           <div class="card-footer text-right">
-            <button type="submit" class="btn btn-primary">Update Category</button>
+            <button type="submit" class="btn btn-primary">@lang('crud.create')</button>
           </div>
+        </div>
+
+
       </div>
 
-      @include('theme.adminlte.components._metas', ['model' => $category])
-
-    </div>
-
-    {{-- Sidebar Card (Meta/Options) --}}
-    <div class="col-md-4">
-      <div class="card card-secondary">
-        <div class="card-header">
-          <h3 class="card-title">Category Options</h3>
-        </div>
-        <div class="card-body">
-
-          {{-- Position --}}
-          <div class="form-group">
-            <label for="position">Position</label>
-            <input type="number" name="position" class="form-control @error('position') is-invalid @enderror"
-              value="{{ old('position', $category->position) }}">
-            @error('position')
-              <span class="text-danger">{{ $message }}</span>
-            @enderror
+      {{-- Sidebar Card (Meta/Options) --}}
+      <div class="col-md-4">
+        <div class="card card-secondary">
+          <div class="card-header">
+            <h3 class="card-title">Category Options</h3>
           </div>
+          <div class="card-body">
 
-          {{-- Is Visible --}}
-          <div class="form-group">
-            <div class="custom-control custom-switch">
-              <input type="checkbox" name="is_visible" value="1" class="custom-control-input" id="is_visible"
-                {{ old('is_visible', $category->is_visible) ? 'checked' : '' }}>
-              <label class="custom-control-label" for="is_visible">Visible in Store</label>
+            {{-- Position --}}
+            <div class="form-group">
+              <label for="position">Position</label>
+              <input type="number" name="position" class="form-control @error('position') is-invalid @enderror"
+                value="{{ old('position', $category->position) }}">
+              @error('position')
+                <span class="text-danger">{{ $message }}</span>
+              @enderror
             </div>
-          </div>
 
-          {{-- Filterable Attributes --}}
-          <div class="form-group">
-            <label>Filterable Attributes</label>
-            <div>
-              @foreach ($attributes as $attribute)
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="attributes[]" id="attribute_{{ $attribute->id }}"
-                    value="{{ $attribute->id }}"
-                    @php
-$selected = old('attributes', $category->attributes->pluck('id')->toArray()); @endphp
-                    {{ in_array($attribute->id, $selected) ? 'checked' : '' }}>
-                  <label class="form-check-label" for="attribute_{{ $attribute->id }}">
-                    {{ $attribute->name }}
-                  </label>
-                </div>
-              @endforeach
+            {{-- Is Visible --}}
+            <div class="form-group">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" name="is_visible" value="1" class="custom-control-input" id="is_visible"
+                  {{ old('is_visible', $category->is_visible) ? 'checked' : '' }}>
+                <label class="custom-control-label" for="is_visible">Visible in Store</label>
+              </div>
             </div>
-            <small class="form-text text-muted">Check attributes to be available as filters.</small>
-            @error('attributes')
-              <span class="text-danger">{{ $message }}</span>
-            @enderror
-          </div>
 
+            {{-- Filterable Attributes --}}
+            <div class="form-group">
+              <label>Filterable Attributes</label>
+              <div>
+                @foreach ($attributes as $attribute)
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="attributes[]"
+                      id="attribute_{{ $attribute->id }}" value="{{ $attribute->id }}"
+                      @php $selected = old('attributes', $category->attributes->pluck('id')->toArray()); @endphp
+                      {{ in_array($attribute->id, $selected) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="attribute_{{ $attribute->id }}">
+                      {{ $attribute->name }}
+                    </label>
+                  </div>
+                @endforeach
+              </div>
+              <small class="form-text text-muted">Check attributes to be available as filters.</small>
+              @error('attributes')
+                <span class="text-danger">{{ $message }}</span>
+              @enderror
+            </div>
+
+          </div>
         </div>
+
+        @include('theme.adminlte.components._metas', ['model' => $category, 'grid' => 'col-md-12 col-12'])
       </div>
     </div>
-  </div>
+  </form>
 @endsection

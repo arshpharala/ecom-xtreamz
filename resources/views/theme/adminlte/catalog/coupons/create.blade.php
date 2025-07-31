@@ -3,11 +3,11 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Create Coupon</h1>
+      <h1>@lang('crud.create_title', ['name' => 'Coupon'])</h1>
     </div>
     <div class="col-sm-6">
       <a href="{{ route('admin.catalog.coupons.index') }}" class="btn btn-secondary float-sm-right">
-        Back to List
+        @lang('crud.back_to_list', ['name' => 'Coupon'])
       </a>
     </div>
   </div>
@@ -65,7 +65,7 @@
 
         </div>
         <div class="card-footer text-right">
-          <button type="submit" class="btn btn-primary">Create Coupon</button>
+          <button type="submit" class="btn btn-primary">@lang('crud.create')</button>
         </div>
       </div>
     </div>

@@ -2,10 +2,10 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1 class="m-0">Categories</h1>
+      <h1 class="m-0">@lang('crud.list_title', ['name' => 'Category'])</h1>
     </div>
     <div class="col-sm-6">
-      <a href="{{ route('admin.catalog.categories.create') }}" class="btn btn-primary float-sm-right">Create Category</a>
+      <a href="{{ route('admin.catalog.categories.create') }}" class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</a>
     </div>
   </div>
 @endsection

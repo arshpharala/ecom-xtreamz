@@ -1,22 +1,23 @@
 @extends('theme.adminlte.layouts.app')
-
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Edit Attribute</h1>
+      <h1>@lang('crud.edit_title', ['name' => 'Attribute'])</h1>
     </div>
     <div class="col-sm-6">
-      <a href="{{ route('admin.catalog.attributes.index') }}" class="btn btn-secondary float-sm-right">Back to List</a>
+      <a href="{{ route('admin.catalog.attributes.index') }}" class="btn btn-secondary float-sm-right">
+        @lang('crud.back_to_list', ['name' => 'Attribute'])
+      </a>
     </div>
   </div>
-@endsection
+  @endsection
 
 @section('content')
   <div class="row">
     <div class="col-md-5 col-sm-12">
-      <div class="card card-primary">
+      <div class="card card-secondary">
         <div class="card-header">
-          <h3 class="card-title">Edit Attribute</h3>
+          <h3 class="card-title">Attribute</h3>
         </div>
 
         <form action="{{ route('admin.catalog.attributes.update', $attribute) }}" method="POST" class="ajax-form">
@@ -49,7 +50,7 @@
           </div>
 
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Update Attribute</button>
+            <button type="submit" class="btn btn-secondary">@lang('crud.update')</button>
           </div>
         </form>
       </div>

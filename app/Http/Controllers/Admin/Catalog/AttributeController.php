@@ -56,7 +56,11 @@ class AttributeController extends Controller
         foreach ($validated['values'] as $value) {
             $attribute->values()->create(['value' => $value]);
         }
-        return response()->json(['message' => 'Attribute created successfully.', 'redirect' => route('admin.catalog.attributes.index')]);
+
+        return response()->json([
+            'message'   => __('crud.created', ['name' => 'Attribute']),
+            'redirect'  => route('admin.catalog.attributes.index')
+        ]);
     }
 
     /**
@@ -96,7 +100,11 @@ class AttributeController extends Controller
         if (!empty($removedValues)) {
             AttributeValue::where('attribute_id', $attribute->id)->whereIn('value', $removedValues)->delete();
         }
-        return response()->json(['message' => 'Attribute updated successfully.', 'redirect' => route('admin.catalog.attributes.index')]);
+
+        return response()->json([
+            'message'   => __('crud.updated', ['name' => 'Attribute']),
+            'redirect'  => route('admin.catalog.attributes.index')
+        ]);
     }
 
 
@@ -108,13 +116,22 @@ class AttributeController extends Controller
     {
         $attribute = Attribute::findOrFail($id);
         $attribute->delete();
+
+        return response()->json([
+            'message'   => __('crud.deleted', ['name' => 'Attribute']),
+            'redirect'  => route('admin.catalog.attributes.index')
+        ]);
     }
 
     public function restore($id)
     {
         $attribute = Attribute::withTrashed()->findOrFail($id);
         $attribute->restore();
-        return response()->json(['message' => 'Attribute restored.']);
+
+        return response()->json([
+            'message'   => __('crud.restored', ['name' => 'Attribute']),
+            'redirect'  => route('admin.catalog.attributes.index')
+        ]);
     }
 
 
@@ -122,13 +139,21 @@ class AttributeController extends Controller
     {
         $request->validate(['ids' => 'required|array']);
         Attribute::whereIn('id', $request->ids)->delete();
-        return response()->json(['message' => 'Attributes deleted.']);
+
+        return response()->json([
+            'message'   => __('crud.deleted', ['name' => 'Attribute']),
+            'redirect'  => route('admin.catalog.attributes.index')
+        ]);
     }
 
     public function bulkRestore(Request $request)
     {
         $request->validate(['ids' => 'required|array']);
         Attribute::withTrashed()->whereIn('id', $request->ids)->restore();
-        return response()->json(['message' => 'Attributes restored.']);
+
+        return response()->json([
+            'message'   => __('crud.restored', ['name' => 'Attribute']),
+            'redirect'  => route('admin.catalog.attributes.index')
+        ]);
     }
 }

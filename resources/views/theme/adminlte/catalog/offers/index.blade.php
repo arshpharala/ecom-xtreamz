@@ -2,11 +2,11 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Offers</h1>
+      <h1>@lang('crud.list_title', ['name' => 'Offer'])</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <button data-url="{{ route('admin.catalog.offers.create') }}" type="button" class="btn btn-primary"
-        onclick="getAside()">Create Offer</button>
+      <button data-url="{{ route('admin.catalog.offers.create') }}" type="button" class="btn btn-secondary"
+        onclick="getAside()"><i class="fa fa-plus"></i> @lang('crud.create')</button>
     </div>
   </div>
 @endsection

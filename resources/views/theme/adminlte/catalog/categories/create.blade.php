@@ -3,11 +3,11 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Create Category</h1>
+      <h1>@lang('crud.create_title', ['name' => 'Category'])</h1>
     </div>
     <div class="col-sm-6">
       <a href="{{ route('admin.catalog.categories.index') }}" class="btn btn-secondary float-sm-right">
-        Back to List
+        @lang('crud.back_to_list', ['name' => 'Category'])
       </a>
     </div>
   </div>
@@ -78,7 +78,7 @@
 
         </div>
         <div class="card-footer text-right">
-          <button type="submit" class="btn btn-primary">Create Category</button>
+          <button type="submit" class="btn btn-secondary">@lang('crud.create')</button>
         </div>
     </div>
   </div>

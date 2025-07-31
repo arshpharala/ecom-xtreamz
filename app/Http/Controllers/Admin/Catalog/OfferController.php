@@ -96,7 +96,7 @@ class OfferController extends Controller
 
 
         return response()->json([
-            'message' => 'Offer created successfully',
+            'message'   => __('crud.created', ['name' => 'Offer']),
             'redirect' => route('admin.catalog.offers.index')
         ]);
     }
@@ -148,7 +148,7 @@ class OfferController extends Controller
         }
 
         return response()->json([
-            'message'   => 'Offer updated successfully',
+            'message'   => __('crud.updated', ['name' => 'Offer']),
             'redirect'  => route('admin.catalog.offers.index')
         ]);
     }
@@ -156,10 +156,15 @@ class OfferController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Offer $offer)
+    public function destroy(string $id)
     {
+        $offer  = Offer::withTrashed()->findOrFail($id);
         $offer->delete();
-        return redirect()->route('admin.catalog.offers.index')->with('success', 'Offer deleted successfully.');
+
+        return response()->json([
+            'message'   => __('crud.deleted', ['name' => 'Offer']),
+            'redirect'  => route('admin.catalog.offers.index')
+        ]);
     }
 
     /**
@@ -167,9 +172,11 @@ class OfferController extends Controller
      */
     public function restore(string $id)
     {
-        $offfer  = Offer::withTrashed()->findOrFail($id);
-        $offfer->restore();
+        $offer  = Offer::withTrashed()->findOrFail($id);
+        $offer->restore();
 
-        return response()->json(['message' => 'Offer Restored.']);
+        return response()->json([
+            'message'   => __('crud.restored', ['name' => 'Offer']),
+        ]);
     }
 }

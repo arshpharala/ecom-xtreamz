@@ -54,11 +54,11 @@ class ProductController extends Controller
                 })
                 ->editColumn('status', function ($row) {
 
-                    if($row->deleted_at){
+                    if ($row->deleted_at) {
                         $status = '<span class="badge badge-danger">Deleted</span>';
-                    }elseif($row->is_active){
+                    } elseif ($row->is_active) {
                         $status = '<span class="badge badge-success">Active</span>';
-                    }else{
+                    } else {
                         $status = '<span class="badge badge-secondary">Inactive</span>';
                     }
 
@@ -70,7 +70,8 @@ class ProductController extends Controller
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.catalog.products.edit', $row->id);
                     $deleteUrl = route('admin.catalog.products.destroy', $row->id);
-                    return view('theme.adminlte.components._table-actions', compact('editUrl', 'deleteUrl'))->render();
+                    $restoreUrl = route('admin.catalog.products.restore', $row->id);
+                    return view('theme.adminlte.components._table-actions', compact('editUrl', 'deleteUrl', 'restoreUrl', 'row'))->render();
                 })
                 ->rawColumns(['status', 'action'])
                 ->make(true);
@@ -128,7 +129,7 @@ class ProductController extends Controller
         }
 
         return response()->json([
-            'message' => 'Product created successfully!',
+            'message' => __('crud.created', ['name' => 'Product']),
             'redirect' => route('admin.catalog.products.edit', $product->id),
         ]);
     }
@@ -198,8 +199,8 @@ class ProductController extends Controller
         Meta::store($request, $product);
 
         return response()->json([
-            'message' => 'Product updated successfully!',
-            'redirect' => route('admin.catalog.products.edit', $product->id),
+            'message'   => __('crud.updated', ['name' => 'Product']),
+            'redirect'  => route('admin.catalog.products.edit', $product->id),
         ]);
     }
 
@@ -212,27 +213,44 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $product->delete();
-        return response()->json(['message' => 'Product deleted.']);
+
+        return response()->json([
+            'message'   => __('crud.deleted', ['name' => 'Product']),
+            'redirect'  => route('admin.catalog.products.index'),
+        ]);
     }
 
     public function restore($id)
     {
         $product = Product::withTrashed()->findOrFail($id);
         $product->restore();
-        return response()->json(['message' => 'Product restored.']);
+
+        return response()->json([
+            'message'   => __('crud.restored', ['name' => 'Product']),
+            'redirect'  => route('admin.catalog.products.index'),
+        ]);
     }
 
     public function bulkDelete(Request $request)
     {
         $request->validate(['ids' => 'required|array']);
         Product::whereIn('id', $request->ids)->delete();
-        return response()->json(['message' => 'Products deleted.']);
+
+        return response()->json([
+            'message'   => __('crud.deleted', ['name' => 'Product']),
+            'redirect'  => route('admin.catalog.products.index'),
+        ]);
     }
 
     public function bulkRestore(Request $request)
     {
         $request->validate(['ids' => 'required|array']);
         Product::withTrashed()->whereIn('id', $request->ids)->restore();
-        return response()->json(['message' => 'Products restored.']);
+
+        return response()->json([
+            'message'   => __('crud.restored', ['name' => 'Product']),
+            'redirect'  => route('admin.catalog.products.index'),
+        ]);
+
     }
 }

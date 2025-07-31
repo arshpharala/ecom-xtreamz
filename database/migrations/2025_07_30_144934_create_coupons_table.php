@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('type', ['fixed', 'percentage']);
             $table->decimal('value', 10, 2);
 
-            $table->enum('type', ['cart', 'variant'])->default('cart');
+            $table->enum('scope', ['cart', 'variant'])->default('cart');
             $table->boolean('is_active')->default(true);
 
             $table->decimal('min_cart_amount', 10, 2)->nullable();

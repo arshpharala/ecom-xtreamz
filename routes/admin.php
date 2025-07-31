@@ -7,19 +7,20 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Auth\AdminController;
 use App\Http\Controllers\Admin\CMS\LocaleController;
 use App\Http\Controllers\Admin\Auth\ModuleController;
+use App\Http\Controllers\Admin\CMS\CountryController;
 use App\Http\Controllers\Admin\CMS\SettingController;
 use App\Http\Controllers\Admin\CMS\TinyMCEController;
 use App\Http\Controllers\Admin\Sales\OrderController;
 use App\Http\Controllers\Admin\CMS\CurrencyController;
 use App\Http\Controllers\Admin\Catalog\BrandController;
 use App\Http\Controllers\Admin\Catalog\OfferController;
+use App\Http\Controllers\Admin\Catalog\CouponController;
 use App\Http\Controllers\Admin\CMS\AttachmentController;
 use App\Http\Controllers\Admin\Sales\CustomerController;
 use App\Http\Controllers\Admin\Auth\PermissionController;
 use App\Http\Controllers\Admin\Catalog\ProductController;
 use App\Http\Controllers\Admin\Catalog\CategoryController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
-use App\Http\Controllers\Admin\Catalog\CouponController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
 
@@ -94,6 +95,9 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
 
     Route::resource('currencies',                           CurrencyController::class);
     Route::delete('currencies/{currency}/restore',          [CurrencyController::class, 'restore'])->name('currencies.restore');
+
+    Route::resource('countries',                            CountryController::class);
+    Route::delete('countries/{country}/restore',            [CountryController::class, 'restore'])->name('countries.restore');
 
     Route::resource('pages',                                PageController::class);
     Route::delete('pages/{product}/restore',                [PageController::class, 'restore'])->name('pages.restore');

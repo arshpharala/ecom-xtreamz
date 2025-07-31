@@ -3,10 +3,10 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1 class="m-0">Attributes</h1>
+      <h1>@lang('crud.list_title', ['name' => 'Attribute'])</h1>
     </div>
-    <div class="col-sm-6">
-      <a href="{{ route('admin.catalog.attributes.create') }}" class="btn btn-primary float-sm-right">Create Attribute</a>
+    <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
+      <a href="{{ route('admin.catalog.attributes.create') }}" class="btn btn-secondary"><i class="fa fa-plus"></i> @lang('crud.create')</a>
     </div>
   </div>
 @endsection

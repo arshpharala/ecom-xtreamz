@@ -71,8 +71,8 @@ class BrandController extends Controller
         Brand::create($data);
 
         return response()->json([
-            'message' => 'Brand created!',
-            'redirect' => route('admin.catalog.brands.index')
+            'message'   => __('crud.created', ['name' => 'Brand']),
+            'redirect'  => route('admin.catalog.brands.index')
         ]);
     }
 
@@ -90,15 +90,14 @@ class BrandController extends Controller
      */
     public function edit($id)
     {
-        $brand = Brand::findOrFail($id);
-
+        $brand          = Brand::findOrFail($id);
         $data['brand'] = $brand;
 
         $response['view'] =  view('theme.adminlte.catalog.brands.edit', $data)->render();
 
         return response()->json([
-            'success' => true,
-            'data' => $response
+            'success'   => true,
+            'data'      => $response
         ]);
     }
 
@@ -125,8 +124,8 @@ class BrandController extends Controller
         $brand->update($data);
 
         return response()->json([
-            'message' => 'Brand updated!',
-            'redirect' => route('admin.catalog.brands.index')
+            'message'   => __('crud.updated', ['name' => 'Brand']),
+            'redirect'  => route('admin.catalog.brands.index')
         ]);
     }
 
@@ -139,7 +138,10 @@ class BrandController extends Controller
         $brand = Brand::findOrFail($id);
         $brand->delete();
 
-        return response()->json(['message' => 'Brand deleted.']);
+        return response()->json([
+            'message'   => __('crud.deleted', ['name' => 'Brand']),
+            'redirect'  => route('admin.catalog.brands.index')
+        ]);
     }
 
     /**
@@ -150,6 +152,9 @@ class BrandController extends Controller
         $brand = Brand::withTrashed()->findOrFail($id);
         $brand->restore();
 
-        return response()->json(['message' => 'Brand Restored.']);
+        return response()->json([
+            'message'   => __('crud.restored', ['name' => 'Brand']),
+            'redirect'  => route('admin.catalog.brands.index')
+        ]);
     }
 }

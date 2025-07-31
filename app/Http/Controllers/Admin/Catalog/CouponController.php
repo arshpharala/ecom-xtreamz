@@ -65,6 +65,8 @@ class CouponController extends Controller
         DB::beginTransaction();
 
         try {
+            $data['scope'] = empty($request->product_variant_ids) ? 'cart' : 'variant';
+
             $coupon = Coupon::create($data);
             $coupon->variants()->sync($request->product_variant_ids ?? []);
             DB::commit();
@@ -74,8 +76,8 @@ class CouponController extends Controller
         }
 
         return response()->json([
-            'message' => 'Coupon created!',
-            'redirect' => route('admin.catalog.coupons.index')
+            'message'   => __('messages.coupon_created'),
+            'redirect'  => route('admin.catalog.coupons.index')
         ]);
     }
 
@@ -115,10 +117,11 @@ class CouponController extends Controller
 
         DB::beginTransaction();
 
-
         try {
+            $data['scope'] = empty($request->product_variant_ids) ? 'cart' : 'variant';
             $coupon->update($data);
             $coupon->variants()->sync($request->product_variant_ids ?? []);
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -126,8 +129,8 @@ class CouponController extends Controller
         }
 
         return response()->json([
-            'message' => 'Coupon updated!',
-            'redirect' => route('admin.catalog.coupons.index')
+            'message'   => __('crud.updated', ['name' => 'Coupon']),
+            'redirect'  => route('admin.catalog.coupons.index')
         ]);
     }
 
@@ -140,7 +143,7 @@ class CouponController extends Controller
         $coupon->delete();
 
         return response()->json([
-            'message' => 'Coupon updated!',
+            'message'   => __('crud.deleted', ['name' => 'Coupon']),
             'redirect' => route('admin.catalog.coupons.index')
         ]);
     }

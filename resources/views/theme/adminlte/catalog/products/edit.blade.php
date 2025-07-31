@@ -6,13 +6,13 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Edit Product</h1>
+      <h1>@lang('crud.create_title', ['name' => 'Product'])</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
       <button type="button" class="btn btn-outline-secondary" id="add-variant-row" onclick="getAside()"
         data-url="{{ route('admin.catalog.product.variants.create', $product->id) }}"> <i class="fa fa-plus"></i> Add
         Variant</button>
-      <a href="{{ route('admin.catalog.products.index') }}" class="btn btn-secondary">Back to List</a>
+      <a href="{{ route('admin.catalog.products.index') }}" class="btn btn-secondary">@lang('crud.back_to_list', ['name' => 'Product'])</a>
     </div>
   </div>
 @endsection
@@ -134,7 +134,7 @@
       </div>
     </div>
     <div class="mt-3">
-      <button type="submit" class="btn btn-primary">Update Product</button>
+      <button type="submit" class="btn btn-primary">@lang('crud.update')</button>
     </div>
   </form>
 

@@ -2,11 +2,11 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1 class="m-0">Products</h1>
+      <h1 class="m-0">@lang('crud.create_title', ['name' => 'Product'])</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <button data-url="{{ route('admin.catalog.products.create') }}" type="button" class="btn btn-primary"
-        onclick="getAside()">Create Product</button>
+      <button data-url="{{ route('admin.catalog.products.create') }}" type="button" class="btn btn-secondary"
+        onclick="getAside()"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
     </div>
   </div>
 @endsection
@@ -55,10 +55,10 @@
             searchable: false,
             render: data => `<input type="checkbox" class="row-checkbox" value="${data}">`
           },
-        //   {
-        //     data: 'id',
-        //     name: 'id'
-        //   },
+          //   {
+          //     data: 'id',
+          //     name: 'id'
+          //   },
           {
             data: 'name',
             orderable: false,

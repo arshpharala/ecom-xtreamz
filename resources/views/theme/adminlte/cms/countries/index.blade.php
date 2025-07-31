@@ -1,14 +1,17 @@
 @extends('theme.adminlte.layouts.app')
+
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1 class="m-0">@lang('crud.list_title', ['name' => 'Coupon'])</h1>
+      <h1 class="m-0">@lang('crud.list_title', ['name' => 'Country'])</h1>
     </div>
     <div class="col-sm-6">
-      <a href="{{ route('admin.catalog.coupons.create') }}" class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</a>
+      <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.countries.create') }}"
+        class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
     </div>
   </div>
 @endsection
+
 @section('content')
   <div class="row">
     <div class="col-md-12">
@@ -19,59 +22,39 @@
               <thead>
                 <tr>
                   <th>Code</th>
-                  <th>Type</th>
-                  <th>Value</th>
-                  <th>Start</th>
-                  <th>End</th>
-                  <th>Active</th>
+                  <th>Name</th>
+                  <th>Currency</th>
                   <th>Created At</th>
-                  <th></th>
+                  <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-
-              </tbody>
+              <tbody></tbody>
             </table>
-
           </div>
         </div>
       </div>
     </div>
   </div>
 @endsection
+
 @push('scripts')
   <script>
     $(function() {
       $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('admin.catalog.coupons.index') }}',
+        ajax: '{{ route('admin.cms.countries.index') }}',
         columns: [{
             data: 'code',
-            orderable: false,
-            searchable: false
+            name: 'code'
           },
           {
-            data: 'type',
-            name: 'type',
-            class: "text-uppercase"
+            data: 'name',
+            name: 'name'
           },
           {
-            data: 'value',
-            name: 'value'
-          },
-          {
-            data: 'start_at',
-            name: 'start_at'
-          },
-          {
-            data: 'end_at',
-            name: 'end_at'
-          },
-          {
-            data: 'is_active',
-            orderable: false,
-            searchable: false
+            data: 'currency_code',
+            name: 'currencies.code'
           },
           {
             data: 'created_at',
@@ -79,12 +62,12 @@
           },
           {
             data: 'action',
+            name: 'action',
             orderable: false,
             searchable: false
           }
         ]
       });
-
     });
   </script>
 @endpush

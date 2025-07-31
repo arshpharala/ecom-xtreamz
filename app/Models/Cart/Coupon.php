@@ -17,6 +17,7 @@ class Coupon extends Model
     protected $fillable = [
         'code',
         'type',
+        'scope',
         'value',
         'start_at',
         'end_at',

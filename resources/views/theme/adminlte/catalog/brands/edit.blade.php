@@ -2,14 +2,9 @@
   enctype="multipart/form-data" onsubmit="handleFormSubmission(this)">
   @csrf
   @method('PUT')
-  <div class="p-3 border-bottom flex-shrink-0" style="background:#f8f9fa;">
-    <div class="d-flex flex-row justify-content-between align-items-center">
-      <h4 id="aside-heading" class="mb-0">Edit Brand</h4>
-      <a data-widget="control-sidebar" data-slide="true" href="#" role="button">
-        <i class="fa fa-times"></i>
-      </a>
-    </div>
-  </div>
+  @include('theme.adminlte.components._aside-header', [
+      'moduleName' => __('crud.edit_title', ['name' => 'Brand']),
+  ])
 
   <!-- Scrollable Content -->
   <div class="flex-fill" style="overflow-y:auto; min-height:0; max-height:calc(100vh - 132px);">
@@ -58,13 +53,8 @@
   </div>
 
   <!-- Fixed Buttons -->
-  <div class="p-3 border-top flex-shrink-0 bg-white">
-    <div class="d-flex flex-row justify-content-between">
-      <button type="button" class="btn btn-outline-secondary" data-widget="control-sidebar"
-        data-slide="true">Cancel</button>
-      <button type="submit" class="btn btn-secondary">Save</button>
-    </div>
-  </div>
+  @include('theme.adminlte.components._aside-footer')
+
 </form>
 <script>
   $(document).ready(function() {

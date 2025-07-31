@@ -79,7 +79,11 @@ class CategoryController extends Controller
         if (!empty($validated['attributes'])) {
             $category->attributes()->sync($validated['attributes']);
         }
-        return response()->json(['message' => 'Category created successfully.', 'redirect' => route('admin.catalog.categories.index')]);
+
+        return response()->json([
+            'message'   => __('crud.created', ['name' => 'Category']),
+            'redirect'  => route('admin.catalog.categories.index')
+        ]);
     }
 
 
@@ -142,7 +146,11 @@ class CategoryController extends Controller
             $category->translations()->save($translation);
         }
         $category->attributes()->sync($validated['attributes'] ?? []);
-        return response()->json(['message' => 'Category updated successfully.', 'redirect' => route('admin.catalog.categories.index')]);
+
+        return response()->json([
+            'message'   => __('crud.updated', ['name' => 'Category']),
+            'redirect'  => route('admin.catalog.categories.index')
+        ]);
     }
 
 
@@ -155,8 +163,8 @@ class CategoryController extends Controller
         $category->delete();
 
         return response()->json([
-            'message'   => 'Category deleted successfully.',
-            'redirect'  => route('admin.catalog.categories.index'),
+            'message'   => __('crud.deleted', ['name' => 'Category']),
+            'redirect'  => route('admin.catalog.categories.index')
         ]);
     }
 
@@ -164,9 +172,10 @@ class CategoryController extends Controller
     {
         $category = Category::withTrashed()->findOrFail($id);
         $category->restore();
+
         return response()->json([
-            'message'   => 'Category restored successfully.',
-            'redirect'  => route('admin.catalog.categories.index'),
+            'message'   => __('crud.restored', ['name' => 'Category']),
+            'redirect'  => route('admin.catalog.categories.index')
         ]);
     }
 
@@ -176,8 +185,8 @@ class CategoryController extends Controller
         Category::whereIn('id', $request->ids)->delete();
 
         return response()->json([
-            'message'   => 'Categories deleted successfully.',
-            'redirect'  => route('admin.catalog.categories.index'),
+            'message'   => __('crud.deleted', ['name' => 'Category']),
+            'redirect'  => route('admin.catalog.categories.index')
         ]);
     }
 
@@ -187,8 +196,8 @@ class CategoryController extends Controller
         Category::withTrashed()->whereIn('id', $request->ids)->restore();
 
         return response()->json([
-            'message'   => 'Categories restored successfully.',
-            'redirect'  => route('admin.catalog.categories.index'),
+            'message'   => __('crud.restored', ['name' => 'Category']),
+            'redirect'  => route('admin.catalog.categories.index')
         ]);
     }
 }

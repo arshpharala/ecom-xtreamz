@@ -3,10 +3,10 @@
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1 class="m-0">Currencies</h1>
+      <h1 class="m-0">@lang('crud.list_title', ['name' => 'Currency'])</h1>
     </div>
     <div class="col-sm-6">
-      <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.currencies.create') }}" class="btn btn-primary float-sm-right">Add Currency</button>
+      <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.currencies.create') }}" class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
     </div>
   </div>
 @endsection

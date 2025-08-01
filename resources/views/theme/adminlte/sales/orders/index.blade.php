@@ -17,6 +17,7 @@
             <th>Order #</th>
             <th>Customer</th>
             <th>Email</th>
+            <th>Currency</th>
             <th>Total</th>
             <th>Status</th>
             <th>Date</th>
@@ -37,9 +38,10 @@
       serverSide: true,
       ajax: '{{ route('admin.sales.orders.index') }}',
       columns: [
-        { data: 'order_number', name: 'order_number' },
-        { data: 'customer', name: 'billing_address.name', orderable: false },
-        { data: 'email', name: 'email' },
+        { data: 'reference_number', name: 'reference_number' },
+        { data: 'user_name', name: 'users.name'},
+        { data: 'user_email', name: 'users.email' },
+        { data: 'currency_code', name: 'currencies.code' },
         { data: 'total', name: 'total' },
         { data: 'status', name: 'payment_status' },
         { data: 'created_at', name: 'created_at' },

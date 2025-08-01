@@ -13,11 +13,11 @@ class CouponService
     {
         $coupon = Coupon::where('code', $code)->where('is_active', true)->first();
 
-        if (!$coupon) return ['valid' => false, 'message' => 'Invalid or inactive coupon'];
+        if (!$coupon) return ['valid' => false, 'message' => 'Invalid coupon'];
 
         $now = Carbon::now();
         if ($coupon->start_at && $now->lt($coupon->start_at)) {
-            return ['valid' => false, 'message' => 'Coupon is not active yet'];
+            return ['valid' => false, 'message' => 'Invalid coupon'];
         }
 
         if ($coupon->end_at && $now->gt($coupon->end_at)) {
@@ -68,7 +68,7 @@ class CouponService
     }
 
 
-    
+
     public function applyCoupon(string $code, float $cartTotal, $user = null, array $variantIds = [])
     {
         $validation = $this->validateCoupon($code, $cartTotal, $user, $variantIds);

@@ -1144,6 +1144,7 @@ main {
   background: var(--color-background);
   max-height: 580px;
   min-height: 240px;
+  overflow: hidden;
 }
 .video-section .video-container .video-bg {
   width: 100%;

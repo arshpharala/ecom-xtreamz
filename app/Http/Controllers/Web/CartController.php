@@ -37,11 +37,11 @@ class CartController extends Controller
                 return $transform;
             });
 
-        $subtotal = $this->cart->getSubtotal();
-        $taxes = 0;
-        $total = $subtotal + $taxes;
+        $cart               = $this->cart->get();
+        $data['cart']       = $cart;
+        $data['variants']   = $variants;
 
-        return view('theme.xtremez.cart', compact('variants', 'subtotal', 'taxes', 'total'));
+        return view('theme.xtremez.cart', $data);
     }
 
     public function store(Request $request)
@@ -105,19 +105,26 @@ class CartController extends Controller
 
         $variant->cart_item = $this->cart->getItem($variant->id);
 
+        $message = $this->cart->refresh();
+
         return response()->json([
             'success' => true,
             'variant' => $variant,
-            'cart'    => $this->cart->get()
+            'cart'    => $this->cart->get(),
+            'message' => $message, // <- include if not null
         ]);
     }
 
     public function destroy(string $variantId)
     {
         $this->cart->remove($variantId);
+
+        $message = $this->cart->refresh();
+
         return response()->json([
             'success' => true,
-            'cart' => $this->cart->get()
+            'cart'    => $this->cart->get(),
+            'message' => $message,
         ]);
     }
 }

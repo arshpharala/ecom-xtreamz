@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\CouponController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\HomeController;
@@ -41,4 +42,7 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
 
     Route::get('cities/{province}',                     [AddressController::class, 'getCities'])->name('province.cities');
     Route::get('areas/{city}',                          [AddressController::class, 'getAreas'])->name('city.areas');
+
+    Route::post('/coupon/apply',                        [CouponController::class, 'apply']);
+    Route::post('/coupon/remove',                       [CouponController::class, 'remove']);
 });

@@ -22,8 +22,10 @@
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180"
     href="{{ asset(setting('site_favicon', 'theme/xtremez/assets/icons/apple-touch-icon.png')) }}" />
+  <link rel="stylesheet"
+    href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
   {{-- <link rel="icon" type="image/png" sizes="32x32"
-    href="{{ asset('theme/xtremez/assets/icons//favicon-32x32.png') }}">
+    href="{{ asset('theme/xtremez/assets/icons//favicon-32x32.png') }}">    
   <link rel="icon" type="image/png" sizes="16x16"
     href="{{ asset('theme/xtremez/assets/icons//favicon-16x16.png') }}"> --}}
 
@@ -66,6 +68,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- SweetAlert2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Select2 -->
+  <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
 
   @stack('scripts')
 

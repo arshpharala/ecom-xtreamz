@@ -28,6 +28,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
+        'is_guest',
         'last_login_at',
         'password_changed_at',
         'stripe_id',
@@ -53,7 +54,17 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'is_guest' => 'boolean'
         ];
+    }
+
+    public function scopeGuest($query){
+        return $query->where('is_guest', 1);
+    }
+
+    public function scopeActive($query){
+        return $query->where('users.is_active', 1);
     }
 
     public function detail()

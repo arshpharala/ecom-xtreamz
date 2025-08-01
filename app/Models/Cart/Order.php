@@ -83,4 +83,11 @@ class Order extends Model
     {
         return $this->hasMany(OrderLineItem::class);
     }
+
+    function scopeWithJoins($query)
+    {
+        return $query->leftJoin('addresses', 'addresses.id', 'orders.billing_address_id')
+            ->leftJoin('users', 'users.id', 'orders.user_id')
+            ->leftJoin('currencies', 'currencies.id', 'orders.currency_id');
+    }
 }

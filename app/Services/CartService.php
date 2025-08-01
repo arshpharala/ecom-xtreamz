@@ -4,6 +4,8 @@ namespace App\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
+use App\Models\Cart\Coupon;
+use App\Services\CouponService;
 
 class CartService
 {
@@ -11,108 +13,182 @@ class CartService
 
     public function get(): Collection
     {
-        $cart = [
-            'subTotal' => $this->getSubTotal(),
-            'tax'   => $this->getTax(),
-            'total' => $this->getTotal(),
-            'count' => $this->getItemCount(),
-            'items' => $this->getItems(),
-        ];
+        $items         = $this->getItems();
+        $subTotal      = $this->getSubTotal();
+        $discount      = $this->getDiscount();
+        $tax           = $this->getTax();
+        $total         = $this->getTotal();
 
-        return collect($cart);
+        return collect([
+            'items'     => $items,
+            'subTotal'  => $subTotal,
+            'discount'  => $discount,
+            'tax'       => $tax,
+            'total'     => $total,
+            'count'     => $this->getItemCount(),
+            'coupon'    => $this->getCoupon(),
+        ]);
     }
 
-    // Get all cart items
-    public function getItems()
+    function getTax(): float
+    {
+        $subTotal      = $this->getSubTotal(); // 500
+        $discount      = $this->getDiscount(); // 10% of 500 = 50
+        $discountedSub = max($subTotal - $discount, 0); // 500 - 50 = 450
+        $tax           = $this->getTaxOnAmount($discountedSub); // 5% of 450 = 22.5
+
+        return (float) $tax;
+    }
+
+    public function getSubTotal(): float
+    {
+        return array_sum(array_column($this->getItems(), 'subtotal'));
+    }
+
+    public function getDiscount(): float
+    {
+        $data = $this->getCoupon();
+        return $data['discount'] ?? 0;
+    }
+
+    public function getTaxOnAmount(float $amount): float
+    {
+        $taxRate = setting('tax_rate', 5); // Assume 5% default
+        return round($amount * ($taxRate / 100), 2);
+    }
+
+    public function getTotal(): float
+    {
+        $subTotal = $this->getSubTotal();
+        $discounted = max($subTotal - $this->getDiscount($subTotal), 0);
+        return $discounted + $this->getTaxOnAmount($discounted);
+    }
+
+    public function getItems(): array
     {
         return Session::get($this->sessionKey, []);
     }
 
-    // Get a single item by rowId
-    public function getItem($rowId)
+    public function getItem(string $variantId): ?array
     {
-        $cart = $this->getItems();
-        return $cart[$rowId] ?? null;
+        return $this->getItems()[$variantId] ?? null;
     }
 
-    // Add item to cart
-    public function add($rowId, $qty = 1, $price = null, array $options = [])
+    public function add(string $variantId, int $qty = 1, float $price = null, array $options = []): void
     {
         $cart = $this->getItems();
 
-        if (isset($cart[$rowId])) {
-            $cart[$rowId]['qty'] += $qty;
+        if (isset($cart[$variantId])) {
+            $cart[$variantId]['qty'] += $qty;
         } else {
-            $cart[$rowId] = [
+            $cart[$variantId] = [
                 'qty'     => $qty,
                 'price'   => $price,
                 'options' => $options,
             ];
         }
 
-        $cart[$rowId]['subtotal'] = $cart[$rowId]['price'] * $cart[$rowId]['qty'];
+        $cart[$variantId]['subtotal'] = $cart[$variantId]['price'] * $cart[$variantId]['qty'];
+
         $this->save($cart);
     }
 
-    // Update item quantity
-    public function update($rowId, $qty)
+    public function update(string $variantId, int $qty): void
     {
         $cart = $this->getItems();
 
-        if (isset($cart[$rowId])) {
-            $cart[$rowId]['qty']      = $qty;
-            $cart[$rowId]['subtotal'] = $cart[$rowId]['price'] * $qty;
+        if (isset($cart[$variantId])) {
+            $cart[$variantId]['qty'] = $qty;
+            $cart[$variantId]['subtotal'] = $cart[$variantId]['price'] * $qty;
             $this->save($cart);
         }
-
-        return $cart;
     }
 
-    // Remove an item from cart
-    public function remove($rowId)
+    public function remove(string $variantId): void
     {
         $cart = $this->getItems();
-        unset($cart[$rowId]);
+        unset($cart[$variantId]);
         $this->save($cart);
-        return $cart;
     }
 
-    // Clear the entire cart
-    public function clear()
+    public function clear(): void
     {
         Session::forget($this->sessionKey);
+        $this->removeCoupon();
     }
 
-    // Save cart to session
-    public function save($cart)
+    protected function save(array $cart): void
     {
         Session::put($this->sessionKey, $cart);
     }
 
-    // Count total items
-    public function getItemCount()
+    public function getItemCount(): int
     {
-        $cart = $this->getItems();
-        return array_sum(array_column($cart, 'qty'));
-    }
-
-    // Get subtotal (total without tax/fees)
-    public function getSubtotal()
-    {
-        $cart = $this->getItems();
-        return array_sum(array_column($cart, 'subtotal'));
-    }
-
-    // Get total tax (tax/fees)
-    public function getTax()
-    {
-        return array_sum(array_map(fn($item) => $item['options']['tax'] ?? 0, $this->getItems()));
+        return array_sum(array_column($this->getItems(), 'qty'));
     }
 
 
-    // Get total (can be extended for tax, shipping etc.)
-    public function getTotal()
+    public function applyCoupon(string $code, $user = null): array
     {
-        return $this->getSubtotal() + $this->getTax();
+        $items = $this->getItems();
+        $variantIds = array_keys($items);
+        $cartTotal = $this->getSubTotal();
+
+        $result = app(CouponService::class)->applyCoupon($code, $cartTotal, $user, $variantIds);
+
+        if ($result['success']) {
+            Session::put('applied_coupon', [
+                'code'      => $result['coupon']->code,
+                'id'        => $result['coupon']->id,
+                'discount'  => $result['discount'],
+                'type'      => $result['coupon']->type,
+                'value'     => $result['coupon']->value,
+            ]);
+        }
+
+        return $result;
+    }
+
+    public function removeCoupon(): void
+    {
+        Session::forget('applied_coupon');
+    }
+
+    public function getCoupon(): ?array
+    {
+        return Session::get('applied_coupon');
+    }
+
+    public function hasCoupon(): bool
+    {
+        return Session::has('applied_coupon');
+    }
+
+    public function refresh(): ?string
+    {
+        $items = $this->getItems();
+        $subTotal = $this->getSubTotal();
+
+        if ($this->hasCoupon()) {
+            $couponData = $this->getCoupon();
+            $coupon = \App\Models\Cart\Coupon::find($couponData['id']);
+
+            if (!$coupon) {
+                $this->removeCoupon();
+                return 'Coupon was removed: no longer valid.';
+            }
+
+            if (empty($items)) {
+                $this->removeCoupon();
+                return 'Coupon was removed: your cart is empty.';
+            }
+
+            if ($subTotal < ($coupon->min_cart_amount ?? 0)) {
+                $this->removeCoupon();
+                return 'Coupon was removed: subtotal is below the required minimum.';
+            }
+        }
+
+        return null; // no issues
     }
 }

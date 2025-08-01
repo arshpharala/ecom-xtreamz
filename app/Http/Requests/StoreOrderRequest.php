@@ -49,7 +49,7 @@ class StoreOrderRequest extends FormRequest
 
         $validator->after(function ($validator) {
             if (!Auth::check() && $this->filled('email')) {
-                if (User::where('email', $this->input('email'))->exists()) {
+                if (User::where('email', $this->input('email'))->where('is_guest', 0)->exists()) {
                     $validator->errors()->add('email', 'An account already exists with this email. Please log in to continue.');
                 }
             }

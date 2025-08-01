@@ -105,17 +105,32 @@
             <ul class="list-unstyled mb-4">
               <li class="d-flex justify-content-between mb-2">
                 <span>Subtotal</span>
-                <span class="cart-sub-total">{{ number_format($subtotal, 2) }} {{ active_currency() }}</span>
+                <span class="cart-sub-total">{{ number_format($cart['subTotal'], 2) }} {{ active_currency() }}</span>
               </li>
               <li class="d-flex justify-content-between mb-2">
                 <span>Taxes</span>
-                <span class="cart-taxes">{{ number_format($taxes, 2) }} {{ active_currency() }}</span>
+                <span class="cart-taxes">{{ number_format($cart['tax'], 2) }} {{ active_currency() }}</span>
               </li>
+              @if (session('applied_coupon'))
+                <li class="d-flex justify-content-between mb-2 align-items-center">
+                  <div>
+                    <span>Coupon ({{ session('applied_coupon.code') }})</span>
+                    <a href="#" class="text-danger p-0 ms-2 remove-coupon">
+                      <i class="bi bi-x-circle"></i> Remove
+                    </a>
+                  </div>
+                  <span class="text-success">
+                    -{{ number_format(session('applied_coupon.discount'), 2) }} {{ active_currency() }}
+                  </span>
+                </li>
+              @endif
+
               <li class="d-flex justify-content-between fw-bold border-top pt-2">
                 <span>Total</span>
-                <span class="cart-total text-black">{{ number_format($total, 2) }} {{ active_currency() }}</span>
+                <span class="cart-total text-black">{{ number_format($cart['total'], 2) }} {{ active_currency() }}</span>
               </li>
             </ul>
+
 
             <form class="cc-form w-100 py-4">
               <div class="input-group border border-black">

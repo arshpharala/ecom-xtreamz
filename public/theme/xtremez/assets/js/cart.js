@@ -25,6 +25,9 @@ $(".cart-items").on("click", ".qty-btn", function () {
 
     updateCartVariantQty(variantId, newQty, function (res) {
         updateCartCount(res.cart);
+        if (res.message) {
+            alert(res.message); // or use toast
+        }
     });
 });
 
@@ -37,6 +40,9 @@ $(".cart-items").on("click", ".btn-trash", function () {
         url: `${appUrl}/cart/${variantId}`,
         method: "DELETE",
         success: function (res) {
+            if (res.message) {
+                alert(res.message); // or use toast
+            }
             $cartItem.remove();
             syncSelectAll();
 
@@ -128,7 +134,6 @@ function addToCart(variantId, qty, callback) {
     });
 }
 
-
 $(document).on("click", ".add-to-cart-btn", function () {
     const $btn = $(this);
 
@@ -169,5 +174,36 @@ $(document).on("click", ".buy-now-btn", function () {
         } else {
             alert("Failed to proceed.");
         }
+    });
+});
+
+$(document).on("click", ".btn-apply", function () {
+    const code = $(".cart-summary input").val();
+
+    $.ajax({
+        url: `${appUrl}/ajax/coupon/apply`,
+        method: "POST",
+        data: { code: code },
+        success: function (res) {
+            alert("Coupon applied!");
+            window.location.reload();
+        },
+        error: function (xhr) {
+            alert(xhr.responseJSON.message || "Failed to apply coupon.");
+        },
+    });
+});
+
+$(document).on("click", ".remove-coupon", function () {
+    $.ajax({
+        url: `${appUrl}/ajax/coupon/remove`,
+        method: "POST",
+        success: function () {
+            alert("Coupon removed");
+            window.location.reload();
+        },
+        error: function () {
+            alert("Failed to remove coupon");
+        },
     });
 });

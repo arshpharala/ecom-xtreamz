@@ -6,6 +6,7 @@
 		background: var(--color-background);
 		max-height: 580px; // Keeps a nice vertical limit
 		min-height: 240px; // Ensures it never gets too short
+        overflow: hidden;
 
 		.video-bg {
 			width: 100%;

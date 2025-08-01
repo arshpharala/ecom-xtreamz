@@ -15,7 +15,20 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $orders = Order::with('billingAddress')->withTrashed();
+            $orders = Order::withTrashed()->withJoins()
+                ->select(
+                    'orders.id',
+                    'orders.reference_number',
+                    'orders.total',
+                    'orders.payment_status',
+                    'orders.created_at',
+                    'orders.deleted_at',
+                    'users.name as user_name',
+                    'users.email as user_email',
+                    'currencies.code as currency_code'
+                )
+                ->groupBy('orders.id');
+
             return DataTables::of($orders)
                 ->addColumn('action', function ($row) {
                     $viewUrl = route('admin.sales.orders.show', $row->id);
@@ -33,8 +46,6 @@ class OrderController extends Controller
                 ->addColumn('status', fn($row) => $row->payment_status === 'paid'
                     ? '<span class="badge badge-success">Paid</span>'
                     : '<span class="badge badge-warning">' . ucfirst($row->payment_status) . '</span>')
-                ->addColumn('customer', fn($row) => $row->billingAddress->name ?? 'Guest')
-                ->addColumn('email', fn($row) => $row->email ?? '-')
                 ->rawColumns(['action', 'status'])
                 ->make(true);
         }

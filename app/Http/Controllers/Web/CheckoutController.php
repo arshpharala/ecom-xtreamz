@@ -7,20 +7,21 @@ use App\Models\User;
 use Stripe\PaymentIntent;
 use App\Models\Cart\Order;
 use Illuminate\Support\Str;
+use App\Models\CMS\Currency;
 use App\Models\CMS\Province;
 use Illuminate\Http\Request;
 use App\Services\CartService;
-use App\Services\Paypal\PaypalService;
 use App\Services\StripeService;
+use App\Models\Cart\CouponUsage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\Cart\BillingAddress;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Paypal\PaypalService;
 use App\Repositories\AddressRepository;
 use App\Http\Requests\StoreOrderRequest;
-use App\Models\CMS\Currency;
 
 class CheckoutController extends Controller
 {
@@ -94,11 +95,23 @@ class CheckoutController extends Controller
 
     function createUser($request)
     {
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            if (!$user->is_active || $user->is_guest) {
+                return $user;
+            }
+
+            abort(403, 'An account with this email already exists. Please log in to continue.');
+        }
+
+
         $data = [
             'name'      => $request->name,
             'email'     => $request->email,
             'password'  => bcrypt(Str::uuid()),
-            'is_active' => 0
+            'is_active' => 0,
+            'is_guest'  => true
         ];
 
         return $this->userRepository->create($data);
@@ -186,6 +199,14 @@ class CheckoutController extends Controller
                 return back()->withErrors(['stripe' => 'Card payment failed.']);
             }
 
+            if ($this->cart->hasCoupon()) {
+                CouponUsage::create([
+                    'coupon_id' => $this->cart->getCoupon()['id'],
+                    'user_id'   => $user->id,
+                    'order_id'  => $order->id
+                ]);
+            }
+
             $this->cart->clear();
 
             return redirect()->route('order.summary', $order->id);
@@ -224,6 +245,14 @@ class CheckoutController extends Controller
             'payment_status' => 'paid',
             'external_reference' => $intent->id,
         ]);
+
+        if ($this->cart->hasCoupon()) {
+            CouponUsage::create([
+                'coupon_id' => $this->cart->getCoupon()['id'],
+                'user_id'   => $user->id,
+                'order_id'  => $order->id
+            ]);
+        }
 
         $this->cart->clear();
 
@@ -284,6 +313,14 @@ class CheckoutController extends Controller
             'payment_status'       => 'paid',
             'external_reference'   => $paypalResponse['id'],
         ]);
+
+        if ($this->cart->hasCoupon()) {
+            CouponUsage::create([
+                'coupon_id' => $this->cart->getCoupon()['id'],
+                'user_id'   => $order->user->id,
+                'order_id'  => $order->id
+            ]);
+        }
 
         $this->cart->clear();
 

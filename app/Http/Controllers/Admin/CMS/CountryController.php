@@ -29,7 +29,7 @@ class CountryController extends Controller
         if (request()->ajax()) {
 
             $query = Country::query()
-                ->select('countries.id', 'countries.code', 'countries.name', 'currencies.code as currency_code', 'countries.created_at')
+                ->select('countries.id', 'countries.code', 'countries.name', 'countries.tax_label', 'countries.tax_percentage', 'currencies.code as currency_code', 'countries.created_at')
                 ->leftJoin('currencies', 'currencies.id', 'countries.currency_id')
                 ->groupBy('countries.id');
 
@@ -57,7 +57,7 @@ class CountryController extends Controller
      */
     public function create()
     {
-        $data['currencies']     = Currency::get();
+        $data['currencies']     = Currency::pluck('code', 'id');
         $response['view']       = view('theme.adminlte.cms.countries.create', $data)->render();
 
         return response()->json([
@@ -100,9 +100,9 @@ class CountryController extends Controller
     public function edit(string $id)
     {
         $country                = Country::findOrFail($id);
-        $currencies             = Currency::get();
-        $data['country']       = $country;
-        $data['currencies']       = $currencies;
+        $currencies             = Currency::pluck('code', 'id');
+        $data['country']        = $country;
+        $data['currencies']     = $currencies;
         $response['view']       = view('theme.adminlte.cms.countries.edit', $data)->render();
 
         return response()->json([

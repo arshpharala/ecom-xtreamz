@@ -24,10 +24,12 @@ class UpdateCountryRequest extends FormRequest
         $id = $this->route('country');
 
         return [
-            'code'          => 'required|string|size:2|unique:countries,code,' . $id,
-            'name'          => 'required|string|unique:countries,name,' . $id,
-            'currency_id'   => 'required|exists:currencies,id',
-            'icon'          => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
+            'code'              => 'required|string|size:2|unique:countries,code,' . $id,
+            'name'              => 'required|string|unique:countries,name,' . $id,
+            'currency_id'       => 'required|exists:currencies,id',
+            'tax_percentage'    => 'required',
+            'tax_label'         => 'required|in:VAT,TAX,GST',
+            'icon'              => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
         ];
     }
 }

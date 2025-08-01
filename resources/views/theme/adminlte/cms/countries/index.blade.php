@@ -24,6 +24,8 @@
                   <th>Code</th>
                   <th>Name</th>
                   <th>Currency</th>
+                  <th>Tax Label</th>
+                  <th>Tax Percentage</th>
                   <th>Created At</th>
                   <th>Action</th>
                 </tr>
@@ -55,6 +57,14 @@
           {
             data: 'currency_code',
             name: 'currencies.code'
+          },
+          {
+            data: 'tax_label',
+            name: 'tax_label'
+          },
+          {
+            data: 'tax_percentage',
+            name: 'tax_percentage'
           },
           {
             data: 'created_at',

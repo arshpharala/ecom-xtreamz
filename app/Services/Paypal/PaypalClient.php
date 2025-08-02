@@ -2,10 +2,12 @@
 
 namespace App\Services\Paypal;
 
+use Illuminate\Support\Str;
+use App\Models\CMS\PaymentGateway;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class PaypalClient
 {
@@ -14,15 +16,27 @@ class PaypalClient
     protected $clientSecret;
     protected $baseUri;
     protected $mode;
+    protected $currency;
 
     public function __construct()
     {
-        $this->clientId     = env('PAYPAL_CLIENT_ID');
-        $this->clientSecret = env('PAYPAL_SECRET');
-        $this->mode         = env('PAYPAL_MODE', 'sandbox');
-        $this->baseUri      = env('PAYPAL_BASE_URI', $this->mode === 'sandbox'
+        $gateway = PaymentGateway::where('gateway', 'paypal')->active()->first();
+
+        $this->clientId     = $gateway->key;
+        $this->clientSecret = $gateway->secret;
+
+        if (!$this->clientId || !$this->clientSecret) {
+            throw new \RuntimeException('PayPal credentials not set in DB');
+        }
+
+        $this->mode = Str::lower($gateway->additional['mode'] ?? 'sandbox');
+        $this->currency = Str::upper($gateway->additional['currency'] ?? 'USD');
+
+        $this->baseUri = $gateway->additional['base_uri'] ?? (
+            $this->mode === 'sandbox'
             ? 'https://api-m.sandbox.paypal.com'
-            : 'https://api-m.paypal.com');
+            : 'https://api-m.paypal.com'
+        );
 
         $this->client = $this->buildClient();
     }

@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\Catalog\CategoryController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
+use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/',                     'dashboard')->name('dashboard');
@@ -101,6 +102,8 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
 
     Route::resource('pages',                                PageController::class);
     Route::delete('pages/{product}/restore',                [PageController::class, 'restore'])->name('pages.restore');
+
+    Route::resource('payment-gateways',                     PaymentGatewayController::class)->only(['store']);
 
     Route::post('upload/tinymce',                           [TinyMCEController::class, 'upload'])->name('upload.tinymce');
 });

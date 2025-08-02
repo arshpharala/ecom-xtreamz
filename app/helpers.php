@@ -41,6 +41,13 @@ if (!function_exists('cart_items_count')) {
     }
 }
 
+if (!function_exists('locale')) {
+    function locale()
+    {
+        return Locale::where('code', app()->getLocale())->first();
+    }
+}
+
 if (!function_exists('active_locals')) {
     function active_locals()
     {
@@ -93,5 +100,19 @@ if (!function_exists('price_convert')) {
 
         $rate = exchange_rate($from, $to);
         return round($amount * $rate, 2);
+    }
+}
+if (!function_exists('mask_sensitive')) {
+    /**
+     * Mask the sentive string
+     *
+     * @param mixed $value
+     * @return string
+     */
+    function mask_sensitive(mixed $value): string
+    {
+        if (!$value) return '';
+        $length = strlen($value);
+        return substr($value, 0, 6) . str_repeat('*', max($length - 10, 4)) . substr($value, -4);
     }
 }

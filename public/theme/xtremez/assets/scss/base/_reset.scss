@@ -1,0 +1,6 @@
+.dropdown-item.active,
+.dropdown-item:active {
+    color: var(--color-light);
+    text-decoration: none;
+    background-color: var(--color-primary-dark);
+}

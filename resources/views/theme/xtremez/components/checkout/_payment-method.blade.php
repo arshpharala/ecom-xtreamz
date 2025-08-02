@@ -1,29 +1,30 @@
 <label class="form-label mb-2">Pay With</label>
 
-<div class="py-1">
-  <label class="form-check-label payment-method-box d-flex align-items-center w-100 mb-0 p-3" for="payCard"
-    style="cursor:pointer;">
-    <input class="form-check-input theme-radio me-3" type="radio" name="payment_method" value="card" id="payCard"
-      checked style="margin-left:0;">
-    <span class="flex-grow-1">Credit / Debit Card</span>
-    <span class="d-flex align-items-center gap-2">
-      <img src="{{ asset('theme/xtremez/assets/icons/visa.png') }}" alt="Visa" width="32">
-      <img src="{{ asset('theme/xtremez/assets/icons/mastercard.png') }}" alt="Mastercard" width="32">
-      <img src="{{ asset('theme/xtremez/assets/icons/amex.png') }}" alt="Amex" width="32">
-    </span>
-  </label>
+@foreach ($gateways as $gateway)
+  @php
+    $id = 'pay_' . $gateway->gateway;
+    $label = ucfirst($gateway->additional['display_name'] ?? $gateway->gateway);
+    $icons = [
+        'stripe' => ['visa.png', 'mastercard.png', 'amex.png'],
+        'paypal' => ['paypal.webp'],
+        'razorpay' => ['razorpay.png'],
+    ];
+  @endphp
 
-</div>
+  <div class="py-1">
+    <label class="form-check-label payment-method-box d-flex align-items-center w-100 mb-0 p-3" for="{{ $id }}"
+      style="cursor:pointer;">
+      <input class="form-check-input theme-radio me-3" type="radio" name="payment_method" value="{{ $gateway->gateway }}"
+        id="{{ $id }}" {{ old('payment_method', 'stripe') === $gateway->gateway ? 'checked' : '' }}
+        style="margin-left:0;">
 
-<div class="py-1">
-  <label class="form-check-label payment-method-box d-flex align-items-center w-100 mb-0 p-3"
-    for="payPaypal"cursor:pointer;">
-    <input class="form-check-input theme-radio me-3" type="radio" name="payment_method" value="paypal" id="payPaypal"
-      style="margin-left:0;">
-    <span class="flex-grow-1">Paypal</span>
-    <span class="d-flex align-items-center gap-2">
-      <img src="{{ asset('theme/xtremez/assets/icons/paypal.webp') }}" alt="PayPal" width="32">
-    </span>
-  </label>
+      <span class="flex-grow-1">{{ $label }}</span>
 
-</div>
+      <span class="d-flex align-items-center gap-2">
+        @foreach ($icons[$gateway->gateway] ?? [] as $icon)
+          <img src="{{ asset('theme/xtremez/assets/icons/' . $icon) }}" alt="{{ $label }}" width="32">
+        @endforeach
+      </span>
+    </label>
+  </div>
+@endforeach

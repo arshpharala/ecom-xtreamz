@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="direction:{{ locale()->direction ?? 'ltr' }}">
 
 <head>
   <meta charset="UTF-8">
@@ -25,7 +25,7 @@
   <link rel="stylesheet"
     href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
   {{-- <link rel="icon" type="image/png" sizes="32x32"
-    href="{{ asset('theme/xtremez/assets/icons//favicon-32x32.png') }}">    
+    href="{{ asset('theme/xtremez/assets/icons//favicon-32x32.png') }}">
   <link rel="icon" type="image/png" sizes="16x16"
     href="{{ asset('theme/xtremez/assets/icons//favicon-16x16.png') }}"> --}}
 

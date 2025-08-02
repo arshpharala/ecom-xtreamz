@@ -25,7 +25,7 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method'    => 'required|in:card,paypal',
+            'payment_method'    => 'required|in:stripe,paypal',
             'card_token'        => 'nullable|string',
             'saved_card_id'     => 'nullable|exists:user_cards,id',
             'saved_address_id'  => 'nullable|exists:addresses,id',

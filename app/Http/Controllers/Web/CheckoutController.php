@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\Paypal\PaypalService;
 use App\Repositories\AddressRepository;
 use App\Http\Requests\StoreOrderRequest;
+use App\Models\CMS\PaymentGateway;
 
 class CheckoutController extends Controller
 {
@@ -42,28 +43,17 @@ class CheckoutController extends Controller
     {
         abort_if($this->cart->getItemCount() == 0, 404);
 
-        if (Auth::check()) {
-            return $this->showAuthForm($request);
-        } else {
-            return $this->showGuestForm();
-        }
-    }
-
-    public function showGuestForm()
-    {
-        $data['provinces'] = Province::where('country_id', 1)->get();
-        return view('theme.xtremez.checkout-guest', $data);
-    }
-
-    public function showAuthForm(Request $request)
-    {
-        $user                   = $request->user();
-        $data['user']           = $user;
-        $data['addresses']      = $user->addresses()->latest()->get();
-        $data['cards']          = $user->cards()->latest()->get();
         $data['provinces']      = Province::where('country_id', 1)->get();
+        $data['gateways']       = PaymentGateway::active()->get();
 
-        return view('theme.xtremez.checkout-auth', $data);
+        if (Auth::check()) {
+            $user                   = $request->user();
+            $data['user']           = $user;
+            $data['addresses']      = $user->addresses()->latest()->get();
+            $data['cards']          = $user->cards()->latest()->get();
+        }
+
+        return view('theme.xtremez.checkout', $data);
     }
 
     public function processOrder(StoreOrderRequest $request)
@@ -78,7 +68,7 @@ class CheckoutController extends Controller
             $this->storeLineItems($order);
 
             $response = match ($request->payment_method) {
-                'card'   => $this->handleStripePayment($request, $order, $user),
+                'stripe'   => $this->handleStripePayment($request, $order, $user),
                 'paypal' => $this->handlePaypalPayment($request, $order, $user), // replace stub
                 default => abort(400, 'Invalid payment method'),
             };
@@ -272,8 +262,8 @@ class CheckoutController extends Controller
             'purchase_units' => [
                 [
                     'amount' => [
-                        'currency_code' => env('PAYPAL_CURRENCY'),
-                        'value'         => price_convert($order->total, active_currency(), env('PAYPAL_CURRENCY')),
+                        'currency_code' => $paypal->getCurrency(),
+                        'value'         => price_convert($order->total, active_currency(), $paypal->getCurrency()),
                     ]
                 ]
             ]

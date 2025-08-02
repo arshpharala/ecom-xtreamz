@@ -9,6 +9,7 @@
 @import "base/variables"; // allows $primary to be imported everywhere
 @import "base/mixins";
 @import "base/base";
+@import "base/reset";
 @import "components/buttons";
 @import "components/form";
 @import "components/rich-text";

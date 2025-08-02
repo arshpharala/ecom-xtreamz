@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\CMS;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CMS\PaymentGateway;
 
 class SettingController extends Controller
 {
@@ -13,8 +14,14 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $settings = Setting::pluck('value', 'key')->toArray();
-        return view('theme.adminlte.settings.index', compact('settings'));
+        $gateways               = PaymentGateway::get();
+        $settings               = Setting::pluck('value', 'key')->toArray();
+
+        $data['gateways']       = $gateways;
+        $data['settings']       = $settings;
+        $data['gatwayConfig']   = config('payment_gateways') ?? [];
+
+        return view('theme.adminlte.settings.index', $data);
     }
 
     /**

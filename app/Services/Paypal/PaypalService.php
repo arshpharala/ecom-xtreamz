@@ -35,4 +35,8 @@ class PaypalService extends PaypalClient
     {
         return $this->get("/v2/checkout/orders/{$orderId}");
     }
+
+    function getCurrency(){
+        return $this->currency;
+    }
 }

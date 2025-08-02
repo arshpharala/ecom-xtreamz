@@ -2,18 +2,34 @@
 
 namespace App\Services;
 
-use App\Models\Address;
 use Stripe\Stripe;
 use App\Models\User;
 use Stripe\Customer;
+use App\Models\Address;
 use Stripe\PaymentIntent;
 use Stripe\PaymentMethod;
+use App\Models\CMS\PaymentGateway;
 
 class StripeService
 {
+    protected $gateway;
+
     public function __construct()
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $this->gateway = PaymentGateway::where('gateway', 'stripe')
+            ->where('is_active', true)
+            ->first();
+
+        if (!$this->gateway || !$this->gateway->secret) {
+            throw new \Exception("Stripe gateway is not configured.");
+        }
+
+        Stripe::setApiKey($this->gateway->secret);
+    }
+
+    public function getGateway(): ?PaymentGateway
+    {
+        return $this->gateway;
     }
 
     public function ensureStripeCustomer(User $user): void

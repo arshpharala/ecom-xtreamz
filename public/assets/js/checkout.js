@@ -7,7 +7,7 @@ $(document).ready(function () {
     $('input[name="payment_method"]').on("change", function () {
         const value = $(this).val();
 
-        if (value === "card") {
+        if (value === "stripe") {
             $cardSection.show();
             $paypalContainer.hide();
             $placeOrderBtn.show();
@@ -30,4 +30,3 @@ $(document).ready(function () {
         $placeOrderBtn.hide();
     }
 });
-                

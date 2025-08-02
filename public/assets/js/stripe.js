@@ -12,7 +12,7 @@ $(document).ready(function () {
         const selectedMethod = $('input[name="payment_method"]:checked').val();
         const usingSavedCard = $('input[name="card_token"]:checked').length > 0;
 
-        if (selectedMethod !== "card" || usingSavedCard) {
+        if (selectedMethod !== "stripe" || usingSavedCard) {
             return;
         }
 

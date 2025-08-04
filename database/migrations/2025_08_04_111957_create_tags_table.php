@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->boolean('is_active')->default(true);
-            $table->integer('postion')->default(99);
+            $table->integer('position')->default(99);
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

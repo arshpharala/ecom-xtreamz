@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\Catalog\AttributeController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
 use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
+use App\Http\Controllers\CMS\TagController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/',                     'dashboard')->name('dashboard');
@@ -102,6 +103,9 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
 
     Route::resource('pages',                                PageController::class);
     Route::delete('pages/{product}/restore',                [PageController::class, 'restore'])->name('pages.restore');
+
+    Route::resource('tags',                                 TagController::class);
+    Route::delete('tags/{product}/restore',                 [TagController::class, 'restore'])->name('tags.restore');
 
     Route::resource('payment-gateways',                     PaymentGatewayController::class)->only(['store']);
 

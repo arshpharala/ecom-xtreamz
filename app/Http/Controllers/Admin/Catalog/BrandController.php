@@ -74,7 +74,7 @@ class BrandController extends Controller
             'message'   => __('crud.created', ['name' => 'Brand']),
             'redirect'  => route('admin.catalog.brands.index')
         ]);
-    }
+    }   
 
 
     /**

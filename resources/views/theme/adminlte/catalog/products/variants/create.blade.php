@@ -52,34 +52,34 @@
         </div>
         <div class="col-6">
 
-            <div class="form-group">
-              <label for="length">Length</label>
-              <input type="number" name="length" class="form-control" step="0.01">
-            </div>
+          <div class="form-group">
+            <label for="length">Length</label>
+            <input type="number" name="length" class="form-control" step="0.01">
+          </div>
         </div>
         <div class="col-6">
-            <div class="form-group">
-              <label for="width">Width</label>
-              <input type="number" name="width" class="form-control" step="0.01">
-            </div>
+          <div class="form-group">
+            <label for="width">Width</label>
+            <input type="number" name="width" class="form-control" step="0.01">
+          </div>
         </div>
         <div class="col-6">
-            <div class="form-group">
-              <label for="height">Height</label>
-              <input type="number" name="height" class="form-control" step="0.01">
-            </div>
+          <div class="form-group">
+            <label for="height">Height</label>
+            <input type="number" name="height" class="form-control" step="0.01">
+          </div>
         </div>
         <div class="col-6">
-            <div class="form-group">
-              <label for="weight">Weight (kgs)</label>
-              <input type="number" name="weight" class="form-control" step="0.01">
-            </div>
+          <div class="form-group">
+            <label for="weight">Weight (kgs)</label>
+            <input type="number" name="weight" class="form-control" step="0.01">
+          </div>
         </div>
         <div class="col-6">
-            <div class="form-group">
-              <label for="weight">Qty (per carton)</label>
-              <input type="number" name="qty_per_carton" class="form-control">
-            </div>
+          <div class="form-group">
+            <label for="weight">Qty (per carton)</label>
+            <input type="number" name="qty_per_carton" class="form-control">
+          </div>
         </div>
         <div class="col-12">
 
@@ -89,8 +89,8 @@
             <div class="upload__box">
               <div class="upload__btn-box">
                 <label class="upload__btn btn btn-outline-primary">Upload images
-                  <input type="file" name="attachments[]" multiple data-min-length="3" min="3" data-max_length="5" class="upload__inputfile"
-                    accept="image/*" />
+                  <input type="file" name="attachments[]" multiple data-min-length="3" min="3"
+                    data-max_length="5" class="upload__inputfile" accept="image/*" />
                 </label>
               </div>
               <div class="upload__img-wrap"></div>
@@ -98,6 +98,16 @@
           </div>
 
 
+        </div>
+
+        <div class="col-12">
+          <h5 class="fs-3 mb-3x ">Tags</h5>
+          @foreach ($tags as $tag)
+            <div class="form-check">
+              <input class="form-check-input cc-form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}">
+              <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
+            </div>
+          @endforeach
         </div>
 
       </div>

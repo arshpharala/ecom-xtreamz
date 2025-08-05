@@ -24,11 +24,13 @@ class UpdateProductVariantRequest extends FormRequest
         $variantId = $this->route('variant') ?? $this->route('id') ?? $this->variant;
 
         return [
-            'sku' => 'required|string|max:255|unique:product_variants,sku,'.$variantId,
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'attributes' => 'required|array',
-            'attributes.*' => 'required|exists:attribute_values,id',
+            'sku'           => 'required|string|max:255|unique:product_variants,sku,' . $variantId,
+            'price'         => 'required|numeric',
+            'stock'         => 'required|integer',
+            'attributes'    => 'required|array',
+            'attributes.*'  => 'required|exists:attribute_values,id',
+            'tags'          => 'required|array',
+            'tags.*'        => 'required|exists:tags,id',
         ];
     }
 }

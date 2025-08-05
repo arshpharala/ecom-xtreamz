@@ -120,6 +120,16 @@
 
         </div>
 
+        <div class="col-12">
+          <h5 class="fs-3 mb-3x ">Tags</h5>
+          @foreach ($tags as $tag)
+            <div class="form-check">
+              <input class="form-check-input cc-form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}" @checked($tag->checked)>
+              <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
+            </div>
+          @endforeach
+        </div>
+
       </div>
 
 

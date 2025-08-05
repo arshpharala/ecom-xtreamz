@@ -12,6 +12,7 @@ use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
 use App\Repositories\PageRepository;
 use App\Models\Catalog\ProductVariant;
+use App\Models\CMS\Tag;
 use App\Repositories\ProductRepository;
 
 class ProductController extends Controller
@@ -37,6 +38,7 @@ class ProductController extends Controller
 
 
         $brands = Brand::active()->orderBy('position')->get();
+        $tags = Tag::active()->orderBy('position')->get();
 
         if (request()->filled('category_id')) {
             $activeCategory = $categories->where('id', request()->category_id)->first();
@@ -46,10 +48,10 @@ class ProductController extends Controller
             $activeCategory = $categories->first();
         }
 
-
         $data['activeCategory'] = $activeCategory;
-        $data['categories'] = $categories;
-        $data['brands']     = $brands;
+        $data['categories']     = $categories;
+        $data['brands']         = $brands;
+        $data['tags']           = $tags;
 
         return view('theme.xtremez.products.index', $data);;
     }

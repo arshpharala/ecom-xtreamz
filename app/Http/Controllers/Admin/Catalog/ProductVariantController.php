@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalog\ProductVariant;
 use App\Http\Requests\StoreProductVariantRequest;
 use App\Http\Requests\UpdateProductVariantRequest;
+use App\Models\CMS\Tag;
 
 class ProductVariantController extends Controller
 {
@@ -19,7 +20,7 @@ class ProductVariantController extends Controller
 
         if (request()->ajax()) {
 
-            $variants = ProductVariant::where('product_id', $product->id)->with('attributeValues.attribute', 'attachments')->get();
+            $variants = ProductVariant::where('product_id', $product->id)->with('tags', 'attributeValues.attribute', 'attachments')->get();
 
             $data['product'] = $product;
             $data['variants'] = $variants;
@@ -48,8 +49,11 @@ class ProductVariantController extends Controller
             ];
         });
 
+        $tags = Tag::get();
+
         $data['attributes'] = $attributes;
-        $data['product'] = $product;
+        $data['product']    = $product;
+        $data['tags']       = $tags;
 
         $response['view'] = view('theme.adminlte.catalog.products.variants.create', $data)->render();
 
@@ -76,6 +80,7 @@ class ProductVariantController extends Controller
             $variant->save();
 
             $variant->attributeValues()->sync(array_values($request['attributes']));
+            $variant->tags()->sync(array_values($request['tags']));
 
             $variant->shipping()->updateOrCreate(
                 [],
@@ -115,8 +120,7 @@ class ProductVariantController extends Controller
     public function edit($productId, $id)
     {
         $product = Product::findOrFail($productId);
-        $variant = ProductVariant::where('product_id', $product->id)->findOrFail($id);
-
+        $variant = ProductVariant::with('tags')->where('product_id', $product->id)->findOrFail($id);
         $category = $product->category->load('attributes.values');
 
         $attributes = $category->attributes->map(function ($attr) {
@@ -127,9 +131,15 @@ class ProductVariantController extends Controller
             ];
         });
 
+        $tags = Tag::get()->map(function($tag) use($variant){
+            $tag->checked = $variant->tags->contains($tag->id);
+            return $tag;
+        });
+
         $data['attributes'] = $attributes;
-        $data['product'] = $product;
-        $data['variant'] = $variant;
+        $data['product']    = $product;
+        $data['variant']    = $variant;
+        $data['tags']       = $tags;
 
         $response['view'] = view('theme.adminlte.catalog.products.variants.edit', $data)->render();
 
@@ -155,6 +165,7 @@ class ProductVariantController extends Controller
             $variant->save();
 
             $variant->attributeValues()->sync(array_values($request['attributes']));
+            $variant->tags()->sync(array_values($request['tags']));
 
             $variant->shipping()->updateOrCreate(
                 [],

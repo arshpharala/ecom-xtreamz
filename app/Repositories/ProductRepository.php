@@ -19,6 +19,7 @@ class ProductRepository
             'price_min',
             'price_max',
             'offer',
+            'tags',
             'search',
             'sort_by'
         ]);

@@ -97,19 +97,12 @@
             <!-- Tags -->
             <div class="mb-4">
               <h5 class="fs-3 mb-3x ">Tags</h5>
+              @foreach ($tags as $tag)
               <div class="form-check">
-                <input class="form-check-input cc-form-check-input" type="checkbox" id="tag1">
-                <label class="form-check-label" for="tag1">Sustainable</label>
+                <input class="form-check-input cc-form-check-input" type="checkbox" id="tag_{{ $tag->id }}">
+                <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
               </div>
-              <div class="form-check">
-                <input class="form-check-input cc-form-check-input" type="checkbox" id="tag2">
-                <label class="form-check-label" for="tag2">New
-                  Arrival</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input cc-form-check-input" type="checkbox" id="tag3">
-                <label class="form-check-label" for="tag3">On Sale</label>
-              </div>
+              @endforeach
             </div>
 
             <!-- Price Range -->
@@ -136,7 +129,7 @@
           <!-- Pagination -->
           <nav class="d-flex justify-content-center my-5 pagination-section">
             <ul class="pagination mb-0">
-              
+
             </ul>
           </nav>
         </main>

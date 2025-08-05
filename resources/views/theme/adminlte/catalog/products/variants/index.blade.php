@@ -59,6 +59,16 @@
         @endforeach
       </div>
 
+      {{-- Tags --}}
+      <div class="mb-2 d-flex flex-wrap">
+        @foreach ($variant->tags as $tag)
+          <span class="badge badge-secondary text-white mr-2 mb-2">
+            <i class="fa fa-tag"></i>
+            {{ $tag->name }}
+          </span>
+        @endforeach
+      </div>
+
       {{-- Linked Offers --}}
       @if ($variant->offers->count())
         <div class="mt-2 border-top pt-2">

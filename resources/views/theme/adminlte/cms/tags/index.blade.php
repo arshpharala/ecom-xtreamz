@@ -5,8 +5,8 @@
       <h1>@lang('crud.list_title', ['name' => 'Tags'])</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <button data-url="{{ route('admin.cms.tags.create') }}" type="button" class="btn btn-secondary"
-        onclick="getAside()"><i class="fa fa-plus"></i> @lang('crud.create')</button>
+      <button data-url="{{ route('admin.cms.tags.create') }}" type="button" class="btn btn-secondary" onclick="getAside()"><i
+          class="fa fa-plus"></i> @lang('crud.create')</button>
     </div>
   </div>
 @endsection
@@ -35,14 +35,13 @@
         processing: true,
         serverSide: true,
         ajax: '{{ route('admin.cms.tags.index') }}',
-        columns: [
-          {
+        columns: [{
             data: 'name',
             name: 'name'
           },
           {
-            data: 'is_active',
-            name: 'is_active'
+            data: 'status',
+            name: 'status_sort'
           },
           {
             data: 'position',

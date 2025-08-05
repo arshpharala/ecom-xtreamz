@@ -37,7 +37,7 @@
     <div class="container">
 
       <!-- Mobile Title -->
-      <h2 class="fs-2 mb-4 d-lg-none">
+      <h2 class="fs-2 mb-4 d-lg-none"> 
         {{ $productVariant->name }}
       </h2>
 

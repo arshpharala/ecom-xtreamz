@@ -1,5 +1,5 @@
-<form action="{{ route('admin.cms.tags.update', $brand->id) }}" method="post" class="ajax-form"
-  enctype="multipart/form-data" onsubmit="handleFormSubmission(this)">
+<form action="{{ route('admin.cms.tags.update', $tag->id) }}" method="post" class="ajax-form" enctype="multipart/form-data"
+  onsubmit="handleFormSubmission(this)">
   @csrf
   @method('PUT')
   @include('theme.adminlte.components._aside-header', [
@@ -14,21 +14,21 @@
         <div class="col-md-12">
           <div class="form-group">
             <label>Name</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name', $brand->name ?? '') }}"
+            <input type="text" name="name" class="form-control" value="{{ old('name', $tag->name ?? '') }}"
               required>
           </div>
 
           <div class="form-group">
             <label>Status</label>
             <select name="is_active" class="form-control">
-              <option value="1" @if (old('is_active', $brand->is_active ?? 1)) selected @endif>Active</option>
-              <option value="0" @if (isset($brand) && !$brand->is_active) selected @endif>Inactive</option>
+              <option value="1" @if (old('is_active', $tag->is_active ?? 1)) selected @endif>Active</option>
+              <option value="0" @if (isset($tag) && !$tag->is_active) selected @endif>Inactive</option>
             </select>
           </div>
           <div class="form-group">
             <label>Position</label>
             <input type="number" name="position" class="form-control"
-              value="{{ old('position', $brand->position ?? 0) }}">
+              value="{{ old('position', $tag->position ?? 0) }}">
           </div>
         </div>
       </div>

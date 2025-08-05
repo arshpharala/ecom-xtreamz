@@ -2,6 +2,7 @@
 
 namespace App\Models\Catalog;
 
+use App\Models\CMS\Tag;
 use App\Models\Attachment;
 use App\Models\Catalog\Product;
 use App\Models\Catalog\AttributeValue;
@@ -38,6 +39,11 @@ class ProductVariant extends Model
     public function attachments()
     {
         return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_product_variant');
     }
 
     public function offers()
@@ -119,6 +125,10 @@ class ProductVariant extends Model
                 $filters['offer'] ?? null,
                 fn($q) =>
                 $q->whereHas('offers', fn($q2) => $q2->active())
+            )
+            ->when(
+                $filters['tags'] ?? null,
+                fn($q, $v) => $q->whereHas('tags', fn($q2) => $q2->whereIn('name', $v) )
             );
     }
 

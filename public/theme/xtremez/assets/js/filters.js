@@ -199,7 +199,6 @@ $(function () {
         });
     }
 
-
     // ===============================
     // 8. Render Attribute Filters Dynamically
     // ===============================
@@ -269,6 +268,15 @@ $(function () {
             () => fetchProducts(1)
         );
         fetchProducts(1);
+    });
+
+    // Search
+    let searchTimer;
+    $(".search-input").on("keyup", function () {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () {
+            fetchProducts(1);
+        }, 500);
     });
 
     // Static filters (brand, color, sort, search)

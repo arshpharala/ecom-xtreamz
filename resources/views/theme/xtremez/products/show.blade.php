@@ -37,7 +37,7 @@
     <div class="container">
 
       <!-- Mobile Title -->
-      <h2 class="fs-2 mb-4 d-lg-none"> 
+      <h2 class="fs-2 mb-4 d-lg-none">
         {{ $productVariant->name }}
       </h2>
 
@@ -88,13 +88,20 @@
 
           <div class="price fs-3 py-3" id="priceDisplay">
             @if ($hasOffer)
-              <span class="text-danger fw-bold">{{ active_currency() }} {{ number_format($discountedPrice, 2) }}</span>
+              <span class="text-danger fw-bold">
+                {{ price_format(active_currency(), number_format($discountedPrice, 2)) }}
+                {{-- {{ active_currency() }} {{ number_format($discountedPrice, 2) }} --}}
+            </span>
               <span class="text-muted text-decoration-line-through ms-2">
-                {{ active_currency() }} {{ number_format($productVariant->price, 2) }}
-              </span>
-              <span class="badge bg-secondary ms-2">{{ $productVariant->offer_data['label'] }}</span>
+                  {{-- {{ active_currency() }} {{ number_format($productVariant->price, 2) }} --}}
+                {{ price_format(active_currency(), number_format($productVariant->price, 2)) }}
+            </span>
+            <span class="badge bg-secondary ms-2">{{ $productVariant->offer_data['label'] }}</span>
             @else
-              <span>{{ active_currency() }} {{ number_format($productVariant->price, 2) }}</span>
+            <span>
+                {{-- {{ active_currency() }} {{ number_format($productVariant->price, 2) }} --}}
+                  {{ price_format(active_currency(), number_format($productVariant->price, 2)) }}
+                </span>
             @endif
           </div>
 

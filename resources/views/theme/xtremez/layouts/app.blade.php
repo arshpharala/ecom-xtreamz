@@ -13,6 +13,12 @@
   <meta name="keywords" content="Corporate Gifts, Promotional Products, Sustainable Giveaways, Custom Gifts, Xtremez">
   <meta name="author" content="Xtremez" />
 
+  <meta name="currency" content="{{ active_currency(true)->code }}">
+  <meta name="currency-position" content="{{ active_currency(true)->currency_position }}">
+  <meta name="decimal" content="{{ active_currency(true)->decimal }}">
+  <meta name="decimal-separator" content="{{ active_currency(true)->decimal_separator }}">
+  <meta name="group-separator" content="{{ active_currency(true)->group_separator }}">
+
   <title>Corporate Gifts & Promotional Items in UAE | Xtreme
     Gifting</title>
 
@@ -22,8 +28,7 @@
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180"
     href="{{ asset(setting('site_favicon', 'theme/xtremez/assets/icons/apple-touch-icon.png')) }}" />
-  <link rel="stylesheet"
-    href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
   {{-- <link rel="icon" type="image/png" sizes="32x32"
     href="{{ asset('theme/xtremez/assets/icons//favicon-32x32.png') }}">
   <link rel="icon" type="image/png" sizes="16x16"
@@ -66,6 +71,9 @@
 
   <!-- Bootstrap 5 Bundle JS (includes Popper) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="{{ asset('assets/js/currency.js') }}"></script>
+
   <!-- SweetAlert2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Select2 -->
@@ -74,6 +82,7 @@
   @stack('scripts')
 
   <!-- custom JS -->
+
   <script src="{{ asset('theme/xtremez/assets/js/main.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/cart.js') }}"></script>
   <script src="{{ asset('assets/js/form.js') }}"></script>

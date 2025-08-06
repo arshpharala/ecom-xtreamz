@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Web\CouponController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\CouponController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\CheckoutController;
@@ -45,4 +45,6 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
 
     Route::post('/coupon/apply',                        [CouponController::class, 'apply']);
     Route::post('/coupon/remove',                       [CouponController::class, 'remove']);
+
+    Route::get('currencies',                            [HomeController::class, 'currencies']);
 });

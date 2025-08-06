@@ -60,7 +60,7 @@
   <section class="product-listing-page py-2">
     <div class="container">
 
-      <div class="row gx-5">
+      <div class="row">
         <!-- Sidebar: Filters -->
         <aside class="col-lg-3 col-md-4 mb-4 d-none d-md-block">
           <div class="sidebar-filters pe-4">

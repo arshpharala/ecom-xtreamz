@@ -2,6 +2,7 @@
 
 use App\Models\CMS\Locale;
 use App\Models\CMS\Country;
+use App\Models\CMS\Currency;
 use Illuminate\Support\Str;
 use App\Services\CartService;
 
@@ -56,8 +57,11 @@ if (!function_exists('active_locals')) {
 }
 
 if (!function_exists('active_currency')) {
-    function active_currency()
+    function active_currency($obj = false)
     {
+        if ($obj) {
+            return Currency::first();
+        }
         return 'AED';
     }
 }
@@ -66,6 +70,35 @@ if (!function_exists('active_country')) {
     function active_country()
     {
         return Country::first(); // for now send like this
+    }
+}
+
+if (!function_exists('price_format')) {
+    /**
+     * Format price according to currency settings.
+     *
+     * @param string $ccy  Currency code (e.g., AED, USD, EUR)
+     * @param float  $amt  Amount to format
+     * @return string
+     */
+    function price_format(string $ccy, float $amt): string
+    {
+        $currency = Currency::where('code', $ccy)->first();
+
+        if (!$currency) {
+            return number_format($amt, 2); // fallback
+        }
+
+        $formattedAmount = number_format(
+            $amt,
+            $currency->decimal ?? 2,
+            $currency->decimal_separator ?? '.',
+            $currency->group_separator ?? ','
+        );
+
+        return $currency->currency_position === 'Left'
+            ? $currency->symbol . $formattedAmount
+            : $formattedAmount . $currency->symbol;
     }
 }
 

@@ -53,4 +53,19 @@ class HomeController extends Controller
 
         return view('theme.xtremez.page', $data);
     }
+
+    function currencies()
+    {
+        $currencies = \App\Models\CMS\Currency::all()->keyBy('code')->map(function ($currency) {
+            return [
+                'symbol'            => $currency->symbol,
+                'decimal'           => (int) $currency->decimal,
+                'decimal_separator' => $currency->decimal_separator,
+                'group_separator'   => $currency->group_separator,
+                'currency_position' => $currency->currency_position,
+            ];
+        });
+
+        return response()->json(['data' => $currencies]);
+    }
 }

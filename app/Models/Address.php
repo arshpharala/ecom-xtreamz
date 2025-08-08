@@ -33,8 +33,17 @@ class Address extends Model
         return $this->belongsTo(City::class);
     }
 
-    public function render(): mixed
+    public function render(bool $plain = false): mixed
     {
+        if ($plain) {
+            return "{$this->address},
+                    {$this->area->name},
+                    {$this->area->landmark}
+                    {$this->city->name},
+                    {$this->province->name},
+                    {$this->country->name }";
+        }
+
         return "<div>
                     {$this->name}, {$this->phone}
                     <br />

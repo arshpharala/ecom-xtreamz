@@ -84,6 +84,11 @@ class Order extends Model
         return $this->hasMany(OrderLineItem::class);
     }
 
+    public function couponUsages()
+    {
+        return $this->hasMany(CouponUsage::class);
+    }
+
     function scopeWithJoins($query)
     {
         return $query->leftJoin('addresses', 'addresses.id', 'orders.billing_address_id')

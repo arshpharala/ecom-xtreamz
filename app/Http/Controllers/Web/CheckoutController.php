@@ -69,7 +69,7 @@ class CheckoutController extends Controller
 
             $response = match ($request->payment_method) {
                 'stripe'   => $this->handleStripePayment($request, $order, $user),
-                'paypal' => $this->handlePaypalPayment($request, $order, $user), // replace stub
+                'paypal' => $this->handlePaypalPayment($request, $order, $user),
                 default => abort(400, 'Invalid payment method'),
             };
 
@@ -78,7 +78,7 @@ class CheckoutController extends Controller
             return $response;
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th; // rethrow the exception to be handled by the global exception handler
+            throw $th;
         }
     }
 

@@ -48,3 +48,9 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
 
     Route::get('currencies',                            [HomeController::class, 'currencies']);
 });
+
+
+Route::get('email', function(){
+    $order = \App\Models\Cart\Order::oldest()->first();
+    return view('email.order-success', compact('order'));
+});

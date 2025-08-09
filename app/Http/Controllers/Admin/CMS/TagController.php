@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\CMS;
+namespace App\Http\Controllers\Admin\CMS;
 
 use App\Models\CMS\Tag;
 use Illuminate\Http\Request;

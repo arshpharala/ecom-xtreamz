@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CMS\TagController;
 use App\Http\Controllers\Admin\CMS\PageController;
 use App\Http\Controllers\Admin\Auth\RoleController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -21,10 +22,10 @@ use App\Http\Controllers\Admin\Auth\PermissionController;
 use App\Http\Controllers\Admin\Catalog\ProductController;
 use App\Http\Controllers\Admin\Catalog\CategoryController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
+use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
-use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
-use App\Http\Controllers\CMS\TagController;
+use App\Http\Controllers\Admin\CMS\EmailController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/',                     'dashboard')->name('dashboard');
@@ -102,12 +103,15 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
     Route::delete('countries/{country}/restore',            [CountryController::class, 'restore'])->name('countries.restore');
 
     Route::resource('pages',                                PageController::class);
-    Route::delete('pages/{product}/restore',                [PageController::class, 'restore'])->name('pages.restore');
+    Route::delete('pages/{page}/restore',                   [PageController::class, 'restore'])->name('pages.restore');
 
     Route::resource('tags',                                 TagController::class);
-    Route::delete('tags/{product}/restore',                 [TagController::class, 'restore'])->name('tags.restore');
+    Route::delete('tags/{tag}/restore',                     [TagController::class, 'restore'])->name('tags.restore');
 
     Route::resource('payment-gateways',                     PaymentGatewayController::class)->only(['store']);
+
+    Route::resource('emails',                               EmailController::class);
+    Route::delete('emails/{email}/restore',                 [EmailController::class, 'restore'])->name('emails.restore');
 
     Route::post('upload/tinymce',                           [TinyMCEController::class, 'upload'])->name('upload.tinymce');
 });

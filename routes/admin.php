@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CMS\TagController;
 use App\Http\Controllers\Admin\CMS\PageController;
 use App\Http\Controllers\Admin\Auth\RoleController;
+use App\Http\Controllers\Admin\CMS\EmailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Auth\AdminController;
 use App\Http\Controllers\Admin\CMS\LocaleController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\Catalog\BrandController;
 use App\Http\Controllers\Admin\Catalog\OfferController;
 use App\Http\Controllers\Admin\Catalog\CouponController;
 use App\Http\Controllers\Admin\CMS\AttachmentController;
+use App\Http\Controllers\Admin\CMS\EmailAdminController;
 use App\Http\Controllers\Admin\Sales\CustomerController;
 use App\Http\Controllers\Admin\Auth\PermissionController;
 use App\Http\Controllers\Admin\Catalog\ProductController;
@@ -25,7 +27,6 @@ use App\Http\Controllers\Admin\Catalog\AttributeController;
 use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
-use App\Http\Controllers\Admin\CMS\EmailController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/',                     'dashboard')->name('dashboard');
@@ -112,6 +113,8 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
 
     Route::resource('emails',                               EmailController::class);
     Route::delete('emails/{email}/restore',                 [EmailController::class, 'restore'])->name('emails.restore');
+
+    Route::resource('email.admins',                         EmailAdminController::class);
 
     Route::post('upload/tinymce',                           [TinyMCEController::class, 'upload'])->name('upload.tinymce');
 });

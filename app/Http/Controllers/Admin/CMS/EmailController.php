@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin\CMS;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEmailRequest;
+use App\Http\Requests\StoreEmailAdminRequest;
+use App\Models\Admin;
 use App\Models\CMS\Email;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -40,9 +43,9 @@ class EmailController extends Controller
                 ->editColumn('is_active', function ($row) {
                     if ($row->deleted_at) {
                         return '<span class="badge badge-danger">Deleted</span>';
-                    }elseif ($row->is_active) {
+                    } elseif ($row->is_active) {
                         return '<span class="badge badge-success">Active</span>';
-                    }else{
+                    } else {
                         return '<span class="badge badge-warning">Inactive</span>';
                     }
                 })
@@ -57,15 +60,20 @@ class EmailController extends Controller
      */
     public function create()
     {
-        //
+        return view('theme.adminlte.cms.emails.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEmailRequest $request)
     {
-        //
+        Email::create($request->validated());
+
+        return response()->json([
+            'message' => __('crud.created', ['name' => 'Email']),
+            'redirect' => route('admin.cms.emails.index')
+        ]);
     }
 
     /**
@@ -81,7 +89,17 @@ class EmailController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $email = Email::with('to', 'cc', 'bcc', 'exclude')->findOrFail($id);
+
+        $adminReceipients = $email->recipients()->get();
+
+        $admins = Admin::whereNotIn('id', $adminReceipients->pluck('id'))->pluck('email', 'id');
+
+        $data['email'] = $email;
+        $data['admins'] = $admins;
+        $data['adminRecipients'] = $adminReceipients;
+
+        return view('theme.adminlte.cms.emails.edit', $data);
     }
 
     /**

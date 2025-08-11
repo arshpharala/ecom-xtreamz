@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Sales;
 
 use App\Models\Cart\Order;
 use Illuminate\Http\Request;
+use App\Services\EmailService;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -79,6 +80,12 @@ class OrderController extends Controller
             'lineItems.productVariant.attributeValues.attribute',
             'lineItems.productVariant.product'
         ])->findOrFail($id);
+
+
+        EmailService::request_mail('order-success-notification', [
+            'order' => $order
+        ]);
+
 
         return view('theme.adminlte.sales.orders.show', compact('order'));
     }

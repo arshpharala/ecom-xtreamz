@@ -2,15 +2,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('admin.dashboard') }}" class="brand-link text-center">
-      @if (!empty(setting('site_logo')))
-        <span class="brand-text font-weight-light text-center">Xtremez</span>
-      @else
-        <img src="{{ asset('storage/' . setting('site_logo', 'theme/adminlte/dist/img/AdminLTELogo.png')) }}"
-          alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
-      @endif
-
-
+      <span class="brand-text font-weight-light text-center">Xtremez</span>
     </a>
 
     <!-- Sidebar -->
@@ -193,6 +185,12 @@
                 <a href="{{ route('admin.cms.tags.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Tags</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.cms.emails.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Email Management</p>
                 </a>
               </li>
               <li class="nav-item">

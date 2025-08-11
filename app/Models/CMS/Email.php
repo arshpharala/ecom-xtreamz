@@ -2,10 +2,11 @@
 
 namespace App\Models\CMS;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Models\Admin;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Email extends Model
 {
@@ -17,6 +18,10 @@ class Email extends Model
     protected $fillable = [
         'reference',
         'template',
+        'subject',
+        'from_email',
+        'from_name',
+        'reply_to_email',
         'is_active',
     ];
 
@@ -24,24 +29,36 @@ class Email extends Model
         'is_active' => 'boolean',
     ];
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     public function recipients()
     {
-        return $this->belongsToMany(User::class, 'email_user');
+        return $this->belongsToMany(Admin::class, 'email_admin')->withPivot('type');
     }
 
-    public function to(){
-        return $this->belongsToMany(User::class, 'email_user')->wherePivot('type', 'to');
+    public function to()
+    {
+        return $this->belongsToMany(Admin::class, 'email_admin')->wherePivot('type', 'to');
     }
 
-    public function cc(){
-        return $this->belongsToMany(User::class, 'email_user')->wherePivot('type', 'cc');
+    public function cc()
+    {
+        return $this->belongsToMany(Admin::class, 'email_admin')->wherePivot('type', 'cc');
     }
 
-    public function bcc(){
-        return $this->belongsToMany(User::class, 'email_user')->wherePivot('type', 'bcc');
+    public function bcc()
+    {
+        return $this->belongsToMany(Admin::class, 'email_admin')->wherePivot('type', 'bcc');
     }
 
-    public function exclude(){
-        return $this->belongsToMany(User::class, 'email_user')->wherePivot('type', 'exclude');
+    public function exclude()
+    {
+        return $this->belongsToMany(Admin::class, 'email_admin')->wherePivot('type', 'exclude');
     }
+
+
+
 }

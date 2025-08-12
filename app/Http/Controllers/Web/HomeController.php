@@ -39,7 +39,7 @@ class HomeController extends Controller
         $data['giftSetProducts'] = $giftSetProducts;
 
 
-        return view('theme.xtremez.home', $data);
+        return view('theme.medibazaar.home', $data);
     }
 
 

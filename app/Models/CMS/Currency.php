@@ -9,5 +9,5 @@ class Currency extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['code', 'name', 'symbol', 'decimal', 'group_separator', 'decimal_separator', 'currency_position'];
+    protected $fillable = ['code', 'name', 'symbol', 'symbol_html', 'exchange_rate', 'decimal', 'group_separator', 'decimal_separator', 'currency_position', 'is_default'];
 }

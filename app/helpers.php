@@ -57,12 +57,21 @@ if (!function_exists('active_locals')) {
 }
 
 if (!function_exists('active_currency')) {
-    function active_currency($obj = false)
+    /**
+     * When $obj = true, returns the Currency row (cached).
+     * Otherwise returns the code string (e.g. 'AED').
+     */
+    function active_currency(bool $obj = false)
     {
-        if ($obj) {
-            return Currency::first();
+        static $active = null;
+
+        if ($active === null) {
+            // TODO: swap this for your real “current site / session” currency
+            $active = Currency::query()->first();
+
         }
-        return 'AED';
+
+        return $obj ? $active : ($active?->code ?? 'AED');
     }
 }
 

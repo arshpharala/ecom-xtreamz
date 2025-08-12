@@ -29,6 +29,10 @@
             <input type="text" name="symbol" class="form-control" value="{{ $currency->symbol }}" required>
           </div>
           <div class="form-group">
+            <label>Symbol HTML</label>
+            <input type="text" name="symbol_html" class="form-control" value="{{ $currency->symbol_html }}" required>
+          </div>
+          <div class="form-group">
             <label>Decimal</label>
             <input type="text" name="decimal" class="form-control" value="{{ $currency->decimal }}">
           </div>

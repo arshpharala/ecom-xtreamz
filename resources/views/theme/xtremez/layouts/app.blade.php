@@ -14,10 +14,24 @@
   <meta name="author" content="Xtremez" />
 
   <meta name="currency" content="{{ active_currency(true)->code }}">
+  <meta name="currency-symbol" content="{{ active_currency(true)->symbol }}">
   <meta name="currency-position" content="{{ active_currency(true)->currency_position }}">
   <meta name="decimal" content="{{ active_currency(true)->decimal }}">
   <meta name="decimal-separator" content="{{ active_currency(true)->decimal_separator }}">
   <meta name="group-separator" content="{{ active_currency(true)->group_separator }}">
+  <style>
+    @font-face {
+      font-family: 'UAESymbol';
+      src: url('assets/font/font.ttf') format('truetype');
+    }
+
+    .uae-symbol {
+      font-family: 'UAESymbol';
+      margin-right: 5px;
+      color: 'black';
+      /* Ensure symbol follows theme */
+    }
+  </style>
 
   <title>Corporate Gifts & Promotional Items in UAE | Xtreme
     Gifting</title>

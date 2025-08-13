@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\CMS\CurrencyController;
 use App\Http\Controllers\Admin\Catalog\BrandController;
 use App\Http\Controllers\Admin\Catalog\OfferController;
 use App\Http\Controllers\Admin\Catalog\CouponController;
+use App\Http\Controllers\Admin\Catalog\VendorController;
 use App\Http\Controllers\Admin\CMS\AttachmentController;
 use App\Http\Controllers\Admin\CMS\EmailAdminController;
 use App\Http\Controllers\Admin\Sales\CustomerController;
@@ -77,6 +78,9 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
     Route::delete('offers/{offer}/restore',                 [OfferController::class, 'restore'])->name('offers.restore');
 
     Route::resource('coupons',                              CouponController::class);
+
+    Route::resource('vendors',                              VendorController::class);
+    Route::delete('vendors/{vendor}/restore',               [VendorController::class, 'restore'])->name('vendors.restore');
 });
 
 

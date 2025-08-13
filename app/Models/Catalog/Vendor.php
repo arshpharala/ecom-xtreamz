@@ -2,29 +2,34 @@
 
 namespace App\Models\Catalog;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Brand extends Model
+class Vendor extends Model
 {
-    use HasFactory, HasUuids, SoftDeletes;
+    use HasUlids, SoftDeletes;
 
     public $incrementing    = false;
     protected $keyType      = 'string';
 
     protected $fillable = [
-        'id',
         'name',
-        'slug',
+        'email',
+        'phone',
+        'address',
+        'website',
         'logo',
+        'description',
         'is_active',
-        'position'
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     function scopeActive($builder)
     {
-        $builder->where('brands.is_active', 1);
+        $builder->where('vendors.is_active', 1);
     }
 }

@@ -88,14 +88,35 @@
     <section class="heading-section py-5">
       <div class="container">
         <div class="heading-row animate-on-scroll" data-animate="fade-up">
-          <h2 class="section-title fs-1 text-center m-0">Browse
-            by
-            Category</h2>
+          <h2 class="section-title fs-1 text-center m-0">Browse by Category</h2>
         </div>
+        <p class="text-center">Explore our store the easy way: shop by category and enjoy a seamless, organized shopping experience.</p>
       </div>
     </section>
 
     <section class="browse-categories py-5">
+      <div class="container text-center">
+        <div class="category-icons row gx-4 gy-5 justify-content-center">
+
+          @foreach ($categories as $category)
+            <div class="col-4 col-sm-3 col-md-2 col-lg-2">
+              <a href="#"
+                class="category-item {{ $loop->first ? 'is-active' : '' }}" data-category-id="{{ $category->id }}"
+                data-category="{{ $category->name }}" aria-label="{{ $category->name }}">
+                <span class="category-badge">
+                  <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }} icon" loading="lazy">
+                </span>
+                <span class="category-label">{{ $category->name }}</span>
+              </a>
+            </div>
+          @endforeach
+
+        </div>
+      </div>
+    </section>
+
+
+    {{-- <section class="browse-categories py-5">
       <div class="container text-center">
         <div class="category-icons d-flex justify-content-center align-items-center flex-wrap pb-5 animate-on-scroll"
           data-animate="fade-up">
@@ -112,7 +133,7 @@
 
         </div>
       </div>
-    </section>
+    </section> --}}
 
     <section class="product-section pb-5 animate-on-scroll" data-animate="fade-up">
       <div class="container">
@@ -227,6 +248,57 @@
               2024 Gifts<br>Collection</h2>
             <a href="#" class="btn btn-light animate-on-scroll" data-animate="fade-up">View
               Brochure</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="features-strip-section pb-5">
+      <div class="container">
+        <div class="features-strip">
+          <div class="row gap-3 align-items-center text-start">
+
+            <div class="col-12 col-sm-6 col-lg d-flex bg-white">
+              <div class="item w-100">
+                <div class="icon-wrap"><i class="bi bi-truck"></i></div>
+                <div>
+                  <div class="title">Easy Free Delivery</div>
+                  <p class="sub">Orders Above 100 AED</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg d-flex bg-white">
+              <div class="item w-100">
+                <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
+                <div>
+                  <div class="title">Secure Payments</div>
+                  <p class="sub">Trusted payment options.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg d-flex bg-white">
+              <div class="item w-100">
+                <div class="icon-wrap"><i class="bi bi-recycle"></i></div>
+                <div>
+                  <div class="title">Easy Returns</div>
+                  <p class="sub">Fast and easy returns</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg d-flex bg-white">
+              <div class="item w-100">
+                <div class="icon-wrap"><i class="bi bi-headset"></i></div>
+                <div>
+                  <div class="title">Customer Support</div>
+                  <p class="sub">Expert Assistance</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

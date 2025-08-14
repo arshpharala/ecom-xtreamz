@@ -1,0 +1,91 @@
+/* ===== Scroll-to-Top (works without any Sass features) ===== */
+.scrolltop-widget {
+    /* intentionally empty */
+}
+
+/* Base button */
+.scrolltop-btn {
+    /* Theme hooks */
+    --btn-size: 52px;
+    --accent: var(--color-secondary, #1f61c4);
+    --radius: 10px;
+
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 1085; /* above modals/backdrops in many stacks */
+    width: var(--btn-size);
+    height: var(--btn-size);
+    border-radius: var(--radius);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #fff;
+    color: var(--accent);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease,
+        background 0.2s, color 0.2s, border-color 0.2s;
+
+    /* Icon */
+    i {
+        font-size: 1.6rem;
+        line-height: 1;
+    }
+
+    /* Interaction */
+    &:hover {
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
+    }
+    &:active {
+        transform: translateY(9px);
+    }
+
+    /* visible state toggled by JS */
+    &.is-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    /* iOS safe area */
+    @supports (padding: max(0px)) {
+        bottom: max(18px, env(safe-area-inset-bottom));
+        right: max(18px, env(safe-area-inset-right));
+    }
+}
+
+/* Solid square variant */
+.btn-solid-square {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* Outline square (use this class instead of .btn-solid-square to test) */
+.btn-outline-square {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: var(--accent);
+}
+
+/* Optional: smaller/larger */
+.scrolltop-btn.is-sm {
+    --btn-size: 44px;
+}
+.scrolltop-btn.is-lg {
+    --btn-size: 60px;
+}
+
+/* Mobile nudge */
+@media (max-width: 575.98px) {
+    .scrolltop-btn {
+        right: 14px;
+        bottom: 14px;
+    }
+}

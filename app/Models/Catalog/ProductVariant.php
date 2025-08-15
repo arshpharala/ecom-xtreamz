@@ -113,6 +113,7 @@ class ProductVariant extends Model
     public function scopeWithFilters($query, $filters)
     {
         return $query
+            ->when($filters['is_new'] ?? null, fn($q, $v) => $q->where('product_variants.created_at', '>=', now()->subDays(30)))
             ->when($filters['is_featured'] ?? null, fn($q, $v) => $q->where('products.is_featured', $v))
             ->when($filters['show_in_slider'] ?? null, fn($q, $v) => $q->where('products.show_in_slider', $v))
             ->when($filters['category_id'] ?? null, fn($q, $v) => $q->where('products.category_id', $v))

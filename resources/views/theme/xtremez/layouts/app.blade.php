@@ -43,6 +43,12 @@
   <link rel="apple-touch-icon" sizes="180x180"
     href="{{ asset(setting('site_favicon', 'theme/xtremez/assets/icons/apple-touch-icon.png')) }}" />
   <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+
   {{-- <link rel="icon" type="image/png" sizes="32x32"
     href="{{ asset('theme/xtremez/assets/icons//favicon-32x32.png') }}">
   <link rel="icon" type="image/png" sizes="16x16"
@@ -54,13 +60,14 @@
   <!-- Your compiled SCSS output -->
   <link href="{{ asset('theme/xtremez/assets/css/main.css') }}" rel="stylesheet">
 
-
-
 </head>
 
 <body>
 
   <div class="site-wrapper d-flex flex-column min-vh-100">
+
+
+    @include('theme.xtremez.layouts.announcement')
 
     @include('theme.xtremez.layouts.header')
 
@@ -74,6 +81,7 @@
     </main>
 
     @include('theme.xtremez.layouts.footer')
+    @include('theme.xtremez.layouts.scrolltop')
   </div>
 
   <script>
@@ -92,6 +100,10 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Select2 -->
   <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Owl Carousel JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   @stack('scripts')
 
@@ -100,6 +112,60 @@
   <script src="{{ asset('theme/xtremez/assets/js/main.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/cart.js') }}"></script>
   <script src="{{ asset('assets/js/form.js') }}"></script>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      new Swiper('.announcement-swiper', {
+        loop: true,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+        slidesPerView: 1,
+        allowTouchMove: false, // announcements shouldn't be draggable
+        speed: 500,
+      });
+    });
+  </script>
+
+  <script>
+    (function() {
+      const btn = document.getElementById('scrollTopBtn');
+      if (!btn) return;
+
+      const showAfter = 200; // px scrolled before showing
+
+      function toggle() {
+        if (window.scrollY > showAfter) {
+          btn.classList.add('is-visible');
+        } else {
+          btn.classList.remove('is-visible');
+        }
+      }
+
+      function scrollToTop() {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReduced) {
+          window.scrollTo(0, 0);
+        } else {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        }
+      }
+
+      window.addEventListener('scroll', toggle, {
+        passive: true
+      });
+      btn.addEventListener('click', scrollToTop);
+
+      // initial state
+      toggle();
+    })();
+  </script>
 
 
 </body>

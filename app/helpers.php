@@ -2,9 +2,11 @@
 
 use App\Models\CMS\Locale;
 use App\Models\CMS\Country;
-use App\Models\CMS\Currency;
 use Illuminate\Support\Str;
+use App\Models\CMS\Currency;
+use App\Models\Catalog\Offer;
 use App\Services\CartService;
+use Illuminate\Support\Collection;
 
 if (!function_exists('setting')) {
     function setting($key, $default = null)
@@ -156,5 +158,19 @@ if (!function_exists('mask_sensitive')) {
         if (!$value) return '';
         $length = strlen($value);
         return substr($value, 0, 6) . str_repeat('*', max($length - 10, 4)) . substr($value, -4);
+    }
+}
+
+if (!function_exists('header_offers')) {
+    /**
+     * Mask the sentive string
+     *
+     * @param int $limit
+     * @return Collection
+     */
+    function header_offers(int $limit = 3): Collection
+    {
+        $offers = Offer::with('translation')->limit($limit)->get();
+        return $offers;
     }
 }

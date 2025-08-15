@@ -42,8 +42,6 @@
                   </li>
                 </ul>
               </div>
-            @else
-              <a href="{{ route('login') }}" class="icon-link"><i class="bi bi-person fs-5"></i></a>
             @endauth
             <a href="{{ route('cart.index') }}" class="icon-link position-relative align-items-baseline">
               <i class="bi bi-cart fs-5"></i>

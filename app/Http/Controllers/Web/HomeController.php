@@ -23,7 +23,8 @@ class HomeController extends Controller
         })
             ->select('categories.id', 'categories.slug', 'categories.icon', 'categories.created_at', 'category_translations.name')
             ->orderBy('categories.position')
-            ->limit(6)
+            ->has('products')
+            // ->limit(6)
             ->get();
 
 
@@ -39,7 +40,7 @@ class HomeController extends Controller
         $data['giftSetProducts'] = $giftSetProducts;
 
 
-        return view('theme.medibazaar.home', $data);
+        return view('theme.xtremez.home', $data);
     }
 
 

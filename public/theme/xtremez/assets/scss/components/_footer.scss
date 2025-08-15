@@ -1,42 +1,109 @@
 .site-footer {
-  background-color: var(--color-light);
+  --footer-bg: var(--color-light);
+  --footer-title: #0b1f3a;
+  --footer-link: #111;
+  --footer-link-muted: #6c757d;
+  --footer-border: #e9ecef;
+  --footer-dark: var(--color-dark);
+  --accent: var(--color-secondary);
 
-  .footer-logo {
-    max-width: 160px;
+  background-color: var(--footer-bg);
+
+  .footer-logo { max-width: 170px; }
+  .footer-title {
+    font-weight: 800;
+    letter-spacing: .2px;
+    margin-bottom: .75rem;
+    color: var(--footer-title);
+    text-transform: uppercase;
+    font-size: .95rem;
   }
+  .footer-about { font-size: .95rem; }
 
   .social-icons a {
     color: #000;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: var(--color-accent);
-    }
+    font-size: 1.125rem;
+    transition: color .2s ease, transform .1s ease;
+    &:hover { color: var(--accent); transform: translateY(-1px); }
   }
 
-  .footer-links {
-    li {
-      margin-bottom: 0.5rem;
-
-      a {
-        font-size: var(--font-size-sm);
-        font-weight: 600;
-        text-decoration: none;
-        color: #111;
-        text-transform: uppercase;
-        transition: color 0.2s ease;
-
-        &:hover {
-          color: var(--color-accent);
-        }
-      }
-    }
-  }
-
-  .footer-bottom {
-    font-size: var(--font-size-sm);
+  .footer-links li { margin-bottom: .5rem; }
+  .footer-links a {
+    font-size: .95rem;
+    // font-weight: 600;
+    text-decoration: none;
+    color: var(--footer-link);
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    background-color: var(--color-dark);
+    transition: color .2s ease;
+    &:hover { color: var(--accent); }
+  }
+
+  /* Subscribe */
+  .subscribe-group {
+    border: 1px solid var(--footer-border);
+    border-radius: 999px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .subscribe-form .input-group-text {
+    background: transparent;
+    border: 0;
+    color: var(--footer-link-muted);
+    padding-left: 1rem;
+  }
+  .subscribe-form .form-control {
+    border: 0;
+    box-shadow: none !important;
+    padding-left: .25rem;
+  }
+  .subscribe-form .btn-subscribe {
+    background: var(--accent);
+    color: #fff;
+    border: 0;
+    padding: .5rem 1rem;
+    border-radius: 999px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity .2s ease, transform .08s ease-in-out;
+    &:hover { opacity: .95; }
+    &:active { transform: translateY(1px); }
+  }
+
+  /* Bottom bar */
+  .footer-bottom {
+    background: var(--footer-dark);
+    border-top: 1px solid rgba(255,255,255,.06);
+    .copy { color: rgba(255,255,255,.9); text-transform: uppercase; letter-spacing: .6px; }
+    .footer-mini-links a {
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      font-size: .9rem;
+      transition: color .2s ease;
+      &:hover { color: var(--accent); }
+    }
+    .payment-icons .pay {
+      display: grid; place-items: center;
+      width: 64px; height: 28px;
+      border-radius: .375rem;
+      background: #fff;
+      border: 1px solid var(--footer-border);
+      overflow: hidden;
+      filter: grayscale(.1);
+      opacity: .95;
+      transition: filter .2s, opacity .2s, transform .15s;
+      svg, i { display: block; }
+      &:hover { filter: none; opacity: 1; transform: translateY(-1px); }
+    }
+    .payment-icons .cod {
+      width: auto; height: auto; background: transparent; border: none; color: #fff; font-size: 1.25rem;
+    }
+  }
+
+  /* Spacing tweaks on mobile */
+  @media (max-width: 991.98px) {
+    .footer-links a { text-transform: none; }
   }
 }

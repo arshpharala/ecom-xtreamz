@@ -26,6 +26,11 @@ class CategoryController extends Controller
                 ->editColumn('name', function ($row) use ($locale) {
                     return $row->translations->where('locale', $locale)->first()?->name ?? $row->slug;
                 })
+                ->editColumn('icon', function ($row) {
+                    return $row->icon
+                        ? '<img src="' . asset('storage/' . $row->icon) . '" class="img-sm">'
+                        : '';
+                })
                 ->addColumn('status', fn($row) => $row->deleted_at ? '<span class="badge badge-danger">Deleted</span>' : '<span class="badge badge-success">Active</span>')
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.catalog.categories.edit', $row->id);
@@ -36,7 +41,7 @@ class CategoryController extends Controller
                 ->editColumn('created_at', function ($row) {
                     return $row->created_at?->format('d-M-Y  h:m A');
                 })
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'status', 'icon'])
                 ->make(true);
         }
         return view('theme.adminlte.catalog.categories.index');

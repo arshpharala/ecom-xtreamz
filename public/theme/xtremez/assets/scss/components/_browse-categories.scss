@@ -1,53 +1,78 @@
 .browse-categories {
-	background-color: var(--color-background);
-	padding: 3rem 0;
+  --circle-size: 112px;
+  --circle-bg: #98b1c7;                 /* soft blue disc */
+  --label-color: #111;
+  --ring: var(--color-secondary);       /* your theme accent */
+  background-color: var(--color-background);
 
-	.category-icons {
-		gap: 3.75rem;
-		.category-item {
-			.category-icon {
-				width: 40px;
-				height: 40px;
-				opacity: 0.6;
-				transition: opacity 0.3s, transform 0.3s;
-				cursor: pointer;
+  .category-icons {
+    /* using grid via Bootstrap row/cols already */
+  }
 
-				&.active {
-					opacity: 1;
-					filter: brightness(0) saturate(100%) invert(78%) sepia(15%)
-						saturate(639%) hue-rotate(137deg) brightness(96%) contrast(92%);
-				}
+  .category-item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .6rem;
+    text-decoration: none;
+    will-change: transform;
+    transition: transform .2s ease;
+    outline: none;
 
-				&:hover {
-					opacity: 1;
-					transform: scale(1.1);
-				}
-			}
-		}
+    &:hover { transform: translateY(-4px); }
+    &:focus-visible .category-badge { box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
+  }
 
-		.dot-separator {
-			font-size: var(--font-size-7xl);
-			color: #ccc;
-			user-select: none;
-		}
-	}
+  .category-badge {
+    width: var(--circle-size);
+    height: var(--circle-size);
+    border-radius: 999px;
+    background: radial-gradient(76% 76% at 50% 50%, var(--circle-bg) 0%, #8da6ba 100%);
+    position: relative;
+    overflow: hidden;
+    display: grid; place-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    transition: box-shadow .2s ease, transform .2s ease;
 
-	@media (max-width: #{$screen-lg - 1}) {
-		.category-icons {
-			gap: 2rem;
-		}
-	}
+    img {
+      width: 110%;
+      height: 110%;
+      object-fit: contain;
+      transform: translate(2%, 2%);   /* slight offset like your ref */
+      pointer-events: none;
+      user-select: none;
+      filter: none;
+      transition: filter .2s ease, transform .2s ease;
+    }
+  }
 
-	@media (max-width: #{$screen-md - 1}) {
-		.category-icons {
-			gap: 1rem;
-			
-			justify-content: space-around !important;
+  .category-label {
+    max-width: calc(var(--circle-size) + 30px);
+    color: var(--label-color);
+    font-weight: 700;
+    font-size: .98rem;
+    line-height: 1.25;
+  }
 
-			.category-icon {
-				height: 30px !important;
-				width: 30px !important;
-			}
-		}
-	}
+  /* Active state: ring + subtle pop + slight image brighten */
+  .category-item.is-active .category-badge {
+    box-shadow:
+      0 0 0 3px #fff,
+      0 0 0 5px var(--ring),
+      0 6px 16px rgba(0,0,0,.12);
+    transform: translateY(-2px);
+  }
+  .category-item.is-active img {
+    filter: brightness(1.05) contrast(1.02);
+  }
+
+  /* Sizes */
+  @media (max-width: 991.98px) {
+    --circle-size: 100px;
+    .category-label { font-size: .95rem; }
+  }
+  @media (max-width: 575.98px) {
+    --circle-size: 88px;
+    .category-label { font-size: .92rem; }
+  }
 }

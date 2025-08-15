@@ -1,0 +1,53 @@
+.browse-categories {
+	background-color: var(--color-background);
+	padding: 3rem 0;
+
+	.category-icons {
+		gap: 3.75rem;
+		.category-item {
+			.category-icon {
+				width: 40px;
+				height: 40px;
+				opacity: 0.6;
+				transition: opacity 0.3s, transform 0.3s;
+				cursor: pointer;
+
+				&.active {
+					opacity: 1;
+					filter: brightness(0) saturate(100%) invert(78%) sepia(15%)
+						saturate(639%) hue-rotate(137deg) brightness(96%) contrast(92%);
+				}
+
+				&:hover {
+					opacity: 1;
+					transform: scale(1.1);
+				}
+			}
+		}
+
+		.dot-separator {
+			font-size: var(--font-size-7xl);
+			color: #ccc;
+			user-select: none;
+		}
+	}
+
+	@media (max-width: #{$screen-lg - 1}) {
+		.category-icons {
+			gap: 2rem;
+		}
+	}
+
+	@media (max-width: #{$screen-md - 1}) {
+		.category-icons {
+			gap: 1rem;
+			
+			justify-content: space-around !important;
+
+			.category-icon {
+				height: 30px !important;
+				width: 30px !important;
+			}
+		}
+	}
+}

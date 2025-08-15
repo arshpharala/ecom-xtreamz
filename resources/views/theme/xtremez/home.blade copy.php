@@ -1,4 +1,10 @@
 @extends('theme.xtremez.layouts.app')
+@push('head')
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+@endpush
 @section('content')
   <main class="flex-fill">
 
@@ -82,10 +88,9 @@
     <section class="heading-section py-5">
       <div class="container">
         <div class="heading-row animate-on-scroll" data-animate="fade-up">
-          <h2 class="section-title fs-1 text-center m-0 text-uppercase">Browse by Category</h2>
+          <h2 class="section-title fs-1 text-center m-0">Browse by Category</h2>
         </div>
-        <p class="text-center">Explore our store the easy way: shop by category and enjoy a seamless, organized shopping
-          experience.</p>
+        <p class="text-center">Explore our store the easy way: shop by category and enjoy a seamless, organized shopping experience.</p>
       </div>
     </section>
 
@@ -95,13 +100,13 @@
 
           @foreach ($categories as $category)
             <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-              <a href="#" class="category-item {{ $loop->first ? 'is-active' : 'is-active' }}"
-                data-category-id="{{ $category->id }}" data-category="{{ $category->name }}"
-                aria-label="{{ $category->name }}">
+              <a href="#"
+                class="category-item {{ $loop->first ? 'is-active' : '' }}" data-category-id="{{ $category->id }}"
+                data-category="{{ $category->name }}" aria-label="{{ $category->name }}">
                 <span class="category-badge">
                   <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }} icon" loading="lazy">
                 </span>
-                <span class="category-label text-uppercase">{{ $category->name }}</span>
+                <span class="category-label">{{ $category->name }}</span>
               </a>
             </div>
           @endforeach
@@ -110,28 +115,62 @@
       </div>
     </section>
 
-    @include('theme.xtremez.components.products.carousel', [
-        'id' => 'new',
-        'sectionName' => 'New Arrivals',
-        'productUrl' => route('ajax.get-products', ['is_new' => 1]),
-    ])
 
+    {{-- <section class="browse-categories py-5">
+      <div class="container text-center">
+        <div class="category-icons d-flex justify-content-center align-items-center flex-wrap pb-5 animate-on-scroll"
+          data-animate="fade-up">
 
-    @foreach ($categories as $category)
-      @include('theme.xtremez.components.products.carousel', [
-          'id' => $category->id,
-          'sectionName' => $category->name,
-          'productUrl' => route('ajax.get-products', ['category_id' => $category->id]),
-      ])
-    @endforeach
+          @foreach ($categories as $category)
+            <div class="category-item" data-category-id="{{ $category->id }}" data-category="{{ $category->name }}">
+              <img src="{{ asset('storage/' . $category->icon) }}" alt="{{ $category->name }} icon"
+                class="category-icon {{ $loop->first ? 'active' : '' }}">
+            </div>
+            @if ($loop->last == false)
+              <span class="dot-separator">•</span>
+            @endif
+          @endforeach
+
+        </div>
+      </div>
+    </section> --}}
+
+    <section class="product-section pb-5 animate-on-scroll" data-animate="fade-up">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="section-title fs-1">Clothing</h2>
+          <div class="section-nav">
+            <button id="productCustomPrev" class="btn btn-link p-0 me-2">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button id="productCustomNext" class="btn btn-link p-0">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="product-carousel" class="owl-carousel owl-theme"></div>
+
+      </div>
+    </section>
 
     @include('theme.xtremez.components.products.gift-set', ['products' => $giftSetProducts])
 
-    @include('theme.xtremez.components.products.carousel', [
-        'id' => 'featured',
-        'sectionName' => 'Featured Products',
-        'productUrl' => route('ajax.get-products', ['is_featured' => 1]),
-    ])
+    <section class="heading-section py-5">
+      <div class="container">
+        <div class="heading-row  animate-on-scroll" data-animate="fade-down">
+          <h2 class="section-title fs-1 text-center m-0">Featured
+            Products</h2>
+        </div>
+      </div>
+    </section>
+
+    <section class="product-section py-5 animate-on-scroll" data-animate="fade-up">
+      <div class="container">
+        <div class="row g-4" id="featured-products">
+        </div>
+      </div>
+    </section>
 
     <section class="sustainable-section py-5">
       <div class="container-fluid px-0 bg-beige">
@@ -274,8 +313,9 @@
     window.ajaxProductURL = "{{ route('ajax.get-products') }}";
     window.activeCategoryId = "{{ $activeCategory->id ?? '' }}";
   </script>
-
-  <script src="{{ asset('assets/js/home.js') }}"></script>
+  <!-- Owl Carousel JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
 
   <script>
     $(document).ready(function() {
@@ -290,6 +330,30 @@
       });
 
 
+      loadFeaturedProducts();
+
     });
+
+    function loadFeaturedProducts() {
+      $.ajax({
+        url: "{{ route('ajax.get-products', ['is_featured' => true]) }}",
+        method: "GET",
+        dataType: "json",
+        success: function(response) {
+          if (response.success && response.data?.products?.length) {
+            const html = response.data.products.map((product) =>
+              render_product_card(product, "col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3")
+            );
+            $("#featured-products").html(html);
+          } else {
+            $("#featured-products").html(`<p class="text-muted">No featured products found.</p>`);
+          }
+        },
+        error: function() {
+          console.error("Failed to load featured products");
+          $("#featured-products").html(`<p class="text-danger">Error loading products.</p>`);
+        },
+      });
+    }
   </script>
 @endpush

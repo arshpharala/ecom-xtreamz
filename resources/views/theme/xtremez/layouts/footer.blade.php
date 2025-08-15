@@ -64,9 +64,9 @@
         <p class="text-muted mb-3">Get exclusive offers, new arrivals & insider perks.</p>
         <form class="subscribe-form" method="POST" action="{{ '' }}" novalidate>
           @csrf
-          <div class="input-group input-group-lg subscribe-group">
+          <div class="input-group input-group-lg subscribe-group fs-6">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-            <input type="email" class="form-control" name="email" id="subscribeEmail"
+            <input type="email" class="form-control fs-6" name="email" id="subscribeEmail"
                    placeholder="Your email address" required>
             <button class="btn btn-subscribe" type="submit">
                 <i class="bi bi-arrow-right-short ms-1"></i>

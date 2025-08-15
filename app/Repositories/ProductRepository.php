@@ -13,6 +13,7 @@ class ProductRepository
     {
         $filters = Request::only([
             'is_featured',
+            'is_new',
             'show_in_slider',
             'category_id',
             'brand_id',
@@ -94,7 +95,7 @@ class ProductRepository
 
 
 
-    public function getGiftProducts($categorySlug = 'gift-bags', $limit = 3)
+    public function getGiftProducts($categorySlug = 'gift-sets', $limit = 3)
     {
         return ProductVariant::withJoins()
             ->select(

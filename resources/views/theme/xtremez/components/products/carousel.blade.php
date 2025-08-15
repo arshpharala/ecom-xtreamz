@@ -1,0 +1,37 @@
+@php
+  if (!$productUrl) {
+      $productUrl = route('ajax.get-products', ['category_id' => $category->id]);
+  }
+@endphp
+<section class="heading-section pt-5">
+  <div class="container">
+    <div class="heading-row animate-on-scroll d-flex justify-content-between align-items-center" data-animate="fade-down">
+      <div>
+        <h2 class="section-title fs-1 m-0 text-uppercase">{{ $sectionName }}</h2>
+        <div class="heading-wrapper">
+    <div class="heading-accent"></div>
+</div>
+      </div>
+      <div class="section-nav d-flex">
+        <button id="product{{ $id }}Prev" class="btn btn-link p-0 me-2 text-secondary">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <button id="product{{ $id }}Next" class="btn btn-link p-0 text-secondary">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="roduct-section pt-5 animate-on-scroll ajax-carousel" id="carousel-{{ $id }}"
+  data-animate="fade-up" data-type="{{ $id }}" data-limit="8" data-items="4"
+  data-prev="#product{{ $id }}Prev" data-next="#product{{ $id }}Next"
+  data-url="{{ $productUrl }}">
+  <div class="container">
+    <div class="row g-4 owl-carousel">
+    </div>
+  </div>
+</section>

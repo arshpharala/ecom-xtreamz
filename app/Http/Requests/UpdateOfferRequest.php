@@ -22,11 +22,16 @@ class UpdateOfferRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'discount_type'   => 'required|in:fixed,percent',
-            'discount_value'  => 'required|numeric|min:0',
-            'starts_at'       => 'nullable|date',
-            'ends_at'         => 'nullable|date|after_or_equal:starts_at',
-            'is_active'       => 'boolean'
+            'discount_type'     => 'required|in:fixed,percent',
+            'discount_value'    => 'required|numeric|min:0',
+            'starts_at'         => 'nullable|date',
+            'ends_at'           => 'nullable|date|after_or_equal:starts_at',
+            'is_active'         => 'boolean',
+            'show_in_slider'    => 'boolean',
+            'banner_image'      => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'bg_color'          => 'nullable|string|max:32',
+            'link_url'          => 'nullable|string|max:2048',
+            'position'          => 'nullable|integer',
         ];
 
         foreach (active_locals() as $locale) {

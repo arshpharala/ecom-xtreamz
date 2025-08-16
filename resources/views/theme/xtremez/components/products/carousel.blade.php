@@ -9,8 +9,8 @@
       <div>
         <h2 class="section-title fs-1 m-0 text-uppercase">{{ $sectionName }}</h2>
         <div class="heading-wrapper">
-    <div class="heading-accent"></div>
-</div>
+          <div class="heading-accent"></div>
+        </div>
       </div>
       <div class="section-nav d-flex">
         <button id="product{{ $id }}Prev" class="btn btn-link p-0 me-2 text-secondary">
@@ -26,7 +26,7 @@
 
 
 
-<section class="roduct-section pt-5 animate-on-scroll ajax-carousel" id="carousel-{{ $id }}"
+<section class="product-section pt-5 animate-on-scroll ajax-carousel" id="carousel-{{ $id }}"
   data-animate="fade-up" data-type="{{ $id }}" data-limit="8" data-items="4"
   data-prev="#product{{ $id }}Prev" data-next="#product{{ $id }}Next"
   data-url="{{ $productUrl }}">

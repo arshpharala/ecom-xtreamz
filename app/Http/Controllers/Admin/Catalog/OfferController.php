@@ -7,6 +7,7 @@ use App\Models\Catalog\Offer;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog\ProductVariant;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreOfferRequest;
 use App\Models\Catalog\OfferTranslation;
 use Yajra\DataTables\Facades\DataTables;
@@ -69,6 +70,11 @@ class OfferController extends Controller
 
         DB::beginTransaction();
 
+        $path = null;
+        if ($request->hasFile('banner_image')) {
+            $path = $request->file('banner_image')->store('promos', 'public');
+        }
+
         try {
             $offer = Offer::create([
                 'discount_type'  => $validated['discount_type'],
@@ -76,6 +82,11 @@ class OfferController extends Controller
                 'starts_at'      => $validated['starts_at'],
                 'ends_at'        => $validated['ends_at'],
                 'is_active'      => $validated['is_active'] ?? false,
+                'show_in_slider' => $validated['show_in_slider'] ?? false,
+                'banner_image'   => $path,
+                'bg_color'       => $validated['bg_color'] ?? null,
+                'link_url'       => $validated['link_url'] ?? null,
+                'position'       => $validated['position'] ?? 0,
             ]);
 
 
@@ -128,14 +139,29 @@ class OfferController extends Controller
         $offer = Offer::findOrFail($id);
 
 
-        $offer->update([
+        $data = [
             'discount_type'  => $validated['discount_type'],
             'discount_value' => $validated['discount_value'],
             'starts_at'      => $validated['starts_at'],
             'ends_at'        => $validated['ends_at'],
             'is_active'      => $validated['is_active'] ?? false,
-        ]);
+            'show_in_slider' => $validated['show_in_slider'] ?? false,
+            'bg_color'       => $validated['bg_color'] ?? null,
+            'link_url'       => $validated['link_url'] ?? null,
+            'position'       => $validated['position'] ?? 0,
+        ];
 
+
+        if ($request->hasFile('banner_image')) {
+
+            if ($offer->banner_image && Storage::disk('public')->exists($offer->banner_image)) {
+                Storage::disk('public')->delete($offer->banner_image);
+            }
+
+            $data['banner_image'] = $request->file('banner_image')->store('promos', 'public');
+        }
+
+        $offer->update($data);
 
         foreach ($validated['title'] as $locale => $title) {
             OfferTranslation::updateOrCreate(

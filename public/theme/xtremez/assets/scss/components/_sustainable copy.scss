@@ -1,0 +1,71 @@
+.sustainable-section {
+	background-color: var(--color-background);
+
+	.bg-beige {
+		background-color: #ede3d7;
+	}
+
+	.sustainable-content-section {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		// Add spacing to the left text content
+		.sustainable-content {
+			padding-top: 3rem;
+			padding-bottom: 3rem;
+			.sustainable-heading {
+				font-family: var(--font-family-primary);
+				font-size: var(--font-size-15xl);
+				line-height: 1.2;
+				color: #222;
+			}
+		}
+	}
+
+	// Image column as background
+	.sustainable-bg-image {
+		background-image: url("../images/sustainable.png");
+		background-size: cover;
+		// background-position: center;
+		background-position-x: right;
+		background-position-y: top;
+		background-repeat: no-repeat;
+		min-height: 480px;
+		max-height: 580px;
+	}
+
+	@media (max-width: #{$screen-xl - 1}) {
+		.sustainable-content-section {
+			align-items: center;
+			.sustainable-content {
+				.sustainable-heading {
+					font-size: var(--font-size-10xl) !important;
+				}
+			}
+
+			.sustainable-bg-image {
+				min-height: 350px;
+			}
+		}
+	}
+
+	@media (max-width: #{$screen-md - 1}) {
+		.sustainable-bg-image {
+			min-height: 280px;
+			max-height: none;
+		}
+
+		.sustainable-content-section {
+			min-height: 280px;
+			.sustainable-content {
+				padding-top: 2rem;
+				padding-bottom: 2rem;
+
+				.sustainable-heading {
+					font-size: var(--font-size-9xl);
+				}
+			}
+		}
+	}
+}

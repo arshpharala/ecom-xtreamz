@@ -117,6 +117,32 @@
     ])
 
 
+    @if ($promoOffers->isNotEmpty())
+      <section class="promo-tiles py-3">
+        <div class="container">
+          <div class="row g-3 g-lg-4">
+            @foreach ($promoOffers as $tile)
+              <div class="col-12 col-md-4">
+                <a href="{{ $tile->url }}" class="promo-tile" style="background: {{ $tile->bg }}">
+                  <div class="promo-copy">
+                    @if ($tile->eyebrow)
+                      <div class="eyebrow">{{ $tile->eyebrow }}</div>
+                    @endif
+                    <h3 class="title">{{ $tile->title }}</h3>
+                    <span class="cta">Shop Now</span>
+                  </div>
+                  <img src="{{ $tile->image }}" alt="{{ $tile->title }}" class="promo-img">
+                </a>
+              </div>
+            @endforeach
+          </div>
+        </div>
+      </section>
+    @endif
+
+
+
+
     @foreach ($categories as $category)
       @include('theme.xtremez.components.products.carousel', [
           'id' => $category->id,
@@ -135,25 +161,35 @@
 
     <section class="sustainable-section py-5">
       <div class="container-fluid px-0 bg-beige">
-        <div class="row g-0 align-items-center">
+        <div class="row g-0 align-items-stretch sustainable-card"><!-- added hook -->
 
           <!-- Left Text Column -->
-          <div class="sustainable-content-section col-md-5 px-lg-5 text-center text-md-start">
+          <div class="sustainable-content-section col-md-6 px-lg-5 text-center text-md-start">
             <div class="sustainable-content px-3 px-xl-5 animate-on-scroll" data-animate="fade-right">
-              <h2 class="sustainable-heading fw-bold mb-4">Sustainable<br>Products</h2>
-              <a href="{{ route('products') }}" class="btn btn-secondary rounded-2">View
-                Items</a>
+              <span class="sustainable-eyebrow">Eco Collection</span>
+              <h2 class="sustainable-heading fw-bold mb-2">Sustainable<br>Products</h2>
+
+              <div class="heading-accent mb-4"></div>
+
+              <!-- optional sub copy -->
+              <p class="sustainable-sub mb-4">Thoughtfully made from recycled materials. Durable design without
+                compromising style.</p>
+
+              <a href="{{ route('products') }}" class="btn btn-secondary">
+                View Items
+                <i class="bi bi-arrow-right-short"></i>
+              </a>
             </div>
           </div>
 
           <!-- Right Image Column -->
-          <div class="col-md-7 sustainable-bg-image">
-            <div class="sustainable-image animate-on-scroll" data-animate="fade-left">
-            </div>
+          <div class="col-md-6 sustainable-bg-image">
+            <div class="sustainable-image animate-on-scroll" data-animate="fade-left"></div>
           </div>
         </div>
       </div>
     </section>
+
 
     <section class="heading-section py-5">
       <div class="container">

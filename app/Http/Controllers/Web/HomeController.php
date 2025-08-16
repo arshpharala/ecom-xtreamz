@@ -29,7 +29,7 @@ class HomeController extends Controller
 
 
         $giftSetProducts = (new ProductRepository())->getGiftProducts();
-
+        $promoOffers = (new \App\Repositories\OfferRepository())->getPromoOffers(3);
 
         $brands = Brand::whereNotNull('logo')->active()->orderBy('position')->get();
 
@@ -38,6 +38,7 @@ class HomeController extends Controller
         $data['categories'] = $categories;
         $data['brands']     = $brands;
         $data['giftSetProducts'] = $giftSetProducts;
+        $data['promoOffers'] = $promoOffers;
 
 
         return view('theme.xtremez.home', $data);

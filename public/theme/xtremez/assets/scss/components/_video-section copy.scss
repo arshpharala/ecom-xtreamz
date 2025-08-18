@@ -1,0 +1,98 @@
+.video-section {
+	.video-container {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 16 / 7;
+		background: var(--color-background);
+		max-height: 580px; // Keeps a nice vertical limit
+		min-height: 240px; // Ensures it never gets too short
+        overflow: hidden;
+
+		.video-bg {
+			width: 100%;
+			height: 100%;
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+			}
+		}
+
+		.video-overlay {
+			background-color: rgba(0, 139, 160, 0.5);
+			z-index: 1;
+			pointer-events: none;
+		}
+
+		.video-play-btn {
+			z-index: 2;
+			width: 64px;
+			height: 64px;
+			background-color: var(--color-light);
+			border: none;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: var(--font-size-9xl);
+			color: var(--color-accent);
+			box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+			transition: transform 0.2s ease;
+			position: relative;
+
+			&:hover {
+				transform: scale(1.1);
+			}
+
+			&::before,
+			&::after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%) scale(0.2);
+				width: 200px; // bigger than button
+				height: 200px;
+				border-radius: 50%;
+				background-color: rgba(0, 139, 160, 0.2);
+				opacity: 0;
+				z-index: -1;
+				animation: wavePulse 3s ease-in-out infinite;
+				pointer-events: none;
+			}
+
+			&::after {
+				animation-delay: 1.5s;
+			}
+		}
+	}
+
+	@media (max-width: #{$screen-lg - 1}) {
+		.video-container {
+			aspect-ratio: 16 / 9;
+			max-height: 350px;
+
+			.video-play-btn {
+				width: 50px;
+				height: 50px;
+				font-size: var(--font-size-11xl);
+			}
+		}
+	}
+
+	@media (max-width: #{$screen-md - 1}) {
+		.video-container {
+			aspect-ratio: 4 / 3;
+			max-width: 100vw;
+			max-height: 260px;
+
+			.video-play-btn {
+				width: 44px;
+				height: 44px;
+				font-size: var(--font-size-xl);
+			}
+		}
+	}
+}

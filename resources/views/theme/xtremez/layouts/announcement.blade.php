@@ -16,6 +16,10 @@
 
           <!-- User Menu -->
 
+          <a href="{{ route('login') }}" class="nav-link ms-3 text-nowrap d-none d-md-flex align-items-center">
+            <i class="bi bi-heart"></i> Wishlist</a>
+            <div class="divider text-white ms-3">|</div>
+
           <a href="{{ route('login') }}" class="nav-link ms-3 text-nowrap d-none d-md-flex align-items-center"><i
               class="bi bi-person"></i>My Account</a>
 

@@ -93,9 +93,9 @@
   }
 
   /* Hover effect (zoom image) */
-  &:hover .sustainable-bg-image {
-    background-size: 103%;
-  }
+//   &:hover .sustainable-bg-image {
+//     background-size: 103%;
+//   }
 
   /* breakpoints */
   @media (max-width: #{$screen-xl - 1}) {

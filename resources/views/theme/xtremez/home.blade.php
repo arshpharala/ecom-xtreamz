@@ -160,7 +160,7 @@
     ])
 
     <section class="sustainable-section py-5">
-      <div class="container-fluid px-0 bg-beige">
+      <div class="container px-0 bg-beige">
         <div class="row g-0 align-items-stretch sustainable-card"><!-- added hook -->
 
           <!-- Left Text Column -->
@@ -190,7 +190,6 @@
       </div>
     </section>
 
-
     <section class="heading-section py-5">
       <div class="container">
         <div class="heading-row  animate-on-scroll" data-animate="fade-down">
@@ -214,25 +213,34 @@
       </div>
     </section>
 
+    <style>
 
-    <section class="video-section position-relative py-5">
-      <div class="video-container">
-        <div class="video-bg">
-          <img src="{{ asset('theme/xtremez/assets/images/video-thumbnail.png') }}" alt="Video Background"
-            class="w-100 h-100 object-fit-cover">
+    </style>
+
+    <section class="video py-5 overflow-hidden">
+      <div class="container-fluid" style="max-width: 1800px">
+        <div class="row">
+          <div class="video-content open-up aos-init aos-animate" data-aos="zoom-out">
+
+            <div class="video-bg position-relative">
+              <img src="{{ asset('assets/images/video-image.jpg') }}" alt="video" class="video-image img-fluid">
+
+              <!-- Play Button Overlay -->
+              <div class="video-player">
+                <a class="youtube cboxElement" href="https://www.youtube.com/embed/pjtsGzQjFM4">
+                  <svg width="70" height="70" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7z"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+          </div>
         </div>
-
-        <div class="video-overlay position-absolute top-0 start-0 w-100 h-100"></div>
-
-        <button class="video-play-btn position-absolute top-50 start-50 translate-middle" aria-label="Play Video"
-          data-toggle="modal" data-target="#exampleModalCenter">
-          <i class="bi bi-play-fill"></i>
-        </button>
-
       </div>
     </section>
 
-    <section class="gift-collection-section pb-5">
+    {{-- <section class="gift-collection-section pb-5">
       <div class="container py-5">
         <div class="collection-card text-center position-relative overflow-hidden">
           <img src="{{ asset('theme/xtremez/assets/images/gift-collection.png') }}" alt="Gifts"
@@ -248,11 +256,80 @@
           </div>
         </div>
       </div>
+    </section> --}}
+
+    <style>
+      .ltn__call-to-action-4 {
+        position: relative;
+        background:#e9e9e9;
+      }
+
+      .ltn__call-to-action-4 img {
+        max-width: 100%;
+      }
+
+      .ltn__section-title-2 {
+        margin-bottom: 40px;
+      }
+
+      .ltn__secondary-color {
+        color: var(--color-secondary) !important;
+      }
+
+      .ltn__section-title-2 .section-title {
+        font-size: 72px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        line-height: 1;
+      }
+
+
+
+    </style>
+
+    <div class="ltn__call-to-action-4 py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-5">
+            <img src="{{ asset('assets/images/corporate-gifts-giftana.png') }}" alt="#">
+          </div>
+          <div class="col-lg-7">
+            <div class="call-to-action-inner call-to-action-inner-4 d-flex flex-column h-100 justify-content-center">
+              <div class="section-title-area ltn__section-title-2">
+                <h1 class="section-title">Our 2024 Gifts
+                  Collection</h1>
+              </div>
+
+              <div class="btn-wrapper animated">
+                <a href="shop.html" class="btn btn-outline-dark text-uppercase">View Brochure</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="newsletter bg-light"
+      style="background: url(https://themewagon.github.io/kaira/images/pattern-bg.png) repeat;">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 py-5 my-5">
+            <div class="subscribe-header text-center pb-3">
+              <h3 class="section-title text-uppercase">Sign Up for our newsletter</h3>
+            </div>
+            <form id="form" class="d-flex flex-wrap gap-2">
+              <input type="text" name="email" placeholder="Your Email Addresss"
+                class="form-control form-control-lg">
+              <button class="btn btn-dark btn-lg text-uppercase w-100">Sign Up</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </section>
 
 
-    <section class="features-strip-section pb-5">
-      <div class="container">
+    <section class="features-strip-section">
+      <div class="container-fluid">
         <div class="features-strip">
           <div class="row gap-3 align-items-center text-start">
 

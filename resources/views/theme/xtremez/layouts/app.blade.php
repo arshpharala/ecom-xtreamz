@@ -82,6 +82,52 @@
 
     @include('theme.xtremez.layouts.footer')
     @include('theme.xtremez.layouts.scrolltop')
+
+    <style>
+      #sendbtn,
+      #sendbtn2,
+      .wa-order-button,
+      .gdpr_wa_button_input {
+        background-color: #25d366 !important;
+        color: rgba(255, 255, 255, 1) !important;
+      }
+
+      .floating_button {
+        right: 20px;
+        position: fixed !important;
+        width: 60px !important;
+        height: 60px !important;
+        bottom: 20px !important;
+        background-color: #25D366 !important;
+        color: #ffffff !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 8px 25px -5px rgba(45, 62, 79, .3) !important;
+        z-index: 9999999 !important;
+        text-decoration: none !important;
+      }
+
+      .floating_button .floating_button_icon {
+        display: block !important;
+        width: 30px !important;
+        height: 30px !important;
+        background-image: url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30px" height="30px"><path fill="%23fff" d="M3.516 3.516c4.686-4.686 12.284-4.686 16.97 0 4.686 4.686 4.686 12.283 0 16.97a12.004 12.004 0 01-13.754 2.299l-5.814.735a.392.392 0 01-.438-.44l.748-5.788A12.002 12.002 0 013.517 3.517zm3.61 17.043l.3.158a9.846 9.846 0 0011.534-1.758c3.843-3.843 3.843-10.074 0-13.918-3.843-3.843-10.075-3.843-13.918 0a9.846 9.846 0 00-1.747 11.554l.16.303-.51 3.942a.196.196 0 00.219.22l3.961-.501zm6.534-7.003l-.933 1.164a9.843 9.843 0 01-3.497-3.495l1.166-.933a.792.792 0 00.23-.94L9.561 6.96a.793.793 0 00-.924-.445 1291.6 1291.6 0 00-2.023.524.797.797 0 00-.588.88 11.754 11.754 0 0010.005 10.005.797.797 0 00.88-.587l.525-2.023a.793.793 0 00-.445-.923L14.6 13.327a.792.792 0 00-.94.23z"/></svg>) !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size
+      }
+    </style>
+
+    <a id="sendbtn"
+      href="whatsapp://send?phone=971582242212&amp;text=Hi%20Merchlist%2C%20I%20need%20to%20inquire%20about%3A%0A%0A%2A%3A%2A%20https%3A%2F%2Fthemerchlist.com%2F&amp;app_absent=0"
+      role="button" target="_blank" class="floating_button">
+      <span class="floating_button_icon"></span>
+      <div class="label-container">
+        <div class="label-text">Need help? Chat with us</div>
+      </div>
+    </a>
   </div>
 
   <script>

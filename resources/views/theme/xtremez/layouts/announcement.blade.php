@@ -9,6 +9,7 @@
                 <div class="swiper-slide">
                   <i class="bi-ticket-detailed"></i>
                   {!! $offer->translation->description ?? '' !!}
+                  <a class="ms-2" href="{{ $offer->url ?? route('products', ['offer' => $offer->id]) }}"><u>View Offer</u></a>
                 </div>
               @endforeach
             </div>

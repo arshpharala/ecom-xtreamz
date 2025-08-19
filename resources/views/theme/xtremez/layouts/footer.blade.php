@@ -4,7 +4,7 @@
       <div class="row gy-4">
         <!-- Brand + Social -->
         <div class="col-12 col-lg-3">
-          <img src="{{ asset(setting('footer_logo', 'theme/xtremez/assets/images/logo.png')) }}" alt="Logo"
+          <img src="{{ asset(setting('site_footer_logo', 'theme/xtremez/assets/images/logo.png')) }}" alt="Logo"
             class="footer-logo mb-3">
           <p class="footer-about mb-3">
             Premium corporate gifts with fast delivery and trusted support.
@@ -61,11 +61,11 @@
         <!-- Subscribe -->
         <div class="col-12 col-lg-3">
           <h6 class="footer-title">Contact Us</h6>
-          <p class="text-muted mb-3">Do you have any questions or suggestions?</p>
+          <p class="mb-1">Do you have any questions or suggestions?</p>
           <ul class="footer-links list-unstyled">
             <li><a href="mailto:{{ setting('contact_email', 'info@xtremez.com') }}">{{ setting('contact_email', 'info@xtremez.com') }}</a></li>
           </ul>
-          <p class="text-muted mb-3">Do you need support? Give us a call.</p>
+          <p class="mb-1">Do you need support? Give us a call.</p>
           <ul class="footer-links list-unstyled">
             <li><a href="tel:{{ setting('contact_phone', '+1234567890') }}">{{ setting('contact_phone', '+1234567890') }}</a></li>
           </ul>

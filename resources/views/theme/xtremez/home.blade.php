@@ -217,7 +217,7 @@
 
     </style>
 
-    <section class="video py-5 overflow-hidden">
+    <section class="video pt-5 overflow-hidden">
       <div class="container-fluid" style="max-width: 1800px">
         <div class="row">
           <div class="video-content open-up aos-init aos-animate" data-aos="zoom-out">
@@ -258,56 +258,27 @@
       </div>
     </section> --}}
 
-    <style>
-      .ltn__call-to-action-4 {
-        position: relative;
-        background:#e9e9e9;
-      }
-
-      .ltn__call-to-action-4 img {
-        max-width: 100%;
-      }
-
-      .ltn__section-title-2 {
-        margin-bottom: 40px;
-      }
-
-      .ltn__secondary-color {
-        color: var(--color-secondary) !important;
-      }
-
-      .ltn__section-title-2 .section-title {
-        font-size: 72px;
-        font-weight: 700;
-        margin-bottom: 15px;
-        line-height: 1;
-      }
-
-
-
-    </style>
-
-    <div class="ltn__call-to-action-4 py-5">
+    <section class="brochure-section py-5">
       <div class="container">
         <div class="row">
-          <div class="col-lg-5">
+          <div class="col-lg-6">
             <img src="{{ asset('assets/images/corporate-gifts-giftana.png') }}" alt="#">
           </div>
-          <div class="col-lg-7">
-            <div class="call-to-action-inner call-to-action-inner-4 d-flex flex-column h-100 justify-content-center">
-              <div class="section-title-area ltn__section-title-2">
+          <div class="col-lg-6">
+            <div class="d-flex flex-column h-100 justify-content-center">
+              <div class="section-title-area">
                 <h1 class="section-title">Our 2024 Gifts
                   Collection</h1>
               </div>
 
-              <div class="btn-wrapper animated">
-                <a href="shop.html" class="btn btn-outline-dark text-uppercase">View Brochure</a>
+              <div>
+                <a href="#" class="btn btn-outline-dark text-uppercase">View Brochure</a>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <section class="newsletter bg-light"
       style="background: url(https://themewagon.github.io/kaira/images/pattern-bg.png) repeat;">

@@ -21,17 +21,34 @@ class CategoryController extends Controller
         if ($request->ajax()) {
             $locale = app()->getLocale();
 
-            $query = Category::withTrashed()->with('translations')->select('id', 'slug', 'icon', 'parent_id', 'position', 'is_visible', 'deleted_at', 'created_at');
+            $query = Category::withTrashed()
+                ->leftJoin(
+                    'category_translations',
+                    function ($join) use ($locale) {
+                        $join->on('categories.id', '=', 'category_translations.category_id')
+                            ->where('category_translations.locale', '=', $locale);
+                    }
+                )
+                ->select(
+                    'categories.id',
+                    'categories.slug',
+                    'categories.icon',
+                    'categories.parent_id',
+                    'categories.position',
+                    'categories.is_visible',
+                    'categories.deleted_at',
+                    'categories.created_at',
+                    'category_translations.name'
+                );
+
             return DataTables::of($query)
-                ->editColumn('name', function ($row) use ($locale) {
-                    return $row->translations->where('locale', $locale)->first()?->name ?? $row->slug;
-                })
                 ->editColumn('icon', function ($row) {
                     return $row->icon
                         ? '<img src="' . asset('storage/' . $row->icon) . '" class="img-sm">'
                         : '';
                 })
-                ->addColumn('status', fn($row) => $row->deleted_at ? '<span class="badge badge-danger">Deleted</span>' : '<span class="badge badge-success">Active</span>')
+                ->editColumn('is_visible', fn($row) => $row->is_visible ? '<span class="badge border border-success text-success">Visible</span>' : '<span class="badge border border-warning text-warning">Hidden</span>')
+                ->addColumn('status', fn($row) => $row->deleted_at ? '<span class="badge border border-danger text-danger">Deleted</span>' : '<span class="badge border border-success text-success">Active</span>')
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.catalog.categories.edit', $row->id);
                     $deleteUrl = route('admin.catalog.categories.destroy', $row->id);
@@ -41,7 +58,7 @@ class CategoryController extends Controller
                 ->editColumn('created_at', function ($row) {
                     return $row->created_at?->format('d-M-Y  h:m A');
                 })
-                ->rawColumns(['action', 'status', 'icon'])
+                ->rawColumns(['action', 'is_visible', 'status', 'icon'])
                 ->make(true);
         }
         return view('theme.adminlte.catalog.categories.index');

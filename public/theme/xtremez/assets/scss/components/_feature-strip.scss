@@ -10,7 +10,8 @@
     bottom: 0;
     width: 100%;
     height: 50%;
-    background-color: #d0e9ea;
+    // background-color: #d0e9ea;
+    background-color: var(--color-footer);
     z-index: 1;
   }
 
@@ -49,11 +50,11 @@
         height: 44px;
         display: grid;
         place-items: center;
-        border: 2px solid var(--color-secondary);
-        color: var(--color-secondary);
+        border: 2px solid var(--color-dark-muted);
+        color: var(--color-dark);
         border-radius: 0.5rem;
         font-size: 1.2rem;
-        background: #fff;
+        background: var(--color-light);
       }
 
       /* text */
@@ -74,7 +75,7 @@
     /* Dividers only on lg+ */
     @media (min-width: 992px) {
       .col-lg + .col-lg {
-        border-left: 1px solid var(--border-color);
+        border-left: 1px solid var(--sub-color);
       }
     }
   }

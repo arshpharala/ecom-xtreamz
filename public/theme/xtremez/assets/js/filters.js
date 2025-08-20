@@ -2,7 +2,7 @@
 // Global State
 // ===============================
 let activeAttributeKeys = []; // Used to track current dynamic attributes for cleanup
-let currencySymbol = $("meta[name='currency-symbol']").attr("content") || "AED";
+let currencySymbol = $("meta[name='currency-symbol-1']").attr("content") || 'AED';
 
 // ===============================
 // 1. Price Slider Initialization
@@ -154,11 +154,11 @@ $(function () {
         // Price
         filters.price_min = $("#priceLabelMinSidebar")
             .text()
-            .replace("AED", "")
+            .replace(currencySymbol, "")
             .trim();
         filters.price_max = $("#priceLabelMaxSidebar")
             .text()
-            .replace("AED", "")
+            .replace(currencySymbol, "")
             .trim();
 
         // Search & Sort

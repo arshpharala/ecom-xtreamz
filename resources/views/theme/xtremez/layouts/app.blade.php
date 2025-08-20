@@ -42,12 +42,14 @@
 
 
   <style>
-    @font-face {
+    <style>@font-face {
       font-family: 'UAESymbol';
-      src: url('./assets/fonts/font.woff2') format('woff2'),
-        url('./assets/fonts/font.woff') format('woff'),
-        url('./assets/fonts/fontD.ttf') format('truetype');
+      src: url('{{ asset('assets/fonts/font.woff2') }}') format('woff2'),
+        url('{{ asset('assets/fonts/font.woff') }}') format('woff'),
+        url('{{ asset('assets/fonts/fontD.ttf') }}') format('truetype');
     }
+
+
 
     .dirham-symbol {
       font-family: 'UAESymbol', sans-serif;
@@ -55,7 +57,6 @@
       color: inherit;
       /* font-weight: bold; */
     }
-
   </style>
   @stack('head')
 

@@ -40,6 +40,23 @@
   <link rel="icon" type="image/png" sizes="16x16"
     href="{{ asset('theme/xtremez/assets/icons//favicon-16x16.png') }}"> --}}
 
+
+  <style>
+    @font-face {
+      font-family: 'UAESymbol';
+      src: url('./assets/fonts/font.woff2') format('woff2'),
+        url('./assets/fonts/font.woff') format('woff'),
+        url('./assets/fonts/fontD.ttf') format('truetype');
+    }
+
+    .dirham-symbol {
+      font-family: 'UAESymbol', sans-serif;
+      font-size: inherit;
+      color: inherit;
+      /* font-weight: bold; */
+    }
+
+  </style>
   @stack('head')
 
 

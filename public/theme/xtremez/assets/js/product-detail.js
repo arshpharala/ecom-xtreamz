@@ -62,18 +62,25 @@ $(function () {
             let html = "";
 
             if (hasOffer && discountedPrice > 0) {
-                html += `<span class="text-danger fw-bold ms-2">${formatPrice(
-                    currency,
-                    discountedPrice
-                )}</span>`;
-                html += `<span class="text-muted text-decoration-line-through ms-2">${formatPrice(
-                    currency,
-                    originalPrice
-                )}</span>`;
+                html += `<span class="text-danger fw-bold ms-2">${variant?.offer_data?.discounted_price_with_currency}</span>`;
+                html += `<span class="text-muted text-decoration-line-through ms-2">${variant?.price_with_currency}</span>`;
                 html += `<span class="badge bg-secondary ms-2">${offerLabel}</span>`;
             } else {
                 html += `<span>${formatPrice(currency, originalPrice)}</span>`;
             }
+            // if (hasOffer && discountedPrice > 0) {
+            //     html += `<span class="text-danger fw-bold ms-2">${formatPrice(
+            //         currency,
+            //         discountedPrice
+            //     )}</span>`;
+            //     html += `<span class="text-muted text-decoration-line-through ms-2">${formatPrice(
+            //         currency,
+            //         originalPrice
+            //     )}</span>`;
+            //     html += `<span class="badge bg-secondary ms-2">${offerLabel}</span>`;
+            // } else {
+            //     html += `<span>${formatPrice(currency, originalPrice)}</span>`;
+            // }
 
             $("#priceDisplay").html(html);
         } catch (err) {

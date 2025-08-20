@@ -19,20 +19,6 @@
   <meta name="decimal" content="{{ active_currency(true)->decimal }}">
   <meta name="decimal-separator" content="{{ active_currency(true)->decimal_separator }}">
   <meta name="group-separator" content="{{ active_currency(true)->group_separator }}">
-  <style>
-    @font-face {
-      font-family: 'UAESymbol';
-      src: url('assets/font/font.ttf') format('truetype');
-    }
-
-    .uae-symbol {
-      font-family: 'UAESymbol';
-      margin-right: 5px;
-      color: 'black';
-      /* Ensure symbol follows theme */
-    }
-  </style>
-
   <title>Corporate Gifts & Promotional Items in UAE | Xtreme
     Gifting</title>
 
@@ -55,7 +41,24 @@
     href="{{ asset('theme/xtremez/assets/icons//favicon-16x16.png') }}"> --}}
 
 
+  <style>
+    @font-face {
+      font-family: 'UAESymbol';
+      src: url('/assets/fonts/font.woff2') format('woff2'),
+        url('/assets/fonts/font.woff') format('woff'),
+        url('/assets/fonts/fontD.ttf') format('truetype');
+    }
+
+    .dirham-symbol {
+      font-family: 'UAESymbol', sans-serif;
+      font-size: inherit;
+      color: inherit;
+      /* font-weight: bold; */
+    }
+
+  </style>
   @stack('head')
+
 
   <!-- Your compiled SCSS output -->
   <link href="{{ asset('theme/xtremez/assets/css/main.css') }}" rel="stylesheet">

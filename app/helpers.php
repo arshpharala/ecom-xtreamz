@@ -71,16 +71,12 @@ if (!function_exists('active_currency')) {
             // TODO: swap this for your real “current site / session” currency
             $active = Currency::query()->first();
 
+            if ($active->code === 'AED') {
+                $active->symbol = '<span class="dirham-symbol">&#xea;</span>';
+            }
         }
 
         return $obj ? $active : ($active?->code ?? 'AED');
-    }
-}
-
-if (!function_exists('active_country')) {
-    function active_country()
-    {
-        return Country::first(); // for now send like this
     }
 }
 
@@ -100,6 +96,10 @@ if (!function_exists('price_format')) {
             return number_format($amt, 2); // fallback
         }
 
+        if ($currency->code === 'AED') {
+            $currency->symbol = '<span class="dirham-symbol">&#xea;</span>';
+        }
+
         $formattedAmount = number_format(
             $amt,
             $currency->decimal ?? 2,
@@ -108,8 +108,15 @@ if (!function_exists('price_format')) {
         );
 
         return $currency->currency_position === 'Left'
-            ? $currency->symbol . $formattedAmount
-            : $formattedAmount . $currency->symbol;
+            ? $currency->symbol .' ' . $formattedAmount
+            : $formattedAmount .' ' . $currency->symbol;
+    }
+}
+
+if (!function_exists('active_country')) {
+    function active_country()
+    {
+        return Country::first(); // for now send like this
     }
 }
 

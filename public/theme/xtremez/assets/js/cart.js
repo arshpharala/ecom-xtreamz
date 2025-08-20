@@ -95,13 +95,23 @@ function updateCartVariantQty(variantId, qty, onSuccess = null) {
 function updateCartCount(cart) {
     const currencyCode = $("meta[name='currency']").attr("content");
 
-    $("body").find("#cart-items-count").text(cart.count);
-    $("body").find(".cart-total").text(formatPrice(currencyCode, cart.total));
+    $("body").find("#cart-items-count").html(cart.count);
+    $("body").find(".cart-total").html(cart.total_with_currency);
     $("body")
         .find(".cart-sub-total")
-        .text(formatPrice(currencyCode, cart.subTotal));
-    $("body").find(".cart-taxes").text(formatPrice(currencyCode, cart.tax));
+        .html(cart.subTotal_with_currency);
+    $("body").find(".cart-taxes").html(cart.tax_with_currency);
 }
+// function updateCartCount(cart) {
+//     const currencyCode = $("meta[name='currency']").attr("content");
+
+//     $("body").find("#cart-items-count").text(cart.count);
+//     $("body").find(".cart-total").text(formatPrice(currencyCode, cart.total));
+//     $("body")
+//         .find(".cart-sub-total")
+//         .text(formatPrice(currencyCode, cart.subTotal));
+//     $("body").find(".cart-taxes").text(formatPrice(currencyCode, cart.tax));
+// }
 
 function syncSelectAll() {
     const $checkboxes = $(".cart-item:visible .form-check-input");

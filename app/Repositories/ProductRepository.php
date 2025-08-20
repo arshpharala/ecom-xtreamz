@@ -55,6 +55,7 @@ class ProductRepository
         $productVariant->link       = route('products.show', ['slug' => $productVariant->slug, 'variant' => $productVariant->id]);
         $productVariant->image      = $productVariant->file_path ? asset('storage/' . $productVariant->file_path) : null;
         $productVariant->currency   = active_currency();
+        $productVariant->price_with_currency   = price_format(active_currency(), $productVariant->price);
         $productVariant->cart_item  = (new CartService())->getItem($productVariant->id);
         $productVariant->is_in_cart = $productVariant->cart_item ? true : false;
 
@@ -88,6 +89,7 @@ class ProductRepository
         return [
             'has_offer'         => true,
             'discounted_price'  => $discountedPrice,
+            'discounted_price_with_currency'  => price_format(active_currency(), $discountedPrice),
             'label'             => $label,
             'title'             => $offer->translation->title ?? '',
         ];

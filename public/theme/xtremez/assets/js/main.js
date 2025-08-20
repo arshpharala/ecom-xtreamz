@@ -155,33 +155,44 @@ function debounce(func, delay = 300) {
 //     </div>`;
 // }
 
-
 function render_product_card(product, grid = false) {
-  const hasOffer = product.offer_data?.has_offer;
-  const offerText = hasOffer ? product.offer_data.label : "";
+    const hasOffer = product.offer_data?.has_offer;
+    const offerText = hasOffer ? product.offer_data.label : "";
 
-  const currentCurrency = product.currency;
-  const discountedPrice = parseFloat(product.offer_data?.discounted_price || 0);
-  const basePrice = parseFloat(product.price);
+    const currentCurrency = product.currency;
+    const discountedPrice = parseFloat(
+        product.offer_data?.discounted_price || 0
+    );
+    const basePrice = parseFloat(product.price);
 
-  const displayPrice =
-    hasOffer && discountedPrice > 0
-      ? formatPrice(currentCurrency, discountedPrice)
-      : formatPrice(currentCurrency, basePrice);
+    const displayPrice =
+        hasOffer && discountedPrice > 0
+            ? product.offer_data.discounted_price_with_currency
+            : product.price_with_currency;
 
-  const originalPrice = hasOffer
-    ? `<span class="orig text-muted text-decoration-line-through ms-2">${formatPrice(currentCurrency, basePrice)}</span>`
-    : "";
+    const originalPrice = hasOffer
+        ? `<span class="orig text-muted text-decoration-line-through ms-2">${product.price_with_currency}</span>`
+        : "";
+    //   const displayPrice =
+    //     hasOffer && discountedPrice > 0
+    //       ? formatPrice(currentCurrency, discountedPrice)
+    //       : formatPrice(currentCurrency, basePrice);
 
-  // optional: if your API sends wishlisted flag; else defaults false
-  const isWishlisted = !!product.is_wishlisted;
+    //   const originalPrice = hasOffer
+    //     ? `<span class="orig text-muted text-decoration-line-through ms-2">${formatPrice(currentCurrency, basePrice)}</span>`
+    //     : "";
 
-  return `
+    // optional: if your API sends wishlisted flag; else defaults false
+    const isWishlisted = !!product.is_wishlisted;
+
+    return `
   <div class="item ${grid || ""}" data-category="${product.category}">
     <div class="product-card d-flex flex-column">
 
       <div class="image-box position-relative">
-        <img src="${product.image}" alt="${product.name}" class="img-fluid product-img"/>
+        <img src="${product.image}" alt="${
+        product.name
+    }" class="img-fluid product-img"/>
 
         ${hasOffer ? `<div class="offer-badge">${offerText}</div>` : ""}
 
@@ -209,13 +220,19 @@ function render_product_card(product, grid = false) {
 
         <div class="product-meta">
           <div class="price-wrap">
-            <span class="price fs-4 fw-bold">${displayPrice}</span>
+            <span class="price fs-5 fw-bold">${displayPrice}</span>
             ${originalPrice}
           </div>
 
-          <button class="btn cart-btn add-to-cart-btn ms-2" data-variant-id="${product.id}" aria-label="Add to cart">
-            <i class="bi bi-cart add-to-cart" style="${product.is_in_cart ? "display:none;" : ""}"></i>
-            <i class="bi bi-cart-check added-to-cart" style="${product.is_in_cart ? "" : "display:none;"}"></i>
+          <button class="btn cart-btn add-to-cart-btn ms-2" data-variant-id="${
+              product.id
+          }" aria-label="Add to cart">
+            <i class="bi bi-cart add-to-cart" style="${
+                product.is_in_cart ? "display:none;" : ""
+            }"></i>
+            <i class="bi bi-cart-check added-to-cart" style="${
+                product.is_in_cart ? "" : "display:none;"
+            }"></i>
           </button>
         </div>
       </div>
@@ -266,4 +283,3 @@ $(document).on("change", "#city-select", function () {
         });
     }
 });
-

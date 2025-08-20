@@ -44,9 +44,9 @@
   <style>
     @font-face {
       font-family: 'UAESymbol';
-      src: url('/assets/fonts/font.woff2') format('woff2'),
-        url('/assets/fonts/font.woff') format('woff'),
-        url('/assets/fonts/fontD.ttf') format('truetype');
+      src: url('./assets/fonts/font.woff2') format('woff2'),
+        url('./assets/fonts/font.woff') format('woff'),
+        url('./assets/fonts/fontD.ttf') format('truetype');
     }
 
     .dirham-symbol {

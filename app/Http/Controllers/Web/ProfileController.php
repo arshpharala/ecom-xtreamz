@@ -34,6 +34,9 @@ class ProfileController extends Controller
                 $user = $user->load('addresses');
                 $data['provinces'] = Province::where('country_id', 1)->get();
                 break;
+            case 'wishlist':
+                $user = $user->load('wishlist');
+                break;
 
             default:
 

@@ -3,6 +3,7 @@
 namespace App\Models\Catalog;
 
 use App\Models\CMS\Tag;
+use App\Models\Wishlist;
 use App\Models\Attachment;
 use App\Models\Catalog\Product;
 use App\Models\Catalog\AttributeValue;
@@ -49,6 +50,11 @@ class ProductVariant extends Model
     public function offers()
     {
         return $this->belongsToMany(Offer::class, 'offer_product_variants');
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
     }
 
     public function activeOffer()

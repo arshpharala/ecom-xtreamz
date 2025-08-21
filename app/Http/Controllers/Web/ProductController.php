@@ -200,7 +200,7 @@ class ProductController extends Controller
 
     public function getProducts()
     {
-        $products = $this->repository->getFiltered();
+        $products = $this->repository->getFiltered(request()->per_page);
 
         if ($products instanceof \Illuminate\Pagination\LengthAwarePaginator) {
             return response()->json([

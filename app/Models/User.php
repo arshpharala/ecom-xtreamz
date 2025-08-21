@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\Address;
+use App\Models\Wishlist;
 use App\Models\Cart\Order;
 use App\Models\Cart\UserCard;
 use Laravel\Cashier\Billable;
@@ -90,5 +91,9 @@ class User extends Authenticatable
     public function cards()
     {
         return $this->hasMany(UserCard::class);
+    }
+
+    public function wishlist() {
+        return $this->hasMany(Wishlist::class);
     }
 }

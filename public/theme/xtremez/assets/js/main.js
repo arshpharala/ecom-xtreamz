@@ -283,3 +283,20 @@ $(document).on("change", "#city-select", function () {
         });
     }
 });
+
+$(document).on('click', '.wishlist-btn', function () {
+    const $btn = $(this);
+    const product_variant_id = $btn.data('variant-id') || null;
+
+    $.post(`${appUrl}/customers/wishlist`, {
+        product_variant_id, toggle: true
+    }).done(function (res) {
+        // Update wishlist counter somewhere in header
+        $('body').find('#wishlist-count').text(res.wishlist.count);
+
+        // Toggle UI
+        $btn.toggleClass('is-active');
+    }).fail(function () {
+        alert('Unable to update wishlist.');
+    });
+});

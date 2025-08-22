@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-5 col-sm-3">
           <div class="nav flex-column nav-tabs" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <a class="nav-link active" id=home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
+            <a class="nav-link active" id="home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
               role="tab" aria-controls="v-pills-home" aria-selected="true">Site</a>
             <a class="nav-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button"
               role="tab" aria-controls="v-pills-profile" aria-selected="false">Social Links</a>

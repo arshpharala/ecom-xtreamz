@@ -58,6 +58,26 @@ if (!function_exists('active_locals')) {
     }
 }
 
+
+if (!function_exists('render_meta_tags')) {
+    function render_meta_tags($meta = null)
+    {
+        $defaultTitle = config('app.name', 'Optimised Medical Supplies');
+        $defaultDescription = 'Welcome to ' . $defaultTitle . ' | Optimised Medical Supplies.';
+        $defaultKeywords = 'Optimised Medical Supplies';
+
+        $title = $meta->meta_title ?? $defaultTitle;
+        $description = $meta->meta_description ?? $defaultDescription;
+        $keywords = $meta->meta_keywords ?? $defaultKeywords;
+
+        return <<<HTML
+            <title>{$title}</title>
+            <meta name="description" content="{$description}">
+            <meta name="keywords" content="{$keywords}">
+        HTML;
+    }
+}
+
 if (!function_exists('active_currency')) {
     /**
      * When $obj = true, returns the Currency row (cached).
@@ -108,8 +128,8 @@ if (!function_exists('price_format')) {
         );
 
         return $currency->currency_position === 'Left'
-            ? $currency->symbol .' ' . $formattedAmount
-            : $formattedAmount .' ' . $currency->symbol;
+            ? $currency->symbol . ' ' . $formattedAmount
+            : $formattedAmount . ' ' . $currency->symbol;
     }
 }
 

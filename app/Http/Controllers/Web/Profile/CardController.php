@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\Profile;
+namespace App\Http\Controllers\Web\V2\Profile;
 
 use Illuminate\Http\Request;
 use App\Services\StripeService;

@@ -13,8 +13,7 @@
                   <p class="fs-5 fw-semibold mt-3">
                     {{ $product->name }}
                   </p>
-                  <p class="fs-2 fw-normal mt-3 z-2 align-self-end"> {{ active_currency() }} {{ $product->price }}
-                  </p>
+                  <p class="fs-2 fw-normal mt-3 z-2 align-self-end"> {!! price_format(active_currency(true)->code, $product->price) !!} </p>
 
                 </div>
                 <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="gift-img img-left-big">
@@ -30,7 +29,7 @@
                   class="gift-box gift-right-half bg-lightblue flex-fill position-relative text-white p-4 d-flex flex-column justify-content-between">
                   <div class="z-2 px-4">
                     <p class="fs-5 fw-bold my-3">{{ $product->name }}</p>
-                    <p class="fs-2 fw-normal">{{ active_currency() }} {{ $product->price }} </p>
+                    <p class="fs-2 fw-normal">{!! price_format(active_currency(true)->code, $product->price) !!} </p>
                   </div>
                   <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="gift-img img-right-small">
                 </div>
@@ -41,7 +40,7 @@
                   <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="gift-img img-left-small">
                   <div class="z-2 text-start px-4">
                     <p class="fs-5 fw-bold my-3">{{ $product->name }}</p>
-                    <p class="fs-2 fw-normal">{{ active_currency() }} {{ $product->price }} </p>
+                    <p class="fs-2 fw-normal">{!! price_format(active_currency(true)->code, $product->price) !!} </p>
                   </div>
                 </div>
               @endif

@@ -25,6 +25,10 @@ class CartService
             'discount'  => $discount,
             'tax'       => $tax,
             'total'     => $total,
+            'subTotal_with_currency'  => price_format(active_currency(), $subTotal),
+            'discount_with_currency'  => price_format(active_currency(), $discount),
+            'tax_with_currency'       => price_format(active_currency(), $tax),
+            'total_with_currency'     => price_format(active_currency(), $total),
             'count'     => $this->getItemCount(),
             'coupon'    => $this->getCoupon(),
         ]);

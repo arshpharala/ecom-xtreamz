@@ -89,18 +89,20 @@
           <div class="price fs-3 py-3" id="priceDisplay">
             @if ($hasOffer)
               <span class="text-danger fw-bold">
-                {{ price_format(active_currency(), number_format($discountedPrice, 2)) }}
+                {!! $productVariant->offer_data['discounted_price_with_currency'] !!}
                 {{-- {{ active_currency() }} {{ number_format($discountedPrice, 2) }} --}}
             </span>
-              <span class="text-muted text-decoration-line-through ms-2">
-                  {{-- {{ active_currency() }} {{ number_format($productVariant->price, 2) }} --}}
-                {{ price_format(active_currency(), number_format($productVariant->price, 2)) }}
+            <span class="text-muted text-decoration-line-through ms-2">
+                {{-- {{ active_currency() }} {{ number_format($productVariant->price, 2) }} --}}
+
+                {!! $productVariant->price_with_currency !!}
             </span>
             <span class="badge bg-secondary ms-2">{{ $productVariant->offer_data['label'] }}</span>
             @else
             <span>
+                {!! $productVariant->price_with_currency !!}
+                {{-- {{ price_format(active_currency(), number_format($productVariant->price, 2)) }} --}}
                 {{-- {{ active_currency() }} {{ number_format($productVariant->price, 2) }} --}}
-                  {{ price_format(active_currency(), number_format($productVariant->price, 2)) }}
                 </span>
             @endif
           </div>

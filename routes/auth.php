@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\Profile\AddressController;
 use App\Http\Controllers\Web\Profile\CardController;
+use App\Http\Controllers\Web\Profile\WishlistController;
 use App\Http\Controllers\Web\ProfileController;
 
 Route::middleware('guest')->group(function () {
@@ -26,4 +27,5 @@ Route::prefix('/customers')->name('customers.')->middleware('auth')->group(funct
     Route::delete('/card/{card}/delete',            [CardController::class, 'destroy'])->name('cart.delete');
 
     Route::resource('address',                      AddressController::class);
+    Route::resource('wishlist',                     WishlistController::class);
 });

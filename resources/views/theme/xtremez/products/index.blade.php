@@ -108,15 +108,15 @@
             <!-- Price Range -->
             <div class="price-range-wrapper cc-price-range mb-4">
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <span id="priceLabelMinSidebar" class="price-label">5
-                  AED</span>
-                <span id="priceLabelMaxSidebar" class="price-label">4000
-                  AED</span>
+                <span id="priceLabelMinSidebar" class="price-label">{!! price_format(active_currency(), 10) !!}</span>
+                <span id="priceLabelMaxSidebar" class="price-label">{!! price_format(active_currency(), 2000) !!}</span>
               </div>
               <div id="price-slider-sidebar"></div>
             </div>
 
           </div>
+
+          
         </aside>
 
         <!-- Main Content: Product List -->

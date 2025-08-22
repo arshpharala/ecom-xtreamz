@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Catalog\Product;
 use App\Models\Catalog\ProductVariant;
+use App\Models\Wishlist;
 use App\Services\CartService;
 use Illuminate\Support\Facades\Request;
 
@@ -12,6 +13,7 @@ class ProductRepository
     public function getFiltered($perPage = 12)
     {
         $filters = Request::only([
+            'is_wishlisted',
             'is_featured',
             'is_new',
             'show_in_slider',
@@ -38,6 +40,10 @@ class ProductRepository
             }])
             ->withSelection();
 
+            if (auth()->check() && !empty($filters['is_wishlisted'])) {
+                $query->whereHas('wishlists', fn($q) => $q->where('user_id', auth()->id()));
+            }
+
         // Handle pagination
         if (Request::has('page')) {
             return $query->paginate($perPage)->through(function ($productVariant) {
@@ -55,10 +61,15 @@ class ProductRepository
         $productVariant->link       = route('products.show', ['slug' => $productVariant->slug, 'variant' => $productVariant->id]);
         $productVariant->image      = $productVariant->file_path ? asset('storage/' . $productVariant->file_path) : null;
         $productVariant->currency   = active_currency();
+        $productVariant->price_with_currency   = price_format(active_currency(), $productVariant->price);
         $productVariant->cart_item  = (new CartService())->getItem($productVariant->id);
         $productVariant->is_in_cart = $productVariant->cart_item ? true : false;
 
         $productVariant->offer_data = $this->transformOffer($productVariant);
+
+        if (auth()->check()) {
+            $productVariant->is_wishlisted = Wishlist::isWishlisted(auth()->id(), $productVariant->id);
+        }
 
         return $productVariant;
     }
@@ -88,6 +99,7 @@ class ProductRepository
         return [
             'has_offer'         => true,
             'discounted_price'  => $discountedPrice,
+            'discounted_price_with_currency'  => price_format(active_currency(), $discountedPrice),
             'label'             => $label,
             'title'             => $offer->translation->title ?? '',
         ];

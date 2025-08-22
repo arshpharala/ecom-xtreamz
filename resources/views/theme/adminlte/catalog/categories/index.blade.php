@@ -26,6 +26,7 @@
                   <th>Icon</th>
                   <th>Name</th>
                   <th>Slug</th>
+                  <th>Visible in Store</th>
                   <th>Status</th>
                   <th>Created At</th>
                   <th>Action</th>
@@ -60,12 +61,15 @@
           },
           {
             data: 'name',
-            orderable: false,
-            searchable: false
+            name: 'category_translations.name'
           },
           {
             data: 'slug',
             name: 'slug'
+          },
+          {
+            data: 'is_visible',
+            name: 'is_visible'
           },
           {
             data: 'status',

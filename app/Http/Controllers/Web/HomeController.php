@@ -18,7 +18,7 @@ class HomeController extends Controller
     public function index()
     {
         $locale     = app()->getLocale();
-        $categories = Category::leftJoin('category_translations', function ($join) use ($locale) {
+        $categories = Category::visible()->leftJoin('category_translations', function ($join) use ($locale) {
             $join->on('category_translations.category_id', 'categories.id')->where('locale', $locale);
         })
             ->select('categories.id', 'categories.slug', 'categories.icon', 'categories.created_at', 'category_translations.name')
@@ -29,7 +29,7 @@ class HomeController extends Controller
 
 
         $giftSetProducts = (new ProductRepository())->getGiftProducts();
-
+        $promoOffers = (new \App\Repositories\OfferRepository())->getPromoOffers(3);
 
         $brands = Brand::whereNotNull('logo')->active()->orderBy('position')->get();
 
@@ -38,6 +38,7 @@ class HomeController extends Controller
         $data['categories'] = $categories;
         $data['brands']     = $brands;
         $data['giftSetProducts'] = $giftSetProducts;
+        $data['promoOffers'] = $promoOffers;
 
 
         return view('theme.xtremez.home', $data);

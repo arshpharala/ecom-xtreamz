@@ -105,11 +105,14 @@
             <ul class="list-unstyled mb-4">
               <li class="d-flex justify-content-between mb-2">
                 <span>Subtotal</span>
-                <span class="cart-sub-total">{{ number_format($cart['subTotal'], 2) }} {{ active_currency() }}</span>
+                <span class="cart-sub-total">
+                    {!! price_format(active_currency(), $cart['subTotal']) !!}</span>
               </li>
               <li class="d-flex justify-content-between mb-2">
                 <span>Taxes</span>
-                <span class="cart-taxes">{{ number_format($cart['tax'], 2) }} {{ active_currency() }}</span>
+                <span class="cart-taxes">
+                    {!! price_format(active_currency(), $cart['tax']) !!}
+                </span>
               </li>
               @if (session('applied_coupon'))
                 <li class="d-flex justify-content-between mb-2 align-items-center">
@@ -120,14 +123,15 @@
                     </a>
                   </div>
                   <span class="text-success">
-                    -{{ number_format(session('applied_coupon.discount'), 2) }} {{ active_currency() }}
+                    -{!! price_format(active_currency(), session('applied_coupon.discount')) !!}
                   </span>
                 </li>
               @endif
 
               <li class="d-flex justify-content-between fw-bold border-top pt-2">
                 <span>Total</span>
-                <span class="cart-total text-black">{{ number_format($cart['total'], 2) }} {{ active_currency() }}</span>
+                <span class="cart-total text-black">{!! price_format(active_currency(), $cart['total']) !!}</span>
+                {{-- <span class="cart-total text-black">{!! number_format($cart['total'], 2) !!} {!! active_currency(true)->symbol !!}</span> --}}
               </li>
             </ul>
 
@@ -149,7 +153,3 @@
     </div>
   </section>
 @endsection
-
-
-@push('scripts')
-@endpush

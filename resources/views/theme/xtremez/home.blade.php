@@ -117,6 +117,32 @@
     ])
 
 
+    @if ($promoOffers->isNotEmpty())
+      <section class="promo-tiles py-3">
+        <div class="container">
+          <div class="row g-3 g-lg-4">
+            @foreach ($promoOffers as $tile)
+              <div class="col-12 col-md-4">
+                <a href="{{ $tile->url }}" class="promo-tile" style="background: {{ $tile->bg }}">
+                  <div class="promo-copy">
+                    @if ($tile->eyebrow)
+                      <div class="eyebrow">{{ $tile->eyebrow }}</div>
+                    @endif
+                    <h3 class="title">{{ $tile->title }}</h3>
+                    <span class="cta">Shop Now</span>
+                  </div>
+                  <img src="{{ $tile->image }}" alt="{{ $tile->title }}" class="promo-img">
+                </a>
+              </div>
+            @endforeach
+          </div>
+        </div>
+      </section>
+    @endif
+
+
+
+
     @foreach ($categories as $category)
       @include('theme.xtremez.components.products.carousel', [
           'id' => $category->id,
@@ -134,22 +160,31 @@
     ])
 
     <section class="sustainable-section py-5">
-      <div class="container-fluid px-0 bg-beige">
-        <div class="row g-0 align-items-center">
+      <div class="container px-0 bg-beige">
+        <div class="row g-0 align-items-stretch sustainable-card"><!-- added hook -->
 
           <!-- Left Text Column -->
-          <div class="sustainable-content-section col-md-5 px-lg-5 text-center text-md-start">
+          <div class="sustainable-content-section col-md-6 px-lg-5 text-center text-md-start">
             <div class="sustainable-content px-3 px-xl-5 animate-on-scroll" data-animate="fade-right">
-              <h2 class="sustainable-heading fw-bold mb-4">Sustainable<br>Products</h2>
-              <a href="{{ route('products') }}" class="btn btn-secondary rounded-2">View
-                Items</a>
+              <span class="sustainable-eyebrow">Eco Collection</span>
+              <h2 class="sustainable-heading fw-bold mb-2">Sustainable<br>Products</h2>
+
+              <div class="heading-accent mb-4"></div>
+
+              <!-- optional sub copy -->
+              <p class="sustainable-sub mb-4">Thoughtfully made from recycled materials. Durable design without
+                compromising style.</p>
+
+              <a href="{{ route('products') }}" class="btn btn-secondary">
+                View Items
+                <i class="bi bi-arrow-right-short"></i>
+              </a>
             </div>
           </div>
 
           <!-- Right Image Column -->
-          <div class="col-md-7 sustainable-bg-image">
-            <div class="sustainable-image animate-on-scroll" data-animate="fade-left">
-            </div>
+          <div class="col-md-6 sustainable-bg-image">
+            <div class="sustainable-image animate-on-scroll" data-animate="fade-left"></div>
           </div>
         </div>
       </div>
@@ -178,25 +213,34 @@
       </div>
     </section>
 
+    <style>
 
-    <section class="video-section position-relative py-5">
-      <div class="video-container">
-        <div class="video-bg">
-          <img src="{{ asset('theme/xtremez/assets/images/video-thumbnail.png') }}" alt="Video Background"
-            class="w-100 h-100 object-fit-cover">
+    </style>
+
+    <section class="video pt-5 overflow-hidden">
+      <div class="container-fluid" style="max-width: 1800px">
+        <div class="row">
+          <div class="video-content open-up aos-init aos-animate" data-aos="zoom-out">
+
+            <div class="video-bg position-relative">
+              <img src="{{ asset('assets/images/video-image.jpg') }}" alt="video" class="video-image img-fluid">
+
+              <!-- Play Button Overlay -->
+              <div class="video-player">
+                <a class="youtube cboxElement" href="https://www.youtube.com/embed/pjtsGzQjFM4">
+                  <svg width="70" height="70" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7z"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+          </div>
         </div>
-
-        <div class="video-overlay position-absolute top-0 start-0 w-100 h-100"></div>
-
-        <button class="video-play-btn position-absolute top-50 start-50 translate-middle" aria-label="Play Video"
-          data-toggle="modal" data-target="#exampleModalCenter">
-          <i class="bi bi-play-fill"></i>
-        </button>
-
       </div>
     </section>
 
-    <section class="gift-collection-section pb-5">
+    {{-- <section class="gift-collection-section pb-5">
       <div class="container py-5">
         <div class="collection-card text-center position-relative overflow-hidden">
           <img src="{{ asset('theme/xtremez/assets/images/gift-collection.png') }}" alt="Gifts"
@@ -212,11 +256,51 @@
           </div>
         </div>
       </div>
+    </section> --}}
+
+    <section class="brochure-section py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <img src="{{ asset('assets/images/corporate-gifts-giftana.png') }}" alt="#">
+          </div>
+          <div class="col-lg-6">
+            <div class="d-flex flex-column h-100 justify-content-center">
+              <div class="section-title-area">
+                <h1 class="section-title">Our 2024 Gifts
+                  Collection</h1>
+              </div>
+
+              <div>
+                <a href="#" class="btn btn-outline-dark text-uppercase">View Brochure</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter bg-light"
+      style="background: url(https://themewagon.github.io/kaira/images/pattern-bg.png) repeat;">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 py-5 my-5">
+            <div class="subscribe-header text-center pb-3">
+              <h3 class="section-title text-uppercase">Sign Up for our newsletter</h3>
+            </div>
+            <form id="form" class="d-flex flex-wrap gap-2">
+              <input type="text" name="email" placeholder="Your Email Addresss"
+                class="form-control form-control-lg">
+              <button class="btn btn-dark btn-lg text-uppercase w-100">Sign Up</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </section>
 
 
-    <section class="features-strip-section pb-5">
-      <div class="container">
+    <section class="features-strip-section">
+      <div class="container-fluid">
         <div class="features-strip">
           <div class="row gap-3 align-items-center text-start">
 

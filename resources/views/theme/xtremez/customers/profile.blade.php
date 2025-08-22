@@ -45,6 +45,7 @@
               OPTIONS</a>
             <a href="#" class="profile-link" data-tab="order" data-heading="My Order History">MY ORDER
               HISTORY</a>
+            <a href="#" class="profile-link" data-tab="wishlist" data-heading="Wishlist">WISHLIST</a>
           </nav>
 
           <!-- Mobile Accordion Container -->

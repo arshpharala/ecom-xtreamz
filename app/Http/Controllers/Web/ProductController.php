@@ -29,7 +29,7 @@ class ProductController extends Controller
     function index()
     {
         $locale     = app()->getLocale();
-        $categories = Category::leftJoin('category_translations', function ($join) use ($locale) {
+        $categories = Category::visible()->leftJoin('category_translations', function ($join) use ($locale) {
             $join->on('category_translations.category_id', 'categories.id')->where('locale', $locale);
         })
             ->select('categories.id', 'categories.slug', 'categories.icon', 'categories.created_at', 'category_translations.name')
@@ -200,7 +200,7 @@ class ProductController extends Controller
 
     public function getProducts()
     {
-        $products = $this->repository->getFiltered();
+        $products = $this->repository->getFiltered(request()->per_page);
 
         if ($products instanceof \Illuminate\Pagination\LengthAwarePaginator) {
             return response()->json([

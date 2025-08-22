@@ -14,7 +14,16 @@ class Category extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
+    protected $casts = [
+        'is_visible' => 'boolean',
+    ];
+
     protected $fillable = ['slug', 'icon', 'parent_id', 'position', 'is_visible'];
+
+    function scopeVisible($query)
+    {
+        return $query->where('is_visible', true);
+    }
 
     public function parent()
     {

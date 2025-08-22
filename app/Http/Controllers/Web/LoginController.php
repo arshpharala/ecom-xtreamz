@@ -33,7 +33,7 @@ class LoginController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Successfully Logged In',
-            'redirect' => route('customers.profile', absolute: false)
+            'redirect' => route('customers.profile')
         ]);
     }
 
@@ -42,6 +42,7 @@ class LoginController extends Controller
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
+            'is_active'    => 1,
             'password' => Hash::make($request->password),
         ]);
 

@@ -115,6 +115,8 @@
             </div>
 
           </div>
+
+          
         </aside>
 
         <!-- Main Content: Product List -->

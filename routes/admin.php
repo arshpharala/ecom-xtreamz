@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\Catalog\CategoryController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
 use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
+use App\Http\Controllers\Admin\Inventory\InventorySourceController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
@@ -88,6 +89,11 @@ Route::group(['prefix' => '/sales', 'as' => 'sales.'], function () {
     Route::resource('customers',                            CustomerController::class);
 });
 
+Route::group(['prefix' => '/inventory', 'as' => 'inventory.'], function () {
+
+    Route::resource('sources',                               InventorySourceController::class);
+    Route::delete('sources/{source}/restore',                [InventorySourceController::class, 'restore'])->name('sources.restore');
+});
 
 Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
 

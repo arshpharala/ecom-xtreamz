@@ -26,23 +26,23 @@ class ProviderCallbackController extends Controller
 
         $userData = User::firstOrNew(['email' => $user->getEmail()]);
 
-        if ($userData->id) {
-            $userData->update([
-                'provider_id' => $user->getId(),
-                'provider_name' => $provider,
-                'active' => 1,
-                'email_verified_at' => now(),
-            ]);
-        } else {
-            $userData->update([
-                'name' => $user->getName() ?? $user->getNickname() ?? 'Guest',
-                'password' => bcrypt(Str::uuid()),
-                'provider_id' => $user->getId(),
-                'provider_name' => $provider,
-                'active' => 1,
-                'email_verified_at' => now(),
-            ]);
+        if (!$userData->id) {
+            $userData->name = $user->getName() ?? $user->getNickname() ?? 'Guest';
+            $userData->password = bcrypt(Str::uuid());
         }
+
+        if(!$userData->name){
+            $userData->name = $user->getName() ?? $user->getNickname() ?? 'Guest';
+        }
+
+        $userData->provider_id = $user->getId();
+        $userData->provider_name = $provider;
+        $userData->is_active = 1;
+        if (!$userData->email_verified_at) {
+            $userData->email_verified_at = now();
+        }
+
+        $userData->save();
 
         Auth::login($userData, true);
 

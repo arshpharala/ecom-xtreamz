@@ -60,3 +60,13 @@ Route::get('email', function () {
 
 Route::get('auth/{provider}/login',         ProviderRedirectController::class)->name('auth.provider.login');
 Route::get('auth/{provider}/callback',      ProviderCallbackController::class)->name('auth.provider.callback');
+
+
+
+Route::get('clear', function () {
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    \Illuminate\Support\Facades\Artisan::call('route:clear');
+    \Illuminate\Support\Facades\Artisan::call('config:clear');
+    return 'Cleared!';
+});

@@ -33,6 +33,8 @@ class User extends Authenticatable
         'last_login_at',
         'password_changed_at',
         'stripe_id',
+        'provider_name',
+        'provider_id',
     ];
 
     /**

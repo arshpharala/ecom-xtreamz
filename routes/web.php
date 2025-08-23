@@ -8,6 +8,8 @@ use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\Profile\AddressController;
+use App\Http\Controllers\Web\ProviderCallbackController;
+use App\Http\Controllers\Web\ProviderRedirectController;
 
 Route::get('/',                                         [HomeController::class, 'index'])->name('home');
 Route::get('about-us',                                  [HomeController::class, 'page'])->name('about-us');
@@ -50,7 +52,11 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
 });
 
 
-Route::get('email', function(){
+Route::get('email', function () {
     $order = \App\Models\Cart\Order::oldest()->first();
     return view('email.order-success', compact('order'));
 });
+
+
+Route::get('auth/{provider}/login',         ProviderRedirectController::class)->name('auth.provider.login');
+Route::get('auth/{provider}/callback',      ProviderCallbackController::class)->name('auth.provider.callback');

@@ -1,22 +1,22 @@
 @extends('theme.xtremez.layouts.app')
 @section('breadcrumb')
   <section class="breadcrumb-bar py-2">
-        <div class="container">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 py-2">
-              <li class="breadcrumb-item">
-                <a href="{{ route('home') }}" class="text-white" title="Home">
-                  <!-- <i class="bi bi-house"></i> -->
-                  Home
-                </a>
-              </li>
-              <li class="breadcrumb-item active text-white" aria-current="page" title="Sign In / Sign Up">
-                Sign In / Sign Up
-              </li>
-            </ol>
-          </nav>
-        </div>
-      </section>
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 py-2">
+          <li class="breadcrumb-item">
+            <a href="{{ route('home') }}" class="text-white" title="Home">
+              <!-- <i class="bi bi-house"></i> -->
+              Home
+            </a>
+          </li>
+          <li class="breadcrumb-item active text-white" aria-current="page" title="Sign In / Sign Up">
+            Sign In / Sign Up
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </section>
 @endsection
 @section('content')
   <section class="heading-section py-5">
@@ -40,13 +40,16 @@
               <form action="{{ route('register') }}" method="POST" class="ajax-form">
                 @csrf
                 <div class="mb-3">
-                  <input type="text" class="form-control theme-input" name="name" placeholder="Your Name" autocomplete="off">
+                  <input type="text" class="form-control theme-input" name="name" placeholder="Your Name"
+                    autocomplete="off">
                 </div>
                 <div class="mb-3">
-                  <input type="email" class="form-control theme-input" name="email" placeholder="Your email" autocomplete="off">
+                  <input type="email" class="form-control theme-input" name="email" placeholder="Your email"
+                    autocomplete="off">
                 </div>
                 <div class="mb-4">
-                  <input type="password" class="form-control theme-input" name="password" placeholder="Password" autocomplete="off">
+                  <input type="password" class="form-control theme-input" name="password" placeholder="Password"
+                    autocomplete="off">
                 </div>
                 <button type="submit" class="btn btn-secondary w-100">SIGN
                   UP</button>
@@ -61,7 +64,8 @@
                   <input type="text" name="email" class="form-control login-inp theme-input" placeholder="Your Name">
                 </div>
                 <div class="mb-3">
-                  <input type="password" name="password" class="form-control login-inp theme-input" placeholder="Your Password">
+                  <input type="password" name="password" class="form-control login-inp theme-input"
+                    placeholder="Your Password">
                 </div>
                 <div class="py-2 d-flex align-items-center">
                   <input type="checkbox" class="form-check-input me-2 theme-checkbox" id="rememberMe">
@@ -72,6 +76,36 @@
                 <button type="submit" class="btn btn-primary w-100 mt-5">SIGN
                   IN</button>
               </form>
+
+              <span class="text-center small text-muted mt-3">Or continue with</span>
+              <div class="mt-4">
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                  {{-- GitHub --}}
+                  <a href="{{ route('auth.provider.login', ['provider' => 'github']) }}"
+                    class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                    style="width:44px;height:44px;background:#000;color:#fff" aria-label="Continue with GitHub"
+                    title="Continue with GitHub">
+                    <i class="bi bi-github fs-4"></i>
+                  </a>
+
+                  {{-- Google --}}
+                  <a href="{{ route('auth.provider.login', ['provider' => 'google']) }}"
+                    class="rounded-circle d-inline-flex align-items-center justify-content-center border"
+                    style="width:44px;height:44px;background:#fff;color:#444" aria-label="Continue with Google"
+                    title="Continue with Google">
+                    <i class="bi bi-google fs-4"></i>
+                  </a>
+
+                  {{-- Facebook --}}
+                  <a href="{{ route('auth.provider.login', ['provider' => 'facebook']) }}"
+                    class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                    style="width:44px;height:44px;background:#1877F2;color:#fff" aria-label="Continue with Facebook"
+                    title="Continue with Facebook">
+                    <i class="bi bi-facebook fs-4"></i>
+                  </a>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

@@ -48,7 +48,7 @@ return new class extends Migration
             $table->integer('qty')->default(0);
             $table->timestamps();
 
-            $table->unique(['inventory_source_id', 'product_variant_id']);
+            $table->unique(['inventory_source_id', 'product_variant_id'], 'inventory_source_stock_unique');
         });
     }
 

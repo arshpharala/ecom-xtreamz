@@ -113,7 +113,7 @@
                   </a>
 
                   {{-- Twitter --}}
-                  <a href="{{ route('auth.provider.login', ['provider' => 'twitter']) }}"
+                  <a href="{{ route('auth.provider.login', ['provider' => 'twitter-oauth-2']) }}"
                     class="rounded-circle d-inline-flex align-items-center justify-content-center"
                     style="width:44px;height:44px;background:#000000;color:#fff" aria-label="Continue with X"
                     title="Continue with X">

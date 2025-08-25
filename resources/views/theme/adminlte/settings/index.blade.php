@@ -21,6 +21,8 @@
             <a class="nav-link" id="payment-gatway-tab" data-bs-toggle="pill" data-bs-target="#v-pills-payment-gateway"
               type="button" role="tab" aria-controls="v-pills-payment-gateway" aria-selected="false">Payment
               Gateway</a>
+            <a class="nav-link" id="social-login-tab" data-bs-toggle="pill" data-bs-target="#v-pills-social-login"
+              type="button" role="tab" aria-controls="v-pills-social-login" aria-selected="false">SSO</a>
 
           </div>
         </div>
@@ -218,6 +220,110 @@
 
               {{ Form::close() }}
             </div>
+
+            <div class="tab-pane fade" id="v-pills-social-login" role="tabpanel" aria-labelledby="social-login-tab">
+              <form action="{{ route('admin.cms.settings.store') }}" method="POST" enctype="multipart/form-data"
+                class="ajax-form">
+                @csrf
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card shadow-sm border-0">
+                      <div class="card-header">
+                        <h5 class="mb-0">SSO Settings</h5>
+                      </div>
+                      <div class="card-body">
+
+                        <div class="mb-3">
+                          <label for="social_login_enabled" class="form-label fw-bold">Enable Social Login</label>
+                          <select id="social_login_enabled" name="social_login_enabled" class="form-select">
+                            <option value="1" {{ setting('social_login_enabled') ? 'selected' : '' }}>Enabled
+                            </option>
+                            <option value="0" {{ !setting('social_login_enabled') ? 'selected' : '' }}>Disabled
+                            </option>
+                          </select>
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                          <div class="col-md-6">
+
+                            <div class="mb-3">
+                              <label for="social_login_google" class="form-label">
+                                <i class="fab fa-google text-danger me-1"></i> Google Login
+                              </label>
+                              <select id="social_login_google" name="social_login_google" class="form-select">
+                                <option value="1" {{ setting('social_login_google') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_google') ? 'selected' : '' }}>Disabled
+                                </option>
+                              </select>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="social_login_facebook" class="form-label">
+                                <i class="fab fa-facebook text-primary me-1"></i> Facebook Login
+                              </label>
+                              <select id="social_login_facebook" name="social_login_facebook" class="form-select">
+                                <option value="1" {{ setting('social_login_facebook') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_facebook') ? 'selected' : '' }}>
+                                  Disabled</option>
+                              </select>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="social_login_twitter" class="form-label">
+                                <i class="fab fa-twitter text-info me-1"></i> Twitter (X) Login
+                              </label>
+                              <select id="social_login_twitter" name="social_login_twitter" class="form-select">
+                                <option value="1" {{ setting('social_login_twitter') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_twitter') ? 'selected' : '' }}>Disabled
+                                </option>
+                              </select>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="social_login_linkedin" class="form-label">
+                                <i class="fab fa-linkedin text-primary me-1"></i> LinkedIn Login
+                              </label>
+                              <select id="social_login_linkedin" name="social_login_linkedin" class="form-select">
+                                <option value="1" {{ setting('social_login_linkedin') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_linkedin') ? 'selected' : '' }}>
+                                  Disabled</option>
+                              </select>
+                            </div>
+
+                            <div class="mb-3">
+                              <label for="social_login_github" class="form-label">
+                                <i class="fab fa-github text-dark me-1"></i> GitHub Login
+                              </label>
+                              <select id="social_login_github" name="social_login_github" class="form-select">
+                                <option value="1" {{ setting('social_login_github') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_github') ? 'selected' : '' }}>Disabled
+                                </option>
+                              </select>
+                            </div>
+
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt-3">
+                  <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
 
 
           </div>

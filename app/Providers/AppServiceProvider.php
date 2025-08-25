@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
-use App\Http\Middleware\AdminAuthenticate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Socialite\SocialiteManager;
+use Laravel\Socialite\Contracts\Factory;
+use App\Http\Middleware\AdminAuthenticate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(Factory::class, function ($app) {
+            return new SocialiteManager($app);
+        });
     }
 
     /**

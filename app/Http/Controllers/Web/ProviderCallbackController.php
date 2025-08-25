@@ -13,11 +13,12 @@ class ProviderCallbackController extends Controller
 {
     public function __invoke($provider)
     {
-        if (!in_array($provider, ['github', 'facebook', 'google'])) {
+        if (!in_array($provider, ['github', 'facebook', 'google', 'twitter-oauth-2'])) {
             abort(404);
         }
 
         $user = Socialite::driver($provider)
+            ->stateless()
             ->user();
 
         if (!$user || !$user->getId()) {
@@ -31,7 +32,7 @@ class ProviderCallbackController extends Controller
             $userData->password = bcrypt(Str::uuid());
         }
 
-        if(!$userData->name){
+        if (!$userData->name) {
             $userData->name = $user->getName() ?? $user->getNickname() ?? 'Guest';
         }
 

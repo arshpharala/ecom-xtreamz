@@ -60,5 +60,13 @@ return [
             'verify' => env('GOOGLE_GUZZLE_VERIFY', false),
         ],
     ],
+    'twitter-oauth-2' => [
+        'client_id' => env('TWITTER_CLIENT_ID'),
+        'client_secret' => env('TWITTER_CLIENT_SECRET'),
+        'redirect' => env('TWITTER_REDIRECT_URI'),
+        'guzzle'        => [
+            'verify' => env('TWITTER_GUZZLE_VERIFY', false),
+        ],
+    ],
 
 ];

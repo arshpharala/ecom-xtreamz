@@ -18,6 +18,7 @@ class ProviderCallbackController extends Controller
         }
 
         $user = Socialite::driver($provider)
+            ->stateless()
             ->user();
 
         if (!$user || !$user->getId()) {
@@ -31,7 +32,7 @@ class ProviderCallbackController extends Controller
             $userData->password = bcrypt(Str::uuid());
         }
 
-        if(!$userData->name){
+        if (!$userData->name) {
             $userData->name = $user->getName() ?? $user->getNickname() ?? 'Guest';
         }
 

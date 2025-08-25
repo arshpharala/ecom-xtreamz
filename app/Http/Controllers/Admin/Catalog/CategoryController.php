@@ -85,7 +85,7 @@ class CategoryController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('icon')) {
-            $data['icon'] = $request->file('icon')->store('categories', 'public');
+            $validated['icon'] = $request->file('icon')->store('categories', 'public');
         }
 
         $category = Category::create([

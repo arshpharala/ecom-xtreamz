@@ -6,7 +6,7 @@
                         <div class="col-xl-8 col-lg-6 col-md-6">
                             <div class="header-top-wrapper">
                                 <div class="header-top-info d-none d-xl-block f-left">
-                                    <span><i class="fas fa-heart"></i> Welcome to Medibazae. We provides <a
+                                    <span><i class="fas fa-heart"></i> Welcome to {{ setting('site_title') }}. We provides <a
                                             href="#">Covid-19 </a>medical accessories</span>
                                 </div>
                                 <div class="header-link f-left">
@@ -39,7 +39,8 @@
                             <div class="logo">
                                 <a href="route('v2.home')">
                                     @if (setting('site_logo'))
-                                        <img src="{{ asset(setting('site_logo')) }}" alt="Site Logo">
+                                        <img src="{{ asset(setting('site_logo')) }}" alt="Site Logo" width="170px"
+                                            height="80px">
                                     @else
                                         <img src="{{ asset('theme/medibazaar/assets/img/logo/logo.png') }}"
                                             alt="Site Logo" />
@@ -100,7 +101,7 @@
                                             </ul> --}}
                                         </li>
                                         {{-- <li><a href="shop-grid.html">Categories </a></li> --}}
-                                        <li><a href="{{ route('v2.blogs.index') }}">Blog</a>
+                                        <li><a href="{{ route('v2.news.index') }}">Blog</a>
                                             {{-- <ul class="sub-menu text-left">
                                                 <li><a href="blog-grid.html">blog grid</a></li>
                                                 <li><a href="blog-grid-sidebar.html">blog grid sidebar</a></li>
@@ -156,24 +157,6 @@
                         <p>{!! setting('contact_email') !!}</p>
                     </div>
                 </div>
-            </div>
-            <div class="social-icon-right mt-20">
-                @if (setting('facebook'))
-                    <a href="{{ setting('facebook') }}">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                @endif
-                @if (setting('twitter'))
-                    <a href="{{ setting('twitter') }}">
-                        <i class="fab fa-twitter-f"></i>
-                    </a>
-                @endif
-                @if (setting('instagram'))
-                    <a href="{{ setting('instagram') }}">
-                        <i class="fab fa-instagram-f"></i>
-                    </a>
-                @endif
-            </div>
             </div>
         </header>
         <!-- header-start -->

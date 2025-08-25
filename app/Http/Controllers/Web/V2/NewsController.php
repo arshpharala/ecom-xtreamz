@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web\V2;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class BlogController extends Controller
+class NewsController extends Controller
 {
     /**
      * Display a listing of the resource.

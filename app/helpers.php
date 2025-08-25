@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Catalog\Category;
 use App\Models\CMS\Locale;
 use App\Models\CMS\Country;
 use Illuminate\Support\Str;
@@ -89,14 +90,14 @@ if (!function_exists('active_currency')) {
 
         if ($active === null) {
             // TODO: swap this for your real “current site / session” currency
-            $active = Currency::query()->first();
+            $active = Currency::default()->first();
 
             if ($active->code === 'AED') {
                 $active->symbol = '<span class="dirham-symbol">&#xea;</span>';
             }
         }
 
-        return $obj ? $active : ($active?->code ?? 'AED');
+        return $obj ? $active : ($active?->code ?? 'GBP');
     }
 }
 
@@ -128,8 +129,8 @@ if (!function_exists('price_format')) {
         );
 
         return $currency->currency_position === 'Left'
-            ? $currency->symbol . ' ' . $formattedAmount
-            : $formattedAmount . ' ' . $currency->symbol;
+            ? $currency->symbol .  $formattedAmount
+            : $formattedAmount . $currency->symbol;
     }
 }
 
@@ -201,3 +202,19 @@ if (!function_exists('header_offers')) {
         return $offers;
     }
 }
+
+if (!function_exists('footer_categories')) {
+    /**
+     * Mask the sentive string
+     *
+     * @param int $limit
+     * @return Collection
+     */
+    function footer_categories(int $limit = 6): Collection
+    {
+        $categories = Category::visible()->with('translation')->limit($limit)->get();
+        return $categories;
+    }
+}
+
+

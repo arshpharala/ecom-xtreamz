@@ -188,6 +188,18 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ route('admin.cms.news.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>News</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.cms.testimonials.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Testimonials</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('admin.cms.locales.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Locale</p>

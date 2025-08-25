@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Web\V2\BlogController;
+use App\Http\Controllers\Web\V2\NewsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\V2\CartController;
 use App\Http\Controllers\Web\V2\HomeController;
@@ -20,7 +20,7 @@ Route::get('featured',                                  [ProductController::clas
 Route::get('products',                                  [ProductController::class, 'index'])->name('products');
 Route::get('products/{slug}',                           [ProductController::class, 'show'])->name('products.show');
 
-Route::resource('blogs',                                BlogController::class);
+Route::resource('news',                                NewsController::class)->only('index', 'show');
 
 Route::get('search',                                    [SearchController::class, 'search'])->name('search');
 
@@ -53,7 +53,7 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
 });
 
 
-Route::get('email', function(){
+Route::get('email', function () {
     $order = \App\Models\Cart\Order::oldest()->first();
     return view('email.order-success', compact('order'));
 });

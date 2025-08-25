@@ -61,24 +61,31 @@
               <form action="{{ route('login') }}" method="POST" class="ajax-form">
                 @csrf
                 <div class="mb-3">
-                  <input type="text" name="email" class="form-control login-inp theme-input" placeholder="Your Name">
+                  <input type="text" name="email" class="form-control login-inp theme-input" placeholder="Your Email">
                 </div>
                 <div class="mb-3">
                   <input type="password" name="password" class="form-control login-inp theme-input"
                     placeholder="Your Password">
                 </div>
-                <div class="py-2 d-flex align-items-center">
-                  <input type="checkbox" class="form-check-input me-2 theme-checkbox" id="rememberMe">
-                  <label class="form-check-label text-white text-uppercase small" for="rememberMe" name="remember"
-                    style="letter-spacing: 0.1em;">Remember
-                    me</label>
+                <div class="pt-2 d-flex align-items-center justify-content-between">
+                  <div>
+                    <input type="checkbox" class="form-check-input me-2 theme-checkbox" id="rememberMe">
+                    <label class="form-check-label text-white text-uppercase small" for="rememberMe" name="remember"
+                      style="letter-spacing: 0.1em;">Remember
+                      me</label>
+                  </div>
+                  <div>
+                    <a class="text-white text-uppercase small" for="rememberMe" name="remember"
+                      style="letter-spacing: 0.1em;">Forgot Password?</a>
+
+                  </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 mt-5">SIGN
+                <button type="submit" class="btn btn-primary w-100 mt-4">SIGN
                   IN</button>
               </form>
 
-              <span class="text-center small text-muted mt-3">Or continue with</span>
-              <div class="mt-4">
+              <span class="text-center small text-white mt-3">Or continue with</span>
+              <div class="mt-3">
                 <div class="d-flex justify-content-center align-items-center gap-3">
                   {{-- GitHub --}}
                   <a href="{{ route('auth.provider.login', ['provider' => 'github']) }}"

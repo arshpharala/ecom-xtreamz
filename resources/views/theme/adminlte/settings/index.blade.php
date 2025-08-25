@@ -153,8 +153,10 @@
             <div class="tab-pane fade" id="v-pills-payment-gateway" role="tabpanel"
               aria-labelledby="payment-gatway-tab">
 
-              {{ Form::open(['route' => ['admin.cms.payment-gateways.store'], 'method' => 'POST', 'class' => 'ajax-form']) }}
-
+              <form action="{{ route('admin.cms.payment-gateways.store') }}" method="POST" enctype="multipart/form-data"
+                class="ajax-form">
+                @csrf
+\
               <div class="row">
                 <div class="col-12">
                   @foreach ($gatwayConfig as $gatewayKey => $gatewayConfig)
@@ -218,7 +220,7 @@
                 </div>
               </div>
 
-              {{ Form::close() }}
+              </form>
             </div>
 
             <div class="tab-pane fade" id="v-pills-social-login" role="tabpanel" aria-labelledby="social-login-tab">

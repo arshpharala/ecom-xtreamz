@@ -10,7 +10,7 @@ class ProviderRedirectController extends Controller
 {
     public function __invoke($provider)
     {
-        if (!in_array($provider, ['github', 'facebook', 'google', 'twitter'])) {
+        if (!in_array($provider, ['github', 'facebook', 'google', 'twitter-oauth-2'])) {
             abort(404);
         }
 

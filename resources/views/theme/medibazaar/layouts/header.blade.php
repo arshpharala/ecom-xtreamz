@@ -37,7 +37,7 @@
                     <div class="row align-items-center">
                         <div class="col-xl-3 col-lg-3">
                             <div class="logo">
-                                <a href="route('v2.home')">
+                                <a href="{{route('v2.home')}}">
                                     @if (setting('site_logo'))
                                         <img src="{{ asset(setting('site_logo')) }}" alt="Site Logo" width="170px"
                                             height="80px">

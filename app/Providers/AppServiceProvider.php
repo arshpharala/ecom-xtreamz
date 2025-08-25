@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         Route::middleware(['web'])
-            ->prefix('v2')
+            // ->prefix('v2')
             ->as('v2.')
             ->group(base_path('routes/web-v2.php'));
 

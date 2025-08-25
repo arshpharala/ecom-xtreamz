@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Socialite;
+use Laravel\Socialite\Facades\Socialite;
 
 class ProviderRedirectController extends Controller
 {

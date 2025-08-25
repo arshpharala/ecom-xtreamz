@@ -13,7 +13,7 @@ class ProviderCallbackController extends Controller
 {
     public function __invoke($provider)
     {
-        if (!in_array($provider, ['github', 'facebook', 'google'])) {
+        if (!in_array($provider, ['github', 'facebook', 'google', 'twitter'])) {
             abort(404);
         }
 

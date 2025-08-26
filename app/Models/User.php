@@ -62,11 +62,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function scopeGuest($query){
+    public function scopeGuest($query)
+    {
         return $query->where('is_guest', 1);
     }
 
-    public function scopeActive($query){
+    public function scopeActive($query)
+    {
         return $query->where('users.is_active', 1);
     }
 
@@ -95,7 +97,14 @@ class User extends Authenticatable
         return $this->hasMany(UserCard::class);
     }
 
-    public function wishlist() {
+    public function wishlist()
+    {
         return $this->hasMany(Wishlist::class);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $url = route('password.reset', ['token' => $token, 'email' => $this->email]);
+        $this->notify(new \App\Notifications\CustomResetPassword($url));
     }
 }

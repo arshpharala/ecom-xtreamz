@@ -76,7 +76,7 @@
                       me</label>
                   </div>
                   <div>
-                    <a class="text-white text-uppercase small" for="rememberMe" name="remember"
+                    <a href="{{ route('password.request') }}" class="text-white text-uppercase small"
                       style="letter-spacing: 0.1em;">Forgot Password?</a>
 
                   </div>

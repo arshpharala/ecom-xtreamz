@@ -110,6 +110,8 @@ class LoginController extends Controller
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
+        $resetUser = null;
+
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
@@ -118,12 +120,14 @@ class LoginController extends Controller
                 ])->save();
 
                 $user->setRememberToken(Str::random(60));
+
+                $resetUser = $user;
             }
         );
 
         if ($status === Password::PASSWORD_RESET) {
 
-            Auth::login($user);
+            Auth::login($resetUser);
 
             return response()->json([
                 'success' => true,

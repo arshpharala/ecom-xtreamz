@@ -1,7 +1,7 @@
 @php
   $brandName     = $brandName     ?? config('app.name');
-  $brandColor    = $brandColor    ?? '#0D47A1';        // primary
-  $accentColor   = $accentColor   ?? '#1565C0';        // header gradient end
+  $brandColor    = $brandColor    ?? '#257e89';        // primary
+  $accentColor   = $accentColor   ?? '#39767b';        // header gradient end
   $textColor     = $textColor     ?? '#22324d';
   $logoUrl       = $logoUrl       ?? asset('assets/images/logo.png');
   $supportEmail  = $supportEmail  ?? (config('mail.from.address') ?: 'support@'.parse_url(config('app.url'), PHP_URL_HOST));

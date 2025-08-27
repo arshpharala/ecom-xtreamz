@@ -3,7 +3,7 @@
   $brandColor    = $brandColor    ?? '#0D47A1';        // primary
   $accentColor   = $accentColor   ?? '#1565C0';        // header gradient end
   $textColor     = $textColor     ?? '#22324d';
-  $logoUrl       = $logoUrl       ?? asset('images/mail/logo.png');
+  $logoUrl       = $logoUrl       ?? asset('assets/images/logo.png');
   $supportEmail  = $supportEmail  ?? (config('mail.from.address') ?: 'support@'.parse_url(config('app.url'), PHP_URL_HOST));
 @endphp
 <!doctype html>
@@ -13,7 +13,6 @@
   <title>Reset your password</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* Clients strip head CSS often; keep most styles inline. */
     @media (max-width: 640px) {
       .container { width: 100% !important; }
       .px-24 { padding-left: 16px !important; padding-right: 16px !important; }
@@ -24,7 +23,6 @@
   </style>
 </head>
 <body style="margin:0; padding:0; background:#f4f7fb;">
-  <!-- Preheader (inbox preview text) -->
   <div class="preheader">Reset your {{ $brandName }} password — link inside.</div>
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background:#f4f7fb;">
@@ -95,8 +93,6 @@
                       © {{ date('Y') }} {{ $brandName }} ·
                       <a href="{{ config('app.url') }}" target="_blank" style="color:#71829e; text-decoration:underline;">{{ parse_url(config('app.url'), PHP_URL_HOST) }}</a>
                     </div>
-
-                    {{-- Unsubscribe / preferences (optional) --}}
                     @isset($unsubscribeUrl)
                       <div>
                         <a href="{{ $unsubscribeUrl }}" target="_blank" style="color:#71829e; text-decoration:underline;">
@@ -104,7 +100,6 @@
                         </a>
                       </div>
                     @endisset
-                    {{-- Note: For transactional emails like password resets, unsubscribe is optional. --}}
                   </td>
                 </tr>
               </table>

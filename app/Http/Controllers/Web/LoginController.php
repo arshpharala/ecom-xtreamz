@@ -21,6 +21,9 @@ class LoginController extends Controller
      */
     public function create()
     {
+        if (Auth::check()) {
+            return redirect()->route('customers.profile');
+        }
         return view('theme.xtremez.auth.login');
     }
 

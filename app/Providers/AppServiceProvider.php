@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Socialite\SocialiteManager;
 use Laravel\Socialite\Contracts\Factory;
-use Opcodes\LogViewer\Facades\LogViewer;
+use Opcodes\LogViewer\Facades\LogViewer as LogViewerFacade;
 use App\Http\Middleware\AdminAuthenticate;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,8 +29,13 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerRoutes();
 
-        LogViewer::auth(function ($request) {
-            return Auth::guard('admin')->check();
+        $this->app->booted(function () {
+            // only run if the package’s binding is actually available
+            if (app()->bound('log-viewer')) {
+                LogViewerFacade::auth(function ($request) {
+                    return Auth::guard('admin')->check();
+                });
+            }
         });
     }
 

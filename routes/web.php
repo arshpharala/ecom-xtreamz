@@ -64,6 +64,7 @@ Route::get('auth/{provider}/callback',      ProviderCallbackController::class)->
 
 
 Route::get('clear', function () {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     \Illuminate\Support\Facades\Artisan::call('cache:clear');
     \Illuminate\Support\Facades\Artisan::call('view:clear');
     \Illuminate\Support\Facades\Artisan::call('route:clear');

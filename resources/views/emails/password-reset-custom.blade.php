@@ -1,114 +1,76 @@
 @php
   $brandName     = $brandName     ?? config('app.name');
-  $brandColor    = $brandColor    ?? '#257e89';        // primary
-  $accentColor   = $accentColor   ?? '#39767b';        // header gradient end
-  $textColor     = $textColor     ?? '#22324d';
-  $logoUrl       = $logoUrl       ?? asset('assets/images/logo.png');
-  $supportEmail  = $supportEmail  ?? (config('mail.from.address') ?: 'support@'.parse_url(config('app.url'), PHP_URL_HOST));
+  $brandColor    = $brandColor    ?? '#257e89';   // deep blue
+  $accentColor   = $accentColor   ?? '#5fa6ac';   // lighter blue
+  $textColor     = $textColor     ?? '#333333';
+  $logoUrl       = $logoUrl       ?? asset('assets/images/logo-white.png');
+  $supportEmail  = $supportEmail  ?? 'inquest@xtremez.xyz';
 @endphp
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Reset your password</title>
+  <title>Password Reset</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    @media (max-width: 640px) {
-      .container { width: 100% !important; }
-      .px-24 { padding-left: 16px !important; padding-right: 16px !important; }
-      .py-32 { padding-top: 20px !important; padding-bottom: 20px !important; }
-      .h1 { font-size: 22px !important; line-height: 28px !important; }
-    }
-    .preheader { display:none!important; visibility:hidden; opacity:0; color:transparent; height:0; width:0; overflow:hidden; }
+    body { margin:0; padding:0; background:#f2f4f8; font-family:Arial,Helvetica,sans-serif; color:{{ $textColor }}; }
+    .container { max-width:600px; margin:30px auto; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 3px 8px rgba(0,0,0,0.08); }
+    .header { background:{{ $brandColor }}; padding:20px; text-align:center; }
+    .header img { max-width:160px; }
+    .content { padding:30px 25px; text-align:center; }
+    .content h1 { margin:0 0 15px; font-size:24px; color:#111; }
+    .content p { margin:0 0 18px; font-size:15px; line-height:1.5; color:#555; }
+    .btn { display:inline-block; padding:14px 32px; background:{{ $accentColor }}; color:#fff !important; font-size:15px; font-weight:600;
+           border-radius:6px; text-decoration:none; margin:25px 0; }
+    .btn:hover { background:#1746b0; }
+    .help { font-size:13px; line-height:1.5; color:#666; padding:20px 25px; border-top:1px solid #eee; text-align:center; }
+    .help a { color:{{ $accentColor }}; text-decoration:none; }
+    .footer { background:#1e293b; padding:20px; text-align:center; font-size:12px; color:#bbb; }
+    .footer a { margin:0 8px; color:#bbb; text-decoration:none; }
   </style>
 </head>
-<body style="margin:0; padding:0; background:#f4f7fb;">
-  <div class="preheader">Reset your {{ $brandName }} password — link inside.</div>
+<body>
 
-  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background:#f4f7fb;">
-    <tr>
-      <td align="center" style="padding:24px;">
-        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background:#ffffff; border:1px solid #e6eaf1; border-radius:14px; overflow:hidden;">
-          <!-- Header -->
-          <tr>
-            <td style="background:linear-gradient(135deg, {{ $brandColor }} 0%, {{ $accentColor }} 100%); padding:20px 24px; text-align:center;">
-              <a href="{{ config('app.url') }}" target="_blank" style="text-decoration:none;">
-                <img src="{{ $logoUrl }}" alt="{{ $brandName }} Logo" width="160" style="display:block; margin:0 auto; border:0; max-width:160px;">
-              </a>
-            </td>
-          </tr>
+  <div class="container">
 
-          <!-- Body -->
-          <tr>
-            <td class="px-24 py-32" style="padding:32px 24px; color:{{ $textColor }}; font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif; font-size:15px; line-height:1.58;">
-              <h1 class="h1" style="margin:0 0 12px; font-size:24px; line-height:30px; color:#0b1b33; font-weight:700;">Reset your password</h1>
+    <!-- Header -->
+    <div class="header">
+      <a href="{{ config('app.url') }}">
+        <img src="{{ $logoUrl }}" alt="{{ $brandName }} Logo">
+      </a>
+    </div>
 
-              <p style="margin:0 0 12px;">Hello {{ $user->name ?? 'there' }},</p>
-              <p style="margin:0 0 16px;">
-                We received a request to reset the password for your <strong>{{ $brandName }}</strong> account.
-                Click the button below to choose a new password.
-              </p>
+    <!-- Content -->
+    <div class="content">
+      <h1>Reset your password</h1>
+      <p>Hello {{ $user->name ?? 'there' }},</p>
+      <p>We got a request to reset your <strong>{{ $brandName }}</strong> account password.
+         Click the button below to create a new password.</p>
 
-              <!-- Button (bulletproof) -->
-              <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin:20px 0;">
-                <tr>
-                  <td align="center" bgcolor="{{ $brandColor }}" style="border-radius:10px;">
-                    <a href="{{ $resetUrl }}"
-                       style="display:inline-block; padding:12px 22px; font-weight:600; text-decoration:none; color:#ffffff; background:{{ $brandColor }}; border:1px solid {{ $brandColor }}; border-radius:10px;"
-                       target="_blank" rel="noopener">
-                      Reset Password
-                    </a>
-                  </td>
-                </tr>
-              </table>
+      <a href="{{ $resetUrl }}" class="btn" target="_blank">Reset Password</a>
 
-              <!-- Fallback link -->
-              <p style="margin:16px 0 0;">
-                If the button doesn’t work, copy and paste this link into your browser:
-              </p>
-              <p style="margin:8px 0 16px; word-break:break-all;">
-                <a href="{{ $resetUrl }}" target="_blank" style="color:{{ $brandColor }}; text-decoration:underline;">{{ $resetUrl }}</a>
-              </p>
+      <p style="font-size:13px; color:#777; margin-top:20px;">
+        If the button doesn’t work, copy this link into your browser:<br>
+        <a href="{{ $resetUrl }}" target="_blank" style="color:{{ $accentColor }};">{{ $resetUrl }}</a>
+      </p>
+    </div>
 
-              <hr style="border:0; border-top:1px solid #e6eaf1; margin:18px 0;">
+    <!-- Help Section -->
+    <div class="help">
+      <p>Need help? Contact us at <a href="mailto:{{ $supportEmail }}">{{ $supportEmail }}</a></p>
+      <p>If you didn’t request this reset, you can safely ignore this email.</p>
+    </div>
 
-              <p style="margin:0 0 6px; font-size:13px; color:#4a5b78;">
-                Didn’t request this? You can safely ignore this email—your password won’t change unless you use the link above.
-              </p>
+    <!-- Footer -->
+    <div class="footer">
+      <p>
+        <a href="#">Facebook</a> ·
+        <a href="#">Instagram</a> ·
+        <a href="#">Twitter</a>
+      </p>
+      <p>© {{ date('Y') }} {{ $brandName }} · All rights reserved</p>
+    </div>
+  </div>
 
-              <p style="margin:0; font-size:13px; color:#4a5b78;">
-                Need help? Contact us at
-                <a href="mailto:{{ $supportEmail }}" style="color:{{ $brandColor }}; text-decoration:underline;">{{ $supportEmail }}</a>.
-              </p>
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="background:#ffffff; padding:0 24px 24px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #eef2f7;">
-                <tr>
-                  <td style="padding-top:16px; text-align:center; font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif; font-size:12px; color:#71829e;">
-                    <div style="margin-bottom:8px;">
-                      © {{ date('Y') }} {{ $brandName }} ·
-                      <a href="{{ config('app.url') }}" target="_blank" style="color:#71829e; text-decoration:underline;">{{ parse_url(config('app.url'), PHP_URL_HOST) }}</a>
-                    </div>
-                    @isset($unsubscribeUrl)
-                      <div>
-                        <a href="{{ $unsubscribeUrl }}" target="_blank" style="color:#71829e; text-decoration:underline;">
-                          Unsubscribe / Manage email preferences
-                        </a>
-                      </div>
-                    @endisset
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
 </body>
 </html>

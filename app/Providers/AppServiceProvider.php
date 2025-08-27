@@ -17,9 +17,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(Factory::class, function ($app) {
-            return new SocialiteManager($app);
-        });
+        // $this->app->singleton(Factory::class, function ($app) {
+        //     return new SocialiteManager($app);
+        // });
     }
 
     /**

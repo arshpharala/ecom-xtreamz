@@ -51,6 +51,8 @@
     <script src="{{ asset('theme/medibazaar/assets/js/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ asset('theme/medibazaar/assets/js/plugins.js') }}"></script>
     <script src="{{ asset('theme/medibazaar/assets/js/main.js') }}"></script>
+
+    @stack('scripts')
 </body>
 
 </html>

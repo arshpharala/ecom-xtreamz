@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Inventory\InventorySourceController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
+use App\Http\Controllers\Admin\CMS\BannerController;
 use App\Http\Controllers\Admin\CMS\NewsController;
 use App\Http\Controllers\Admin\CMS\TestimonialController;
 
@@ -130,6 +131,9 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
 
     Route::resource('testimonials',                     TestimonialController::class);
     Route::resource('news',                     NewsController::class);
+
+    Route::resource('banners', BannerController::class);
+    Route::delete('banners/{banner}/restore', [BannerController::class, 'restore'])->name('banners.restore');
 
     Route::post('upload/tinymce',                            [TinyMCEController::class, 'upload'])->name('upload.tinymce');
 });

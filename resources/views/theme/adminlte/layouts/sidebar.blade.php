@@ -188,6 +188,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ route('admin.cms.banners.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Banners</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('admin.cms.news.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>News</p>

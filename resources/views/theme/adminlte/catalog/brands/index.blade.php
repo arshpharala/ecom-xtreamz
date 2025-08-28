@@ -5,7 +5,7 @@
       <h1>@lang('crud.list_title', ['name' => 'Brand'])</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <button data-url="{{ route('admin.catalog.brands.create') }}" type="button" class="btn btn-secondary"
+      <button data-url="{{ route('admin.cms.statistics.create') }}" type="button" class="btn btn-secondary"
         onclick="getAside()"><i class="fa fa-plus"></i> @lang('crud.create')</button>
     </div>
   </div>
@@ -18,7 +18,6 @@
           <tr>
             {{-- <th>#</th> --}}
             <th>Name</th>
-            <th>Slug</th>
             <th>Logo</th>
             <th>Status</th>
             <th>Position</th>
@@ -36,7 +35,7 @@
       $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('admin.catalog.brands.index') }}',
+        ajax: '{{ route('admin.cms.statistics.index') }}',
         columns: [
           //     {
           //     data: 'id',
@@ -45,10 +44,6 @@
           {
             data: 'name',
             name: 'name'
-          },
-          {
-            data: 'slug',
-            name: 'slug'
           },
           {
             data: 'logo',

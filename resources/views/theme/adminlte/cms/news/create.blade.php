@@ -36,6 +36,11 @@
                             </select>
                         </div>
 
+                        <div class="form-group">
+                            <label for="">Slug <small>( {{ env('APP_URL').'/blog/...' }} )</small> </label>
+                            <input type="text" name="slug" class="form-control" required>
+                        </div>
+
                         {{-- Name Translations --}}
                         @foreach (active_locals() as $locale)
                             <div class="form-group">

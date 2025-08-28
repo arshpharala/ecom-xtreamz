@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Web\V2;
 
+use App\Models\CMS\Tag;
+use App\Models\CMS\Page;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Catalog\Brand;
@@ -12,7 +14,6 @@ use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
 use App\Repositories\PageRepository;
 use App\Models\Catalog\ProductVariant;
-use App\Models\CMS\Tag;
 use App\Repositories\ProductRepository;
 
 class ProductController extends Controller
@@ -36,6 +37,15 @@ class ProductController extends Controller
             ->orderBy('categories.position')
             ->get();
 
+        $slug = request()->segment(2);
+        // $slug = request()->segment(1);
+
+        $page = Page::with('metas', 'translation')
+            ->where('slug', $slug)
+            ->active()
+            ->first();
+
+
 
         $brands = Brand::active()->orderBy('position')->get();
         $tags = Tag::active()->orderBy('position')->get();
@@ -48,12 +58,13 @@ class ProductController extends Controller
             $activeCategory = $categories->first();
         }
 
+        $data['page']           = $page;
         $data['activeCategory'] = $activeCategory;
         $data['categories']     = $categories;
         $data['brands']         = $brands;
         $data['tags']           = $tags;
 
-        return view('theme.xtremez.products.index', $data);;
+        return view('theme.medibazaar.products.index', $data);;
     }
 
     public function show($slug, Request $request)

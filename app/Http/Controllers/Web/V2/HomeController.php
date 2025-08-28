@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Web\V2;
 
-use App\Models\Catalog\Brand;
-use App\Http\Controllers\Controller;
-use App\Models\Catalog\Offer;
-use App\Models\Catalog\ProductVariant;
 use App\Models\CMS\News;
+use App\Models\CMS\Banner;
+use App\Models\Catalog\Brand;
+use App\Models\Catalog\Offer;
 use App\Models\CMS\Testimonial;
+use App\Http\Controllers\Controller;
 use App\Repositories\PageRepository;
+use App\Models\Catalog\ProductVariant;
 use App\Repositories\ProductRepository;
 
 class HomeController extends Controller
@@ -88,6 +89,12 @@ class HomeController extends Controller
             ->orderBy('position', 'desc')
             ->limit(3)->get();
 
+        $banners = Banner::active()
+            ->with('translation')
+            ->ordered()
+            ->get();
+
+        $data['banners']            = $banners;
         $data['bannerProducts']     = $bannerProducts;
         $data['bestSellerProducts'] = $bestSellerProducts;
         $data['topRatedProducts']   = $topRatedProducts;

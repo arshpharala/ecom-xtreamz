@@ -36,6 +36,7 @@ class CategoryController extends Controller
                     'categories.parent_id',
                     'categories.position',
                     'categories.is_visible',
+                    'categories.show_on_homepage',
                     'categories.deleted_at',
                     'categories.created_at',
                     'category_translations.name'
@@ -48,7 +49,7 @@ class CategoryController extends Controller
                         : '';
                 })
                 ->editColumn('is_visible', fn($row) => $row->is_visible ? '<span class="badge border border-success text-success">Visible</span>' : '<span class="badge border border-warning text-warning">Hidden</span>')
-                ->addColumn('status', fn($row) => $row->deleted_at ? '<span class="badge border border-danger text-danger">Deleted</span>' : '<span class="badge border border-success text-success">Active</span>')
+                ->addColumn('show_on_homepage', fn($row) => $row->show_on_homepage ? '<span class="badge border border-success text-success">Visible</span>' : '<span class="badge border border-warning text-warning">Hidden</span>')
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.catalog.categories.edit', $row->id);
                     $deleteUrl = route('admin.catalog.categories.destroy', $row->id);
@@ -58,7 +59,7 @@ class CategoryController extends Controller
                 ->editColumn('created_at', function ($row) {
                     return $row->created_at?->format('d-M-Y  h:m A');
                 })
-                ->rawColumns(['action', 'is_visible', 'status', 'icon'])
+                ->rawColumns(['action', 'is_visible', 'show_on_homepage', 'icon'])
                 ->make(true);
         }
         return view('theme.adminlte.catalog.categories.index');
@@ -152,13 +153,38 @@ class CategoryController extends Controller
             unset($validated['icon']);
         }
 
+        if ($request->hasFile('image')) {
+
+            if ($category->image && Storage::disk('public')->exists($category->image)) {
+                Storage::disk('public')->delete($category->image);
+            }
+            $validated['image'] = $request->file('image')->store('categories', 'public');
+        } else {
+            unset($validated['image']);
+        }
+
+        if ($request->hasFile('banner_image')) {
+
+            if ($category->banner_image && Storage::disk('public')->exists($category->banner_image)) {
+                Storage::disk('public')->delete($category->banner_image);
+            }
+            $validated['banner_image'] = $request->file('banner_image')->store('categories', 'public');
+        } else {
+            unset($validated['banner_image']);
+        }
+
 
         $category->update([
-            'slug'       => $validated['slug'],
-            'icon'       => $validated['icon'] ?? $category->icon,
-            'parent_id'  => $validated['parent_id'] ?? null,
-            'position'   => $validated['position'] ?? 0,
-            'is_visible' => $validated['is_visible'] ?? false,
+            'slug'              => $validated['slug'],
+            'icon'              => $validated['icon'] ?? $category->icon,
+            'parent_id'         => $validated['parent_id'] ?? null,
+            'position'          => $validated['position'] ?? 0,
+            'is_visible'        => $validated['is_visible'] ?? false,
+            'show_on_homepage'  => $validated['show_on_homepage'] ?? false,
+            'image'             => $validated['image'] ?? $category->image,
+            'banner_image'      => $validated['banner_image'] ?? $category->banner_image,
+            'text_color'        => $validated['text_color'] ?? $category->text_color,
+            'background_color'  => $validated['background_color'] ?? $category->background_color,
         ]);
 
 

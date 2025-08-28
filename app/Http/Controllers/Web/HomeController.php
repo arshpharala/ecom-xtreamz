@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Catalog\Brand;
 use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
+use App\Repositories\CategoryRepository;
 use App\Repositories\PageRepository;
 use App\Repositories\ProductRepository;
 
@@ -18,18 +19,15 @@ class HomeController extends Controller
     public function index()
     {
         $locale     = app()->getLocale();
-        $categories = Category::visible()->leftJoin('category_translations', function ($join) use ($locale) {
-            $join->on('category_translations.category_id', 'categories.id')->where('locale', $locale);
-        })
-            ->select('categories.id', 'categories.slug', 'categories.icon', 'categories.created_at', 'category_translations.name')
-            ->orderBy('categories.position')
-            ->has('products')
-            // ->limit(6)
-            ->get();
 
+        $categories = (new CategoryRepository())->getHomeScreenCategories(6);
 
         $giftSetProducts = (new ProductRepository())->getGiftProducts();
-        $promoOffers = (new \App\Repositories\OfferRepository())->getPromoOffers(3);
+        $offers = (new \App\Repositories\OfferRepository())->getPromoOffers(5);
+
+        $bannerOffers = $offers->where('show_in_slider', 1);
+        $promoOffers = $offers->where('show_in_slider', 0)->take(1);
+
 
         $brands = Brand::whereNotNull('logo')->active()->orderBy('position')->get();
 
@@ -39,6 +37,7 @@ class HomeController extends Controller
         $data['brands']     = $brands;
         $data['giftSetProducts'] = $giftSetProducts;
         $data['promoOffers'] = $promoOffers;
+        $data['bannerOffers'] = $bannerOffers;
 
 
         return view('theme.xtremez.home', $data);

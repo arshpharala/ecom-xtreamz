@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Socialite\SocialiteManager;
 use Laravel\Socialite\Contracts\Factory;
+use Opcodes\LogViewer\Facades\LogViewer;
 use App\Http\Middleware\AdminAuthenticate;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,9 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(Factory::class, function ($app) {
-            return new SocialiteManager($app);
-        });
+        //
     }
 
     /**
@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerRoutes();
+
+        LogViewer::auth(function ($request) {
+            return Auth::guard('admin')->check();
+        });
     }
 
     protected function registerRoutes()

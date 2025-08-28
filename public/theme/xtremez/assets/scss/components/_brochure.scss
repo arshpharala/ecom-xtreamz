@@ -17,3 +17,53 @@
         }
     }
 }
+
+.offer-banner {
+    position: relative;
+
+    .title-area {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .title {
+            text-decoration: none;
+            font-size: var(--font-size-9xl);
+            font-weight: 500;
+            margin-bottom: 15px;
+            line-height: 1;
+
+            span {
+                font-weight: 600;
+                font-size: 5rem;
+            }
+        }
+    }
+
+    .action-area {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: end;
+        a {
+            text-decoration: underline;
+            text-underline-offset: 12px;
+            text-decoration-thickness: 2px;
+            color: var(--color-dark);
+            font-size: var(--font-size-5xl);
+            font-weight: 500;
+            transition: font-size 0.2s ease-in;
+
+            &::after {
+                content: none;
+            }
+
+            &:hover{
+                font-size: var(--font-size-6xl);
+            }
+        }
+    }
+
+    img {
+        max-width: 100%;
+    }
+}

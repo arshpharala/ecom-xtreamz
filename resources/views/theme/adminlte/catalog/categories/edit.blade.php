@@ -37,7 +37,6 @@
               @enderror
             </div>
 
-
             {{-- Parent Category --}}
             <div class="form-group">
               <label for="parent_id">Parent Category (optional)</label>
@@ -69,26 +68,52 @@
               </div>
             @endforeach
 
-            {{-- Icon --}}
-            <div class="form-group">
-              <label>Icon</label>
 
-              <input type="file" name="icon" class="form-control" accept="image/*">
 
-              @if (isset($category) && $category->icon)
-                <div class="mt-2">
-                  <img src="{{ asset('storage/' . $category->icon) }}" class="img-lg img-thumbnail">
-                </div>
-              @endif
+
+
+
+            <div class="form-row">
+              {{-- Icon --}}
+              <div class="form-group col-md-4">
+                <label>Icon</label>
+                <input type="file" name="icon" class="form-control" accept="image/*">
+                @if (isset($category) && $category->icon)
+                  <div class="my-2">
+                    <img src="{{ asset('storage/' . $category->icon) }}" class="img-lg img-thumbnail">
+                  </div>
+                @endif
+              </div>
+              {{-- NEW: Image --}}
+              <div class="form-group col-md-4">
+                <label>Image</label>
+                <input type="file" name="image" class="form-control" accept="image/*">
+                @if ($category->image)
+                  <div class="my-2">
+                    <img src="{{ asset('storage/' . $category->image) }}" class="img-lg img-thumbnail">
+                  </div>
+                @endif
+              </div>
+
+              {{-- NEW: Banner Image --}}
+              <div class="form-group col-md-4">
+                <label>Banner Image</label>
+                <input type="file" name="banner_image" class="form-control" accept="image/*">
+                @if ($category->banner_image)
+                  <div class="my-2">
+                    <img src="{{ asset('storage/' . $category->banner_image) }}" class="img-lg img-thumbnail">
+                  </div>
+                @endif
+              </div>
             </div>
+
+
 
           </div>
           <div class="card-footer text-right">
-            <button type="submit" class="btn btn-primary">@lang('crud.create')</button>
+            <button type="submit" class="btn btn-primary">@lang('crud.update')</button>
           </div>
         </div>
-
-
       </div>
 
       {{-- Sidebar Card (Meta/Options) --}}
@@ -98,6 +123,27 @@
             <h3 class="card-title">Category Options</h3>
           </div>
           <div class="card-body">
+            <div class="form-row">
+
+              {{-- Is Visible --}}
+              <div class="form-group col-md-6">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" name="is_visible" value="1" class="custom-control-input" id="is_visible"
+                    {{ old('is_visible', $category->is_visible) ? 'checked' : '' }}>
+                  <label class="custom-control-label" for="is_visible">Visible in Store</label>
+                </div>
+              </div>
+
+              {{-- NEW: Show on Homepage --}}
+              <div class="form-group col-md-6">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" name="show_on_homepage" value="1" class="custom-control-input"
+                    id="show_on_homepage" {{ old('show_on_homepage', $category->show_on_homepage) ? 'checked' : '' }}>
+                  <label class="custom-control-label" for="show_on_homepage">Show on Homepage</label>
+                </div>
+              </div>
+            </div>
+
 
             {{-- Position --}}
             <div class="form-group">
@@ -109,12 +155,17 @@
               @enderror
             </div>
 
-            {{-- Is Visible --}}
-            <div class="form-group">
-              <div class="custom-control custom-switch">
-                <input type="checkbox" name="is_visible" value="1" class="custom-control-input" id="is_visible"
-                  {{ old('is_visible', $category->is_visible) ? 'checked' : '' }}>
-                <label class="custom-control-label" for="is_visible">Visible in Store</label>
+            {{-- NEW: Color Settings --}}
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>Background Color</label>
+                <input type="color" name="background_color" class="form-control"
+                  value="{{ old('background_color', $category->background_color) }}">
+              </div>
+              <div class="form-group col-md-4">
+                <label>Text Color</label>
+                <input type="color" name="text_color" class="form-control"
+                  value="{{ old('text_color', $category->text_color) }}">
               </div>
             </div>
 

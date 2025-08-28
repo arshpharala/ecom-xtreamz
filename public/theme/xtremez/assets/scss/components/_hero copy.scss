@@ -31,28 +31,10 @@
     }
 
     .hero-text {
-        max-width: 700px;
+        max-width: 540px;
         padding-top: 4rem;
         padding-bottom: 4rem;
         position: relative;
-
-        .buy-link{
-            text-decoration: underline;
-            text-underline-offset: 12px;
-            text-decoration-thickness: 2px;
-            color: var(--color-dark);
-            font-size: var(--font-size-5xl);
-            font-weight: 500;
-            transition: font-size 0.2s ease-in;
-
-            &::after {
-                content: none;
-            }
-
-            &:hover{
-                font-size: var(--font-size-6xl);
-            }
-        }
 
         .hero-subtitle {
             font-size: var(--font-size-10xl);

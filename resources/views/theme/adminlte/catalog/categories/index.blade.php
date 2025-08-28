@@ -27,7 +27,7 @@
                   <th>Name</th>
                   <th>Slug</th>
                   <th>Visible in Store</th>
-                  <th>Status</th>
+                  <th>Show on Homepage</th>
                   <th>Created At</th>
                   <th>Action</th>
                 </tr>
@@ -72,9 +72,8 @@
             name: 'is_visible'
           },
           {
-            data: 'status',
-            orderable: false,
-            searchable: false
+            data: 'show_on_homepage',
+            name: 'show_on_homepage'
           },
           {
             data: 'created_at',

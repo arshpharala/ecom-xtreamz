@@ -89,3 +89,51 @@
         border-color: var(--color-secondary) !important;
     }
 }
+
+.btn-circle {
+    background: white;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 25px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i {
+        color: var(--color-dark);
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        transition: transform 0.1s ease-in;
+    }
+
+    &:hover {
+        i {
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+.btn-circle-outline {
+    border: 1px solid var(--color-dark);
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 25px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    i {
+        color: var(--color-dark);
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        transition: transform 0.1s ease-in;
+    }
+
+    &:hover {
+        i {
+            transform: rotate(-45deg);
+        }
+    }
+}

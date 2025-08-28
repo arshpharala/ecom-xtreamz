@@ -5,34 +5,26 @@
     <section class="hero-section d-flex align-items-center p-0">
       <div class="owl-carousel hero-carousel w-100">
         <!-- Slide 1 -->
-        <div class="hero-slide" style="background-image: url({{ asset('theme/xtremez/assets/images/banner.jpg') }});">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-6 text-white hero-text animate-on-scroll" data-animate="fade-up">
-                <h2 class="hero-subtitle">Corporate</h2>
-                <h1 class="hero-title">Gift Items</h1>
-                <p class="hero-description">
-                  Xtremez is the Middle East's largest
-                  and leading corporate gifts supplier
-                  and solution provider, with deep
-                  expertise in branded merchandise,
-                  corporate giveaways and promotional
-                  gifts and giveaways.
-                </p>
-                <a href="{{ route('products') }}" class="btn btn-light btn-lg mt-3">Browse
-                  More</a>
+        @foreach ($bannerOffers as $offer)
+          <div class="hero-slide" style="background-color: {{ $offer->bg }};">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8 text-white hero-text animate-on-scroll" data-animate="fade-up">
+                  <h1 class="hero-title text-black">{{ $offer->title }}</h1>
+                  <a href="{{ $offer->link }}" class="mt-3 buy-link">Shop Now</a>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="feature-list d-none d-lg-flex">
+            {{-- <div class="feature-list d-none d-lg-flex">
             <div class="feature-dash"></div>
             <div><span>Creative</span></div>
             <div><span>Innovative</span></div>
             <div><span>Sustainable</span></div>
-          </div>
+          </div> --}}
 
-        </div>
+          </div>
+        @endforeach
         <!-- Slide 2 -->
         {{-- <div class="hero-slide" style="background-image: url({{ asset('theme/xtremez/assets/images/banner-2.jpg') }});">
           <div class="container">
@@ -51,12 +43,6 @@
                   Now</a>
               </div>
             </div>
-          </div>
-          <div class="feature-list d-none d-lg-flex">
-            <div class="feature-dash"></div>
-            <div><span>Creative</span></div>
-            <div><span>Innovative</span></div>
-            <div><span>Sustainable</span></div>
           </div>
         </div> --}}
         <!-- Add more .hero-slide divs as needed -->
@@ -89,7 +75,7 @@
       </div>
     </section>
 
-    <section class="browse-categories py-5">
+    {{-- <section class="browse-categories py-5">
       <div class="container text-center">
         <div class="category-icons row gx-4 gy-5 justify-content-center">
 
@@ -108,6 +94,27 @@
 
         </div>
       </div>
+    </section> --}}
+
+    <section class="promo-tiles py-3">
+      <div class="container">
+        <div class="row g-3 g-lg-4">
+          @foreach ($categories as $category)
+            <div class="col-12 col-md-4">
+              <a href="{{ $category->link }}" class="promo-tile" style="background: {{ $category->background_color }}">
+                <div class="promo-copy">
+                  <h3 class="title">{{ $category->name }}</h3>
+                  <span class="cta">Shop Now</span>
+                  <div class="btn-circle" style="margin: 50px 0 0 0 ">
+                    <i class="bi bi-arrow-right fw-bold"></i>
+                  </div>
+                </div>
+                <img src="{{ $category->image }}" alt="{{ $category->name }}" class="promo-img">
+              </a>
+            </div>
+          @endforeach
+        </div>
+      </div>
     </section>
 
     @include('theme.xtremez.components.products.carousel', [
@@ -116,131 +123,163 @@
         'productUrl' => route('ajax.get-products', ['is_new' => 1]),
     ])
 
-
-    @if ($promoOffers->isNotEmpty())
-      <section class="promo-tiles py-3">
-        <div class="container">
-          <div class="row g-3 g-lg-4">
-            @foreach ($promoOffers as $tile)
-              <div class="col-12 col-md-4">
-                <a href="{{ $tile->url }}" class="promo-tile" style="background: {{ $tile->bg }}">
-                  <div class="promo-copy">
-                    @if ($tile->eyebrow)
-                      <div class="eyebrow">{{ $tile->eyebrow }}</div>
-                    @endif
-                    <h3 class="title">{{ $tile->title }}</h3>
-                    <span class="cta">Shop Now</span>
+    @foreach ($promoOffers as $tile)
+      <section class="offer-banner py-5">
+        <div class="container-fluid">
+          <div class="row" style="background: {{ $tile->bg }}">
+            <div class="col-md-12">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-5">
+                    <div class="title-area h-100">
+                      <h3 class="title">Get
+                        <span>
+                          {{ $tile->title }}
+                        </span>
+                      </h3>
+                    </div>
                   </div>
-                  <img src="{{ $tile->image }}" alt="{{ $tile->title }}" class="promo-img">
-                </a>
+                  <div class="col-md-4">
+                    <img src="{{ $tile->image }}" alt="{{ $tile->title }}" class="promo-img">
+                  </div>
+                  <div class="col-md-3">
+                    <div class="action-area h-100">
+                      <a href="http://">Shop Now</a>
+                    </div>
+                  </div>
+                </div>
               </div>
-            @endforeach
+            </div>
           </div>
         </div>
       </section>
-    @endif
+    @break
+  @endforeach
+
+  {{-- @if ($promoOffers->isNotEmpty())
+    <section class="promo-tiles py-3">
+      <div class="container">
+        <div class="row g-3 g-lg-4">
+          @foreach ($promoOffers as $tile)
+            <div class="col-12 col-md-4">
+              <a href="{{ $tile->url }}" class="promo-tile" style="background: {{ $tile->bg }}">
+                <div class="promo-copy">
+                  @if ($tile->eyebrow)
+                    <div class="eyebrow">{{ $tile->eyebrow }}</div>
+                  @endif
+                  <h3 class="title">{{ $tile->title }}</h3>
+                  <span class="cta">Shop Now</span>
+                </div>
+                <img src="{{ $tile->image }}" alt="{{ $tile->title }}" class="promo-img">
+              </a>
+            </div>
+          @endforeach
+        </div>
+      </div>
+    </section>
+  @endif --}}
 
 
 
 
-    @foreach ($categories as $category)
-      @include('theme.xtremez.components.products.carousel', [
-          'id' => $category->id,
-          'sectionName' => $category->name,
-          'productUrl' => route('ajax.get-products', ['category_id' => $category->id]),
-      ])
-    @endforeach
-
-    @include('theme.xtremez.components.products.gift-set', ['products' => $giftSetProducts])
-
+  {{-- @foreach ($categories as $category)
     @include('theme.xtremez.components.products.carousel', [
-        'id' => 'featured',
-        'sectionName' => 'Featured Products',
-        'productUrl' => route('ajax.get-products', ['is_featured' => 1]),
+        'id' => $category->id,
+        'sectionName' => $category->name,
+        'productUrl' => route('ajax.get-products', ['category_id' => $category->id]),
     ])
+  @endforeach --}}
 
-    <section class="sustainable-section py-5">
-      <div class="container px-0 bg-beige">
-        <div class="row g-0 align-items-stretch sustainable-card"><!-- added hook -->
+  @include('theme.xtremez.components.products.gift-set', ['products' => $giftSetProducts])
 
-          <!-- Left Text Column -->
-          <div class="sustainable-content-section col-md-6 px-lg-5 text-center text-md-start">
-            <div class="sustainable-content px-3 px-xl-5 animate-on-scroll" data-animate="fade-right">
-              <span class="sustainable-eyebrow">Eco Collection</span>
-              <h2 class="sustainable-heading fw-bold mb-2">Sustainable<br>Products</h2>
+  @include('theme.xtremez.components.products.carousel', [
+      'id' => 'featured',
+      'sectionName' => 'Featured Products',
+      'productUrl' => route('ajax.get-products', ['is_featured' => 1]),
+  ])
 
-              <div class="heading-accent mb-4"></div>
+  <section class="sustainable-section py-5">
+    <div class="container px-0 bg-beige">
+      <div class="row g-0 align-items-stretch sustainable-card"><!-- added hook -->
 
-              <!-- optional sub copy -->
-              <p class="sustainable-sub mb-4">Thoughtfully made from recycled materials. Durable design without
-                compromising style.</p>
+        <!-- Left Text Column -->
+        <div class="sustainable-content-section col-md-6 px-lg-5 text-center text-md-start">
+          <div class="sustainable-content px-3 px-xl-5 animate-on-scroll" data-animate="fade-right">
+            <span class="sustainable-eyebrow">Eco Collection</span>
+            <h2 class="sustainable-heading fw-bold mb-2">Sustainable<br>Products</h2>
 
-              <a href="{{ route('products') }}" class="btn btn-secondary">
-                View Items
-                <i class="bi bi-arrow-right-short"></i>
+            <div class="heading-accent mb-4"></div>
+
+            <!-- optional sub copy -->
+            <p class="sustainable-sub mb-4">Thoughtfully made from recycled materials. Durable design without
+              compromising style.</p>
+
+            <a href="{{ route('products') }}" class="btn btn-secondary">
+              View Items
+              <i class="bi bi-arrow-right-short"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Image Column -->
+        <div class="col-md-6 sustainable-bg-image">
+          <div class="sustainable-image animate-on-scroll" data-animate="fade-left"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="heading-section py-5">
+    <div class="container">
+      <div class="heading-row  animate-on-scroll" data-animate="fade-down">
+        <h2 class="section-title fs-1 text-center m-0">Our
+          Brands</h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="our-brands-section py-5">
+    <div class="container">
+      <div class="slider pb-5">
+        @for ($i = 0; $i < 2; $i++)
+          <div class="logos">
+            @foreach ($brands as $brand)
+              <img src="{{ asset('storage/' . $brand->logo) }}" class="brand-logo" alt="{{ $brand->name }}" />
+            @endforeach
+          </div>
+        @endfor
+      </div>
+    </div>
+  </section>
+
+  <style>
+
+  </style>
+
+  <section class="video pt-5 overflow-hidden">
+    <div class="container-fluid" style="max-width: 1800px">
+      <div class="row">
+        <div class="video-content open-up aos-init aos-animate" data-aos="zoom-out">
+
+          <div class="video-bg position-relative">
+            <img src="{{ asset('assets/images/video-image.jpg') }}" alt="video" class="video-image img-fluid">
+
+            <!-- Play Button Overlay -->
+            <div class="video-player">
+              <a class="youtube cboxElement" href="https://www.youtube.com/embed/pjtsGzQjFM4">
+                <svg width="70" height="70" viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5v14l11-7z"></path>
+                </svg>
               </a>
             </div>
           </div>
 
-          <!-- Right Image Column -->
-          <div class="col-md-6 sustainable-bg-image">
-            <div class="sustainable-image animate-on-scroll" data-animate="fade-left"></div>
-          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="heading-section py-5">
-      <div class="container">
-        <div class="heading-row  animate-on-scroll" data-animate="fade-down">
-          <h2 class="section-title fs-1 text-center m-0">Our
-            Brands</h2>
-        </div>
-      </div>
-    </section>
-
-    <section class="our-brands-section py-5">
-      <div class="container">
-        <div class="slider pb-5">
-          @for ($i = 0; $i < 2; $i++)
-            <div class="logos">
-              @foreach ($brands as $brand)
-                <img src="{{ asset('storage/' . $brand->logo) }}" class="brand-logo" alt="{{ $brand->name }}" />
-              @endforeach
-            </div>
-          @endfor
-        </div>
-      </div>
-    </section>
-
-    <style>
-
-    </style>
-
-    <section class="video pt-5 overflow-hidden">
-      <div class="container-fluid" style="max-width: 1800px">
-        <div class="row">
-          <div class="video-content open-up aos-init aos-animate" data-aos="zoom-out">
-
-            <div class="video-bg position-relative">
-              <img src="{{ asset('assets/images/video-image.jpg') }}" alt="video" class="video-image img-fluid">
-
-              <!-- Play Button Overlay -->
-              <div class="video-player">
-                <a class="youtube cboxElement" href="https://www.youtube.com/embed/pjtsGzQjFM4">
-                  <svg width="70" height="70" viewBox="0 0 24 24" fill="white">
-                    <path d="M8 5v14l11-7z"></path>
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-    {{-- <section class="gift-collection-section pb-5">
+  {{-- <section class="gift-collection-section pb-5">
       <div class="container py-5">
         <div class="collection-card text-center position-relative overflow-hidden">
           <img src="{{ asset('theme/xtremez/assets/images/gift-collection.png') }}" alt="Gifts"
@@ -258,122 +297,123 @@
       </div>
     </section> --}}
 
-    <section class="brochure-section py-5">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6">
-            <img src="{{ asset('assets/images/corporate-gifts-giftana.png') }}" alt="#">
-          </div>
-          <div class="col-lg-6">
-            <div class="d-flex flex-column h-100 justify-content-center">
-              <div class="section-title-area">
-                <h1 class="section-title">Our 2024 Gifts
-                  Collection</h1>
-              </div>
+  <section class="brochure-section py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <img src="{{ asset('assets/images/corporate-gifts-giftana.png') }}" alt="#">
+        </div>
+        <div class="col-lg-6">
+          <div class="d-flex flex-column h-100 justify-content-center">
+            <div class="section-title-area">
+              <h1 class="section-title">Our 2024 Gifts
+                Collection</h1>
+            </div>
 
+            <div>
+              <a href="#" class="btn btn-outline-dark text-uppercase">View Brochure</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="newsletter bg-light"
+    style="background: url(https://themewagon.github.io/kaira/images/pattern-bg.png) repeat;">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 py-5 my-5">
+          <div class="subscribe-header text-center pb-3">
+            <h3 class="section-title text-uppercase">Sign Up for our newsletter</h3>
+          </div>
+          <form id="form" class="d-flex flex-wrap gap-2">
+            <input type="text" name="email" placeholder="Your Email Addresss"
+              class="form-control form-control-lg">
+            <button class="btn btn-dark btn-lg text-uppercase w-100">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="features-strip-section">
+    <div class="container-fluid">
+      <div class="features-strip">
+        <div class="row gap-3 align-items-center text-start">
+
+          <div class="col-12 col-sm-6 col-lg d-flex bg-white">
+            <div class="item w-100">
+              <div class="icon-wrap"><i class="bi bi-truck"></i></div>
               <div>
-                <a href="#" class="btn btn-outline-dark text-uppercase">View Brochure</a>
+                <div class="title">Easy Free Delivery</div>
+                <p class="sub">Orders Above 100 AED</p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="newsletter bg-light"
-      style="background: url(https://themewagon.github.io/kaira/images/pattern-bg.png) repeat;">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-8 py-5 my-5">
-            <div class="subscribe-header text-center pb-3">
-              <h3 class="section-title text-uppercase">Sign Up for our newsletter</h3>
+          <div class="col-12 col-sm-6 col-lg d-flex bg-white">
+            <div class="item w-100">
+              <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
+              <div>
+                <div class="title">Secure Payments</div>
+                <p class="sub">Trusted payment options.</p>
+              </div>
             </div>
-            <form id="form" class="d-flex flex-wrap gap-2">
-              <input type="text" name="email" placeholder="Your Email Addresss"
-                class="form-control form-control-lg">
-              <button class="btn btn-dark btn-lg text-uppercase w-100">Sign Up</button>
-            </form>
           </div>
-        </div>
-      </div>
-    </section>
 
-
-    <section class="features-strip-section">
-      <div class="container-fluid">
-        <div class="features-strip">
-          <div class="row gap-3 align-items-center text-start">
-
-            <div class="col-12 col-sm-6 col-lg d-flex bg-white">
-              <div class="item w-100">
-                <div class="icon-wrap"><i class="bi bi-truck"></i></div>
-                <div>
-                  <div class="title">Easy Free Delivery</div>
-                  <p class="sub">Orders Above 100 AED</p>
-                </div>
+          <div class="col-12 col-sm-6 col-lg d-flex bg-white">
+            <div class="item w-100">
+              <div class="icon-wrap"><i class="bi bi-recycle"></i></div>
+              <div>
+                <div class="title">Easy Returns</div>
+                <p class="sub">Fast and easy returns</p>
               </div>
             </div>
-
-            <div class="col-12 col-sm-6 col-lg d-flex bg-white">
-              <div class="item w-100">
-                <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
-                <div>
-                  <div class="title">Secure Payments</div>
-                  <p class="sub">Trusted payment options.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg d-flex bg-white">
-              <div class="item w-100">
-                <div class="icon-wrap"><i class="bi bi-recycle"></i></div>
-                <div>
-                  <div class="title">Easy Returns</div>
-                  <p class="sub">Fast and easy returns</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg d-flex bg-white">
-              <div class="item w-100">
-                <div class="icon-wrap"><i class="bi bi-headset"></i></div>
-                <div>
-                  <div class="title">Customer Support</div>
-                  <p class="sub">Expert Assistance</p>
-                </div>
-              </div>
-            </div>
-
           </div>
+
+          <div class="col-12 col-sm-6 col-lg d-flex bg-white">
+            <div class="item w-100">
+              <div class="icon-wrap"><i class="bi bi-headset"></i></div>
+              <div>
+                <div class="title">Customer Support</div>
+                <p class="sub">Expert Assistance</p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </main>
+</main>
 @endsection
 
 @push('scripts')
-  <script>
-    // Laravel route passed to JS
-    window.ajaxProductURL = "{{ route('ajax.get-products') }}";
-    window.activeCategoryId = "{{ $activeCategory->id ?? '' }}";
-  </script>
+<script>
+  // Laravel route passed to JS
+  window.ajaxProductURL = "{{ route('ajax.get-products') }}";
+  window.activeCategoryId = "{{ $activeCategory->id ?? '' }}";
+</script>
 
-  <script src="{{ asset('assets/js/home.js') }}"></script>
+<script src="{{ asset('assets/js/home.js') }}"></script>
 
-  <script>
-    $(document).ready(function() {
-      $('.hero-carousel').owlCarousel({
-        items: 1,
-        loop: true,
-        autoplay: true,
-        autoplayTimeout: 3000,
-        nav: false,
-        animateOut: 'fadeOut',
-        animateIn: 'fadeIn'
-      });
-
-
+<script>
+  $(document).ready(function() {
+    $('.hero-carousel').owlCarousel({
+      items: 1,
+      loop: true,
+      autoplay: true,
+      autoplayTimeout: 3000,
+      nav: true,
+      dots: true,
+      animateOut: 'fadeOut',
+      animateIn: 'fadeIn'
     });
-  </script>
+
+
+  });
+</script>
 @endpush

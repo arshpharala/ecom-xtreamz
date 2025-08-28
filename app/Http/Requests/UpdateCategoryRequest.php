@@ -26,12 +26,22 @@ class UpdateCategoryRequest extends FormRequest
             'slug'      => 'required|string|unique:categories,slug,' . $id . ',id',
             'name'      => 'required|array',
             'name.*'    => 'required|string|max:255',
+
             'icon'      => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:2048',
+            'banner_image' => 'nullable|image|max:2048',
+
             'parent_id' => 'nullable|uuid|exists:categories,id',
+
             'attributes' => 'nullable|array',
             'attributes.*' => 'uuid|exists:attributes,id',
+
             'position'  => 'nullable|integer',
-            'is_visible' => 'boolean'
+            'is_visible' => 'boolean',
+            'show_on_homepage' => 'boolean',
+
+            'text_color' => 'nullable|string|max:7',
+            'background_color' => 'nullable|string|max:7',
         ];
     }
 }

@@ -29,13 +29,13 @@ class OfferRepository
             $title = optional($o->translation)->title ?? 'Offer';
             $eyebrow = optional($o->translation)->description ?? null;
 
-            return (object)[
-                'title' => $title,
-                'eyebrow' => $eyebrow,  // small line
-                'image' => $o->banner_image ? asset('storage/' . $o->banner_image) : asset('assets/images/default-promo.jpg'),
-                'bg' => $o->bg_color ?: '#e6f7fc',
-                'url' => $o->link_url ?: route('products', ['offer' => $o->id]), // fallback route
-            ];
+            $o->title = $title;
+            $o->eyebrow = $eyebrow;
+            $o->image = $o->banner_image ? asset('storage/' . $o->banner_image) : asset('assets/images/default-promo.jpg');
+            $o->bg = $o->bg_color ?: '#e6f7fc';
+            $o->url =  $o->link_url ?: route('products', ['offer' => $o->id]); // fallback route
+
+           return $o;
         });
     }
 }

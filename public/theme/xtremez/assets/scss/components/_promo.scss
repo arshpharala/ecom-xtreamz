@@ -1,81 +1,105 @@
 /* Promo Tiles (3-up banners) */
-.promo-tiles .promo-tile{
-  position: relative;
-  display: block;
-  overflow: hidden;
-  border-radius: 8px;
-  min-height: 220px;             /* adjust to your asset aspect */
-  padding: 28px 24px;
-  text-decoration: none;
-  box-shadow: 0 1px 0 rgba(0,0,0,.03);
-  transition: transform .2s ease, box-shadow .2s ease;
+.promo-tiles .promo-tile {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 8px;
+    min-height: 220px; /* adjust to your asset aspect */
+    padding: 28px 24px;
+    text-decoration: none;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.promo-tiles .promo-tile:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0,0,0,.12);
+.promo-tiles .promo-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
 
 /* Pastel backgrounds */
-.promo-tiles .bg-pink { background: #fde7e8; }
-.promo-tiles .bg-blue { background: #e6f7fc; }
-.promo-tiles .bg-peach{ background: #fdebdc; }
+.promo-tiles .bg-pink {
+    background: #fde7e8;
+}
+.promo-tiles .bg-blue {
+    background: #e6f7fc;
+}
+.promo-tiles .bg-peach {
+    background: #fdebdc;
+}
 
 /* Copy block */
-.promo-tiles .promo-copy{
-  position: relative;
-  z-index: 2;
-  max-width: 56%;
-  color: #111;
+.promo-tiles .promo-copy {
+    position: relative;
+    z-index: 2;
+    max-width: 56%;
+    color: #111;
 }
-.promo-tiles .promo-copy .eyebrow{
-  font-size: 1.05rem;
-  color: #333;
-  margin-bottom: 4px;
+.promo-tiles .promo-copy .eyebrow {
+    font-size: 1.05rem;
+    color: #333;
+    margin-bottom: 4px;
 }
-.promo-tiles .promo-copy .title{
-  font-weight: 900;
-  font-size: 3rem;               /* large like screenshot */
-  line-height: 1.05;
-  margin: 0 0 10px 0;
+.promo-tiles .promo-copy .title {
+    font-weight: 900;
+    font-size: 3rem; /* large like screenshot */
+    line-height: 1.05;
+    margin: 0 0 10px 0;
 }
-.promo-tiles .promo-copy .cta{
-  color: #ff3b3b;                /* red link like ref */
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
+.promo-tiles .promo-copy .cta {
+    color: #ff3b3b; /* red link like ref */
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
 }
-.promo-tiles .promo-tile:hover .cta{
-  border-bottom-color: currentColor;
+.promo-tiles .promo-tile:hover .cta {
+    border-bottom-color: currentColor;
 }
 
 /* Product image on the right */
-.promo-tiles .promo-img{
-  position: absolute;
-  right: 20px;
-  bottom: 8px;
-  height: 160px;                 /* tune per asset */
-  width: auto;
-  z-index: 1;
-  transition: transform .25s ease;
+.promo-tiles .promo-img {
+    position: absolute;
+    right: 20px;
+    bottom: 8px;
+    height: 160px; /* tune per asset */
+    width: auto;
+    z-index: 1;
+    transition: transform 0.25s ease;
 }
-.promo-tiles .promo-tile:hover .promo-img{
-  transform: scale(1.03);
+.promo-tiles .promo-tile:hover .promo-img {
+    transform: scale(1.03);
 }
 
 /* Responsive tweaks */
-@media (max-width: 1199.98px){
-  .promo-tiles .promo-copy .title{ font-size: 2.4rem; }
+@media (max-width: 1199.98px) {
+    .promo-tiles .promo-copy .title {
+        font-size: 2.4rem;
+    }
 }
-@media (max-width: 991.98px){
-  .promo-tiles .promo-copy{ max-width: 60%; }
+@media (max-width: 991.98px) {
+    .promo-tiles .promo-copy {
+        max-width: 60%;
+    }
 }
-@media (max-width: 767.98px){
-  .promo-tiles .promo-tile{ min-height: 190px; padding: 22px 18px; }
-  .promo-tiles .promo-copy{ max-width: 65%; }
-  .promo-tiles .promo-copy .title{ font-size: 2rem; }
-  .promo-tiles .promo-img{ height: 130px; right: 14px; }
+@media (max-width: 767.98px) {
+    .promo-tiles .promo-tile {
+        min-height: 190px;
+        padding: 22px 18px;
+    }
+    .promo-tiles .promo-copy {
+        max-width: 65%;
+    }
+    .promo-tiles .promo-copy .title {
+        font-size: 2rem;
+    }
+    .promo-tiles .promo-img {
+        height: 130px;
+        right: 14px;
+    }
 }
-@media (max-width: 575.98px){
-  .promo-tiles .promo-copy{ max-width: 70%; }
-  .promo-tiles .promo-img{ height: 120px; }
+@media (max-width: 575.98px) {
+    .promo-tiles .promo-copy {
+        max-width: 70%;
+    }
+    .promo-tiles .promo-img {
+        height: 120px;
+    }
 }

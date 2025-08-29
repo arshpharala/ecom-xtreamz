@@ -154,92 +154,63 @@ function debounce(func, delay = 300) {
 //         </div>
 //     </div>`;
 // }
-
 function render_product_card(product, grid = false) {
     const hasOffer = product.offer_data?.has_offer;
     const offerText = hasOffer ? product.offer_data.label : "";
 
-    const currentCurrency = product.currency;
-    const discountedPrice = parseFloat(
-        product.offer_data?.discounted_price || 0
-    );
-    const basePrice = parseFloat(product.price);
-
-    const displayPrice =
-        hasOffer && discountedPrice > 0
-            ? product.offer_data.discounted_price_with_currency
-            : product.price_with_currency;
+    const displayPrice = hasOffer
+        ? product.offer_data.discounted_price_with_currency
+        : product.price_with_currency;
 
     const originalPrice = hasOffer
-        ? `<span class="orig text-muted text-decoration-line-through ms-2">${product.price_with_currency}</span>`
+        ? `<span class="orig">${product.price_with_currency}</span>`
         : "";
-    //   const displayPrice =
-    //     hasOffer && discountedPrice > 0
-    //       ? formatPrice(currentCurrency, discountedPrice)
-    //       : formatPrice(currentCurrency, basePrice);
 
-    //   const originalPrice = hasOffer
-    //     ? `<span class="orig text-muted text-decoration-line-through ms-2">${formatPrice(currentCurrency, basePrice)}</span>`
-    //     : "";
-
-    // optional: if your API sends wishlisted flag; else defaults false
     const isWishlisted = !!product.is_wishlisted;
 
     return `
-  <div class="item ${grid || ""}" data-category="${product.category}">
-    <div class="product-card d-flex flex-column">
+      <div class="item ${grid || ""}">
+        <div class="product-card">
 
-      <div class="image-box position-relative">
-        <img src="${product.image}" alt="${
-        product.name
-    }" class="img-fluid product-img"/>
+          <!-- Image -->
+          <div class="image-box">
+            <img src="${product.image}" alt="${product.name}" class="product-img"/>
 
-        ${hasOffer ? `<div class="offer-badge">${offerText}</div>` : ""}
+            ${hasOffer ? `<div class="offer-badge">${offerText}</div>` : ""}
 
-        <!-- wishlist (overlay, top-right) -->
-        <button class="wishlist-btn ${isWishlisted ? "is-active" : ""}"
-                type="button"
-                aria-label="Add to wishlist"
-                aria-pressed="${isWishlisted}"
-                data-variant-id="${product.id}">
-          <i class="bi bi-heart"></i>
-          <i class="bi bi-heart-fill"></i>
-        </button>
-
-        <!-- overlay -->
-        <div class="image_overlay"></div>
-        <a href="${product.link}" class="overlay-button">View details</a>
-      </div>
-
-      <div class="stats-container">
-        <span class="product-title">${product.name}</span>
-
-        <div class="product-description">
-          <p>${product.description || ""}</p>
-        </div>
-
-        <div class="product-meta">
-          <div class="price-wrap">
-            <span class="price fs-5 fw-bold">${displayPrice}</span>
-            ${originalPrice}
+            <button class="wishlist-btn ${isWishlisted ? "is-active" : ""}"
+                    type="button"
+                    data-variant-id="${product.id}">
+              <i class="bi bi-heart"></i>
+              <i class="bi bi-heart-fill"></i>
+            </button>
           </div>
 
-          <button class="btn cart-btn add-to-cart-btn ms-2" data-variant-id="${
-              product.id
-          }" aria-label="Add to cart">
-            <i class="bi bi-cart add-to-cart" style="${
-                product.is_in_cart ? "display:none;" : ""
-            }"></i>
-            <i class="bi bi-cart-check added-to-cart" style="${
-                product.is_in_cart ? "" : "display:none;"
-            }"></i>
-          </button>
-        </div>
-      </div>
+          <!-- Title & Category -->
+          <div class="stats-container">
+            <div class="product-title">${product.name}</div>
+            <div class="product-category">View Category</div>
 
-    </div>
-  </div>`;
+            <!-- Description (hidden until hover) -->
+            <div class="product-description">${product.description || ""}</div>
+
+            <!-- Price & Cart -->
+            <div class="price-bar">
+              <div class="price-wrap">
+                ${displayPrice} ${originalPrice}
+              </div>
+              <button class="cart-btn add-to-cart-btn" data-variant-id="${product.id}">
+                <i class="bi bi-cart ${product.is_in_cart ? "d-none" : ""}"></i>
+                <i class="bi bi-cart-check ${product.is_in_cart ? "" : "d-none"}"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>`;
 }
+
+
 
 function render_pagination(pagination) {
     const $pagination = $(".pagination");

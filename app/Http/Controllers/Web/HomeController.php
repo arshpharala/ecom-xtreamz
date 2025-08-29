@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Models\CMS\Page;
+use App\Models\CMS\Banner;
 use Illuminate\Http\Request;
 use App\Models\Catalog\Brand;
 use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
-use App\Repositories\CategoryRepository;
 use App\Repositories\PageRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\CategoryRepository;
 
 class HomeController extends Controller
 {
@@ -31,7 +32,12 @@ class HomeController extends Controller
 
         $brands = Brand::whereNotNull('logo')->active()->orderBy('position')->get();
 
+        $banners = Banner::active()
+            ->with('translation')
+            ->ordered()
+            ->get();
 
+        $data['banners']            = $banners;
         $data['locale']     = $locale;
         $data['categories'] = $categories;
         $data['brands']     = $brands;

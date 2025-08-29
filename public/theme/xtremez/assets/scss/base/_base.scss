@@ -1,5 +1,5 @@
 html {
-    background-color: var(--color-background);
+    background-color: var(--color-light);
 }
 
 body {
@@ -18,11 +18,15 @@ body {
 
 main {
     flex: 1 0 auto;
-    background-color: var(--color-background);
+    background-color: var(--color-light);
 }
 
 .owl-stage-outer {
     padding-bottom: 1.37rem;
+}
+
+.bg-white{
+    background-color: var(--color-light);
 }
 
 .heading-wrapper {

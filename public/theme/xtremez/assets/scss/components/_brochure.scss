@@ -1,69 +1,65 @@
 .brochure-section {
-    position: relative;
-    background: #e9e9e9;
-
-    img {
-        max-width: 100%;
+    .brochure-box {
+        background: #eaf6fb;
+        border-radius: 20px;
+        padding: 5rem 0rem;
     }
 
-    .section-title-area {
-        margin-bottom: 40px;
-
-        .section-title {
-            font-size: 72px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            line-height: 1;
+    .brochure-img {
+        padding: 1rem 3rem;
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
     }
-}
 
-.offer-banner {
-    position: relative;
+    .brochure-text {
+        padding: 1rem 3rem;
+        .brochure-subtitle {
+            font-size: var(--font-size-7xl);
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 0.1rem;
+        }
 
-    .title-area {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .title {
-            text-decoration: none;
-            font-size: var(--font-size-9xl);
+        .brochure-title {
+            font-size: var(--font-size-16xl); // close to your screenshot
+            font-weight: 800;
+            color: #111;
+            line-height: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .brochure-btn {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
             font-weight: 500;
-            margin-bottom: 15px;
-            line-height: 1;
+            border: 1px solid #111;
+            border-radius: 6px;
+            background: transparent;
+            color: #111;
+            transition: all 0.2s ease;
 
-            span {
-                font-weight: 600;
-                font-size: 5rem;
+            &:hover {
+                background: #111;
+                color: #fff;
             }
         }
     }
 
-    .action-area {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: end;
-        a {
-            text-decoration: underline;
-            text-underline-offset: 12px;
-            text-decoration-thickness: 2px;
-            color: var(--color-dark);
-            font-size: var(--font-size-5xl);
-            font-weight: 500;
-            transition: font-size 0.2s ease-in;
+    /* ✅ Responsive adjustments */
+    @media (max-width: 991.98px) {
+        text-align: center;
+        padding: 2rem 1.5rem;
 
-            &::after {
-                content: none;
-            }
-
-            &:hover{
-                font-size: var(--font-size-6xl);
-            }
+        .brochure-title {
+            font-size: 2rem;
         }
-    }
 
-    img {
-        max-width: 100%;
+        .brochure-btn {
+            margin-top: 1rem;
+        }
     }
 }

@@ -161,7 +161,7 @@ if (!function_exists('price_format')) {
         );
 
         return $currency->currency_position === 'Left'
-            ? $currency->symbol .  $formattedAmount
+            ? $currency->symbol . ' ' .  $formattedAmount
             : $formattedAmount . $currency->symbol;
     }
 }

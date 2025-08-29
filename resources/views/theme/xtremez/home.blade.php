@@ -5,13 +5,23 @@
     <section class="hero-section d-flex align-items-center p-0">
       <div class="owl-carousel hero-carousel w-100">
         <!-- Slide 1 -->
-        @foreach ($bannerOffers as $offer)
-          <div class="hero-slide" style="background-color: {{ $offer->bg }};">
+        @foreach ($banners as $banner)
+          <div class="hero-slide" style="background: url({{ asset('storage/' . $banner->background) }});"
+            data-background="{{ asset('storage/' . $banner->background) }}">
             <div class="container">
               <div class="row">
+
+                <div class="col-lg-4">
+                  <div class="slider-img d-none d-lg-block" data-animation="fadeInRight" data-delay=".8s">
+                    <img src="{{ asset('storage/' . $banner->image) }}" alt="">
+                  </div>
+                </div>
                 <div class="col-lg-8 text-white hero-text animate-on-scroll" data-animate="fade-up">
-                  <h1 class="hero-title text-black">{{ $offer->title }}</h1>
-                  <a href="{{ $offer->link }}" class="mt-3 buy-link">Shop Now</a>
+                  <h1 class="hero-title" style="color: {{ $banner->text_color }}">{{ $banner->translation->title }}</h1>
+                  @if ($banner->btn_link)
+                    <a href="{{ $banner->btn_link }}" class="mt-3 buy-link"
+                      style="background: {{ $banner->btn_color }}">{{ $banner->btn_text ?? __('Shop Now') }}</a>
+                  @endif
                 </div>
               </div>
             </div>
@@ -198,7 +208,7 @@
       'productUrl' => route('ajax.get-products', ['is_featured' => 1]),
   ])
 
-  <section class="sustainable-section py-5">
+  {{-- <section class="sustainable-section py-5">
     <div class="container px-0 bg-beige">
       <div class="row g-0 align-items-stretch sustainable-card"><!-- added hook -->
 
@@ -227,7 +237,30 @@
         </div>
       </div>
     </div>
+  </section> --}}
+
+  <section class="sustainable-section py-5">
+    <div class="container">
+      <div class="sustainable-banner d-flex align-items-center justify-content-between flex-wrap">
+
+        <!-- Left: Text -->
+        <div class="sustainable-text">
+          <p class="eyebrow">Eco Collection</p>
+          <h2 class="title">Sustainable<br>Products</h2>
+          <a href="{{ route('products') }}" class="cta-link">Shop Now</a>
+        </div>
+
+        <!-- Right: Image -->
+        <div class="sustainable-image">
+          <img src="{{ asset('assets/images/sustainable-products.png') }}" alt="Sustainable Products"
+            class="img-fluid">
+          <img src="{{ asset('assets/images/globe.png') }}" alt="Eco Icon" class="eco-icon">
+        </div>
+
+      </div>
+    </div>
   </section>
+
 
   <section class="heading-section py-5">
     <div class="container">
@@ -256,8 +289,8 @@
 
   </style>
 
-  <section class="video pt-5 overflow-hidden">
-    <div class="container-fluid" style="max-width: 1800px">
+  <section class="video py-5 overflow-hidden">
+    <div class="container">
       <div class="row">
         <div class="video-content open-up aos-init aos-animate" data-aos="zoom-out">
 
@@ -299,94 +332,45 @@
 
   <section class="brochure-section py-5">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6">
-          <img src="{{ asset('assets/images/corporate-gifts-giftana.png') }}" alt="#">
-        </div>
-        <div class="col-lg-6">
-          <div class="d-flex flex-column h-100 justify-content-center">
-            <div class="section-title-area">
-              <h1 class="section-title">Our 2024 Gifts
-                Collection</h1>
-            </div>
+      <div class="brochure-box">
+        <div class="row g-0 align-items-center">
 
-            <div>
-              <a href="#" class="btn btn-outline-dark text-uppercase">View Brochure</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="newsletter bg-light"
-    style="background: url(https://themewagon.github.io/kaira/images/pattern-bg.png) repeat;">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-8 py-5 my-5">
-          <div class="subscribe-header text-center pb-3">
-            <h3 class="section-title text-uppercase">Sign Up for our newsletter</h3>
-          </div>
-          <form id="form" class="d-flex flex-wrap gap-2">
-            <input type="text" name="email" placeholder="Your Email Addresss"
-              class="form-control form-control-lg">
-            <button class="btn btn-dark btn-lg text-uppercase w-100">Sign Up</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <section class="features-strip-section">
-    <div class="container-fluid">
-      <div class="features-strip">
-        <div class="row gap-3 align-items-center text-start">
-
-          <div class="col-12 col-sm-6 col-lg d-flex bg-white">
-            <div class="item w-100">
-              <div class="icon-wrap"><i class="bi bi-truck"></i></div>
-              <div>
-                <div class="title">Easy Free Delivery</div>
-                <p class="sub">Orders Above 100 AED</p>
-              </div>
-            </div>
+          <!-- Left: Image -->
+          <div class="col-lg-6 brochure-img">
+            <img src="{{ asset('assets/images/corporate-gifts-giftana.png') }}" alt="Brochure" class="img-fluid">
           </div>
 
-          <div class="col-12 col-sm-6 col-lg d-flex bg-white">
-            <div class="item w-100">
-              <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
-              <div>
-                <div class="title">Secure Payments</div>
-                <p class="sub">Trusted payment options.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12 col-sm-6 col-lg d-flex bg-white">
-            <div class="item w-100">
-              <div class="icon-wrap"><i class="bi bi-recycle"></i></div>
-              <div>
-                <div class="title">Easy Returns</div>
-                <p class="sub">Fast and easy returns</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12 col-sm-6 col-lg d-flex bg-white">
-            <div class="item w-100">
-              <div class="icon-wrap"><i class="bi bi-headset"></i></div>
-              <div>
-                <div class="title">Customer Support</div>
-                <p class="sub">Expert Assistance</p>
-              </div>
-            </div>
+          <!-- Right: Text -->
+          <div class="col-lg-6 brochure-text">
+            <p class="brochure-subtitle">A wide collection of creatives</p>
+            <h2 class="brochure-title">Our 2024 Gifts<br>Collection</h2>
+            <a href="#" class="btn brochure-btn">View Brochure</a>
           </div>
 
         </div>
       </div>
     </div>
   </section>
+
+
+  <section class="newsletter-section mt-5">
+    <div class="container text-center">
+      <p class="newsletter-subtitle">Get in touch with us</p>
+      <h2 class="newsletter-title">Our Newsletter</h2>
+
+      <form id="newsletter-form" class="newsletter-form">
+        <div class="newsletter-input d-flex align-items-center">
+          <i class="bi bi-envelope icon"></i>
+          <input type="email" class="form-control" placeholder="Your Email Address" required>
+          <button type="submit" class="btn-submit">
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+
 
 </main>
 @endsection

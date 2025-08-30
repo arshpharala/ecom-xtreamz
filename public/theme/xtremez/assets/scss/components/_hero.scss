@@ -2,20 +2,23 @@
     position: relative;
     padding: 0;
     width: 100%;
-    min-height: 520px;
-    height: 75vh;
-    max-height: 920px;
+    min-height: 480px;
+    height: 60vh;
+    max-height: 820px;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     .hero-carousel {
         width: 100%;
-        height: 75vh;
+        height: 65vh;
         .owl-stage-outer,
         .owl-stage,
         .owl-item,
         .hero-slide {
             height: 100%;
-            min-height: 520px;
+            min-height: 480px;
         }
         .owl-item .hero-slide {
             display: flex;
@@ -25,18 +28,18 @@
             background-position: center 30%;
             position: relative;
             width: 100%;
-            height: 75vh;
+            height: 60vh;
             transition: background-image 0.3s;
         }
     }
 
     .hero-text {
         max-width: 700px;
-        padding-top: 4rem;
-        padding-bottom: 4rem;
+        // padding-top: 1rem;
+        // padding-bottom: 4rem;
         position: relative;
 
-        .buy-link{
+        .buy-link {
             text-decoration: underline;
             text-underline-offset: 12px;
             text-decoration-thickness: 2px;
@@ -49,7 +52,7 @@
                 content: none;
             }
 
-            &:hover{
+            &:hover {
                 font-size: var(--font-size-6xl);
             }
         }
@@ -194,18 +197,32 @@
 
         .owl-dot {
             span {
-                width: 12px;
-                height: 12px;
-                background: var(--color-dark-muted);
+                width: 14px;
+                height: 14px;
+                background: var(--color-dark-muted); // inactive filled
                 border-radius: 50%;
                 transition: all 0.3s ease;
                 display: block;
+                position: relative; // needed for inner dot positioning
             }
 
             &.active {
                 span {
-                    background: var(--color-background);
-                    transform: scale(1.2);
+                    background: transparent; // hollow
+                    border: 2px solid var(--color-dark); // black ring
+                    transform: scale(1.3);
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 6px; // inner dot size
+                        height: 6px;
+                        background: var(--color-dark); // inner dot color
+                        border-radius: 50%;
+                        transform: translate(-50%, -50%);
+                    }
                 }
             }
         }

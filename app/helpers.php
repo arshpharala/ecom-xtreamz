@@ -141,7 +141,7 @@ if (!function_exists('price_format')) {
      * @param float  $amt  Amount to format
      * @return string
      */
-    function price_format(string $ccy, float $amt): string
+    function price_format(string $ccy, float $amt, $decimal = null): string
     {
         $currency = Currency::where('code', $ccy)->first();
 
@@ -155,7 +155,7 @@ if (!function_exists('price_format')) {
 
         $formattedAmount = number_format(
             $amt,
-            $currency->decimal ?? 2,
+            $decimal ?? $currency->decimal ?? 2,
             $currency->decimal_separator ?? '.',
             $currency->group_separator ?? ','
         );

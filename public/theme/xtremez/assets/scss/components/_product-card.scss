@@ -34,13 +34,13 @@
 
     &:hover {
         background: #fff;
-        transform: translateY(-3px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-
-        .image-box{
+        transform: scale(0.95); // ✅ shrink card slightly (5%)
+        // box-shadow: 36px 36px 36px rgba(0, 0, 0, 0.18); // ✅ darker, deeper shadow
+            box-shadow: var(--color-grey) 0px 0px 0px 13px;
+        .image-box {
             height: 180px;
 
-            img.product-img{
+            img.product-img {
                 max-height: 160px; /* shrink */
             }
         }

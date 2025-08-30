@@ -108,9 +108,9 @@
 
     <section class="promo-tiles py-3">
       <div class="container">
-        <div class="row g-3 g-lg-4">
+        <div class="row g-3 g-lg-4 d-flex">
           @foreach ($categories as $category)
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-4 flex-fill">
               <a href="{{ $category->link }}" class="promo-tile" style="background: {{ $category->background_color }}">
                 <div class="promo-copy">
                   <h3 class="title">{{ $category->name }}</h3>
@@ -239,8 +239,8 @@
     </div>
   </section> --}}
 
-  <section class="sustainable-section py-5">
-    <div class="container">
+  <section class="sustainable-section py-5 position-relative">
+    <div class="container position-relative">
       <div class="sustainable-banner d-flex align-items-center justify-content-between flex-wrap">
 
         <!-- Left: Text -->
@@ -250,16 +250,15 @@
           <a href="{{ route('products') }}" class="cta-link">Shop Now</a>
         </div>
 
-        <!-- Right: Image -->
-        <div class="sustainable-image">
-          <img src="{{ asset('assets/images/sustainable-products.png') }}" alt="Sustainable Products"
-            class="img-fluid">
-          <img src="{{ asset('assets/images/globe.png') }}" alt="Eco Icon" class="eco-icon">
-        </div>
-
       </div>
+
+      <!-- Globe Icon -->
+      <img src="{{ asset('assets/images/globe.png') }}" alt="Eco Icon" class="eco-icon">
+
+      <img src="{{ asset('assets/images/sustainable-products.png') }}" alt="Sustainable Products" class="sustainable-image img-fluid">
     </div>
   </section>
+
 
 
   <section class="heading-section py-5">

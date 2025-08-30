@@ -96,14 +96,28 @@ $(document).ready(function () {
 // Sticky Header
 const $header = $("#header");
 const toggleClass = "is-sticky";
-$(window).on("scroll", function () {
+let headerHeight = $header.outerHeight();
+
+// Add placeholder to prevent layout shift
+const $placeholder = $("<div>").css("height", headerHeight).hide();
+$header.before($placeholder);
+
+$(window).on("scroll resize", function () {
+    headerHeight = $header.outerHeight();
+    $placeholder.css("height", headerHeight);
+
     const currentScroll = $(window).scrollTop();
     if (currentScroll > 150) {
-        $header.addClass(toggleClass);
+        if (!$header.hasClass(toggleClass)) {
+            $header.addClass(toggleClass);
+            $placeholder.show();
+        }
     } else {
         $header.removeClass(toggleClass);
+        $placeholder.hide();
     }
 });
+
 
 function debounce(func, delay = 300) {
     let timeout;
@@ -189,7 +203,7 @@ function render_product_card(product, grid = false) {
           <!-- Title & Category -->
           <div class="stats-container">
             <div class="product-title">${product.name}</div>
-            <div class="product-category">View Category</div>
+            <div class="product-category">${product.category_name}</div>
 
             <!-- Description (hidden until hover) -->
             <div class="product-description">${product.description || ""}</div>

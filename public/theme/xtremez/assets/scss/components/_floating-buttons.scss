@@ -1,6 +1,6 @@
 // Variables
 $chat-bg: #25d366;
-$chat-color: #fff;
+$chat-color: var(--color-secondary);
 $chat-shadow: 0 8px 25px -5px rgba(45, 62, 79, 0.3);
 $chat-z: 9999999;
 
@@ -119,9 +119,9 @@ $chat-z: 9999999;
 
 /* Solid square variant */
 .btn-solid-square {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
+    background: var(--color-dark);
+    color: var(--color-light);
+    border-color: var(--color-dark);
 }
 
 /* Outline square (use this class instead of .btn-solid-square to test) */

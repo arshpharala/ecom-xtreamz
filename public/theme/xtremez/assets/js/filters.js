@@ -133,8 +133,8 @@ $(function () {
         let filters = {};
 
         // Active category
-        const activeCategory = $(".category-list li.active").data("category");
-        if (activeCategory) filters.category_id = activeCategory;
+        const activeCategory = $(".category-list li.active").data("category-slug");
+        if (activeCategory) filters.category= activeCategory;
 
         // All select inputs (including dynamic attributes)
         $(".theme-select").each(function () {

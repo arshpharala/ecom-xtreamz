@@ -202,7 +202,7 @@ function render_product_card(product, grid = false) {
 
           <!-- Title & Category -->
           <div class="stats-container">
-            <div class="product-title">${product.name}</div>
+            <a class="product-title" href="${product.link}">${product.name}</a>
             <div class="product-category">${product.category_name}</div>
 
             <!-- Description (hidden until hover) -->

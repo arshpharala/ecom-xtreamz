@@ -123,6 +123,7 @@ class ProductVariant extends Model
             ->when($filters['is_new'] ?? null, fn($q, $v) => $q->where('product_variants.created_at', '>=', now()->subDays(30)))
             ->when($filters['is_featured'] ?? null, fn($q, $v) => $q->where('products.is_featured', $v))
             ->when($filters['show_in_slider'] ?? null, fn($q, $v) => $q->where('products.show_in_slider', $v))
+            ->when($filters['category'] ?? null, fn($q, $v) => $q->where('categories.slug', $v))
             ->when($filters['category_id'] ?? null, fn($q, $v) => $q->where('products.category_id', $v))
             ->when($filters['brand_id'] ?? null, fn($q, $v) => $q->where('products.brand_id', $v))
             ->when($filters['price_min'] ?? null, fn($q, $v) => $q->where('product_variants.price', '>=', $v))

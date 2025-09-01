@@ -70,7 +70,7 @@
                 @foreach ($categories as $category)
                   <li
                     class="d-flex align-items-center py-3 border-bottom {{ $category->id == $activeCategory->id ? 'active' : '' }}    "
-                    data-category="{{ $category->id }}">
+                    data-category="{{ $category->id }}" data-category-slug="{{ $category->slug }}">
                     <img src="{{ asset('storage/' . $category->icon) }}" class="me-2" width="22" alt>
                     {{ $category->name }} <span class="ms-auto badge text-dark">{{ $category->products_count }}</span>
                   </li>

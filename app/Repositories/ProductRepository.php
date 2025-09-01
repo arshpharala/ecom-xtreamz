@@ -19,6 +19,7 @@ class ProductRepository
             'is_new',
             'show_in_slider',
             'category_id',
+            'category',
             'brand_id',
             'price_min',
             'price_max',

@@ -1206,6 +1206,9 @@ main {
   display: flex;
   flex-direction: column;
 }
+.product-card .stats-container a {
+  text-decoration: none;
+}
 .product-card .stats-container .product-title {
   font-weight: 600;
   font-size: 1rem;

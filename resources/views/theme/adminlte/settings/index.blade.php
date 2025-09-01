@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-5 col-sm-3">
           <div class="nav flex-column nav-tabs" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <a class="nav-link active" id=home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
+            <a class="nav-link active" id="home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
               role="tab" aria-controls="v-pills-home" aria-selected="true">Site</a>
             <a class="nav-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button"
               role="tab" aria-controls="v-pills-profile" aria-selected="false">Social Links</a>
@@ -28,7 +28,7 @@
         </div>
         <div class="col-7 col-sm-9">
           <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby=home-tab">
+            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="home-tab">
               <form action="{{ route('admin.cms.settings.store') }}" method="POST" enctype="multipart/form-data"
                 class="ajax-form">
                 @csrf
@@ -41,6 +41,11 @@
                       <h5 class="mb-3">Site Title</h5>
                       <input type="text" class="form-control" name="site_title" value="{{ setting('site_title') }}"
                         placeholder="Site Title">
+                    </div>
+
+                    <div class="mb-4">
+                      <h5 class="mb-3">Site Intro</h5>
+                      <textarea name="site_intro" class="form-control" placeholder="Site Intro" rows='4'>{{ setting('site_intro') }}</textarea>
                     </div>
 
                     <div class="mb-4">

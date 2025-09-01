@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\CMS\Page;
 use App\Models\CMS\Locale;
 use App\Models\CMS\Country;
 use Illuminate\Support\Str;
 use App\Models\CMS\Currency;
 use App\Models\Catalog\Offer;
 use App\Services\CartService;
+use App\Models\Catalog\Category;
 use Illuminate\Support\Collection;
 
 if (!function_exists('setting')) {
@@ -58,6 +60,57 @@ if (!function_exists('active_locals')) {
     }
 }
 
+
+if (!function_exists('page_content')) {
+    function page_content(string $sectionType, string $key, $default = null)
+    {
+        $slug = request()->segment(1) ?: 'home';
+        $locale = app()->getLocale();
+
+        $page = once(function () use ($slug, $locale) {
+            return Page::with([
+                'metas',
+                'translation',
+                'sections.translations' => fn($q) => $q->where('locale', $locale),
+            ])
+                ->where('slug', $slug)
+                ->where('is_active', true)
+                ->first();
+        });
+
+        if (!$page) return $default;
+
+        $section = $page->sections->firstWhere('type', $sectionType);
+        if (!$section) return $default;
+
+        if ($key == 'image') return  asset('storage/' . $section->image);
+
+
+        $translation = $section->translations->firstWhere('locale', $locale);
+        return $translation->{$key} ?? $default;
+    }
+}
+
+
+if (!function_exists('render_meta_tags')) {
+    function render_meta_tags($meta = null)
+    {
+        $defaultTitle = config('app.name', 'Optimised Medical Supplies');
+        $defaultDescription = 'Welcome to ' . $defaultTitle . ' | Optimised Medical Supplies.';
+        $defaultKeywords = 'Optimised Medical Supplies';
+
+        $title = $meta->meta_title ?? $defaultTitle;
+        $description = $meta->meta_description ?? $defaultDescription;
+        $keywords = $meta->meta_keywords ?? $defaultKeywords;
+
+        return <<<HTML
+            <title>{$title}</title>
+            <meta name="description" content="{$description}">
+            <meta name="keywords" content="{$keywords}">
+        HTML;
+    }
+}
+
 if (!function_exists('active_currency')) {
     /**
      * When $obj = true, returns the Currency row (cached).
@@ -69,14 +122,14 @@ if (!function_exists('active_currency')) {
 
         if ($active === null) {
             // TODO: swap this for your real “current site / session” currency
-            $active = Currency::query()->first();
+            $active = Currency::default()->first();
 
             if ($active->code === 'AED') {
                 $active->symbol = '<span class="dirham-symbol">&#xea;</span>';
             }
         }
 
-        return $obj ? $active : ($active?->code ?? 'AED');
+        return $obj ? $active : ($active?->code ?? 'GBP');
     }
 }
 
@@ -88,7 +141,7 @@ if (!function_exists('price_format')) {
      * @param float  $amt  Amount to format
      * @return string
      */
-    function price_format(string $ccy, float $amt): string
+    function price_format(string $ccy, float $amt, $decimal = null): string
     {
         $currency = Currency::where('code', $ccy)->first();
 
@@ -102,14 +155,14 @@ if (!function_exists('price_format')) {
 
         $formattedAmount = number_format(
             $amt,
-            $currency->decimal ?? 2,
+            $decimal ?? $currency->decimal ?? 2,
             $currency->decimal_separator ?? '.',
             $currency->group_separator ?? ','
         );
 
         return $currency->currency_position === 'Left'
-            ? $currency->symbol .' ' . $formattedAmount
-            : $formattedAmount .' ' . $currency->symbol;
+            ? $currency->symbol . ' ' .  $formattedAmount
+            : $formattedAmount . $currency->symbol;
     }
 }
 
@@ -179,5 +232,23 @@ if (!function_exists('header_offers')) {
     {
         $offers = Offer::with('translation')->limit($limit)->get();
         return $offers;
+    }
+}
+
+if (!function_exists('menu_categories')) {
+    /**
+     * Mask the sentive string
+     *
+     * @param int $limit
+     * @return Collection
+     */
+    function menu_categories(int $limit = 6): Collection
+    {
+        $categories = Category::visible()
+            ->withJoins()
+            ->withSelection()
+            ->applySorting('position')
+            ->limit($limit)->get();
+        return $categories;
     }
 }

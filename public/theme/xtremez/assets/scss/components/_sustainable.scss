@@ -1,123 +1,148 @@
 .sustainable-section {
-  background-color: var(--color-background);
+  position: relative;
 
-  .bg-beige { background-color: #ede3d7; } // overall strip tone
-
-  /* subtle card feel for the whole row */
-  .sustainable-card {
-    box-shadow: 0 16px 40px rgba(0,0,0,.06);
-    isolation: isolate;
-  }
-
-  .sustainable-content-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 420px;
-
-    .sustainable-content {
-      padding-top: clamp(1.5rem, 4vw, 3rem);
-      padding-bottom: clamp(1.5rem, 4vw, 3rem);
-
-      .sustainable-eyebrow {
-        display: inline-block;
-        font-size: .9rem;
-        font-weight: 800;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-        color: #6a6a6a;
-        margin-bottom: .35rem;
-      }
-
-      .sustainable-heading {
-        font-family: var(--font-family-primary);
-        font-size: clamp(28px, 5vw, var(--font-size-15xl));
-        line-height: 1.05;
-        color: #121212;
-        margin: 0;
-      }
-
-      .heading-accent {
-        position: relative;
-        width: 60px;
-        height: 3px;
-        background: var(--color-primary);
-        border-radius: 2px;
-
-        /* thin secondary line, continues across */
-        &::after {
-          content: "";
-          position: absolute;
-          left: 100%;
-          top: 50%;
-          transform: translateY(-50%);
-          height: 1.5px;
-          width: clamp(80px, 22vw, 360px);
-          background: var(--color-secondary);
-          border-radius: 2px;
-          margin-left: 6px;
-          opacity: .85;
-        }
-      }
-
-      .sustainable-sub {
-        color: #4b4b4b;
-        max-width: 44ch;
-      }
-
-    }
-  }
-
-  /* Image column (uses CSS background) */
-  .sustainable-bg-image {
+  .sustainable-banner {
+    background: #f5faf7;
+    border-radius: 20px;
+    padding: 5rem 6rem;
     position: relative;
-    // background-image: url("../images/sustainable.png");
-    background-image: url("../images/eco-friendly-gifts_l.jpg");
-    background-size: cover;
-    background-position: right top;
-    background-repeat: no-repeat;
-    min-height: 420px;
-
-    /* soft overlay & hover zoom */
-    &::before {
-      content: "";
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,.12) 100%);
-      pointer-events: none;
-      opacity: .75;
-      mix-blend-mode: multiply;
-    }
-
-    /* subtle zoom on hover of section */
-    .sustainable-image { position: absolute; inset: 0; }
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  /* Hover effect (zoom image) */
-//   &:hover .sustainable-bg-image {
-//     background-size: 103%;
-//   }
+  /* Left text */
+  .sustainable-text {
+    max-width: 420px;
+    z-index: 3;
 
-  /* breakpoints */
-  @media (max-width: #{$screen-xl - 1}) {
-    .sustainable-content-section {
-      align-items: center;
+    .eyebrow {
+      font-size: var(--font-size-7xl);
+      font-weight: 500;
+      color: #111;
+      margin-bottom: 0.1rem;
+    }
 
-      .sustainable-content .sustainable-heading {
-        font-size: var(--font-size-10xl) !important;
+    .title {
+      font-size: var(--font-size-16xl);
+      font-weight: 700;
+      line-height: 1.1;
+      color: #59a25b;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-link {
+      font-size: var(--font-size-7xl);
+      font-weight: 700;
+      color: #111;
+      text-decoration: none;
+      border-bottom: 3px solid #59a25b;
+    //   padding-bottom: 3px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+
+      &:hover {
+        color: #1b7c3b;
+        border-color: #111;
       }
     }
   }
 
-  @media (max-width: #{$screen-md - 1}) {
-    .sustainable-content-section { min-height: 300px; }
-    .sustainable-bg-image { min-height: 280px; }
+  /* Product image (right) */
+  .sustainable-image {
+    position: absolute;
+    top: 30px;
+    right: 80px;
+    width: 60%;  // responsive scaling
+    max-width: 720px;
+    height: auto;
+    z-index: 2;
 
-    .sustainable-content-section .sustainable-content {
-      padding-top: 2rem;
-      padding-bottom: 2rem;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 
-      .sustainable-heading { font-size: var(--font-size-9xl); }
-      .heading-accent::after { width: 40vw; }
+  /* Globe icon (floating top-right) */
+  .eco-icon {
+    position: absolute;
+    top: -40px;
+    right: 60px;
+    width: 140px;
+    height: auto;
+    z-index: 3;
+  }
+
+  /* ✅ Responsive tweaks */
+  @media (max-width: $screen-xl) {
+    .sustainable-banner {
+      padding: 4rem 3rem;
+    }
+    .sustainable-image {
+      width: 50%;
+      right: 40px;
+    }
+    .eco-icon {
+      width: 100px;
+      top: -30px;
+      right: 20px;
+    }
+  }
+
+  @media (max-width: $screen-lg) {
+    .sustainable-banner {
+      flex-direction: column;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    .sustainable-text {
+      margin-bottom: 2rem;
+      max-width: 100%;
+      .title {
+        font-size: 2.5rem;
+      }
+    }
+    .sustainable-image {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: 80%;
+      margin: 0 auto;
+    }
+    .eco-icon {
+      width: 80px;
+      top: -20px;
+      right: 10px;
+    }
+  }
+
+  @media (max-width: $screen-md) {
+    .sustainable-banner {
+      padding: 2rem 1.5rem;
+    }
+    .sustainable-text .title {
+      font-size: 2rem;
+    }
+    .sustainable-image {
+      width: 100%;
+    }
+    .eco-icon {
+      width: 60px;
+    }
+  }
+
+  @media (max-width: $screen-sm) {
+    .sustainable-banner {
+      padding: 1.5rem;
+    }
+    .sustainable-text .title {
+      font-size: 1.6rem;
+    }
+    .eco-icon {
+      width: 50px;
+      top: -15px;
+      right: 5px;
     }
   }
 }

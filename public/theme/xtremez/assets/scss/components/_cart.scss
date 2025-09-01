@@ -1,9 +1,9 @@
 // cart.scss
 .cart-section {
-	background-color: var(--color-background);
+	background-color: var(--color-light);
 
 	.cart-list {
-		background: var(--color-light);
+		background: var(--color-background);
 		// border-radius: 8px;
 		min-height: 480px;
 	}

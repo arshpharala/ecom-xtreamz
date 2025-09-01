@@ -1,5 +1,5 @@
 .browse-categories {
-	background-color: var(--color-background);
+	background-color: var(--color-light);
 	padding: 3rem 0;
 
 	.category-icons {
@@ -41,7 +41,7 @@
 	@media (max-width: #{$screen-md - 1}) {
 		.category-icons {
 			gap: 1rem;
-			
+
 			justify-content: space-around !important;
 
 			.category-icon {

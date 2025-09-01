@@ -8,10 +8,8 @@
   <meta charset="UTF-8" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="robots" content="index, follow" />
-  <meta name="description"
-    content="Xtremez is the Middle East’s leader in corporate gifts, promotional products, and sustainable branded giveaways. Discover innovative gifting solutions.">
-  <meta name="keywords" content="Corporate Gifts, Promotional Products, Sustainable Giveaways, Custom Gifts, Xtremez">
-  <meta name="author" content="Xtremez" />
+
+  {!! render_meta_tags($meta ?? null) !!}
 
   <meta name="currency" content="{{ active_currency(true)->code }}">
   <meta name="currency-symbol" content="{{ active_currency(true)->symbol }}">
@@ -19,8 +17,7 @@
   <meta name="decimal" content="{{ active_currency(true)->decimal }}">
   <meta name="decimal-separator" content="{{ active_currency(true)->decimal_separator }}">
   <meta name="group-separator" content="{{ active_currency(true)->group_separator }}">
-  <title>Corporate Gifts & Promotional Items in UAE | Xtreme
-    Gifting</title>
+
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://www.xtremez.com/" />
@@ -48,8 +45,6 @@
         url('{{ asset('assets/fonts/font.woff') }}') format('woff'),
         url('{{ asset('assets/fonts/fontD.ttf') }}') format('truetype');
     }
-
-
 
     .dirham-symbol {
       font-family: 'UAESymbol', sans-serif;

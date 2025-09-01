@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Arr;
 
 class ProductVariant extends Model
 {
@@ -131,7 +132,10 @@ class ProductVariant extends Model
             ->when(
                 $filters['offer'] ?? null,
                 fn($q) =>
-                $q->whereHas('offers', fn($q2) => $q2->active())
+                $q->whereHas('offers', fn($q2) => $q2->active()
+                ->when($filters['offer_name'] ?? null || $filters['offer_id'] ?? null, function($q3) use($filters){
+                    $q3->whereIn('id', Arr::wrap($filters['offer_id'] ?? null))->orWhereIn('name', Arr::wrap($filters['offer_name'] ?? null));
+                }))
             )
             ->when(
                 $filters['tags'] ?? null,

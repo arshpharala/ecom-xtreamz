@@ -15,7 +15,9 @@ class ProductVariantOfferController extends Controller
     public function index($productId, $variantId)
     {
         $variant            = ProductVariant::with('offers')->where('product_id', $productId)->findOrFail($variantId);
-        $offers             = Offer::upcoming()->withSelection()->withJoins()
+        $offers             = Offer::where(function($q){
+            $q->active()->orWhere('starts_at', '>', now());
+        })->withSelection()->withJoins()
             ->whereNotIn('offers.id', $variant->offers->pluck('id')->toArray())->get();
 
         $data['offers']     = $offers;
@@ -43,7 +45,9 @@ class ProductVariantOfferController extends Controller
     public function store(Request $request, $productId, $variantId)
     {
         $variant            = ProductVariant::with('offers')->where('product_id', $productId)->findOrFail($variantId);
-        $offer              = Offer::upcoming()->findOrFail($request->offer_id);
+        $offer              = Offer::where(function($q){
+            $q->active()->orWhere('starts_at', '>', now());
+        })->findOrFail($request->offer_id);
 
         $variant->offers()->syncWithoutDetaching($offer);
 

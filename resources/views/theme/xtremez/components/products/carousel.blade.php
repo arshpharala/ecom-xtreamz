@@ -13,12 +13,19 @@
         </div>
       </div>
       <div class="section-nav d-flex">
-        <button id="product{{ $id }}Prev" class="btn btn-link p-0 me-2 text-secondary">
+        <div id="product{{ $id }}Prev" class="btn-circle-outline" style="margin: 50px 0 0 0 ">
+          <i class="bi bi-arrow-left fw-bold"></i>
+        </div>
+        <div id="product{{ $id }}Next" class="btn-circle-outline" style="margin: 50px 0 0 10px ">
+          <i class="bi bi-arrow-right fw-bold"></i>
+        </div>
+
+        {{-- <button id="product{{ $id }}Prev" class="btn btn-link p-0 me-2 text-secondary">
           <i class="bi bi-chevron-left"></i>
         </button>
         <button id="product{{ $id }}Next" class="btn btn-link p-0 text-secondary">
           <i class="bi bi-chevron-right"></i>
-        </button>
+        </button> --}}
       </div>
     </div>
   </div>

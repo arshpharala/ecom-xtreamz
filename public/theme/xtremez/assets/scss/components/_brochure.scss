@@ -1,19 +1,65 @@
 .brochure-section {
-    position: relative;
-    background: #e9e9e9;
-
-    img {
-        max-width: 100%;
+    .brochure-box {
+        background: #eaf6fb;
+        border-radius: 20px;
+        padding: 5rem 0rem;
     }
 
-    .section-title-area {
-        margin-bottom: 40px;
+    .brochure-img {
+        padding: 1rem 3rem;
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
 
-        .section-title {
-            font-size: 72px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            line-height: 1;
+    .brochure-text {
+        padding: 1rem 3rem;
+        .brochure-subtitle {
+            font-size: var(--font-size-7xl);
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 0.1rem;
+        }
+
+        .brochure-title {
+            font-size: var(--font-size-16xl); // close to your screenshot
+            font-weight: 800;
+            color: #111;
+            line-height: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .brochure-btn {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border: 1px solid #111;
+            border-radius: 12px;
+            background: transparent;
+            color: #111;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: #111;
+                color: #fff;
+            }
+        }
+    }
+
+    /* ✅ Responsive adjustments */
+    @media (max-width: 991.98px) {
+        text-align: center;
+        padding: 2rem 1.5rem;
+
+        .brochure-title {
+            font-size: 2rem;
+        }
+
+        .brochure-btn {
+            margin-top: 1rem;
         }
     }
 }

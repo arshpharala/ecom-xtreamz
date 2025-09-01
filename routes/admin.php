@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\CMS\CurrencyController;
 use App\Http\Controllers\Admin\Catalog\BrandController;
 use App\Http\Controllers\Admin\Catalog\OfferController;
 use App\Http\Controllers\Admin\Catalog\CouponController;
+use App\Http\Controllers\Admin\Catalog\VendorController;
 use App\Http\Controllers\Admin\CMS\AttachmentController;
 use App\Http\Controllers\Admin\CMS\EmailAdminController;
 use App\Http\Controllers\Admin\Sales\CustomerController;
@@ -28,6 +29,9 @@ use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Inventory\InventorySourceController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
+use App\Http\Controllers\Admin\CMS\BannerController;
+use App\Http\Controllers\Admin\CMS\NewsController;
+use App\Http\Controllers\Admin\CMS\TestimonialController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/',                     'dashboard')->name('dashboard');
@@ -78,6 +82,9 @@ Route::group(['prefix' => '/catalog', 'as' => 'catalog.'], function () {
     Route::delete('offers/{offer}/restore',                 [OfferController::class, 'restore'])->name('offers.restore');
 
     Route::resource('coupons',                              CouponController::class);
+
+    Route::resource('vendors',                              VendorController::class);
+    Route::delete('vendors/{vendor}/restore',               [VendorController::class, 'restore'])->name('vendors.restore');
 });
 
 
@@ -117,10 +124,16 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
 
     Route::resource('payment-gateways',                     PaymentGatewayController::class)->only(['store']);
 
-    Route::resource('emails',                               EmailController::class);
-    Route::delete('emails/{email}/restore',                 [EmailController::class, 'restore'])->name('emails.restore');
+    Route::resource('emails',                            EmailController::class);
+    Route::delete('emails/{email}/restore',                    [EmailController::class, 'restore'])->name('emails.restore');
 
-    Route::resource('email.admins',                         EmailAdminController::class);
+    Route::resource('email.admins',                      EmailAdminController::class);
 
-    Route::post('upload/tinymce',                           [TinyMCEController::class, 'upload'])->name('upload.tinymce');
+    Route::resource('testimonials',                     TestimonialController::class);
+    Route::resource('news',                     NewsController::class);
+
+    Route::resource('banners', BannerController::class);
+    Route::delete('banners/{banner}/restore', [BannerController::class, 'restore'])->name('banners.restore');
+
+    Route::post('upload/tinymce',                            [TinyMCEController::class, 'upload'])->name('upload.tinymce');
 });

@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin\CMS;
 
 use App\Models\CMS\Page;
+use App\Models\CMS\PageSection;
 use App\Models\Seo\Meta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\CMS\PageSectionItem;
+use App\Models\CMS\PageSectionTranslation;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class PageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         if (request()->ajax()) {
-
             $locale = app()->getLocale();
 
             $query = Page::select('pages.id', 'pages.slug', 'pages.is_active', 'pages.created_at', 'pages.updated_at', 'page_translations.title')
@@ -27,7 +27,6 @@ class PageController extends Controller
                 ->groupBy('pages.id');
 
             return DataTables::of($query)
-
                 ->addColumn('action', function ($row) {
                     $editUrl = route('admin.cms.pages.edit', $row->id);
                     $deleteUrl = route('admin.cms.pages.destroy', $row->id);
@@ -44,9 +43,6 @@ class PageController extends Controller
         return view('theme.adminlte.cms.pages.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $page = new Page();
@@ -54,15 +50,13 @@ class PageController extends Controller
         return view('theme.adminlte.cms.pages.create', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = $request->validate([
             'slug' => 'required|string|unique:pages,slug',
             'position' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:3072',
             'title' => 'required|array',
             'title.*' => 'required|string|max:255',
             'content' => 'nullable|array',
@@ -77,6 +71,11 @@ class PageController extends Controller
                 'is_active' => $request->has('is_active'),
             ]);
 
+            if ($request->hasFile('banner')) {
+                $page->banner = $request->file('banner')->store('pages', 'public');
+                $page->save();
+            }
+
             foreach (active_locals() as $locale) {
                 $page->translations()->create([
                     'locale'  => $locale,
@@ -88,33 +87,26 @@ class PageController extends Controller
             Meta::store($request, $page);
 
             DB::commit();
+
+            return response()->json([
+                'message' => 'Page created successfully.',
+                'redirect' => route('admin.cms.pages.index')
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
-
-
-        return response()->json([
-            'message' => 'Page created successfully.',
-            'redirect' => route('admin.cms.pages.index')
-        ]);
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show(string $id) {}
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $page = Page::with('translations')->findOrFail($id);
+        $page = Page::with([
+            'translations',
+            'sections.translations'
+        ])->findOrFail($id);
 
         $data['page'] = $page;
 
@@ -122,21 +114,24 @@ class PageController extends Controller
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
+        $page = Page::with('sections.translations')->findOrFail($id);
+
         $data = $request->validate([
-            'slug' => 'required|string|unique:pages,slug,' . $id . ',id',
+            'slug' => 'required|string|unique:pages,slug,' . $page->id,
             'position' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:3072',
             'title' => 'required|array',
             'title.*' => 'required|string|max:255',
             'content' => 'nullable|array',
+            'sections' => 'nullable|array',
+            'sections.*.type' => 'required|string|max:255',
+            'sections.*.heading' => 'nullable|array',
+            'sections.*.content' => 'nullable|array',
+            'sections.*.image' => 'nullable|file|mimes:jpeg,png,jpg,webp,gif|max:3072',
         ]);
-
-        $page = Page::findOrFail($id);
 
         DB::beginTransaction();
 
@@ -144,45 +139,97 @@ class PageController extends Controller
             $page->update([
                 'slug'      => $data['slug'],
                 'position'  => $data['position'] ?? 0,
-                'is_active' => $request->has('is_active') ?? 0,
+                'is_active' => $request->has('is_active'),
             ]);
 
-            foreach (active_locals() as $locale) {
-                $translation            = $page->translations()->firstOrNew(['locale' => $locale]);
-                $translation->title     = $data['title'][$locale] ?? '';
-                $translation->content   = $data['content'][$locale] ?? '';
+            if ($request->hasFile('banner')) {
+                if ($page->banner && Storage::disk('public')->exists($page->banner)) {
+                    Storage::disk('public')->delete($page->banner);
+                }
 
-                $page->translations()->save($translation);
+                $page->banner = $request->file('banner')->store('pages', 'public');
+                $page->save();
+            }
+
+            foreach (active_locals() as $locale) {
+                $page->translations()->updateOrCreate(
+                    ['locale' => $locale],
+                    [
+                        'title'   => $data['title'][$locale] ?? '',
+                        'content' => $data['content'][$locale] ?? '',
+                    ]
+                );
             }
 
             Meta::store($request, $page);
 
+            if ($request->has('sections')) {
+                $submittedIds = [];
+
+                foreach ($request->sections as $index => $sectionData) {
+                    $sectionId = $sectionData['id'] ?? null;
+
+                    // Create or update
+                    if ($sectionId) {
+                        $section = PageSection::findOrFail($sectionId);
+                    } else {
+                        $section = new PageSection();
+                        $section->page_id = $page->id;
+                    }
+
+                    $section->type      = $sectionData['type'];
+                    $section->position  = $index;
+                    $section->is_active = true;
+
+                    // Image handling
+                    if ($request->hasFile("sections.$index.image")) {
+                        if ($section->image && Storage::disk('public')->exists($section->image)) {
+                            Storage::disk('public')->delete($section->image);
+                        }
+                        $section->image = $request->file("sections.$index.image")->store('sections', 'public');
+                    }
+
+                    $section->save();
+                    $submittedIds[] = $section->id;
+
+                    foreach (active_locals() as $locale) {
+                        $section->translations()->updateOrCreate(
+                            ['locale' => $locale],
+                            [
+                                'heading' => $sectionData['heading'][$locale] ?? '',
+                                'content' => $sectionData['content'][$locale] ?? '',
+                            ]
+                        );
+                    }
+                }
+
+                $page->sections()
+                    ->whereNotIn('id', $submittedIds)
+                    ->each(function ($section) {
+                        if ($section->image && Storage::disk('public')->exists($section->image)) {
+                            Storage::disk('public')->delete($section->image);
+                        }
+
+                        $section->translations()->delete();
+                        $section->delete();
+                    });
+            }
+
+
             DB::commit();
+
+            return response()->json([
+                'message' => 'Page updated successfully.',
+                'redirect' => route('admin.cms.pages.index')
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
-
-
-        return response()->json([
-            'message' => 'Page updated successfully.',
-            'redirect' => route('admin.cms.pages.index')
-        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 
-    /**
-     * Restore the specified resource from storage.
-     */
-    public function restore(string $id)
-    {
-        //
-    }
+    public function destroy(string $id) {}
+
+    public function restore(string $id) {}
 }

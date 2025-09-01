@@ -43,7 +43,7 @@
       <div class="row gx-4 gy-4">
         <!-- Cart List -->
         <div class="col-md-12 col-lg-7 col-xl-8">
-          <div class="cart-list bg-white p-4">
+          <div class="cart-list bg-grey p-4">
             @if ($variants->isNotEmpty())
               <div class="cart-items">
                 <!-- Cart Item Start -->
@@ -101,7 +101,7 @@
         </div>
         <!-- Cart Summary -->
         <div class="col-md-12 col-lg-5 col-xl-4">
-          <div class="cart-summary bg-white p-4">
+          <div class="cart-summary bg-grey p-4">
             <ul class="list-unstyled mb-4">
               <li class="d-flex justify-content-between mb-2">
                 <span>Subtotal</span>
@@ -139,7 +139,7 @@
             <form class="cc-form w-100 py-4">
               <div class="input-group border border-black">
                 <input type="text" class="form-control border-0" placeholder="Gift card number" />
-                <span class="input-group-text border-0 bg-white pe-2">
+                <span class="input-group-text border-0 bg-grey pe-2">
                   <button class="btn btn-dark cc-button btn-apply" type="button">Apply</button>
                 </span>
               </div>

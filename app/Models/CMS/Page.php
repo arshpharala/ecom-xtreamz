@@ -16,16 +16,31 @@ class Page extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['slug', 'is_active', 'position'];
+    protected $fillable = ['slug', 'is_active', 'position', 'banner'];
+
+    public function scopeActive($query)
+    {
+        return $query->where('pages.is_active', true);
+    }
+
+    public function translation()
+    {
+        return $this->hasOne(PageTranslation::class)->where('locale', app()->getLocale());
+    }
 
     public function translations()
     {
         return $this->hasMany(PageTranslation::class);
     }
 
-    public function scopeActive($query)
+    public function sections()
     {
-        return $query->where('pages.is_active', true);
+        return $this->hasMany(PageSection::class);
+    }
+
+    function scopeFindBySlug($query, $slug)
+    {
+        $query->where('slug', $slug);
     }
 
     public function scopeWithJoins($query)

@@ -29,12 +29,54 @@ class Offer extends Model
         'position',
     ];
 
+    public $appends = ['label'];
+
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
         'is_active' => 'boolean',
         'show_in_slider' => 'boolean'
     ];
+
+    public function getLabelAttribute()
+    {
+        if ($this->discount_type === 'percent') {
+            $value = $this->discount_value;
+
+            $formatted = fmod($value, 1) == 0
+                ? (int)$value
+                : number_format($value, 2);
+
+            return "{$formatted}% OFF";
+        } elseif ($this->discount_type === 'fixed') {
+            $value = $this->discount_value;
+
+            $formatted = fmod($value, 1) == 0
+                ? (int)$value
+                : number_format($value, 2);
+
+            return "{$formatted} " . active_currency() . " OFF";
+        }
+
+        return null;
+    }
+
+    public function getDiscountedPriceAttribute()
+    {
+        if (!$this->relationLoaded('variant')) {
+            return null; // only works when variant is loaded
+        }
+
+        $variant = $this->variant;
+
+        if ($this->discount_type === 'percent') {
+            return round($variant->price * (1 - $this->discount_value / 100), 2);
+        } elseif ($this->discount_type === 'fixed') {
+            return max(0, $variant->price - $this->discount_value);
+        }
+
+        return $variant->price;
+    }
 
     function translations()
     {

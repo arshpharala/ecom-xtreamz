@@ -12,6 +12,7 @@ class ProductRepository
 {
     public function getFiltered($perPage = 12)
     {
+        $perPage = 2;
         $filters = Request::only([
             'is_wishlisted',
             'is_featured',
@@ -90,17 +91,15 @@ class ProductRepository
         $discountedPrice = null;
         if ($offer->discount_type === 'percent') {
             $discountedPrice    = round($variant->price * (1 - $offer->discount_value / 100), 2);
-            $label              = "{$offer->discount_value}% OFF";
         } elseif ($offer->discount_type === 'fixed') {
             $discountedPrice    = max(0, $variant->price - $offer->discount_value);
-            $label              = "{$offer->discount_value} " . active_currency() . " OFF";
         }
 
         return [
             'has_offer'         => true,
             'discounted_price'  => $discountedPrice,
             'discounted_price_with_currency'  => price_format(active_currency(), $discountedPrice),
-            'label'             => $label,
+            'label'             => $offer->label,
             'title'             => $offer->translation->title ?? '',
         ];
     }

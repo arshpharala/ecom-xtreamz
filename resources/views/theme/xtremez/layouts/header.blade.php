@@ -40,19 +40,21 @@
       <!-- Navigation -->
       <nav class="main-nav">
         <ul class="nav align-items-center">
-          <li class="nav-item dropdown">
+            @foreach (menu_categories(10) as $category)
+            <li class="nav-item"><a href="{{ $category->link }}" class="nav-link">{{ $category->name }}</a></li>
+            @endforeach
+          {{-- <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sustainable</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Eco Friendly Bags</a></li>
               <li><a class="dropdown-item" href="#">Recycled Bottles</a></li>
             </ul>
           </li>
-          <li class="nav-item"><a href="#" class="nav-link">Apparel</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Tech</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Drinkware</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Bags</a></li>
           <li class="nav-item"><a href="#" class="nav-link">Office</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Other Brands</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Other Brands</a></li> --}}
         </ul>
       </nav>
 

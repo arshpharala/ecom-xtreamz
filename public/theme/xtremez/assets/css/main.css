@@ -76,6 +76,10 @@ main {
   background-color: var(--color-light);
 }
 
+.bg-grey {
+  background-color: var(--color-background);
+}
+
 .heading-wrapper {
   display: flex;
   align-items: center;
@@ -254,6 +258,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 .btn-circle-outline i {
   color: var(--color-dark);
@@ -277,6 +282,7 @@ main {
   padding: 0.6rem 1.5rem;
   letter-spacing: 0.05em;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 .btn-outline-dark:hover, .btn-outline-dark:focus {
   background: var(--color-dark);
@@ -297,6 +303,7 @@ main {
   padding: 0.6rem 1.5rem;
   letter-spacing: 0.05em;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 .btn-dark:hover, .btn-dark:focus {
   background: transparent;
@@ -2220,7 +2227,7 @@ main {
 }
 
 .listing-header {
-  background: var(--color-background);
+  background: var(--color-light);
 }
 .listing-header .section-title {
   font-size: var(--font-size-10xl);
@@ -2292,7 +2299,7 @@ main {
   background-color: var(--color-light);
 }
 .cart-section .cart-list {
-  background: var(--color-light);
+  background: var(--color-background);
   min-height: 480px;
 }
 .cart-section .cart-selectall {
@@ -2426,7 +2433,7 @@ main {
   }
 }
 .checkout-section {
-  background: var(--color-background);
+  background: var(--color-light);
 }
 .checkout-section .default-address-box {
   background: var(--color-background);

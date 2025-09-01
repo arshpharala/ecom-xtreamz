@@ -123,6 +123,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     i {
         color: var(--color-dark);
@@ -150,6 +151,7 @@
     padding: 0.6rem 1.5rem;
     letter-spacing: 0.05em;
     transition: all 0.3s ease;
+    cursor: pointer;
 
     &:hover,
     &:focus {
@@ -171,6 +173,7 @@
     padding: 0.6rem 1.5rem;
     letter-spacing: 0.05em;
     transition: all 0.3s ease;
+    cursor: pointer;
 
     &:hover,
     &:focus {

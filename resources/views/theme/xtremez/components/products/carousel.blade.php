@@ -3,7 +3,7 @@
       $productUrl = route('ajax.get-products', ['category_id' => $category->id]);
   }
 @endphp
-<section class="heading-section py-5">
+<section class="heading-section pt-5">
   <div class="container">
     <div class="heading-row animate-on-scroll d-flex justify-content-between align-items-center" data-animate="fade-down">
       <div>

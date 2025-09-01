@@ -1,5 +1,5 @@
 .listing-header {
-	background: var(--color-background);
+	background: var(--color-light);
 
 	.section-title {
 		font-size: var(--font-size-10xl);
@@ -12,7 +12,7 @@
 		font-weight: 700;
 	}
 
-	@media (max-width: #{$screen-md - 1}) {	
+	@media (max-width: #{$screen-md - 1}) {
 		.row {
 			flex-direction: column;
 			gap: 1.3rem;

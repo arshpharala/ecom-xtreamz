@@ -31,7 +31,7 @@
         </div>
         <div class="col-md-5 col-lg-5 col-xl-6 d-flex align-items-center">
           <form class="cc-search-bar w-100">
-            <div class="input-group search-group">
+            <div class="input-group search-group border">
               <input type="text" class="form-control search-input fw-bold type-placeholder"
                 placeholder="Search Here" />
               <span class="input-group-text search-icon">
@@ -46,7 +46,7 @@
         </div>
         <div class="col-md-4 col-lg-3  col-xl-3 d-none d-md-flex align-items-center justify-content-end gap-3">
           <span class="fw-bold sort-label text-nowrap">Sort By</span>
-          <select class="form-select theme-select border-0 sort-select" name="sort_by">
+          <select class="form-select theme-select sort-select" name="sort_by">
             <option value="">Featured</option>
             <option value="price_asc">Price: Low to High</option>
             <option value="price_desc">Price: High to Low</option>
@@ -116,7 +116,7 @@
 
           </div>
 
-          
+
         </aside>
 
         <!-- Main Content: Product List -->

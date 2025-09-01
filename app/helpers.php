@@ -235,16 +235,20 @@ if (!function_exists('header_offers')) {
     }
 }
 
-if (!function_exists('footer_categories')) {
+if (!function_exists('menu_categories')) {
     /**
      * Mask the sentive string
      *
      * @param int $limit
      * @return Collection
      */
-    function footer_categories(int $limit = 6): Collection
+    function menu_categories(int $limit = 6): Collection
     {
-        $categories = Category::visible()->with('translation')->limit($limit)->get();
+        $categories = Category::visible()
+            ->withJoins()
+            ->withSelection()
+            ->applySorting('position')
+            ->limit($limit)->get();
         return $categories;
     }
 }

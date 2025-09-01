@@ -41,7 +41,7 @@
       <nav class="main-nav">
         <ul class="nav align-items-center">
             @foreach (menu_categories(10) as $category)
-            <li class="nav-item"><a href="{{ $category->link }}" class="nav-link">{{ $category->name }}</a></li>
+            <li class="nav-item"><a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link">{{ $category->name }}</a></li>
             @endforeach
           {{-- <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sustainable</a>

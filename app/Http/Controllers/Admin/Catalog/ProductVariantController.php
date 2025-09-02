@@ -168,7 +168,7 @@ class ProductVariantController extends Controller
             $variant->save();
 
             $variant->attributeValues()->sync(array_values($request['attributes']));
-            $variant->tags()->sync(array_values($request['tags']));
+            $variant->tags()->sync(array_values($request['tags'] ?? []));
 
             $variant->shipping()->updateOrCreate(
                 [],

@@ -61,27 +61,23 @@
           //   },
           {
             data: 'name',
-            orderable: false,
-            searchable: false
+            name: 'product_translations.name'
           },
           {
             data: 'slug',
             name: 'slug'
           },
           {
-            data: 'category',
-            orderable: false,
-            searchable: false
+            data: 'category_name',
+            name: 'category_translations.name'
           },
           {
-            data: 'brand',
-            orderable: false,
-            searchable: false
+            data: 'brand_name',
+            name: 'brands.name'
           },
           {
             data: 'status',
-            orderable: false,
-            searchable: false
+            name: 'products.is_active'
           },
           {
             data: 'created_at',

@@ -26,32 +26,28 @@ class ProductController extends Controller
         if ($request->ajax()) {
             $locale = app()->getLocale();
 
-            $query = Product::withTrashed()->with([
-                'translations',
-                'variants',
-                'category.translations',
-                'brand'
-            ]);
+            $query = Product::withTrashed()
+            ->leftJoin('categories', 'categories.id', 'products.category_id')
+            ->leftJoin('product_translations', function($join){
+                $join->on('products.id', 'product_translations.product_id')->where('product_translations.locale', app()->getLocale());
+            })
+            ->leftJoin('category_translations', function($join){
+                $join->on('categories.id', 'category_translations.category_id')->where('category_translations.locale', app()->getLocale());
+            })
+            ->leftJoin('brands', 'brands.id', 'products.brand_id')
+            ->select(
+                'products.id',
+                'products.category_id',
+                'products.slug',
+                'products.is_active',
+                'products.created_at',
+                'products.deleted_at',
+                'product_translations.name',
+                'category_translations.name as category_name',
+                'brands.name as brand_name'
+            );
 
             return DataTables::of($query)
-                ->addColumn('id', function ($row) {
-                    return $row->id;
-                })
-                ->editColumn('name', function ($row) use ($locale) {
-                    return $row->translations->where('locale', $locale)->first()?->name ?? $row->slug;
-                })
-                ->editColumn('slug', function ($row) {
-                    return $row->slug;
-                })
-                ->editColumn('category', function ($row) use ($locale) {
-                    return $row->category
-                        ? ($row->category->translations->where('locale', $locale)->first()?->name ?? $row->category->slug)
-                        : '-';
-                })
-                ->editColumn('brand', function ($row) use ($locale) {
-                    // Otherwise, just name
-                    return $row->brand->name ?? '-';
-                })
                 ->editColumn('status', function ($row) {
 
                     if ($row->deleted_at) {

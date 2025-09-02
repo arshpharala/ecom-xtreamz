@@ -19,19 +19,19 @@
         <div class="col-12">
           <div class="form-group">
             <label for="">SKU / Product Code</label>
-            <input type="text" name="sku" class="form-control" value="" required>
+            <input type="text" name="sku" class="form-control" value="{{ $lastSKU ?? '' }}" required>
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="">Price</label>
-            <input type="number" name="price" class="form-control" step="0.01" value="" required>
+            <input type="number" name="price" class="form-control" step="0.01" value="100" required>
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="">Stock</label>
-            <input type="number" name="stock" class="form-control" value="" required>
+            <input type="number" name="stock" class="form-control" value="10" required>
           </div>
         </div>
         <div class="col-12">
@@ -54,31 +54,31 @@
 
           <div class="form-group">
             <label for="length">Length</label>
-            <input type="number" name="length" class="form-control" step="0.01">
+            <input type="number" name="length" class="form-control" step="0.01" value="10">
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="width">Width</label>
-            <input type="number" name="width" class="form-control" step="0.01">
+            <input type="number" name="width" class="form-control" step="0.01" value="10">
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="height">Height</label>
-            <input type="number" name="height" class="form-control" step="0.01">
+            <input type="number" name="height" class="form-control" step="0.01" value="10">
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="weight">Weight (kgs)</label>
-            <input type="number" name="weight" class="form-control" step="0.01">
+            <input type="number" name="weight" class="form-control" step="0.01" value="0.10">
           </div>
         </div>
         <div class="col-6">
           <div class="form-group">
             <label for="weight">Qty (per carton)</label>
-            <input type="number" name="qty_per_carton" class="form-control">
+            <input type="number" name="qty_per_carton" class="form-control" value="1">
           </div>
         </div>
         <div class="col-12">

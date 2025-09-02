@@ -51,6 +51,9 @@ class ProductVariantController extends Controller
 
         $tags = Tag::get();
 
+        $lastSKU = ProductVariant::orderByDesc('sku')->limit(1)->value('sku');
+        $data['lastSKU'] = $lastSKU;
+
         $data['attributes'] = $attributes;
         $data['product']    = $product;
         $data['tags']       = $tags;
@@ -80,7 +83,7 @@ class ProductVariantController extends Controller
             $variant->save();
 
             $variant->attributeValues()->sync(array_values($request['attributes']));
-            $variant->tags()->sync(array_values($request['tags']));
+            $variant->tags()->sync(array_values($request['tags'] ?? []));
 
             $variant->shipping()->updateOrCreate(
                 [],
@@ -131,7 +134,7 @@ class ProductVariantController extends Controller
             ];
         });
 
-        $tags = Tag::get()->map(function($tag) use($variant){
+        $tags = Tag::get()->map(function ($tag) use ($variant) {
             $tag->checked = $variant->tags->contains($tag->id);
             return $tag;
         });

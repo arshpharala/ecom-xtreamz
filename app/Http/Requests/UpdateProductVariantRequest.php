@@ -29,8 +29,8 @@ class UpdateProductVariantRequest extends FormRequest
             'stock'         => 'required|integer',
             'attributes'    => 'required|array',
             'attributes.*'  => 'required|exists:attribute_values,id',
-            'tags'          => 'required|array',
-            'tags.*'        => 'required|exists:tags,id',
+            'tags'          => 'nullable|array',
+            'tags.*'        => 'nullable|exists:tags,id',
         ];
     }
 }

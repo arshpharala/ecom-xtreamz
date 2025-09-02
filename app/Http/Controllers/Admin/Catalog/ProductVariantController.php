@@ -51,7 +51,7 @@ class ProductVariantController extends Controller
 
         $tags = Tag::get();
 
-        $lastSKU = ProductVariant::orderByDesc('sku')->limit(1)->value('sku');
+        $lastSKU = ProductVariant::latest()->limit(1)->value('sku');
         $data['lastSKU'] = $lastSKU;
 
         $data['attributes'] = $attributes;

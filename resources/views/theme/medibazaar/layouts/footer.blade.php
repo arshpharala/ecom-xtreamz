@@ -28,13 +28,13 @@
                     <div class="footer-wrapper ml-80 mb-30">
                         <h3 class="footer-title">Useful Links</h3>
                         <div class="footer-link">
-                            <ul>
+                            <>
                                 <li><a href="{{ route('customers.profile') }}#wishlist">My Wishlist</a></li>
                                 <li><a href="{{ route('customers.profile') }}">My Account</a></li>
-                                <li><a href="{{ route('v2.policy') }}">Return Policy</a></li>
-                                <li><a href="{{ route('v2.policy') }}">Privacy Policy</a></li>
-                                <li><a href="{{ route('v2.contact-us') }}">Contact Us</a></li>
-                            </ul>
+                                <li><a href="{{ route('policy') }}">Return Policy</a></li>
+                                <li><a href="{{ route('policy') }}">Privacy Policy</a></li>
+                                <li><a href="{{ route('contact-us') }}">Contact Us</a></li>
+                            </
                         </div>
                     </div>
                 </div>
@@ -72,9 +72,9 @@
                 <div class="col-xl-6 col-lg-6 col-md-6">
                     <div class="footer-bottom-link f-right">
                         <ul>
-                            <li><a href="{{ route('v2.home') }}">Home </a></li>
-                            <li><a href="{{ route('v2.about-us') }}"> About Us</a></li>
-                            <li><a href="{{ route('v2.products') }}">Our Product</a></li>
+                            <li><a href="{{ route('home') }}">Home </a></li>
+                            <li><a href="{{ route('about-us') }}"> About Us</a></li>
+                            <li><a href="{{ route('products') }}">Our Product</a></li>
                         </ul>
                     </div>
                 </div>

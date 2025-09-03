@@ -28,13 +28,13 @@
                     <div class="footer-wrapper ml-80 mb-30">
                         <h3 class="footer-title">Useful Links</h3>
                         <div class="footer-link">
-                            <>
+                            <ul>
                                 <li><a href="{{ route('customers.profile') }}#wishlist">My Wishlist</a></li>
                                 <li><a href="{{ route('customers.profile') }}">My Account</a></li>
                                 <li><a href="{{ route('policy') }}">Return Policy</a></li>
                                 <li><a href="{{ route('policy') }}">Privacy Policy</a></li>
                                 <li><a href="{{ route('contact-us') }}">Contact Us</a></li>
-                            </
+                            </ul>
                         </div>
                     </div>
                 </div>

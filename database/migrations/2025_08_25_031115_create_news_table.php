@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->id();
-            $table->integer('category_id');
+            $table->uuid('id')->primary();
+            $table->uuid('category_id');
             $table->string('author');
+            $table->string('slug')->unique();
             $table->boolean('is_guide')->default(0);
             $table->boolean('is_active')->default(0);
             $table->integer('position')->default(99);
@@ -22,11 +23,12 @@ return new class extends Migration
             $table->string('thumbnail')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('news_translations', function (Blueprint $table) {
             $table->id();
-            $table->integer('news_id');
+            $table->uuid('news_id');
             $table->string('locale', 5)->index();
             $table->text('title');
             $table->text('intro');
@@ -40,6 +42,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('news_translations');
         Schema::dropIfExists('news');
     }
 };

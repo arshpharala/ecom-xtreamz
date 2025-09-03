@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\LoginController;
+use App\Http\Controllers\Web\V2\LoginController;
 use App\Http\Controllers\Web\Profile\AddressController;
 use App\Http\Controllers\Web\Profile\CardController;
 use App\Http\Controllers\Web\Profile\WishlistController;

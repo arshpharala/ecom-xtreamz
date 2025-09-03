@@ -64,6 +64,7 @@ class Page extends Model
     {
         return $query->select([
             'pages.id',
+            'pages.banner',
             'page_translations.title',
             'page_translations.content',
             'metas.meta_description',

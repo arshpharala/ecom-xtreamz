@@ -50,8 +50,8 @@
                         searchable: false
                     },
                     {
-                        data: 'name',
-                        name: 'testimonial_translations.name'
+                        data: 'title',
+                        name: 'news_translations.title'
                     },
                     {
                         data: 'author',

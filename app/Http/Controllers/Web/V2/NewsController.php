@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Web\V2;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\CMS\News;
+use App\Repositories\PageRepository;
 
 class NewsController extends Controller
 {
@@ -12,7 +14,20 @@ class NewsController extends Controller
      */
     public function index()
     {
-        //
+        $news = News::where('is_active', true)
+            ->orderBy('position')
+            ->orderBy('created_at', 'desc')
+            ->with('translation')
+            ->paginate(9);
+
+        $slug = request()->segment(1);
+
+        $page = (new PageRepository())->findBySlug($slug);
+
+        $data['news'] = $news;
+        $data['page'] = $page;
+
+        return view('theme.medibazaar.news.index', $data);
     }
 
     /**

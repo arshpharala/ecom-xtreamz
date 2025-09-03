@@ -37,8 +37,7 @@ class ProductController extends Controller
             ->orderBy('categories.position')
             ->get();
 
-        $slug = request()->segment(2);
-        // $slug = request()->segment(1);
+        $slug = request()->segment(1);
 
         $page = Page::with('metas', 'translation')
             ->where('slug', $slug)
@@ -50,16 +49,17 @@ class ProductController extends Controller
         $brands = Brand::active()->orderBy('position')->get();
         $tags = Tag::active()->orderBy('position')->get();
 
-        if (request()->filled('category_id')) {
-            $activeCategory = $categories->where('id', request()->category_id)->first();
+        if (request()->filled('category')) {
+            $activeCategory = $categories->where('slug', request()->category)->first();
         }
 
-        if (empty($activeCategory)) {
-            $activeCategory = $categories->first();
-        }
+        // if (empty($activeCategory)) {
+        //     $activeCategory = $categories->first();
+        // }
+
 
         $data['page']           = $page;
-        $data['activeCategory'] = $activeCategory;
+        $data['activeCategory'] = $activeCategory ?? null;
         $data['categories']     = $categories;
         $data['brands']         = $brands;
         $data['tags']           = $tags;
@@ -76,12 +76,23 @@ class ProductController extends Controller
         $selected       = $this->getSelectedAttributes($productVariant);
         // $allVariants    = $this->formatAllVariants($product);
 
-        return view('theme.xtremez.products.show', compact(
-            'productVariant',
-            'attributes',
-            'selected',
-            // 'allVariants'
-        ));
+
+
+        $featuredProducts = ProductVariant::withJoins()
+            ->applySorting('position')
+            ->withSelection()
+            ->withFilters(['is_featured' => 1])
+            ->limit(8)
+            ->get()->map(function ($variant) {
+                return (new ProductRepository())->transform($variant);
+            });
+
+        $data['featuredProducts']   = $featuredProducts;
+        $data['productVariant']     = $productVariant;
+        $data['attributes']         = $attributes;
+        $data['selected']           = $selected;
+
+        return view('theme.medibazaar.products.show',$data);
     }
 
     public function resolve(Request $request)

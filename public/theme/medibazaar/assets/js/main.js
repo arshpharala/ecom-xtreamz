@@ -823,7 +823,7 @@ function render_product_card(product, grid = true) {
     // Grid Card
     if (grid) {
         return `
-        <div class="col-xl-3 col-lg-3 col-md-6">
+        <div class="col-xl-3 col-lg-3 col-md-6 flex-fill">
             <div class="product-03-wrapper grey-2-bg pos-rel text-center mb-30">
                 <div class="badge-tag">
                     ${isHot ? `<span class="product-tag pro-tag hot-1">Hot</span>` : ""}

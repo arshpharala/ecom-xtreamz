@@ -21,6 +21,27 @@
     <link rel="stylesheet" href="{{ asset('theme/medibazaar/assets/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/medibazaar/assets/css/responsive.css') }}">
 
+
+    <style>
+        .product-02-img {
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            object-fit: contain;
+        }
+
+        .product-list-content .product-img{
+            width: 60vh !important;
+        }
+
+        .basic-pagination ul li a {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+    </style>
+
 </head>
 
 <body>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\V2;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\PageRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +19,13 @@ class LoginController extends Controller
      */
     public function create()
     {
-        return view('theme.xtremez.login');
+        $slug = request()->segment(1);
+
+        $page = (new PageRepository())->findOrFailBySlug($slug);
+
+
+        $data['page'] = $page;
+        return view('theme.medibazaar.auth.login', $data);
     }
 
     /**

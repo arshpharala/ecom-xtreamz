@@ -133,11 +133,13 @@ $(function () {
         let filters = {};
 
         // Active category
-        const activeCategory = $(".category-list li.active").data("category");
-        if (activeCategory) filters.category_id = activeCategory;
+        const activeCategory = $(".category-list li a.active").data("category");
+
+
+        if (activeCategory) filters.category = activeCategory;
 
         // All select inputs (including dynamic attributes)
-        $(".theme-select").each(function () {
+        $(".select").each(function () {
             const name = $(this).attr("name") || $(this).data("filter");
             if (name && $(this).val()) {
                 filters[name] = $(this).val();
@@ -153,12 +155,12 @@ $(function () {
 
 
         // Price
-        filters.price_min = $("#priceLabelMinSidebar")
-            .text()
-            .replace(/[^0-9.,]/g, "").replace(/,/g, "").trim();
-        filters.price_max = $("#priceLabelMaxSidebar")
-            .text()
-            .replace(/[^0-9.,]/g, "").replace(/,/g, "").trim();
+        // filters.price_min = $("#priceLabelMinSidebar")
+        //     .text()
+        //     .replace(/[^0-9.,]/g, "").replace(/,/g, "").trim();
+        // filters.price_max = $("#priceLabelMaxSidebar")
+        //     .text()
+        //     .replace(/[^0-9.,]/g, "").replace(/,/g, "").trim();
 
         // filters.price_min = $("#priceLabelMinSidebar")
         //     .text()
@@ -293,7 +295,7 @@ $(function () {
     });
 
     // Static filters (brand, color, sort, search)
-    $(".theme-select, .cc-form-check-input").on("change", () =>
+    $("select").on("change", () =>
         fetchProducts(1)
     );
 

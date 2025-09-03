@@ -7,6 +7,7 @@ use App\Services\CartService;
 use App\Services\PriceService;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
+use App\Repositories\PageRepository;
 use App\Models\Catalog\ProductVariant;
 use App\Repositories\ProductRepository;
 
@@ -37,11 +38,16 @@ class CartController extends Controller
                 return $transform;
             });
 
+        $slug = request()->segment(1);
+
+        $page = (new PageRepository())->findBySlug($slug);
+
         $cart               = $this->cart->get();
         $data['cart']       = $cart;
         $data['variants']   = $variants;
+        $data['page']       = $page;
 
-        return view('theme.xtremez.cart', $data);
+        return view('theme.medibazaar.cart', $data);
     }
 
     public function store(Request $request)

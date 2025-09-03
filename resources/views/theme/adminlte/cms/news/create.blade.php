@@ -50,13 +50,13 @@
 
                             <div class="form-group">
                                 <label for="intro_{{ $locale }}">Intro ({{ strtoupper($locale) }})</label>
-                                <textarea name="intro[{{ $locale }}]" class="form-control tinymce-editor" required></textarea>
+                                <textarea name="intro[{{ $locale }}]" class="form-control tinymce-editor"></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label for="description_{{ $locale }}">Description
                                     ({{ strtoupper($locale) }})</label>
-                                <textarea name="description[{{ $locale }}]" class="form-control tinymce-editor" required></textarea>
+                                <textarea name="description[{{ $locale }}]" class="form-control tinymce-editor"></textarea>
                             </div>
                         @endforeach
 
@@ -105,7 +105,7 @@
 
                     <div class="form-group">
                         <label>Image</label>
-                        <input type="file" name="company_logo" class="form-control" accept="image/*">
+                        <input type="file" name="image" class="form-control" accept="image/*">
 
                         @if (isset($news) && $news->image)
                             <div class="mt-2">

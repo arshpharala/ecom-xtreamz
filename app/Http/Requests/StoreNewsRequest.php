@@ -11,7 +11,7 @@ class StoreNewsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,23 @@ class StoreNewsRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $locales = active_locals();
+        $rules = [
+            'slug'          => ['required', 'string', 'max:255', 'unique:news,slug'],
+            'position'      => ['nullable', 'integer'],
+            'is_guide'      => ['nullable'],
+            'is_active'     => ['nullable'],
+            'is_featured'   => ['nullable'],
+            'category_id'   => ['required'],
+            'image'         => ['required', 'image', 'max:4096'],
+            'color'         => ['nullable', 'string', 'max:7'],
+            'author' => ['required', 'string'],
         ];
+        foreach ($locales as $locale) {
+            $rules["title.$locale"] = ['required', 'string', "max:255"];
+            $rules["intro.$locale"] = ['nullable', 'string'];
+            $rules["description.$locale"] = ['nullable', 'string'];
+        }
+        return $rules;
     }
 }

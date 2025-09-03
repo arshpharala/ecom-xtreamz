@@ -61,6 +61,7 @@ class HomeController extends Controller
 
         $deal = Offer::active()->first();
 
+        if ($deal)
         $dealProducts = ProductVariant::withJoins()
             ->applySorting('position')
             ->withSelection()
@@ -69,6 +70,7 @@ class HomeController extends Controller
             ->get()->map(function ($variant) {
                 return (new ProductRepository())->transform($variant);
             });
+
 
         $featuredProducts = ProductVariant::withJoins()
             ->applySorting('position')
@@ -100,7 +102,7 @@ class HomeController extends Controller
         $data['topRatedProducts']   = $topRatedProducts;
         $data['popularProducts']    = $popularProducts;
         $data['deal']               = $deal;
-        $data['dealProducts']       = $dealProducts;
+        $data['dealProducts']       = $dealProducts ?? collect();
         $data['featuredProducts']   = $featuredProducts;
         $data['testimonials']       = $testimonials;
         $data['news']               = $news;
@@ -112,6 +114,28 @@ class HomeController extends Controller
         $data['brands']     = $brands;
 
         return view('theme.medibazaar.home', $data);
+    }
+
+    function contact()
+    {
+        $slug = request()->segment(1);
+
+        $page = (new PageRepository())->findBySlug($slug);
+
+        $data['page'] = $page;
+
+        return view('theme.medibazaar.contact', $data);
+    }
+
+    function about()
+    {
+        $slug = request()->segment(1);
+
+        $page = (new PageRepository())->findBySlug($slug);
+
+        $data['page'] = $page;
+
+        return view('theme.medibazaar.about', $data);
     }
 
 

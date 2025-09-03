@@ -238,6 +238,8 @@
         <!-- deal-area-end -->
     @endif
 
+    @if ($dealProducts->isNotEmpty())
+
     <!-- banner-area-start -->
     <div class="banner-02-area pb-70 pl-165 pr-165">
         <div class="container-fluid">
@@ -269,6 +271,8 @@
         </div>
     </div>
     <!-- banner-area-end -->
+
+    @endif
 
     <!-- product-area-start -->
     <div class="product-area pb-70">
@@ -369,21 +373,21 @@
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="blog-wrapper mb-30">
                             <div class="blog-img pos-rel">
-                                <a href="{{ route('news.show', ['news' => $news->slug]) }}"><img
+                                <a href="{{ route('news.show', ['news' => $n->slug]) }}"><img
                                         src="{{ asset('theme/medibazaar/assets/img/blog/01.jpg') }}" alt=""></a>
                                 <span class="blog-tag color-1">covid -19</span>
                             </div>
                             <div class="blog-text">
                                 <div class="blog-meta">
                                     <span><i class="far fa-calendar-alt"></i> <a
-                                            href="{{ route('news.show', ['news' => $news->slug]) }}">{{ $n->published_at->format('d f Y') }}</a></span>
+                                            href="{{ route('news.show', ['news' => $n->slug]) }}">{{ $n->published_at->format('d f Y') }}</a></span>
                                 </div>
                                 <h4><a
-                                        href="{{ route('news.show', ['news' => $news->slug]) }}">{{ $n->translation->title }}</a>
+                                        href="{{ route('news.show', ['news' => $n->slug]) }}">{{ $n->translation->title }}</a>
                                 </h4>
-                                <p>{{ $n->translation->intro }}</p>
+                                <p>{!! $n->translation->intro !!}</p>
                                 <div class="b-button gray-b-button">
-                                    <a href="{{ route('news.show', ['news' => $news->slug]) }}">read more <i
+                                    <a href="{{ route('news.show', ['news' => $n->slug]) }}">read more <i
                                             class="far fa-plus"></i></a>
                                 </div>
                             </div>

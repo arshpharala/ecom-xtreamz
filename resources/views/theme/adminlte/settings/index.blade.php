@@ -66,8 +66,18 @@
                     </div>
 
                     <div class="mb-4">
+                      <h5 class="mb-3">Google Map Iframe</h5>
+                      <textarea class="form-control" name="address" rows="3" placeholder="google_map">{{ setting('google_map') }}</textarea>
+                    </div>
+
+                    <div class="mb-4">
                       <h5 class="mb-3">Copyright</h5>
                       <input type="text" class="form-control" name="copyright" value="{{ setting('copyright') }}">
+                    </div>
+
+                    <div class="mb-4">
+                      <h5 class="mb-3">Working Hours</h5>
+                      <input type="text" class="form-control" name="working_hours" value="{{ setting('working_hours') }}">
                     </div>
 
 

@@ -1,20 +1,25 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\CartController;
-use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\CouponController;
 use App\Http\Controllers\Web\SearchController;
-use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\V2\CartController;
+
+
+use App\Http\Controllers\Web\V2\HomeController;
+use App\Http\Controllers\Web\V2\NewsController;
 use App\Http\Controllers\Web\CheckoutController;
+use App\Http\Controllers\Web\V2\ProductController;
 use App\Http\Controllers\Web\Profile\AddressController;
 use App\Http\Controllers\Web\ProviderCallbackController;
 use App\Http\Controllers\Web\ProviderRedirectController;
 
 Route::get('/',                                         [HomeController::class, 'index'])->name('home');
-Route::get('about-us',                                  [HomeController::class, 'page'])->name('about-us');
-Route::get('contact-us',                                [HomeController::class, 'page'])->name('contact-us');
+Route::get('about-us',                                  [HomeController::class, 'about'])->name('about-us');
+Route::get('contact-us',                                [HomeController::class, 'contact'])->name('contact-us');
 Route::get('policy',                                    [HomeController::class, 'page'])->name('policy');
+
+Route::resource('news',                                NewsController::class)->only('index', 'show');
 
 Route::get('clearance',                                 [ProductController::class, 'clearance'])->name('clearance');
 Route::get('featured',                                  [ProductController::class, 'featured'])->name('featured');

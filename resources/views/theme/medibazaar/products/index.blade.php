@@ -1,5 +1,12 @@
 @extends('theme.medibazaar.layouts.app')
 @section('content')
+    <style>
+        .category-item ul li a.active {
+            color: #ff6f61;
+            font-weight: 600;
+        }
+    </style>
+
     <!-- breadcrumb-area-start -->
     <div class="breadcrumb-area pt-125 pb-125" style="background-image:url({{ asset('storage/' . $page->banner) }})">
         <div class="container">
@@ -22,17 +29,18 @@
 
 
     <!-- shop-full-area-start -->
-    <div class="shhop-full-area pt-100 pb-100 pr-60 pl-60">
+    <div class="shhop-full-area pt-100 pb-100 pr-60 pl-60 catalog-filters">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-xl-3 custom-col-2">
+                <div class="col-xl-3 custom-col-2 ">
                     <div class="category-sidebar cat-side mb-30">
                         <h3 class="cat-title">Category</h3>
-                        <div class="category-item">
+                        <div class="category-item category-list">
                             <ul>
                                 @foreach ($categories as $category)
-                                    <li><a href="#" class="{{ $category->id == $activeCategory->id ? 'active' : '' }}"
-                                            data-category="{{ $category->id }}">{{ $category->name }}</a></li>
+                                    <li><a href="{{ route('products', ['category' => $category->slug]) }}"
+                                            class="{{ $category->slug == $activeCategory?->slug ? 'active' : '' }}"
+                                            data-category="{{ $category->slug }}">{{ $category->name }}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -83,11 +91,11 @@
                             <div class="col-xl-4 col-lg-4 col-md-4">
                                 <div class="pro-filter mb-20 f-right">
                                     <form action="#">
-                                        <select name="pro-filter" id="pro-filter">
-                                            <option value="1">Default Type </option>
-                                            <option value="2">Top Sales </option>
-                                            <option value="3">New Product </option>
-                                            <option value="4">A to Z Product </option>
+                                        <select name="pro-filter" id="pro-filter" class="sort-select">
+                                            <option value="">Featured</option>
+                                            <option value="price_asc">Price: Low to High</option>
+                                            <option value="price_desc">Price: High to Low</option>
+                                            <option value="newest">Newest</option>
                                         </select>
                                     </form>
                                 </div>
@@ -100,7 +108,7 @@
                                     <div class="row" id="products"><!-- AJAX products injected here --></div>
                                 </div>
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    <div class="row" id="products-list"><!-- AJAX list view injected here --></div>
+                                    <div class="row d-flex" id="products-list"><!-- AJAX list view injected here --></div>
                                 </div>
                             </div>
                         </div>

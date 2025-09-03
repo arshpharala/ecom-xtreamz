@@ -37,7 +37,7 @@
                     <div class="row align-items-center">
                         <div class="col-xl-3 col-lg-3">
                             <div class="logo">
-                                <a href="{{route('v2.home')}}">
+                                <a href="{{route('home')}}">
                                     @if (setting('site_logo'))
                                         <img src="{{ asset(setting('site_logo')) }}" alt="Site Logo" width="170px"
                                             height="80px">
@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="header-search f-right d-none d-xl-block">
                                     <form class="header-search-form">
-                                        <input placeholder="Search" type="text">
+                                        <input placeholder="Search" value="{{ request()->search }}" class="search-input" name="search" type="text">
                                         <button type="submit"><i class="far fa-search"></i></button>
                                     </form>
                                 </div>
@@ -76,14 +76,14 @@
                             <div class="main-menu">
                                 <nav id="mobile-menu">
                                     <ul>
-                                        <li><a href="{{ route('v2.home') }}">Home</a>
+                                        <li><a href="{{ route('home') }}">Home</a>
                                             {{-- <ul class="sub-menu text-left">
                                                 <li><a href="index.html">home 1</a></li>
                                                 <li><a href="index-2.html">home 2</a></li>
                                                 <li><a href="index-3.html">home 3</a></li>
                                             </ul> --}}
                                         </li>
-                                        <li><a href="{{ route('v2.products') }}">Shop</a>
+                                        <li><a href="{{ route('products') }}">Shop</a>
                                             {{-- <ul class="sub-menu text-left">
                                                 <li><a href="shop-grid.html">shop grid</a>
                                                 <li><a href="shop-full-width.html">shop full width</a>
@@ -101,7 +101,7 @@
                                             </ul> --}}
                                         </li>
                                         {{-- <li><a href="shop-grid.html">Categories </a></li> --}}
-                                        <li><a href="{{ route('v2.news.index') }}">Blog</a>
+                                        <li><a href="{{ route('news.index') }}">News</a>
                                             {{-- <ul class="sub-menu text-left">
                                                 <li><a href="blog-grid.html">blog grid</a></li>
                                                 <li><a href="blog-grid-sidebar.html">blog grid sidebar</a></li>
@@ -134,7 +134,7 @@
                     </button>
                 </div>
                 <div class="logo-side mb-30">
-                    <a href="{{ route('v2.home') }}">
+                    <a href="{{ route('home') }}">
                         @if (setting('site_logo'))
                             <img src="{{ asset(setting('site_logo')) }}" alt="Site Logo">
                         @else

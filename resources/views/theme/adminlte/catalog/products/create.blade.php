@@ -98,16 +98,18 @@
 
   $(function() {
     let $slug = $("input[name='slug']");
-    // target the first name input field from loop
     let $firstName = $("input[name^='name']").first();
 
     $firstName.on("input", function() {
       if (!$slug.val().trim()) {
-        $slug.val($(this).val()
+        let slug = $(this).val()
           .toLowerCase()
-          .replace(/\s+/g, "-") // spaces → dashes
+          .replace(/\s+/g, "-") // spaces → dash
           .replace(/[^a-z0-9\-]/g, "") // remove invalid chars
-        );
+          .replace(/-+/g, "-") // collapse multiple dashes
+          .replace(/^-+|-+$/g, ""); // trim leading/trailing dashes
+
+        $slug.val(slug);
       }
     });
   });

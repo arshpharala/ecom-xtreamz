@@ -247,7 +247,10 @@ if (!function_exists('menu_categories')) {
         return Category::visible()
             ->withJoins()
             ->withSelection()
-            ->with('children.translation')
+            ->whereNull('parent_id')
+            ->with(['children' => function ($q) {
+                $q->visible()->applySorting('position')->with('translation');
+            }])
             ->applySorting('position')
             ->limit($limit)
             ->get();

@@ -37,6 +37,7 @@ return new class extends Migration
         Schema::create('product_variants', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('product_id')->index();
+            $table->string('thumbnail')->nullable();
             $table->string('sku')->unique();
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('stock');

@@ -12,7 +12,6 @@ class ProductRepository
 {
     public function getFiltered($perPage = 12)
     {
-        $perPage = 2;
         $filters = Request::only([
             'is_wishlisted',
             'is_featured',

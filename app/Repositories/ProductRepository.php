@@ -39,7 +39,9 @@ class ProductRepository
             ->with(['offers' => function ($query) {
                 $query->active();
             }])
-            ->withSelection();
+            ->withSelection()
+            ->where('products.is_active', 1)
+            ->where('products.deleted_at', null);
 
             if (auth()->check() && !empty($filters['is_wishlisted'])) {
                 $query->whereHas('wishlists', fn($q) => $q->where('user_id', auth()->id()));

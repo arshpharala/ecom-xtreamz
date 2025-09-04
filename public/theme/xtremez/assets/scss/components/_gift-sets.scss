@@ -14,7 +14,10 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            mix-blend-mode: multiply;
+
+            .gift-img {
+                mix-blend-mode: multiply;
+            }
 
             &:hover {
                 .gift-img {

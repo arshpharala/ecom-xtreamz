@@ -1285,6 +1285,8 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.gift-set-section .gift-set-grid .gift-box .gift-img {
   mix-blend-mode: multiply;
 }
 .gift-set-section .gift-set-grid .gift-box:hover .gift-img {

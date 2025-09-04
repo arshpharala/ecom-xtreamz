@@ -40,12 +40,11 @@ class ProductRepository
                 $query->active();
             }])
             ->withSelection()
-            ->where('products.is_active', 1)
-            ->where('products.deleted_at', null);
+            ->withActiveProducts();
 
-            if (auth()->check() && !empty($filters['is_wishlisted'])) {
-                $query->whereHas('wishlists', fn($q) => $q->where('user_id', auth()->id()));
-            }
+        if (auth()->check() && !empty($filters['is_wishlisted'])) {
+            $query->whereHas('wishlists', fn($q) => $q->where('user_id', auth()->id()));
+        }
 
         // Handle pagination
         if (Request::has('page')) {
@@ -119,17 +118,18 @@ class ProductRepository
                 'main_attachment.file_path',
                 'main_attachment.file_name'
             )
-            ->orderBy('products.position')
+            ->applySorting(null)
+            ->withFilters(['show_in_slider' => 1])
+            ->withActiveProducts()
             ->where('categories.slug', $categorySlug)
             ->limit($limit)
             ->get()
             ->map(function ($variant) {
-                return (object)[
-                    'name' => $variant->name,
-                    'price' => $variant->price,
-                    'image' => $variant->file_path ? 'storage/' . $variant->file_path : 'default.jpg',
-                    'link' => route('products.show', ['slug' => $variant->slug, 'varient' => $variant->id])
-                ];
+
+                $variant->image = $variant->file_path ? 'storage/' . $variant->file_path : 'default.jpg';
+                $variant->link = route('products.show', ['slug' => $variant->slug, 'varient' => $variant->id]);
+
+                return $variant;
             });
     }
 

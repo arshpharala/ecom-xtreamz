@@ -21,6 +21,12 @@ class ProductVariant extends Model
 
     protected $fillable = ['product_id', 'sku', 'price', 'stock', 'deleted_at'];
 
+    public function scopeWithActiveProducts($query)
+    {
+        return $query->where('products.is_active', 1)
+            ->whereNull('products.deleted_at');
+    }
+
 
     public function product()
     {
@@ -134,13 +140,13 @@ class ProductVariant extends Model
                 $filters['offer'] ?? null,
                 fn($q) =>
                 $q->whereHas('offers', fn($q2) => $q2->active()
-                ->when($filters['offer_name'] ?? null || $filters['offer_id'] ?? null, function($q3) use($filters){
-                    $q3->whereIn('id', Arr::wrap($filters['offer_id'] ?? null))->orWhereIn('name', Arr::wrap($filters['offer_name'] ?? null));
-                }))
+                    ->when($filters['offer_name'] ?? null || $filters['offer_id'] ?? null, function ($q3) use ($filters) {
+                        $q3->whereIn('id', Arr::wrap($filters['offer_id'] ?? null))->orWhereIn('name', Arr::wrap($filters['offer_name'] ?? null));
+                    }))
             )
             ->when(
                 $filters['tags'] ?? null,
-                fn($q, $v) => $q->whereHas('tags', fn($q2) => $q2->whereIn('name', $v) )
+                fn($q, $v) => $q->whereHas('tags', fn($q2) => $q2->whereIn('name', $v))
             );
     }
 
@@ -172,7 +178,7 @@ class ProductVariant extends Model
         $attachment = $this->attachments->first();
 
         if ($attachment) {
-            return asset('storage/'. $attachment->file_path);
+            return asset('storage/' . $attachment->file_path);
         }
         return asset('assets/images/no-image.jpg'); // Default image if no thumbnail is set
     }

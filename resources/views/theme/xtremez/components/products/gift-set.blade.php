@@ -11,9 +11,9 @@
                     <div class="price">
                       {!! price_format(active_currency(true)->code, $product->price) !!}
                     </div>
-                    <div class="btn-circle">
+                    <a class="btn-circle" href="{{ $product->slug }}">
                       <i class="bi bi-arrow-right fw-bold"></i>
-                    </div>
+                    </a>
                   </div>
 
                 </div>

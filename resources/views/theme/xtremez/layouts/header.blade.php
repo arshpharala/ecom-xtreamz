@@ -16,7 +16,7 @@
         <a href="{{ route('cart.index') }}" class="cart-link">
           <i class="bi bi-cart"></i> MY CART
           @if (cart_items_count() > 0)
-          {{ cart_items_count() }}
+            {{ cart_items_count() }}
           @endif
         </a>
 
@@ -40,23 +40,34 @@
       <!-- Navigation -->
       <nav class="main-nav">
         <ul class="nav align-items-center">
-            @foreach (menu_categories(10) as $category)
-            <li class="nav-item"><a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link">{{ $category->name }}</a></li>
-            @endforeach
-          {{-- <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Sustainable</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Eco Friendly Bags</a></li>
-              <li><a class="dropdown-item" href="#">Recycled Bottles</a></li>
-            </ul>
-          </li>
-          <li class="nav-item"><a href="#" class="nav-link">Tech</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Drinkware</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Bags</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Office</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Other Brands</a></li> --}}
+          @foreach (menu_categories(10) as $category)
+            @if ($category->children->count() > 0)
+              <li class="nav-item dropdown">
+                <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link dropdown-toggle"
+                  data-bs-toggle="dropdown">
+                  {{ $category->name }}
+                </a>
+                <ul class="dropdown-menu">
+                  @foreach ($category->children as $child)
+                    <li>
+                      <a class="dropdown-item" href="{{ route('products', ['category' => $child->slug]) }}">
+                        {{ $child->name }}
+                      </a>
+                    </li>
+                  @endforeach
+                </ul>
+              </li>
+            @else
+              <li class="nav-item">
+                <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link">
+                  {{ $category->name }}
+                </a>
+              </li>
+            @endif
+          @endforeach
         </ul>
       </nav>
+
 
       <!-- Contact Us -->
       <a href="{{ route('contact-us') }}" class="btn btn-dark">Contact Us</a>

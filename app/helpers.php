@@ -244,11 +244,12 @@ if (!function_exists('menu_categories')) {
      */
     function menu_categories(int $limit = 6): Collection
     {
-        $categories = Category::visible()
+        return Category::visible()
             ->withJoins()
             ->withSelection()
+            ->with('children')
             ->applySorting('position')
-            ->limit($limit)->get();
-        return $categories;
+            ->limit($limit)
+            ->get();
     }
 }

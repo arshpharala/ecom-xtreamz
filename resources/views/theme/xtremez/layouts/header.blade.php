@@ -51,7 +51,7 @@
                   @foreach ($category->children as $child)
                     <li>
                       <a class="dropdown-item" href="{{ route('products', ['category' => $child->slug]) }}">
-                        {{ $child->name }}
+                        {{ $child->translation->name }}
                       </a>
                     </li>
                   @endforeach

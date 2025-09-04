@@ -247,7 +247,7 @@ if (!function_exists('menu_categories')) {
         return Category::visible()
             ->withJoins()
             ->withSelection()
-            ->with('children')
+            ->with('children.translation')
             ->applySorting('position')
             ->limit($limit)
             ->get();

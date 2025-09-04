@@ -187,7 +187,7 @@
     </div>
   </section>
 
-  <section class="product-specifications pb-5">
+  <section class="product-specifications py-5">
     <div class="container">
       <div class="spec-box bg-white p-5 shadow-sm">
         <h3 class="section-title fw-bold fs-5">

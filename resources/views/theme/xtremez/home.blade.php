@@ -112,7 +112,7 @@
           @foreach ($categories as $category)
             <div class="col-12 col-md-4 flex-fill">
               <a href="{{ $category->link }}" class="promo-tile" style="background: {{ $category->background_color }}">
-                <div class="promo-copy">
+                <div class="promo-copy d-flex flex-column h-100 justify-content-around">
                   <h3 class="title">{{ $category->name }}</h3>
                   <span class="cta">Shop Now</span>
                   <div class="btn-circle" style="margin: 50px 0 0 0 ">

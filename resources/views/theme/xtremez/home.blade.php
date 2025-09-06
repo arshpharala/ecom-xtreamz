@@ -80,7 +80,7 @@
         <div class="heading-row animate-on-scroll" data-animate="fade-up">
           <h2 class="section-title fs-1 text-center m-0 text-uppercase">Browse by Category</h2>
         </div>
-        <p class="text-center">Explore our store the easy way: shop by category and enjoy a seamless, organized shopping
+        <p class="text-center animate-on-scroll" data-animate="fade-up">Explore our store the easy way: shop by category and enjoy a seamless, organized shopping
           experience.</p>
       </div>
     </section>
@@ -108,7 +108,7 @@
 
     <section class="promo-tiles py-3">
       <div class="container">
-        <div class="row g-3 g-lg-4 d-flex">
+        <div class="row g-3 g-lg-4 d-flex animate-on-scroll" data-animate="zoom-out">
           @foreach ($categories as $category)
             <div class="col-12 col-md-4 flex-fill">
               <a href="{{ $category->link }}" class="promo-tile" style="background: {{ $category->background_color }}">

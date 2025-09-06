@@ -5,14 +5,14 @@
 @endphp
 <section class="heading-section pt-5">
   <div class="container">
-    <div class="heading-row animate-on-scroll d-flex justify-content-between align-items-center" data-animate="fade-down">
-      <div>
+    <div class="heading-row d-flex justify-content-between align-items-center">
+      <div class="animate-on-scroll" data-animate="fade-right">
         <h2 class="section-title fs-1 m-0 text-uppercase">{{ $sectionName }}</h2>
         <div class="heading-wrapper">
           <div class="heading-accent"></div>
         </div>
       </div>
-      <div class="section-nav d-flex">
+      <div class="section-nav d-flex animate-on-scroll" data-animate="fade-left">
         <div id="product{{ $id }}Prev" class="btn-circle-outline" style="margin: 50px 0 0 0 ">
           <i class="bi bi-arrow-left fw-bold"></i>
         </div>

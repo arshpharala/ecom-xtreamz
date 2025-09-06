@@ -60,17 +60,37 @@
             font-size: 0.95rem;
             color: var(--color-dark);
             text-decoration: none;
-            border-bottom: 1px solid transparent;
             padding: 0.25rem 0;
-            transition: border-color 0.2s ease, color 0.2s ease;
+            .cart-icon-wrapper {
+                position: relative;
+                display: inline-block;
 
-            i {
-                font-size: 1.1rem;
+                i {
+                    font-size: 1.1rem;
+                }
+
+                .cart-badge {
+                    position: absolute;
+                    top: -6px;
+                    right: -8px;
+                    background: red;
+                    color: var(--color-light);
+                    font-size: 12px;
+                    font-weight: bold;
+                    border-radius: 50%;
+                    padding: 2px 6px;
+                    line-height: 1;
+                }
             }
 
-            &:hover {
-                border-bottom-color: var(--color-dark);
-                color: var(--color-dark);
+            .cart-text {
+                border-bottom: 1px solid transparent;
+                transition: border-color 0.2s ease, color 0.2s ease;
+
+                &:hover {
+                    border-bottom-color: var(--color-dark);
+                    color: var(--color-dark);
+                }
             }
         }
     }

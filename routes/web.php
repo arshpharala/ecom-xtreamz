@@ -58,11 +58,6 @@ Route::get('email', function () {
 });
 
 
-Route::get('auth/{provider}/login',         ProviderRedirectController::class)->name('auth.provider.login');
-Route::get('auth/{provider}/callback',      ProviderCallbackController::class)->name('auth.provider.callback');
-
-
-
 Route::get('clear', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     \Illuminate\Support\Facades\Artisan::call('cache:clear');

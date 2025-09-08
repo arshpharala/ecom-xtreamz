@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\LoginController;
-use App\Http\Controllers\Web\Profile\AddressController;
-use App\Http\Controllers\Web\Profile\CardController;
-use App\Http\Controllers\Web\Profile\WishlistController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\Profile\CardController;
+use App\Http\Controllers\Web\Profile\AddressController;
+use App\Http\Controllers\Web\Profile\WishlistController;
+use App\Http\Controllers\Web\ProviderCallbackController;
+use App\Http\Controllers\Web\ProviderRedirectController;
 
 Route::middleware('guest')->group(function () {
     Route::get('login',                             [LoginController::class, 'create'])->name('login');
@@ -15,6 +17,9 @@ Route::middleware('guest')->group(function () {
     Route::post('password/email',                   [LoginController::class, 'sendResetLinkEmail'])->name('password.email');
     Route::get('/reset-password/{token}',           [LoginController::class, 'resetPasswordForm'])->name('password.reset');
     Route::post('/reset-password',                  [LoginController::class, 'resetPassword'])->name('password.update');
+
+    Route::get('auth/{provider}/login',             ProviderRedirectController::class)->name('auth.provider.login');
+    Route::get('auth/{provider}/callback',          ProviderCallbackController::class)->name('auth.provider.callback');
 });
 
 Route::middleware('auth')->group(function () {

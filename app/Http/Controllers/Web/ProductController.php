@@ -40,6 +40,10 @@ class ProductController extends Controller
         $brands = Brand::active()->orderBy('position')->get();
         $tags = Tag::active()->orderBy('position')->get();
 
+        if (request()->filled('category')) {
+            $activeCategory = $categories->where('slug', request()->category)->first();
+        }
+        
         if (request()->filled('category_id')) {
             $activeCategory = $categories->where('id', request()->category_id)->first();
         }

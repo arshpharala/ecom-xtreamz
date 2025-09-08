@@ -1,6 +1,6 @@
 <div id="wishlist" class="profile-tab">
-  <div class="profile-main">
-    <div class="row" id="wishlist-products">
+  <div class="profile-main bg-white p-4 border border-2 shadow">
+    <div class="row d-flex" id="wishlist-products">
 
     </div>
 

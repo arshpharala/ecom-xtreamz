@@ -4,9 +4,9 @@
 	.profile-sidebar {
 		font-size: var(--font-size-md);
 		color: #222;
-		a {
+		.profile-link {
 			display: block;
-			padding: 0.5rem 1rem;
+			padding: 1rem 1rem;
 			color: #222;
 			text-decoration: none;
 			border-left: 3px solid transparent;

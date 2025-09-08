@@ -1,5 +1,5 @@
 <div id="payment" class="profile-tab">
-  <div class="profile-main bg-white p-4">
+  <div class="profile-main bg-white p-4 border border-2 shadow">
     <div class="row g-4 p-4">
 
       {{-- Saved Cards Section --}}
@@ -64,7 +64,7 @@
 <script>
   window.initStripeCardForm = function() {
 
-    
+
     const stripeKey = "{{ env('STRIPE_KEY') }}";
     const stripe = Stripe(stripeKey);
     const elements = stripe.elements();

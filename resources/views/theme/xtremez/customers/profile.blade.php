@@ -34,18 +34,28 @@
       <div class="row">
         <!-- Sidebar -->
         <div class="col-lg-3 mb-4">
-          <nav class="profile-sidebar d-flex flex-column gap-3">
-            <a href="#" class="profile-link active" data-tab="profile" data-heading="My Profile">MY
+          <nav class="profile-sidebar d-flex flex-column">
+            <a href="#" class="profile-link border-bottom active" data-tab="profile" data-heading="My Profile">MY
               PROFILE</a>
-            <a href="#" class="profile-link" data-tab="password" data-heading="Change Password">CHANGE
+            <a href="#" class="profile-link border-bottom" data-tab="password" data-heading="Change Password">CHANGE
               PASSWORD</a>
-            <a href="#" class="profile-link" data-tab="address" data-heading="Address Book">ADDRESS
+            <a href="#" class="profile-link border-bottom" data-tab="address" data-heading="Address Book">ADDRESS
               BOOK</a>
-            <a href="#" class="profile-link" data-tab="payment" data-heading="My Payment Options">MY PAYMENT
+            <a href="#" class="profile-link border-bottom" data-tab="payment" data-heading="My Payment Options">MY
+              PAYMENT
               OPTIONS</a>
-            <a href="#" class="profile-link" data-tab="order" data-heading="My Order History">MY ORDER
+            <a href="#" class="profile-link border-bottom" data-tab="order" data-heading="My Order History">MY ORDER
               HISTORY</a>
-            <a href="#" class="profile-link" data-tab="wishlist" data-heading="Wishlist">WISHLIST</a>
+            <a href="#" class="profile-link border-bottom" data-tab="wishlist" data-heading="Wishlist">WISHLIST</a>
+
+            <a href="#" class="profile-link"
+              onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              LOGOUT
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              @csrf
+            </form>
+
           </nav>
 
           <!-- Mobile Accordion Container -->

@@ -1,5 +1,5 @@
 <div id="profile" class="profile-tab">
-  <form class="profile-main bg-white p-4 ajax-form" method="POST" action="{{ route('customers.profile.update') }}">
+  <form class="profile-main bg-white p-4 ajax-form border border-2 shadow" method="POST" action="{{ route('customers.profile.update') }}">
     @csrf
     <div class="row g-4 p-4">
       {{-- Full Name --}}

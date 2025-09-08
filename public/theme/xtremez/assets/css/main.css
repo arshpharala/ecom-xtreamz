@@ -2616,19 +2616,19 @@ main {
   font-size: var(--font-size-md);
   color: #222;
 }
-.profile-section .profile-sidebar a {
+.profile-section .profile-sidebar .profile-link {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1rem;
   color: #222;
   text-decoration: none;
   border-left: 3px solid transparent;
   transition: all 0.3s ease;
 }
-.profile-section .profile-sidebar a.active {
+.profile-section .profile-sidebar .profile-link.active {
   color: var(--color-secondary);
   border-left-color: var(--color-secondary);
 }
-.profile-section .profile-sidebar a:hover {
+.profile-section .profile-sidebar .profile-link:hover {
   color: var(--color-secondary);
 }
 .profile-section .profile-main {

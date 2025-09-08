@@ -1,6 +1,6 @@
 <div id="address" class="profile-tab">
-  <div class="profile-main bg-white p-4">
-    <div class="row g-4 p-4">
+  <div class="profile-main bg-white p-4 border border-2 shadow">
+    <div class="row g-4 p-4 ">
       @if ($user->addresses->isNotEmpty())
         <div class="fw-bold">Saved Address</div>
 

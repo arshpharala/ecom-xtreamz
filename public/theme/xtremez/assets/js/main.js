@@ -118,7 +118,6 @@ $(window).on("scroll resize", function () {
     }
 });
 
-
 function debounce(func, delay = 300) {
     let timeout;
     return function (...args) {
@@ -188,7 +187,9 @@ function render_product_card(product, grid = false) {
 
           <!-- Image -->
           <div class="image-box">
-            <img src="${product.image}" alt="${product.name}" class="product-img"/>
+            <img src="${product.image}" alt="${
+        product.name
+    }" class="product-img"/>
 
             ${hasOffer ? `<div class="offer-badge">${offerText}</div>` : ""}
 
@@ -213,9 +214,15 @@ function render_product_card(product, grid = false) {
               <div class="price-wrap">
                 ${displayPrice} ${originalPrice}
               </div>
-              <button class="cart-btn add-to-cart-btn" data-variant-id="${product.id}">
-                <i class="bi bi-cart ${product.is_in_cart ? "d-none" : ""}"></i>
-                <i class="bi bi-cart-check ${product.is_in_cart ? "" : "d-none"}"></i>
+              <button class="cart-btn add-to-cart-btn" data-variant-id="${
+                  product.id
+              }">
+                <i class="bi bi-cart add-to-cart"  style="${
+                    product.is_in_cart ? "display:none;" : ""
+                }"></i>
+                <i class="bi bi-cart-check added-to-cart" style="${
+                    product.is_in_cart ? "" : "display:none;"
+                }"></i>
               </button>
             </div>
           </div>
@@ -223,8 +230,6 @@ function render_product_card(product, grid = false) {
         </div>
       </div>`;
 }
-
-
 
 function render_pagination(pagination) {
     const $pagination = $(".pagination");
@@ -269,19 +274,22 @@ $(document).on("change", "#city-select", function () {
     }
 });
 
-$(document).on('click', '.wishlist-btn', function () {
+$(document).on("click", ".wishlist-btn", function () {
     const $btn = $(this);
-    const product_variant_id = $btn.data('variant-id') || null;
+    const product_variant_id = $btn.data("variant-id") || null;
 
     $.post(`${appUrl}/customers/wishlist`, {
-        product_variant_id, toggle: true
-    }).done(function (res) {
-        // Update wishlist counter somewhere in header
-        $('body').find('#wishlist-count').text(res.wishlist.count);
+        product_variant_id,
+        toggle: true,
+    })
+        .done(function (res) {
+            // Update wishlist counter somewhere in header
+            $("body").find("#wishlist-count").text(res.wishlist.count);
 
-        // Toggle UI
-        $btn.toggleClass('is-active');
-    }).fail(function () {
-        alert('Unable to update wishlist.');
-    });
+            // Toggle UI
+            $btn.toggleClass("is-active");
+        })
+        .fail(function () {
+            alert("Unable to update wishlist.");
+        });
 });

@@ -96,6 +96,12 @@ function updateCartCount(cart) {
     const currencyCode = $("meta[name='currency']").attr("content");
 
     $("body").find("#cart-items-count").html(cart.count);
+    if (cart.count > 0) {
+        $("body").find("#cart-items-count").show();
+    }else{
+        $("body").find("#cart-items-count").hide();
+    }
+    
     $("body").find(".cart-total").html(cart.total_with_currency);
     $("body")
         .find(".cart-sub-total")

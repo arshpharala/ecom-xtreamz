@@ -16,9 +16,7 @@
         <a href="{{ route('cart.index') }}" class="cart-link">
           <div class="cart-icon-wrapper">
             <i class="bi bi-cart"></i>
-            @if (cart_items_count() > 0)
-              <span class="cart-badge">{{ cart_items_count() }}</span>
-            @endif
+              <span class="cart-badge" id="cart-items-count" style="{{ cart_items_count() > 0 ? '' : 'display:none' }}">{{ cart_items_count() }}</span>
           </div>
           <span class="cart-text">MY CART</span>
         </a>

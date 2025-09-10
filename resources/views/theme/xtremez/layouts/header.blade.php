@@ -16,7 +16,8 @@
         <a href="{{ route('cart.index') }}" class="cart-link">
           <div class="cart-icon-wrapper">
             <i class="bi bi-cart"></i>
-              <span class="cart-badge" id="cart-items-count" style="{{ cart_items_count() > 0 ? '' : 'display:none' }}">{{ cart_items_count() }}</span>
+            <span class="cart-badge" id="cart-items-count"
+              style="{{ cart_items_count() > 0 ? '' : 'display:none' }}">{{ cart_items_count() }}</span>
           </div>
           <span class="cart-text">MY CART</span>
         </a>
@@ -45,15 +46,14 @@
           @foreach (menu_categories(10) as $category)
             @if ($category->children->count() > 0)
               <li class="nav-item dropdown">
-                <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link dropdown-toggle"
-                  data-bs-toggle="dropdown">
-                  {{ $category->name }}
+                <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link has-submenu">
+                  {{ $category->name }} <i class="bi bi-chevron-down ms-1"></i>
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="submenu">
                   @foreach ($category->children as $child)
                     <li>
-                      <a class="dropdown-item" href="{{ route('products', ['category' => $child->slug]) }}">
-                        {{ $child->translation->name }}
+                      <a href="{{ route('products', ['category' => $child->slug]) }}">
+                        <i class="bi bi-circle"></i> {{ $child->translation->name }}
                       </a>
                     </li>
                   @endforeach

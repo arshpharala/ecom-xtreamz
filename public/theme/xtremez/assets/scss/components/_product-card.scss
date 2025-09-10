@@ -62,6 +62,7 @@
             max-height: 200px;
             object-fit: contain;
             transition: max-height 0.3s ease;
+            mix-blend-mode: darken;
         }
 
         .offer-badge {

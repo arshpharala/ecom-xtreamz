@@ -125,6 +125,7 @@ class ProductVariant extends Model
 
     public function scopeWithFilters($query, $filters)
     {
+        $categoryId = null;
         if ($filters['category'] ?? false) {
             $categoryId = Category::where('slug', $filters['category'])->value('id');
         }

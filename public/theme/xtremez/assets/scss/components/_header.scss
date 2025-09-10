@@ -100,81 +100,91 @@
         border-top: 1px solid #eee;
         padding: 0.5rem 0;
 
-        .main-nav {
-            .nav-item {
-                position: relative;
-                margin-right: 1.75rem;
-                .nav-link {
-                    display: flex;
-                    align-items: center;
-                    padding: 0;
-                    gap: 0.35rem;
-                    cursor: pointer;
-                    color: var(--color-dark);
+.main-nav {
+  .nav-item {
+    position: relative;
 
-                    i {
-                        font-size: 0.8rem;
-                        transition: transform 0.3s ease;
-                    }
-                }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      color: var(--color-dark); // keep dark text
+      text-decoration: none; // remove underline
 
-                /* Submenu */
-                .submenu {
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    min-width: 220px;
-                    background: #fff;
-                    padding: 0.75rem 0;
-                    border-radius: 6px;
-                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-                    opacity: 0;
-                    visibility: hidden;
-                    transform: translateY(10px);
-                    transition: all 0.3s ease;
-                    z-index: 100;
+      i {
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+      }
 
-                    li {
-                        a {
-                            display: flex;
-                            align-items: center;
-                            gap: 0.5rem;
-                            padding: 0.5rem 1rem;
-                            font-size: 0.9rem;
-                            font-weight: 500;
-                            color: var(--color-dark);
-                            transition: background 0.25s ease, color 0.25s ease;
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
 
-                            i {
-                                font-size: 0.65rem;
-                                color: var(--color-primary);
-                            }
+    /* Submenu */
+    .submenu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 220px;
+      background: #fff;
+      padding: 0; // remove default padding, we'll style li
+      margin: 0;
+      border-radius: 6px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      z-index: 100;
+      list-style: none; // remove bullets
 
-                            &:hover {
-                                background: rgba(
-                                    var(--color-primary-rgb),
-                                    0.06
-                                );
-                                color: var(--color-primary);
-                            }
-                        }
-                    }
-                }
-
-                /* Hover state */
-                &:hover {
-                    .submenu {
-                        opacity: 1;
-                        visibility: visible;
-                        transform: translateY(0);
-                    }
-
-                    .nav-link i {
-                        transform: rotate(180deg);
-                    }
-                }
-            }
+      li {
+        border-bottom: 1px solid #eee; // divider
+        &:last-child {
+          border-bottom: none;
         }
+
+        a {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.65rem 1rem;
+          font-size: 0.9rem;
+          font-weight: 500;
+          color: var(--color-dark);
+          text-decoration: none; // no underline
+          transition: background 0.25s ease, color 0.25s ease;
+
+          i {
+            font-size: 0.7rem;
+            color: var(--color-primary);
+          }
+
+          &:hover {
+            background: rgba(var(--color-primary-rgb), 0.08); // hover highlight
+            color: var(--color-primary);
+          }
+        }
+      }
+    }
+
+    /* Hover state */
+    &:hover {
+      .submenu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .nav-link i {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
 
         .btn {
             font-size: var(--font-size-sm);

@@ -148,10 +148,10 @@
           </div>
           <div class="col-12 col-md-4 text-center text-md-end order-3">
             <ul class="payment-icons list-unstyled d-flex gap-2 mb-0 justify-content-center justify-content-md-end">
-              <li class="pay visa">VISA</li>
-              <li class="pay mc">MC</li>
-              <li class="pay amex">AMEX</li>
-              <li class="pay pp">PayPal</li>
+              <li class="pay visa"><img src="https://img.icons8.com/color/48/visa.png" alt="Visa"></li>
+              <li class="pay mc"><img src="https://img.icons8.com/color/48/mastercard-logo.png" alt="MasterCard"></li>
+              <li class="pay amex"><img src="https://img.icons8.com/color/48/amex.png" alt="American Express"></li>
+              <li class="pay pp"><img src="https://img.icons8.com/color/48/paypal.png" alt="PayPal"></li>
             </ul>
           </div>
         </div>

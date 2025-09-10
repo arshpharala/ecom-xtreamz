@@ -649,14 +649,17 @@ main {
   border-top: 1px solid #eee;
   padding: 0.5rem 0;
 }
-.main-header .header-bottom .main-nav .nav-link {
+.main-header .header-bottom .main-nav .nav-item {
+  margin-right: 1.75rem;
+}
+.main-header .header-bottom .main-nav .nav-item .nav-link {
   color: var(--color-dark);
-  padding: 0.75rem 1.25rem;
+  padding: 0;
   font-weight: 500;
   font-size: var(--font-size-base);
   transition: color 0.2s ease;
 }
-.main-header .header-bottom .main-nav .nav-link:hover {
+.main-header .header-bottom .main-nav .nav-item .nav-link:hover {
   color: var(--color-primary);
 }
 .main-header .header-bottom .btn {
@@ -771,7 +774,7 @@ main {
   color: var(--color-secondary);
 }
 .site-footer .footer-bottom .payment-icons .pay {
-  padding: 4px 10px;
+  padding: 2px 4px;
   border-radius: 4px;
   background: #fff;
   color: #000;
@@ -782,6 +785,10 @@ main {
 .site-footer .footer-bottom .payment-icons .pay:hover {
   transform: translateY(-2px);
   opacity: 1;
+}
+.site-footer .footer-bottom .payment-icons .pay img {
+  width: 30px;
+  height: 20px;
 }
 
 .breadcrumb-bar {

@@ -125,13 +125,18 @@ class ProductVariant extends Model
 
     public function scopeWithFilters($query, $filters)
     {
+        if ($filters['category']) {
+            $categoryId = Category::where('slug', $filters['category'])->value('id');
+        }
+
         return $query
             ->when($filters['is_new'] ?? null, fn($q, $v) => $q->where('product_variants.created_at', '>=', now()->subDays(30)))
             ->when($filters['is_featured'] ?? null, fn($q, $v) => $q->where('products.is_featured', $v))
             ->when($filters['show_in_slider'] ?? null, fn($q, $v) => $q->where('products.show_in_slider', $v))
-            ->when($filters['category'] ?? null, fn($q, $v) => $q->where('categories.slug', $v))
-            ->when($filters['category_id'] ?? null, fn($q, $v) => $q->where('products.category_id', $v)
-            ->orWhere('categories.parent_id', $v))
+            ->when($filters['category'] ?? null, function ($q, $v) use ($categoryId) {
+                $q->where('categories.id', $categoryId)->orWhere('categories.parent_id', $categoryId);
+            })
+            ->when($filters['category_id'] ?? null, fn($q, $v) => $q->where('products.category_id', $v)->orWhere('categories.parent_id', $v))
             ->when($filters['brand_id'] ?? null, fn($q, $v) => $q->where('products.brand_id', $v))
             ->when($filters['price_min'] ?? null, fn($q, $v) => $q->where('product_variants.price', '>=', $v))
             ->when($filters['price_max'] ?? null, fn($q, $v) => $q->where('product_variants.price', '<=', $v))

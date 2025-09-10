@@ -49,7 +49,7 @@
                 <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link has-submenu">
                   {{ $category->name }} <i class="bi bi-chevron-down ms-1"></i>
                 </a>
-                <ul class="submenu mt-5">
+                <ul class="submenu mt-2">
                   @foreach ($category->children as $child)
                     <li>
                       <a href="{{ route('products', ['category' => $child->slug]) }}">

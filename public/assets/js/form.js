@@ -198,6 +198,35 @@ function getAside() {
     });
 }
 
+function getFormFilters(formSelector, updateUrl = false) {
+    let filters = {};
+    const params = new URLSearchParams();
+
+    if (formSelector instanceof jQuery === false) {
+        formSelector = $(formSelector);
+    }
+
+    $.each(formSelector.serializeArray(), (i, field) => {
+        if (!field.value) return;
+
+        if (filters[field.name]) {
+            if (!Array.isArray(filters[field.name])) {
+                filters[field.name] = [filters[field.name]];
+            }
+            filters[field.name].push(field.value);
+        } else {
+            filters[field.name] = field.value;
+        }
+    });
+
+    if (!updateUrl) return filters;
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    history.replaceState(null, "", newUrl);
+
+    return filters;
+}
+
 $(".select2").select2({
     placeholder: "Select Option",
     width: "100%",

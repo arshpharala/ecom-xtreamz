@@ -13,14 +13,14 @@ use App\Http\Controllers\Controller;
 use App\Repositories\PageRepository;
 use App\Models\Catalog\ProductVariant;
 use App\Models\CMS\Tag;
-use App\Repositories\ProductRepository;
+use App\Repositories\ProductVariantRepository;
 
 class ProductController extends Controller
 {
     protected $repository;
     protected $cart;
 
-    public function __construct(ProductRepository $repository, CartService $cart)
+    public function __construct(ProductVariantRepository $repository, CartService $cart)
     {
         $this->repository = $repository;
         $this->cart = $cart;
@@ -43,7 +43,7 @@ class ProductController extends Controller
         if (request()->filled('category')) {
             $activeCategory = $categories->where('slug', request()->category)->first();
         }
-        
+
         if (request()->filled('category_id')) {
             $activeCategory = $categories->where('id', request()->category_id)->first();
         }
@@ -255,7 +255,7 @@ class ProductController extends Controller
     {
         $slug               = request()->segment(1);
         $page               = (new PageRepository())->findOrFailBySlug($slug);
-        $giftSetProducts    = (new ProductRepository())->getGiftProducts();
+        $giftSetProducts    = (new ProductVariantRepository())->getGiftProducts();
 
         $data['giftSetProducts']   = $giftSetProducts;
         $data['page']   = $page;

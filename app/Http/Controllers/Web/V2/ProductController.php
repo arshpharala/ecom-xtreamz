@@ -14,14 +14,14 @@ use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
 use App\Repositories\PageRepository;
 use App\Models\Catalog\ProductVariant;
-use App\Repositories\ProductRepository;
+use App\Repositories\ProductVariantRepository;
 
 class ProductController extends Controller
 {
     protected $repository;
     protected $cart;
 
-    public function __construct(ProductRepository $repository, CartService $cart)
+    public function __construct(ProductVariantRepository $repository, CartService $cart)
     {
         $this->repository = $repository;
         $this->cart = $cart;
@@ -262,7 +262,7 @@ class ProductController extends Controller
     {
         $slug               = request()->segment(1);
         $page               = (new PageRepository())->findOrFailBySlug($slug);
-        $giftSetProducts    = (new ProductRepository())->getGiftProducts();
+        $giftSetProducts    = (new ProductVariantRepository())->getGiftProducts();
 
         $data['giftSetProducts']   = $giftSetProducts;
         $data['page']   = $page;

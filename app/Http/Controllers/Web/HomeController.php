@@ -9,7 +9,7 @@ use App\Models\Catalog\Brand;
 use App\Models\Catalog\Category;
 use App\Http\Controllers\Controller;
 use App\Repositories\PageRepository;
-use App\Repositories\ProductRepository;
+use App\Repositories\ProductVariantRepository;
 use App\Repositories\CategoryRepository;
 
 class HomeController extends Controller
@@ -23,7 +23,7 @@ class HomeController extends Controller
 
         $categories = (new CategoryRepository())->getHomeScreenCategories(6);
 
-        $giftSetProducts = (new ProductRepository())->getGiftProducts();
+        $giftSetProducts = (new ProductVariantRepository())->getGiftProducts();
         $offers = (new \App\Repositories\OfferRepository())->getPromoOffers(5);
 
         $bannerOffers = $offers->where('show_in_slider', 1);

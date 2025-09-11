@@ -10,7 +10,7 @@ use App\Models\CMS\Testimonial;
 use App\Http\Controllers\Controller;
 use App\Repositories\PageRepository;
 use App\Models\Catalog\ProductVariant;
-use App\Repositories\ProductRepository;
+use App\Repositories\ProductVariantRepository;
 
 class HomeController extends Controller
 {
@@ -28,7 +28,7 @@ class HomeController extends Controller
             ->withSelection()
             ->limit(6)
             ->get()->map(function ($variant) {
-                return (new ProductRepository())->transform($variant);
+                return (new ProductVariantRepository())->transform($variant);
             });
 
 
@@ -38,7 +38,7 @@ class HomeController extends Controller
             ->withFilters(['tags' => ['Best Seller']])
             ->limit(6)
             ->get()->map(function ($variant) {
-                return (new ProductRepository())->transform($variant);
+                return (new ProductVariantRepository())->transform($variant);
             });
 
         $topRatedProducts = ProductVariant::withJoins()
@@ -47,7 +47,7 @@ class HomeController extends Controller
             ->withFilters(['tags' => ['Top Rated']])
             ->limit(6)
             ->get()->map(function ($variant) {
-                return (new ProductRepository())->transform($variant);
+                return (new ProductVariantRepository())->transform($variant);
             });
 
         $popularProducts = ProductVariant::withJoins()
@@ -56,7 +56,7 @@ class HomeController extends Controller
             ->withFilters(['tags' => ['Popular']])
             ->limit(6)
             ->get()->map(function ($variant) {
-                return (new ProductRepository())->transform($variant);
+                return (new ProductVariantRepository())->transform($variant);
             });
 
         $deal = Offer::active()->first();
@@ -67,7 +67,7 @@ class HomeController extends Controller
             ->withFilters(['offer' => true, 'offer_id' => $deal->id])
             ->limit(3)
             ->get()->map(function ($variant) {
-                return (new ProductRepository())->transform($variant);
+                return (new ProductVariantRepository())->transform($variant);
             });
 
         $featuredProducts = ProductVariant::withJoins()
@@ -76,7 +76,7 @@ class HomeController extends Controller
             ->withFilters(['is_featured' => 1])
             ->limit(8)
             ->get()->map(function ($variant) {
-                return (new ProductRepository())->transform($variant);
+                return (new ProductVariantRepository())->transform($variant);
             });
 
         $testimonials = Testimonial::query()

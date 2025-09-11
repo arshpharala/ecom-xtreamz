@@ -24,28 +24,19 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $locale = app()->getLocale();
 
             $query = Product::withTrashed()
-            ->leftJoin('categories', 'categories.id', 'products.category_id')
-            ->leftJoin('product_translations', function($join){
-                $join->on('products.id', 'product_translations.product_id')->where('product_translations.locale', app()->getLocale());
-            })
-            ->leftJoin('category_translations', function($join){
-                $join->on('categories.id', 'category_translations.category_id')->where('category_translations.locale', app()->getLocale());
-            })
-            ->leftJoin('brands', 'brands.id', 'products.brand_id')
-            ->select(
-                'products.id',
-                'products.category_id',
-                'products.slug',
-                'products.is_active',
-                'products.created_at',
-                'products.deleted_at',
-                'product_translations.name',
-                'category_translations.name as category_name',
-                'brands.name as brand_name'
-            );
+                ->withJoins()
+                ->withSelection()
+                ->withFilters($request->only([
+                    'search',
+                    'status',
+                    'category_id',
+                    'brand_id',
+                    'is_featured',
+                    'is_new',
+                    'show_in_slider',
+                ]));
 
             return DataTables::of($query)
                 ->editColumn('status', function ($row) {
@@ -73,7 +64,10 @@ class ProductController extends Controller
                 ->make(true);
         }
 
-        return view('theme.adminlte.catalog.products.index');
+        $data['categories'] = Category::withJoins()->pluck('category_translations.name', 'categories.id');
+        $data['brands']     = Brand::pluck('name', 'id');
+
+        return view('theme.adminlte.catalog.products.index', $data);
     }
 
 
@@ -247,6 +241,5 @@ class ProductController extends Controller
             'message'   => __('crud.restored', ['name' => 'Product']),
             'redirect'  => route('admin.catalog.products.index'),
         ]);
-
     }
 }

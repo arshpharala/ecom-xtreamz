@@ -8,7 +8,7 @@ use App\Services\PriceService;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog\ProductVariant;
-use App\Repositories\ProductRepository;
+use App\Repositories\ProductVariantRepository;
 
 class CartController extends Controller
 {
@@ -25,7 +25,7 @@ class CartController extends Controller
 
         $variantIds = array_keys($items);
 
-        $repository = new ProductRepository();
+        $repository = new ProductVariantRepository();
 
         $variants = ProductVariant::withJoins()
             ->withSelection()

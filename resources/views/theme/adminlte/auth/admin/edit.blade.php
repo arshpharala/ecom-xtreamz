@@ -1,5 +1,5 @@
-<form action="{{ route('admin.auth.admins.update', $admin->id) }}" method="post" class="ajax-form" enctype="multipart/form-data"
-  onsubmit="handleFormSubmission(this)">
+<form action="{{ route('admin.auth.admins.update', $admin->id) }}" method="post" class="ajax-form"
+  enctype="multipart/form-data" onsubmit="handleFormSubmission(this)">
   @csrf
   @method('PUT')
 
@@ -24,7 +24,8 @@
           </div>
           <div class="form-group">
             <label>Email</label>
-            <input type="email" name="email" value="{{ $admin->email }}" class="form-control" required autocomplete="off">
+            <input type="email" name="email" value="{{ $admin->email }}" class="form-control" required
+              autocomplete="off">
           </div>
 
           <div class="form-group">
@@ -40,6 +41,27 @@
             <input type="password" name="password" class="form-control" autocomplete="new-password">
           </div>
         </div>
+
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12 border-bottom mb-2">
+              <h5>Roles</h5>
+            </div>
+            @foreach ($roles as $role)
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="role_{{ $role->id }}">
+                    <input type="checkbox" id="role_{{ $role->id }}" value="{{ $role->id }}" name="roles[]" @checked($role->checked)>
+                    <i>
+                      {{ $role->name }}
+                    </i>
+                  </label>
+                </div>
+              </div>
+            @endforeach
+          </div>
+        </div>
       </div>
 
     </div>
@@ -48,7 +70,8 @@
   <!-- Fixed Buttons -->
   <div class="p-3 border-top flex-shrink-0 bg-white">
     <div class="d-flex flex-row justify-content-between">
-      <button type="button" class="btn btn-outline-secondary" data-widget="control-sidebar" data-slide="true">Cancel</button>
+      <button type="button" class="btn btn-outline-secondary" data-widget="control-sidebar"
+        data-slide="true">Cancel</button>
       <button type="submit" class="btn btn-secondary">Update</button>
     </div>
   </div>

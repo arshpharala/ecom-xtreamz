@@ -44,4 +44,21 @@ class Admin extends Authenticatable
             'is_active' => 'boolean',
         ];
     }
+
+    function roles(){
+        return $this->belongsToMany(Role::class, 'admin_roles');
+    }
+
+
+    public function has_permission($moduleName, $access)
+    {
+
+        $permissions    = $this->roles->load('permissions.module')->pluck('permissions')->collapse();
+        $modules        = Module::all();
+        $module         = $modules->where('name', $moduleName)->first();
+        $permission     = $permissions->where('module_od', $module->id)->where('name', $access)->first();
+
+        return $permission;
+
+    }
 }

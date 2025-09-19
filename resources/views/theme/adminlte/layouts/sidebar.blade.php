@@ -92,12 +92,12 @@
                   <p>Customers</p>
                 </a>
               </li>
-              {{-- <li class="nav-item">
-                <a href="#" class="nav-link">
+              <li class="nav-item">
+                <a href="{{ route('admin.sales.subscribers.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Invoices</p>
+                  <p>Subscribers</p>
                 </a>
-              </li> --}}
+              </li>
             </ul>
           </li>
           <li class="nav-item">

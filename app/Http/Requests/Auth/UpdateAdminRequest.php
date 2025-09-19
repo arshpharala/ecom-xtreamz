@@ -28,6 +28,7 @@ class UpdateAdminRequest extends FormRequest
             'email' => 'email|string|max:255|unique:admins,email,' . $id . ',id',
             'is_active' => 'nullable|boolean',
             'password' => 'nullable|string|min:8',
+            'roles.*' => 'nullable'
         ];
     }
 }

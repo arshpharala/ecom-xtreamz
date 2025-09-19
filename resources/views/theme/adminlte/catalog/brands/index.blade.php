@@ -4,10 +4,7 @@
     <div class="col-sm-6">
       <h1>@lang('crud.list_title', ['name' => 'Brand'])</h1>
     </div>
-    <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <button data-url="{{ route('admin.cms.statistics.create') }}" type="button" class="btn btn-secondary"
-        onclick="getAside()"><i class="fa fa-plus"></i> @lang('crud.create')</button>
-    </div>
+    
   </div>
 @endsection
 @section('content')
@@ -17,11 +14,10 @@
         <thead>
           <tr>
             {{-- <th>#</th> --}}
-            <th>Name</th>
-            <th>Logo</th>
+            <th>Email</th>
             <th>Status</th>
-            <th>Position</th>
-            <th>Action</th>
+            <th>Subscribed At</th>
+            <th>IP</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -35,35 +31,25 @@
       $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('admin.cms.statistics.index') }}',
+        ajax: '{{ route('admin.sales.subscribers.index') }}',
         columns: [
-          //     {
-          //     data: 'id',
-          //     name: 'id'
-          //   },
           {
-            data: 'name',
-            name: 'name'
+            data: 'email',
+            name: 'email'
           },
           {
-            data: 'logo',
-            name: 'logo',
+            data: 'status',
+            name: 'status',
             orderable: false,
             searchable: false
           },
           {
-            data: 'is_active',
-            name: 'is_active'
+            data: 'subscribed_at',
+            name: 'subscribed_at'
           },
           {
-            data: 'position',
-            name: 'position'
-          },
-          {
-            data: 'action',
-            name: 'action',
-            orderable: false,
-            searchable: false
+            data: 'ip_address',
+            name: 'ip_address'
           }
         ]
       });

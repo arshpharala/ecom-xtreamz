@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
 use App\Http\Controllers\Admin\CMS\BannerController;
 use App\Http\Controllers\Admin\CMS\NewsController;
 use App\Http\Controllers\Admin\CMS\TestimonialController;
+use App\Http\Controllers\Admin\Sales\SubscriberController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/',                     'dashboard')->name('dashboard');
@@ -94,6 +95,8 @@ Route::group(['prefix' => '/sales', 'as' => 'sales.'], function () {
     Route::delete('orders/{order}/restore',                 [OrderController::class, 'restore'])->name('orders.restore');
 
     Route::resource('customers',                            CustomerController::class);
+
+    Route::resource('subscribers',                          SubscriberController::class);
 });
 
 Route::group(['prefix' => '/inventory', 'as' => 'inventory.'], function () {

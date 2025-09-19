@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     protected $fillable = ['name', 'is_active'];
-    
+
     protected $casts = [
         'is_active' => 'boolean',
     ];
@@ -18,5 +18,10 @@ class Role extends Model
     public function admins()
     {
         return $this->belongsToMany(User::class, 'admin_roles');
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'role_permissions');
     }
 }

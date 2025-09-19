@@ -357,10 +357,10 @@
       <p class="newsletter-subtitle">Get in touch with us</p>
       <h2 class="newsletter-title">Our Newsletter</h2>
 
-      <form id="newsletter-form" class="newsletter-form">
+      <form id="newsletter-form" class="newsletter-form ajax-form" action="{{ route('ajax.subscribe') }}" method="POST">
         <div class="newsletter-input d-flex align-items-center">
           <i class="bi bi-envelope icon"></i>
-          <input type="email" class="form-control" placeholder="Your Email Address" required>
+          <input type="email" name="subscriber_email" class="form-control" placeholder="Your Email Address" required>
           <button type="submit" class="btn-submit">
             <i class="bi bi-arrow-right"></i>
           </button>

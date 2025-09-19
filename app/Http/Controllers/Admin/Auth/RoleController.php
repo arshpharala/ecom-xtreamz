@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreRoleRequest;
 use App\Http\Requests\Auth\UpdateRoleRequest;
+use App\Models\Permission;
 use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
@@ -80,8 +81,15 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        $role = Role::findOrFail($id);
+        $role = Role::with('permissions')->findOrFail($id);
+        $permissions = Permission::with('module')->get()->map(function ($permission) use ($role) {
+            $permission->checked = $role->permissions->contains($permission->id);
 
+            return $permission;
+        });
+
+
+        $data['permissions'] = $permissions;
         $data['role'] = $role;
 
         $response['view'] =  view('theme.adminlte.auth.roles.edit', $data)->render();
@@ -104,6 +112,7 @@ class RoleController extends Controller
         $data['is_active'] = $request->boolean('is_active');
 
         $role->update($data);
+        $role->permissions()->sync($data['permissions'] ?? null);
 
         return response()->json([
             'message' => 'Role updated!',

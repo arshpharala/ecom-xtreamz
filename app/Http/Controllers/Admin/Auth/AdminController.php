@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreAdminRequest;
 use App\Http\Requests\Auth\UpdateAdminRequest;
+use App\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminController extends Controller
@@ -81,8 +82,14 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        $admin = Admin::findOrFail($id);
+        $admin = Admin::with('roles')->findOrFail($id);
+        $roles = Role::get()->map(function($role) use($admin){
+            $role->checked = $admin->roles->contains($role->id);
 
+            return $role;
+        });
+
+        $data['roles'] = $roles;
         $data['admin'] = $admin;
 
         $response['view'] =  view('theme.adminlte.auth.admin.edit', $data)->render();
@@ -109,6 +116,7 @@ class AdminController extends Controller
         }
 
         $admin->update($data);
+        $admin->roles()->sync($data['roles'] ?? null);
 
         return response()->json([
             'message' => 'User updated!',

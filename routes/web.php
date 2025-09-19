@@ -49,6 +49,8 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::post('/coupon/remove',                       [CouponController::class, 'remove']);
 
     Route::get('currencies',                            [HomeController::class, 'currencies']);
+
+    Route::post('subscribe',                             [HomeController::class, 'subscribe'])->name('subscribe');
 });
 
 

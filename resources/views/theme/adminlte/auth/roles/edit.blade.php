@@ -1,5 +1,5 @@
-<form action="{{ route('admin.auth.roles.update', $role->id) }}" method="post" class="ajax-form" enctype="multipart/form-data"
-  onsubmit="handleFormSubmission(this)">
+<form action="{{ route('admin.auth.roles.update', $role->id) }}" method="post" class="ajax-form"
+  enctype="multipart/form-data" onsubmit="handleFormSubmission(this)">
   @csrf
   @method('PUT')
 
@@ -31,18 +31,45 @@
             </select>
           </div>
         </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            @foreach ($permissions->groupBy('module.name') as $moduleName => $modulePermissions)
+              <div class="col-md-12 bg-gray-light mb-2`">
+                <div class="border">
+                  <h5>{{ $moduleName }}</h5>
+                </div>
+                <div class="row">
+                  @foreach ($modulePermissions as $permission)
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="permission_{{ $permission->id }}">
+                          <input type="checkbox" id="permission_{{ $permission->id }}" value="{{ $permission->id }}"
+                            name="permissions[]" @checked($permission->checked)>
+                          <i>
+                            {{ $permission->name }}
+                          </i>
+                        </label>
+                      </div>
+                    </div>
+                  @endforeach
+                </div>
+              </div>
+            @endforeach
+          </div>
+        </div>
+
       </div>
-
     </div>
-  </div>
 
-  <!-- Fixed Buttons -->
-  <div class="p-3 border-top flex-shrink-0 bg-white">
-    <div class="d-flex flex-row justify-content-between">
-      <button type="button" class="btn btn-outline-secondary" data-widget="control-sidebar" data-slide="true">Cancel</button>
-      <button type="submit" class="btn btn-secondary">Update</button>
+    <!-- Fixed Buttons -->
+    <div class="p-3 border-top flex-shrink-0 bg-white">
+      <div class="d-flex flex-row justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" data-widget="control-sidebar"
+          data-slide="true">Cancel</button>
+        <button type="submit" class="btn btn-secondary">Update</button>
+      </div>
     </div>
-  </div>
 </form>
 
 <script>

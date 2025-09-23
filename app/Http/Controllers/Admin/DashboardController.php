@@ -8,17 +8,16 @@ use Illuminate\Http\Request;
 use App\Models\Catalog\Product;
 use App\Models\Cart\OrderLineItem;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    use AuthorizesRequests;
+
     function dashboard()
     {
-
-        $user = Auth::guard('admin')->user();
-
-        return $user->has_permission('Product', 'Create');
-
         return view('theme.adminlte.dashboard');
     }
 

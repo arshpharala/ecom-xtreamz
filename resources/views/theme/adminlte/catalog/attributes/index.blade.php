@@ -6,16 +6,21 @@
       <h1>@lang('crud.list_title', ['name' => 'Attribute'])</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <a href="{{ route('admin.catalog.attributes.create') }}" class="btn btn-secondary"><i class="fa fa-plus"></i> @lang('crud.create')</a>
+      @can('create', App\Models\Catalog\Attribute::class)
+        <a href="{{ route('admin.catalog.attributes.create') }}" class="btn btn-secondary"><i class="fa fa-plus"></i>
+          @lang('crud.create')</a>
+      @endcan
     </div>
   </div>
 @endsection
 
 @section('content')
-  <div class="mb-2">
-    <button type="button" class="btn btn-danger btn-sm" id="bulk-delete">Delete Selected</button>
-    <button type="button" class="btn btn-success btn-sm" id="bulk-restore">Restore Selected</button>
-  </div>
+  @can('bulk', App\Models\Catalog\Attribute::class)
+    <div class="mb-2">
+      <button type="button" class="btn btn-danger btn-sm" id="bulk-delete">Delete Selected</button>
+      <button type="button" class="btn btn-success btn-sm" id="bulk-restore">Restore Selected</button>
+    </div>
+  @endcan
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -55,10 +60,10 @@
               return `<input type="checkbox" class="row-checkbox" value="${data}">`;
             }
           },
-        //   {
-        //     data: 'id',
-        //     name: 'id'
-        //   },
+          //   {
+          //     data: 'id',
+          //     name: 'id'
+          //   },
           {
             data: 'name',
             name: 'name'

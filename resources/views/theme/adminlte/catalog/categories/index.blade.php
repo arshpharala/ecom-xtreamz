@@ -5,15 +5,20 @@
       <h1 class="m-0">@lang('crud.list_title', ['name' => 'Category'])</h1>
     </div>
     <div class="col-sm-6">
-      <a href="{{ route('admin.catalog.categories.create') }}" class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</a>
+      @can('create', App\Models\Catalog\Category::class)
+        <a href="{{ route('admin.catalog.categories.create') }}" class="btn btn-secondary float-sm-right"> <i
+            class="fa fa-plus"></i> @lang('crud.create')</a>
+      @endcan
     </div>
   </div>
 @endsection
 @section('content')
-  <div class="mb-2">
-    <button type="button" class="btn btn-danger btn-sm" id="bulk-delete">Delete Selected</button>
-    <button type="button" class="btn btn-success btn-sm" id="bulk-restore">Restore Selected</button>
-  </div>
+  @can('bulk', App\Models\Catalog\Category::class)
+    <div class="mb-2">
+      <button type="button" class="btn btn-danger btn-sm" id="bulk-delete">Delete Selected</button>
+      <button type="button" class="btn btn-success btn-sm" id="bulk-restore">Restore Selected</button>
+    </div>
+  @endcan
   <div class="row">
     <div class="col-md-12">
       <div class="card">

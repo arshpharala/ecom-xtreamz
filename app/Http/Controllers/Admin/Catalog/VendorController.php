@@ -6,15 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\Catalog\Vendor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVendorRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Yajra\DataTables\Facades\DataTables;
 
 class VendorController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Vendor::class);
+
         if ($request->ajax()) {
             $vendors = Vendor::withTrashed();
             return DataTables::of($vendors)
@@ -45,6 +49,8 @@ class VendorController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Vendor::class);
+
         $response['view'] =  view('theme.adminlte.catalog.vendors.create')->render();
 
         return response()->json([
@@ -58,6 +64,8 @@ class VendorController extends Controller
      */
     public function store(StoreVendorRequest $request)
     {
+        $this->authorize('create', Vendor::class);
+
         $data = $request->validated();
 
         if ($request->hasFile('logo')) {
@@ -87,7 +95,9 @@ class VendorController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $vendor = Vendor::findOrFail($id);
+
+        $this->authorize('update', $vendor);
     }
 
     /**
@@ -95,7 +105,9 @@ class VendorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $vendor = Vendor::findOrFail($id);
+
+        $this->authorize('update', $vendor);
     }
 
     /**
@@ -104,6 +116,9 @@ class VendorController extends Controller
     public function destroy(string $id)
     {
         $vendor = Vendor::findOrFail($id);
+
+        $this->authorize('delete', $vendor);
+
         $vendor->delete();
         return response()->json([
             'message'   => __('crud.deleted', ['name' => 'Vendor']),
@@ -116,7 +131,10 @@ class VendorController extends Controller
      */
     public function restore(string $id)
     {
-        $brand = Vendor::withTrashed()->findOrFail($id);
+        $vendor = Vendor::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $vendor);
+
         $brand->restore();
 
         return response()->json([

@@ -9,14 +9,19 @@ use App\Models\Catalog\AttributeValue;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreAttributeRequest;
 use App\Http\Requests\UpdateAttributeRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AttributeController extends Controller
 {
+    use AuthorizesRequests;
+    
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Attribute::class);
+
         if ($request->ajax()) {
             $query = Attribute::withTrashed()->select(['id', 'name', 'deleted_at', 'created_at']);
             return DataTables::of($query)
@@ -43,6 +48,8 @@ class AttributeController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Attribute::class);
+
         return view('theme.adminlte.catalog.attributes.create');
     }
 
@@ -51,6 +58,8 @@ class AttributeController extends Controller
      */
     public function store(StoreAttributeRequest $request)
     {
+        $this->authorize('create', Attribute::class);
+
         $validated = $request->validated();
         $attribute = Attribute::create(['name' => $validated['name']]);
         foreach ($validated['values'] as $value) {
@@ -78,6 +87,8 @@ class AttributeController extends Controller
     {
         $attribute = Attribute::findOrFail($id);
 
+        $this->authorize('update', $attribute);
+
         $data['attribute'] = $attribute;
 
         return view('theme.adminlte.catalog.attributes.edit', $data);
@@ -89,6 +100,9 @@ class AttributeController extends Controller
     public function update(UpdateAttributeRequest $request, $id)
     {
         $attribute = Attribute::withTrashed()->findOrFail($id);
+
+        $this->authorize('update', $attribute);
+
         $validated = $request->validated();
         $attribute->update(['name' => $validated['name']]);
         $existingVals = $attribute->values->pluck('value')->toArray();
@@ -115,6 +129,9 @@ class AttributeController extends Controller
     public function destroy(string $id)
     {
         $attribute = Attribute::findOrFail($id);
+
+        $this->authorize('delete', $attribute);
+
         $attribute->delete();
 
         return response()->json([
@@ -126,6 +143,9 @@ class AttributeController extends Controller
     public function restore($id)
     {
         $attribute = Attribute::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $attribute);
+
         $attribute->restore();
 
         return response()->json([
@@ -137,6 +157,8 @@ class AttributeController extends Controller
 
     public function bulkDelete(Request $request)
     {
+        $this->authorize('bulk', Attribute::class);
+
         $request->validate(['ids' => 'required|array']);
         Attribute::whereIn('id', $request->ids)->delete();
 
@@ -148,6 +170,8 @@ class AttributeController extends Controller
 
     public function bulkRestore(Request $request)
     {
+        $this->authorize('bulk', Attribute::class);
+
         $request->validate(['ids' => 'required|array']);
         Attribute::withTrashed()->whereIn('id', $request->ids)->restore();
 

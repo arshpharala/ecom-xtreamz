@@ -8,16 +8,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCouponRequest;
 use App\Http\Requests\UpdateCouponRequest;
 use App\Models\Catalog\ProductVariant;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class CouponController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Coupon::class);
+
         if ($request->ajax()) {
             $coupons = Coupon::query()
                 ->select('id', 'code', 'type', 'value', 'start_at', 'end_at', 'min_cart_amount', 'is_active', 'created_at');
@@ -51,6 +56,8 @@ class CouponController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Coupon::class);
+
         $variants = ProductVariant::with('product.translation')->get();
         return view('theme.adminlte.catalog.coupons.create', compact('variants'));
     }
@@ -60,6 +67,8 @@ class CouponController extends Controller
      */
     public function store(StoreCouponRequest $request)
     {
+        $this->authorize('create', Coupon::class);
+
         $data = $request->validated();
 
         DB::beginTransaction();
@@ -95,6 +104,9 @@ class CouponController extends Controller
     public function edit(string $id)
     {
         $coupon     = Coupon::findOrFail($id);
+
+        $this->authorize('update', $coupon);
+
         $variants   = ProductVariant::with('product.translation')->get();
 
         $variants = $variants->pluck('product.translation.name', 'id')->map(function ($name, $id) use ($variants) {
@@ -112,8 +124,12 @@ class CouponController extends Controller
      */
     public function update(UpdateCouponRequest $request, string $id)
     {
-        $data       = $request->validated();
         $coupon     = Coupon::findOrFail($id);
+
+        $this->authorize('update', $coupon);
+
+        $data       = $request->validated();
+
 
         DB::beginTransaction();
 
@@ -140,6 +156,9 @@ class CouponController extends Controller
     public function destroy(string $id)
     {
         $coupon = Coupon::findOrFail($id);
+
+        $this->authorize('delete', $coupon);
+
         $coupon->delete();
 
         return response()->json([

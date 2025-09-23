@@ -12,14 +12,18 @@ use App\Http\Requests\StoreOfferRequest;
 use App\Models\Catalog\OfferTranslation;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\UpdateOfferRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class OfferController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Offer::class);
+
         if ($request->ajax()) {
             $offers = Offer::withJoins()
                 ->withSelection()
@@ -52,6 +56,8 @@ class OfferController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Offer::class);
+
         $data['offer'] = new Offer();
         $response['view'] =  view('theme.adminlte.catalog.offers.create', $data)->render();
 
@@ -66,6 +72,8 @@ class OfferController extends Controller
      */
     public function store(StoreOfferRequest $request)
     {
+        $this->authorize('create', Offer::class);
+
         $validated = $request->validated();
 
         DB::beginTransaction();
@@ -119,6 +127,8 @@ class OfferController extends Controller
     {
         $offer = Offer::with('translations')->findOrFail($id);
 
+        $this->authorize('update', $offer);
+
         $data['offer'] = $offer;
 
         $response['view'] =  view('theme.adminlte.catalog.offers.edit', $data)->render();
@@ -134,10 +144,11 @@ class OfferController extends Controller
      */
     public function update(UpdateOfferRequest $request, string $id)
     {
-        $validated = $request->validated();
-
         $offer = Offer::findOrFail($id);
 
+        $this->authorize('update', $offer);
+
+        $validated = $request->validated();
 
         $data = [
             'discount_type'  => $validated['discount_type'],
@@ -184,7 +195,10 @@ class OfferController extends Controller
      */
     public function destroy(string $id)
     {
-        $offer  = Offer::withTrashed()->findOrFail($id);
+        $offer = Offer::withTrashed()->findOrFail($id);
+
+        $this->authorize('delete', $offer);
+
         $offer->delete();
 
         return response()->json([
@@ -198,7 +212,10 @@ class OfferController extends Controller
      */
     public function restore(string $id)
     {
-        $offer  = Offer::withTrashed()->findOrFail($id);
+        $offer = Offer::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $offer);
+
         $offer->restore();
 
         return response()->json([

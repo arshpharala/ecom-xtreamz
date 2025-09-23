@@ -3,12 +3,15 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Socialite\SocialiteManager;
 use Laravel\Socialite\Contracts\Factory;
 use Opcodes\LogViewer\Facades\LogViewer;
 use App\Http\Middleware\AdminAuthenticate;
+use App\Models\Admin;
+use App\Policies\AdminPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,10 +29,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerRoutes();
-
         LogViewer::auth(function ($request) {
             return Auth::guard('admin')->check();
         });
+
+        // Gate::policy(Admin::class, AdminPolicy::class);
     }
 
     protected function registerRoutes()

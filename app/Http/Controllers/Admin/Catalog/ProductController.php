@@ -15,14 +15,19 @@ use App\Models\Catalog\ProductTranslation;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Seo\Keyword;
 use App\Models\Seo\Meta;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProductController extends Controller
 {
+    use AuthorizesRequests;
+    
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Product::class);
+
         if ($request->ajax()) {
 
             $query = Product::withTrashed()
@@ -77,6 +82,8 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Product::class);
+
         $categories = Category::with(['translations'])->get();
         $brands         = Brand::all();
 
@@ -97,6 +104,8 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        $this->authorize('create', Product::class);
+
         // 1. Create the Product
         $product = Product::create([
             'slug'        => $request->slug,
@@ -138,12 +147,13 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $defaultLocale = app()->getLocale();
         $product = Product::with([
             'translations',
             'attachments',
             'category.attributes.values'
         ])->findOrFail($id);
+
+        $this->authorize('update', $product);;
 
         $categories = Category::with('translations')->get();
         $brands     = Brand::all();
@@ -162,6 +172,8 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, $id)
     {
         $product = Product::findOrFail($id);
+
+        $this->authorize('update', $product);
 
         // Update main fields
         $product->update([
@@ -202,6 +214,9 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+
+        $this->authorize('delete', $product);
+
         $product->delete();
 
         return response()->json([
@@ -213,6 +228,9 @@ class ProductController extends Controller
     public function restore($id)
     {
         $product = Product::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $product);
+
         $product->restore();
 
         return response()->json([
@@ -223,6 +241,8 @@ class ProductController extends Controller
 
     public function bulkDelete(Request $request)
     {
+        $this->authorize('bulk', Product::class);
+
         $request->validate(['ids' => 'required|array']);
         Product::whereIn('id', $request->ids)->delete();
 
@@ -234,6 +254,8 @@ class ProductController extends Controller
 
     public function bulkRestore(Request $request)
     {
+        $this->authorize('bulk', Product::class);
+
         $request->validate(['ids' => 'required|array']);
         Product::withTrashed()->whereIn('id', $request->ids)->restore();
 

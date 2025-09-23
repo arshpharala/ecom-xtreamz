@@ -6,18 +6,24 @@ use App\Models\Module;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Auth\StorePermissionRequest;
 use App\Http\Requests\Auth\UpdatePermissionRequest;
-use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PermissionController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
 
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Permission::class);
+
         if ($request->ajax()) {
             $roles = Permission::query()
                 ->select(
@@ -49,6 +55,8 @@ class PermissionController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Permission::class);
+
         $data['modules']    = Module::get();
         $response['view']   = view('theme.adminlte.auth.permissions.create', $data)->render();
 
@@ -63,6 +71,8 @@ class PermissionController extends Controller
      */
     public function store(StorePermissionRequest $request)
     {
+        $this->authorize('create', Permission::class);
+
         $data = $request->validated();
 
         $data['is_active'] = $request->boolean('is_active');
@@ -90,6 +100,9 @@ class PermissionController extends Controller
     public function edit(string $id)
     {
         $permission = Permission::findOrFail($id);
+
+        $this->authorize('update', $permission);
+
         $data['modules']    = Module::get();
         $data['permission'] = $permission;
 
@@ -109,6 +122,8 @@ class PermissionController extends Controller
     {
         $permission = Permission::findOrFail($id);
 
+        $this->authorize('update', $permission);
+
         $data = $request->validated();
 
         $data['is_active'] = $request->boolean('is_active');
@@ -126,6 +141,15 @@ class PermissionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $permission = Permission::findOrFail($id);
+
+        $this->authorize('delete', $permission);
+
+        $permission->delete();
+
+        return response()->json([
+            'message' => 'Permission deleted!',
+            'redirect' => route('admin.auth.permissions.index')
+        ]);
     }
 }

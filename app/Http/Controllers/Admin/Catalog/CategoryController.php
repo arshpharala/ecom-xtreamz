@@ -6,18 +6,24 @@ use Illuminate\Http\Request;
 use App\Models\Catalog\Category;
 use App\Models\Catalog\Attribute;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CategoryController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Category::class);
+
         if ($request->ajax()) {
             $locale = app()->getLocale();
 
@@ -70,6 +76,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Category::class);
+
         $categories  = Category::all();
         $attributes = Attribute::all();
 
@@ -83,6 +91,8 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+        $this->authorize('create', Category::class);
+
         $validated = $request->validated();
 
         if ($request->hasFile('icon')) {
@@ -124,7 +134,10 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category       = Category::withTrashed()->with('translations', 'attributes')->findOrFail($id);
+        $category = Category::withTrashed()->with('translations', 'attributes')->findOrFail($id);
+
+        $this->authorize('update', $category);
+
         $categories     = Category::where('id', '!=', $category->id)->get();
         $attributes     = Attribute::all();
 
@@ -140,8 +153,11 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, $id)
     {
-        $validated = $request->validated();
         $category = Category::withTrashed()->findOrFail($id);
+
+        $this->authorize('update', $category);
+
+        $validated = $request->validated();
 
         if ($request->hasFile('icon')) {
 
@@ -208,6 +224,9 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
+
+        $this->authorize('delete', $category);
+
         $category->delete();
 
         return response()->json([
@@ -219,6 +238,9 @@ class CategoryController extends Controller
     public function restore($id)
     {
         $category = Category::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $category);
+
         $category->restore();
 
         return response()->json([
@@ -227,8 +249,11 @@ class CategoryController extends Controller
         ]);
     }
 
+
     public function bulkDelete(Request $request)
     {
+        $this->authorize('bulk', Category::class);
+
         $request->validate(['ids' => 'required|array']);
         Category::whereIn('id', $request->ids)->delete();
 
@@ -238,8 +263,11 @@ class CategoryController extends Controller
         ]);
     }
 
+
     public function bulkRestore(Request $request)
     {
+        $this->authorize('bulk', Category::class);
+
         $request->validate(['ids' => 'required|array']);
         Category::withTrashed()->whereIn('id', $request->ids)->restore();
 

@@ -5,7 +5,10 @@
       <h1 class="m-0">@lang('crud.list_title', ['name' => 'Coupon'])</h1>
     </div>
     <div class="col-sm-6">
-      <a href="{{ route('admin.catalog.coupons.create') }}" class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</a>
+      @can('create', App\Models\Cart\Coupon::class)
+        <a href="{{ route('admin.catalog.coupons.create') }}" class="btn btn-secondary float-sm-right"> <i
+            class="fa fa-plus"></i> @lang('crud.create')</a>
+      @endcan
     </div>
   </div>
 @endsection

@@ -36,7 +36,7 @@ class SubscriberController extends Controller
                 ->rawColumns(['status'])
                 ->make(true);
         }
-        return view('theme.adminlte.catalog.brands.index');
+        return view('theme.adminlte.sales.subscribers.index');
     }
 
     /**

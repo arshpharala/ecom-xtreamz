@@ -20,6 +20,8 @@ class AdminAuthenticate
             return redirect()->route('admin.login');
         }
 
+        Auth::shouldUse('admin'); // Handle Authorization
+
         return $next($request);
     }
 }

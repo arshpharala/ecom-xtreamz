@@ -9,23 +9,27 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreBrandRequest;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\UpdateBrandRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BrandController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        // $this->authorize('viewAny', Brand::class);
+
         if ($request->ajax()) {
             $brands = Brand::withTrashed();
             return DataTables::of($brands)
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('admin.catalog.brands.edit', $row->id);
-                    $deleteUrl = route('admin.catalog.brands.destroy', $row->id);
-                    $restoreUrl = route('admin.catalog.brands.restore', $row->id);
-                    $editSidebar = true;
-                    return view('theme.adminlte.components._table-actions', compact('editUrl', 'deleteUrl', 'restoreUrl', 'row', 'editSidebar'))->render();
+                    $compact['editUrl'] = route('admin.catalog.brands.edit', $row->id);
+                    $compact['deleteUrl'] = route('admin.catalog.brands.destroy', $row->id);
+                    $compact['restoreUrl'] = route('admin.catalog.brands.restore', $row->id);
+                    $compact['editSidebar'] = true;
+                    return view('theme.adminlte.components._table-actions', $compact)->render();
                 })
                 ->editColumn('logo', function ($row) {
                     return $row->logo
@@ -47,6 +51,8 @@ class BrandController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Brand::class);
+
         $response['view'] =  view('theme.adminlte.catalog.brands.create')->render();
 
         return response()->json([
@@ -60,6 +66,8 @@ class BrandController extends Controller
      */
     public function store(StoreBrandRequest $request)
     {
+        $this->authorize('create', Brand::class);
+
         $data = $request->validated();
 
         if ($request->hasFile('logo')) {
@@ -74,7 +82,7 @@ class BrandController extends Controller
             'message'   => __('crud.created', ['name' => 'Brand']),
             'redirect'  => route('admin.catalog.brands.index')
         ]);
-    }   
+    }
 
 
     /**
@@ -91,6 +99,9 @@ class BrandController extends Controller
     public function edit($id)
     {
         $brand          = Brand::findOrFail($id);
+
+        $this->authorize('update', $brand);
+
         $data['brand'] = $brand;
 
         $response['view'] =  view('theme.adminlte.catalog.brands.edit', $data)->render();
@@ -107,6 +118,8 @@ class BrandController extends Controller
     public function update(UpdateBrandRequest $request, $id)
     {
         $brand = Brand::findOrFail($id);
+
+        $this->authorize('update', $brand);
 
         $data = $request->validated();
 
@@ -136,6 +149,9 @@ class BrandController extends Controller
     public function destroy($id)
     {
         $brand = Brand::findOrFail($id);
+
+        $this->authorize('delete', $brand);
+
         $brand->delete();
 
         return response()->json([

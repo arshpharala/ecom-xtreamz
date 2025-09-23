@@ -4,7 +4,12 @@
     <div class="col-sm-6">
       <h1>@lang('crud.list_title', ['name' => 'Brand'])</h1>
     </div>
-    
+    <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
+      @can('create', App\Models\Catalog\Brand::class)
+        <button data-url="{{ route('admin.catalog.brands.create') }}" type="button" class="btn btn-secondary"
+          onclick="getAside()"><i class="fa fa-plus"></i> @lang('crud.create')</button>
+      @endcan
+    </div>
   </div>
 @endsection
 @section('content')
@@ -14,10 +19,11 @@
         <thead>
           <tr>
             {{-- <th>#</th> --}}
-            <th>Email</th>
+            <th>Name</th>
+            <th>Logo</th>
             <th>Status</th>
-            <th>Subscribed At</th>
-            <th>IP</th>
+            <th>Position</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -31,25 +37,35 @@
       $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('admin.sales.subscribers.index') }}',
+        ajax: '{{ route('admin.catalog.brands.index') }}',
         columns: [
+          //     {
+          //     data: 'id',
+          //     name: 'id'
+          //   },
           {
-            data: 'email',
-            name: 'email'
+            data: 'name',
+            name: 'name'
           },
           {
-            data: 'status',
-            name: 'status',
+            data: 'logo',
+            name: 'logo',
             orderable: false,
             searchable: false
           },
           {
-            data: 'subscribed_at',
-            name: 'subscribed_at'
+            data: 'is_active',
+            name: 'is_active'
           },
           {
-            data: 'ip_address',
-            name: 'ip_address'
+            data: 'position',
+            name: 'position'
+          },
+          {
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false
           }
         ]
       });

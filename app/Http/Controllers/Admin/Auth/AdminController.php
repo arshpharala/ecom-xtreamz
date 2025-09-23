@@ -2,21 +2,30 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
+use App\Models\Role;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
+use App\Repositories\AdminRoleRepository;
 use App\Http\Requests\Auth\StoreAdminRequest;
 use App\Http\Requests\Auth\UpdateAdminRequest;
-use App\Models\Role;
-use Yajra\DataTables\Facades\DataTables;
+use App\Repositories\AdminPermissionRepository;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AdminController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', new Admin());
+
         if ($request->ajax()) {
             $admins = Admin::query();
             return DataTables::of($admins)
@@ -43,6 +52,8 @@ class AdminController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Admin::class);
+
         $response['view'] =  view('theme.adminlte.auth.admin.create')->render();
 
         return response()->json([
@@ -56,6 +67,8 @@ class AdminController extends Controller
      */
     public function store(StoreAdminRequest $request)
     {
+        $this->authorize('create', Admin::class);
+
         $data = $request->validated();
 
         $data['is_active'] = $request->boolean('is_active');
@@ -83,7 +96,10 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         $admin = Admin::with('roles')->findOrFail($id);
-        $roles = Role::get()->map(function($role) use($admin){
+
+        $this->authorize('update', $admin);
+
+        $roles = Role::get()->map(function ($role) use ($admin) {
             $role->checked = $admin->roles->contains($role->id);
 
             return $role;
@@ -107,6 +123,8 @@ class AdminController extends Controller
     {
         $admin = Admin::findOrFail($id);
 
+        $this->authorize('update', $admin);
+
         $data = $request->validated();
 
         $data['is_active'] = $request->boolean('is_active');
@@ -117,6 +135,9 @@ class AdminController extends Controller
 
         $admin->update($data);
         $admin->roles()->sync($data['roles'] ?? null);
+
+        app(AdminPermissionRepository::class)->clearForAdmin($admin);
+        app(AdminRoleRepository::class)->clearForAdmin($admin);
 
         return response()->json([
             'message' => 'User updated!',

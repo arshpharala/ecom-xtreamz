@@ -3,20 +3,28 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
+use App\Repositories\AdminRoleRepository;
 use App\Http\Requests\Auth\StoreRoleRequest;
 use App\Http\Requests\Auth\UpdateRoleRequest;
-use App\Models\Permission;
-use Yajra\DataTables\Facades\DataTables;
+use App\Repositories\AdminPermissionRepository;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RoleController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Role::class);
+
         if ($request->ajax()) {
             $roles = Role::query();
             return DataTables::of($roles)
@@ -43,6 +51,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Role::class);
+
         $response['view'] =  view('theme.adminlte.auth.roles.create')->render();
 
         return response()->json([
@@ -56,6 +66,9 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
+
+        $this->authorize('create', Role::class);
+
         $data = $request->validated();
 
         $data['is_active'] = $request->boolean('is_active');
@@ -82,6 +95,9 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $role = Role::with('permissions')->findOrFail($id);
+
+        $this->authorize('update', $role);
+
         $permissions = Permission::with('module')->get()->map(function ($permission) use ($role) {
             $permission->checked = $role->permissions->contains($permission->id);
 
@@ -107,12 +123,20 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
+        $this->authorize('update', $role);
+
+
         $data = $request->validated();
 
         $data['is_active'] = $request->boolean('is_active');
 
         $role->update($data);
         $role->permissions()->sync($data['permissions'] ?? null);
+
+        foreach ($role->admins as $admin) {
+            app(AdminPermissionRepository::class)->clearForAdmin($admin);
+            app(AdminRoleRepository::class)->clearForAdmin($admin);
+        }
 
         return response()->json([
             'message' => 'Role updated!',
@@ -125,6 +149,15 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+
+        $this->authorize('delete', $role);
+
+        $role->delete();
+
+        return response()->json([
+            'message' => 'Role deleted!',
+            'redirect' => route('admin.auth.roles.index')
+        ]);
     }
 }

@@ -5,8 +5,10 @@
       <h1 class="m-0">@lang('crud.create_title', ['name' => 'Product'])</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <button data-url="{{ route('admin.catalog.products.create') }}" type="button" class="btn btn-secondary"
-        onclick="getAside()"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
+      @can('create', App\Models\Catalog\Product::class)
+        <button data-url="{{ route('admin.catalog.products.create') }}" type="button" class="btn btn-secondary"
+          onclick="getAside()"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
+      @endcan
     </div>
   </div>
 @endsection

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
+    public const CACHE_KEY = 'permissions:all';
+
     protected $fillable = [
         'module_id',
         'name',

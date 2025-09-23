@@ -10,14 +10,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Inventory\InventorySource;
 use App\Http\Requests\StoreInventorySourceRequest;
 use App\Http\Requests\UpdateInventorySourceRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class InventorySourceController extends Controller
 {
+    use AuthorizesRequests;
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', InventorySource::class);
         //
     }
 
@@ -26,6 +30,8 @@ class InventorySourceController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', InventorySource::class);
+
         $source = new InventorySource();
 
         $countries = Country::orderBy('name')->pluck('name', 'id');
@@ -38,6 +44,8 @@ class InventorySourceController extends Controller
      */
     public function store(StoreInventorySourceRequest $request)
     {
+        $this->authorize('create', InventorySource::class);
+
         InventorySource::create($request->validated());
         return redirect()->route('admin.inventory.sources.index')
             ->with('success', 'Inventory source created.');
@@ -57,6 +65,8 @@ class InventorySourceController extends Controller
     public function edit(string $id)
     {
         $source = InventorySource::findOrFail($id);
+
+        $this->authorize('update', $source);
 
         $countries = Country::orderBy('name')->pluck('name', 'id');
 
@@ -79,6 +89,8 @@ class InventorySourceController extends Controller
     {
         $source = InventorySource::findOrFail($id);
 
+        $this->authorize('update', $source);
+
         $validated = $request->validated();
         $validated['is_active'] = (bool) $request->boolean('is_active');
 
@@ -95,6 +107,9 @@ class InventorySourceController extends Controller
     public function destroy(string $id)
     {
         $source = InventorySource::findOrFail($id);
+
+        $this->authorize('delete', $source);
+
         $source->delete();
 
         return back()->with('success', 'Inventory source deleted.');

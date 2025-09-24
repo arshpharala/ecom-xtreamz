@@ -6,7 +6,10 @@
       <h1 class="m-0">@lang('crud.list_title', ['name' => 'Currency'])</h1>
     </div>
     <div class="col-sm-6">
-      <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.currencies.create') }}" class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
+      @can('create', App\Models\CMS\Currency::class)
+        <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.currencies.create') }}"
+          class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
+      @endcan
     </div>
   </div>
 @endsection
@@ -43,8 +46,7 @@
         processing: true,
         serverSide: true,
         ajax: '{{ route('admin.cms.currencies.index') }}',
-        columns: [
-          {
+        columns: [{
             data: 'code',
             name: 'code'
           },
@@ -70,5 +72,4 @@
       });
     });
   </script>
-
 @endpush

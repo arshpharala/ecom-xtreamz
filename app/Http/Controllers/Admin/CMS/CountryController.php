@@ -11,9 +11,12 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreCountryRequest;
 use App\Http\Requests\UpdateCountryRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CountryController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Create a new controller instance.
      *
@@ -26,6 +29,8 @@ class CountryController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Country::class);
+
         if (request()->ajax()) {
 
             $query = Country::query()
@@ -57,6 +62,8 @@ class CountryController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Country::class);
+
         $data['currencies']     = Currency::pluck('code', 'id');
         $response['view']       = view('theme.adminlte.cms.countries.create', $data)->render();
 
@@ -71,6 +78,8 @@ class CountryController extends Controller
      */
     public function store(StoreCountryRequest $request)
     {
+        $this->authorize('create', Country::class);
+
         $data = $request->validated();
 
         if ($request->hasFile('icon')) {
@@ -100,6 +109,9 @@ class CountryController extends Controller
     public function edit(string $id)
     {
         $country                = Country::findOrFail($id);
+
+        $this->authorize('update', $country);
+
         $currencies             = Currency::pluck('code', 'id');
         $data['country']        = $country;
         $data['currencies']     = $currencies;
@@ -117,6 +129,8 @@ class CountryController extends Controller
     public function update(UpdateCountryRequest $request, string $id)
     {
         $country = Country::findOrFail($id);
+
+        $this->authorize('update', $country);
 
         $data = $request->validated();
 
@@ -143,6 +157,10 @@ class CountryController extends Controller
      */
     public function destroy(string $id)
     {
+        $country = Country::findOrFail($id);
+
+        $this->authorize('delete', $country);
+
         $isDeleted = $this->countryRepository->delete($id);
 
         if ($isDeleted) {
@@ -166,6 +184,9 @@ class CountryController extends Controller
     public function restore(string $id)
     {
         $brand = Country::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $country);
+
         $brand->restore();
 
         return response()->json([

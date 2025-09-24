@@ -11,14 +11,19 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\CMS\TestimonialTranslation;
 use App\Http\Requests\StoreTestimonialRequest;
 use App\Http\Requests\UpdateTestimonialRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TestimonialController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Testimonial::class);
+
         if ($request->ajax()) {
             $locale = app()->getLocale();
 
@@ -67,6 +72,8 @@ class TestimonialController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Testimonial::class);
+
         return view('theme.adminlte.cms.testimonials.create');
     }
 
@@ -75,6 +82,8 @@ class TestimonialController extends Controller
      */
     public function store(StoreTestimonialRequest $request)
     {
+        $this->authorize('create', Testimonial::class);
+
         $validated = $request->validated();
 
         DB::beginTransaction();
@@ -135,6 +144,9 @@ class TestimonialController extends Controller
     public function edit(string $id)
     {
         $testimonial            = Testimonial::findOrFail($id);
+
+        $this->authorize('update', $testimonial);
+
         $data['testimonial']    = $testimonial;
 
         return view('theme.adminlte.cms.testimonials.edit', $data);
@@ -146,6 +158,8 @@ class TestimonialController extends Controller
     public function update(UpdateTestimonialRequest $request, string $id)
     {
         $testimonial            = Testimonial::findOrFail($id);
+
+        $this->authorize('update', $testimonial);
 
         $validated = $request->validated();
 
@@ -213,6 +227,29 @@ class TestimonialController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $testimonial = Testimonial::findOrFail($id);
+
+        $this->authorize('delete', $testimonial);
+
+        $testimonial->delete();
+
+        return response()->json([
+            'message' => __('crud.deleted', ['name' => 'Testimonial']),
+            'redirect' => route('admin.cms.testimonials.index')
+        ]);
+    }
+
+    public function restore(string $id)
+    {
+        $testimonial = Testimonial::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $testimonial);
+
+        $testimonial->restore();
+
+        return response()->json([
+            'message' => __('crud.restored', ['name' => 'Testimonial']),
+            'redirect' => route('admin.cms.testimonials.index')
+        ]);
     }
 }

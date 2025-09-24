@@ -8,15 +8,20 @@ use App\Models\Catalog\Brand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Yajra\DataTables\Facades\DataTables;
 
 class TagController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Tag::class);
+
         if ($request->ajax()) {
             $tags = Tag::query()
                 ->withTrashed();
@@ -57,6 +62,8 @@ class TagController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Tag::class);
+
         $response['view'] =  view('theme.adminlte.cms.tags.create')->render();
 
         return response()->json([
@@ -70,6 +77,8 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
+        $this->authorize('create', Tag::class);
+
         $data = $request->validated();
 
         $data['is_active'] = $request->boolean('is_active');
@@ -96,6 +105,9 @@ class TagController extends Controller
     public function edit(string $id)
     {
         $tag = Tag::findOrFail($id);
+
+        $this->authorize('update', $tag);
+
         $data['tag'] = $tag;
 
         $response['view'] =  view('theme.adminlte.cms.tags.edit', $data)->render();
@@ -112,6 +124,9 @@ class TagController extends Controller
     public function update(UpdateTagRequest $request, string $id)
     {
         $tag                = Tag::findOrFail($id);
+
+        $this->authorize('update', $tag);
+
         $data               = $request->validated();
         $data['is_active']  = $request->boolean('is_active');
         $tag->update($data);
@@ -128,6 +143,9 @@ class TagController extends Controller
     public function destroy(string $id)
     {
         $tag = Tag::findOrFail($id);
+
+        $this->authorize('delete', $tag);
+
         $tag->delete();
 
         return response()->json([
@@ -143,6 +161,9 @@ class TagController extends Controller
     public function restore(string $id)
     {
         $tag = Tag::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $tag);
+
         $tag->restore();
 
         return response()->json([

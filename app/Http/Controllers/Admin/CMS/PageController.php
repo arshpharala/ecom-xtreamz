@@ -10,13 +10,18 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CMS\PageSectionItem;
 use App\Models\CMS\PageSectionTranslation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class PageController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('viewAny', Page::class);
+
         if (request()->ajax()) {
             $locale = app()->getLocale();
 
@@ -45,6 +50,8 @@ class PageController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Page::class);
+
         $page = new Page();
         $data['page'] = $page;
         return view('theme.adminlte.cms.pages.create', $data);
@@ -52,6 +59,8 @@ class PageController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Page::class);
+
         $data = $request->validate([
             'slug' => 'required|string|unique:pages,slug',
             'position' => 'nullable|integer',
@@ -108,6 +117,8 @@ class PageController extends Controller
             'sections.translations'
         ])->findOrFail($id);
 
+        $this->authorize('update', $page);
+
         $data['page'] = $page;
 
         return view('theme.adminlte.cms.pages.edit', $data);
@@ -116,7 +127,9 @@ class PageController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $page = Page::with('sections.translations')->findOrFail($id);
+        $page = Page::findOrFail($id);
+
+        $this->authorize('update', $page);
 
         $data = $request->validate([
             'slug' => 'required|string|unique:pages,slug,' . $page->id,
@@ -229,7 +242,32 @@ class PageController extends Controller
     }
 
 
-    public function destroy(string $id) {}
 
-    public function restore(string $id) {}
+    public function destroy(string $id)
+    {
+        $page = Page::findOrFail($id);
+
+        $this->authorize('delete', $page);
+
+        $page->delete();
+
+        return response()->json([
+            'message' => 'Page deleted successfully.',
+            'redirect' => route('admin.cms.pages.index')
+        ]);
+    }
+
+    public function restore(string $id)
+    {
+        $page = Page::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $page);
+
+        $page->restore();
+
+        return response()->json([
+            'message' => 'Page restored successfully.',
+            'redirect' => route('admin.cms.pages.index')
+        ]);
+    }
 }

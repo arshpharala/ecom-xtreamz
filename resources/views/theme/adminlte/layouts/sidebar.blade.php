@@ -232,54 +232,70 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('admin.cms.pages.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pages</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('admin.cms.banners.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Banners</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('admin.cms.news.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>News</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('admin.cms.testimonials.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Testimonials</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('admin.cms.locales.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Locale</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('admin.cms.currencies.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Currencies</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('admin.cms.countries.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Countries</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('admin.cms.tags.index') }}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tags</p>
-                </a>
-              </li>
+              @can('viewAny', App\Models\CMS\Page::class)
+                <li class="nav-item">
+                  <a href="{{ route('admin.cms.pages.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pages</p>
+                  </a>
+                </li>
+              @endcan
+              @can('viewAny', App\Models\CMS\Banner::class)
+                <li class="nav-item">
+                  <a href="{{ route('admin.cms.banners.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Banners</p>
+                  </a>
+                </li>
+              @endcan
+              @can('viewAny', App\Models\CMS\News::class)
+                <li class="nav-item">
+                  <a href="{{ route('admin.cms.news.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>News</p>
+                  </a>
+                </li>
+              @endcan
+              @can('viewAny', App\Models\CMS\Testimonial::class)
+                <li class="nav-item">
+                  <a href="{{ route('admin.cms.testimonials.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Testimonials</p>
+                  </a>
+                </li>
+              @endcan
+              @can('viewAny', App\Models\CMS\Locale::class)
+                <li class="nav-item">
+                  <a href="{{ route('admin.cms.locales.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Locale</p>
+                  </a>
+                </li>
+              @endcan
+              @can('viewAny', App\Models\CMS\Currency::class)
+                <li class="nav-item">
+                  <a href="{{ route('admin.cms.currencies.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Currencies</p>
+                  </a>
+                </li>
+              @endcan
+              @can('viewAny', App\Models\CMS\Country::class)
+                <li class="nav-item">
+                  <a href="{{ route('admin.cms.countries.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Countries</p>
+                  </a>
+                </li>
+              @endcan
+              @can('viewAny', App\Models\CMS\Tag::class)
+                <li class="nav-item">
+                  <a href="{{ route('admin.cms.tags.index') }}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Tags</p>
+                  </a>
+                </li>
+              @endcan
               <li class="nav-item">
                 <a href="{{ route('admin.cms.emails.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>

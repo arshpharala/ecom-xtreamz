@@ -6,7 +6,9 @@
       <h1 class="m-0">Pages</h1>
     </div>
     <div class="col-sm-6">
-      <a href="{{ route('admin.cms.pages.create') }}" class="btn btn-primary float-sm-right">Create Page</a>
+      @can('create', App\Models\CMS\Page::class)
+        <a href="{{ route('admin.cms.pages.create') }}" class="btn btn-primary float-sm-right">Create Page</a>
+      @endcan
     </div>
   </div>
 @endsection
@@ -42,8 +44,7 @@
         processing: true,
         serverSide: true,
         ajax: '{{ route('admin.cms.pages.index') }}',
-        columns: [
-          {
+        columns: [{
             data: 'title',
             name: 'title'
           },
@@ -65,5 +66,4 @@
       });
     });
   </script>
-
 @endpush

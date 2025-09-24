@@ -6,8 +6,10 @@
       <h1 class="m-0">@lang('crud.list_title', ['name' => 'Country'])</h1>
     </div>
     <div class="col-sm-6">
-      <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.countries.create') }}"
-        class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
+      @can('create', App\Models\CMS\Country::class)
+        <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.countries.create') }}"
+          class="btn btn-secondary float-sm-right"> <i class="fa fa-plus"></i> @lang('crud.create')</button>
+      @endcan
     </div>
   </div>
 @endsection

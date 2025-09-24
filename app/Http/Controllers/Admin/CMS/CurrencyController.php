@@ -10,9 +10,12 @@ use App\Repositories\CurrencyRepository;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreCurrencyRequest;
 use App\Http\Requests\UpdateCurrencyRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CurrencyController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Create a new controller instance.
      *
@@ -25,6 +28,8 @@ class CurrencyController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Currency::class);
+
         if (request()->ajax()) {
 
             $query = Currency::withTrashed();
@@ -53,6 +58,8 @@ class CurrencyController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Currency::class);
+
         $positions              = Position::cases();
         $data['positions']      = $positions;
         $response['view']       = view('theme.adminlte.cms.currencies.create', $data)->render();
@@ -68,6 +75,8 @@ class CurrencyController extends Controller
      */
     public function store(StoreCurrencyRequest $request)
     {
+        $this->authorize('create', Currency::class);
+
         $data = $request->validated();
 
         $this->currencyRepository->create($data);
@@ -92,6 +101,9 @@ class CurrencyController extends Controller
     public function edit(string $id)
     {
         $currency               = Currency::findOrFail($id);
+
+        $this->authorize('update', $currency);
+
         $positions              = Position::cases();
         $data['currency']       = $currency;
         $data['positions']      = $positions;
@@ -108,6 +120,10 @@ class CurrencyController extends Controller
      */
     public function update(UpdateCurrencyRequest $request, string $id)
     {
+        $currency = Currency::findOrFail($id);
+
+        $this->authorize('update', $currency);
+
         $data = $request->validated();
 
         $this->currencyRepository->update($data, $id);
@@ -124,6 +140,10 @@ class CurrencyController extends Controller
      */
     public function destroy(string $id)
     {
+        $currency = Currency::findOrFail($id);
+
+        $this->authorize('delete', $currency);
+        
         $isDeleted = $this->currencyRepository->delete($id);
 
         if ($isDeleted) {

@@ -8,16 +8,22 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLocaleRequest;
 use App\Http\Requests\UpdateLocaleRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class LocaleController extends Controller
 {
+
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Locale::class);
+
         if (request()->ajax()) {
 
             $query = Locale::withTrashed();
@@ -46,6 +52,8 @@ class LocaleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Locale::class);
+
         $directions             = TextDirection::cases();
 
         $data['directions']     = $directions;
@@ -62,6 +70,8 @@ class LocaleController extends Controller
      */
     public function store(StoreLocaleRequest $request)
     {
+        $this->authorize('create', Locale::class);
+
         $data = $request->validated();
 
         if ($request->hasFile('logo')) {
@@ -92,6 +102,8 @@ class LocaleController extends Controller
     {
         $locale = Locale::findOrFail($id);
 
+        $this->authorize('update', $locale);
+
         $directions = \App\Enums\TextDirection::cases();
 
         $data['directions'] = $directions;
@@ -111,6 +123,8 @@ class LocaleController extends Controller
     public function update(UpdateLocaleRequest $request, string $id)
     {
         $locale = Locale::findOrFail($id);
+
+        $this->authorize('update', $locale);
 
         $data = $request->validated();
 
@@ -140,6 +154,8 @@ class LocaleController extends Controller
     {
         $locale = Locale::findOrFail($id);
 
+        $this->authorize('delete', $locale);
+
         $locale->delete();
 
         return response()->json(['message' => 'Locale Deleted.']);
@@ -151,6 +167,8 @@ class LocaleController extends Controller
     public function restore(string $id)
     {
         $locale = Locale::onlyTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $locale);
 
         $locale->restore();
 

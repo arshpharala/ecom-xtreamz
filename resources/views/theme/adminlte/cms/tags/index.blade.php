@@ -5,8 +5,10 @@
       <h1>@lang('crud.list_title', ['name' => 'Tags'])</h1>
     </div>
     <div class="col-sm-6 d-flex flex-row justify-content-end gap-2">
-      <button data-url="{{ route('admin.cms.tags.create') }}" type="button" class="btn btn-secondary" onclick="getAside()"><i
-          class="fa fa-plus"></i> @lang('crud.create')</button>
+      @can('create', App\Models\CMS\Tag::class)
+        <button data-url="{{ route('admin.cms.tags.create') }}" type="button" class="btn btn-secondary" onclick="getAside()"><i
+            class="fa fa-plus"></i> @lang('crud.create')</button>
+      @endcan
     </div>
   </div>
 @endsection

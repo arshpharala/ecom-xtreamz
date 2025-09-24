@@ -7,16 +7,19 @@ use App\Http\Requests\StoreEmailRequest;
 use App\Http\Requests\StoreEmailAdminRequest;
 use App\Models\Admin;
 use App\Models\CMS\Email;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmailController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Email::class);
 
         if ($request->ajax()) {
 
@@ -60,6 +63,8 @@ class EmailController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Email::class);
+
         return view('theme.adminlte.cms.emails.create');
     }
 
@@ -68,6 +73,8 @@ class EmailController extends Controller
      */
     public function store(StoreEmailRequest $request)
     {
+        $this->authorize('create', Email::class);
+
         Email::create($request->validated());
 
         return response()->json([
@@ -91,6 +98,8 @@ class EmailController extends Controller
     {
         $email = Email::with('to', 'cc', 'bcc', 'exclude')->findOrFail($id);
 
+        $this->authorize('update', $email);
+
         $adminReceipients = $email->recipients()->get();
 
         $admins = Admin::whereNotIn('id', $adminReceipients->pluck('id'))->pluck('email', 'id');
@@ -107,7 +116,9 @@ class EmailController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $email = Email::findOrFail($id);
+
+        $this->authorize('update', $email);
     }
 
     /**
@@ -115,7 +126,9 @@ class EmailController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $email = Email::findOrFail($id);
+
+        $this->authorize('delete', $email);
     }
 
     /**
@@ -123,7 +136,10 @@ class EmailController extends Controller
      */
     public function restore(string $id)
     {
-        $email  = Email::withTrashed()->findOrFail($id);
+        $email = Email::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $email);
+
         $email->restore();
 
         return response()->json([

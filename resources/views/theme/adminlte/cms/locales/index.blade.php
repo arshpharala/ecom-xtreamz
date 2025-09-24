@@ -6,7 +6,10 @@
       <h1 class="m-0">Locale</h1>
     </div>
     <div class="col-sm-6">
-      <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.locales.create') }}" class="btn btn-primary float-sm-right">Add Locale</button>
+      @can('create', App\Models\CMS\Locale::class)
+        <button type="button" onclick="getAside()" data-url="{{ route('admin.cms.locales.create') }}"
+          class="btn btn-primary float-sm-right">Add Locale</button>
+      @endcan
     </div>
   </div>
 @endsection
@@ -43,8 +46,7 @@
         processing: true,
         serverSide: true,
         ajax: '{{ route('admin.cms.locales.index') }}',
-        columns: [
-          {
+        columns: [{
             data: 'code',
             name: 'code'
           },
@@ -70,5 +72,4 @@
       });
     });
   </script>
-
 @endpush

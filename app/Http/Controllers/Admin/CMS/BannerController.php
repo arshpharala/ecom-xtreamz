@@ -11,14 +11,20 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreBannerRequest;
 use App\Http\Requests\UpdateBannerRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BannerController extends Controller
 {
+
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Banner::class);
+
         if ($request->ajax()) {
             $banners = Banner::withJoins()
                 ->withSelection()
@@ -46,6 +52,8 @@ class BannerController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Banner::class);
+
         $data['banner'] = new Banner();
         $response['view'] = view('theme.adminlte.cms.banners.create', $data)->render();
 
@@ -60,6 +68,8 @@ class BannerController extends Controller
      */
     public function store(StoreBannerRequest $request)
     {
+        $this->authorize('create', Banner::class);
+
         $validated = $request->validated();
 
         DB::beginTransaction();
@@ -107,6 +117,9 @@ class BannerController extends Controller
     public function edit(string $id)
     {
         $banner = Banner::with('translations')->findOrFail($id);
+
+        $this->authorize('update', $banner);
+
         $data['banner'] = $banner;
 
         $response['view'] = view('theme.adminlte.cms.banners.edit', $data)->render();
@@ -122,8 +135,11 @@ class BannerController extends Controller
      */
     public function update(UpdateBannerRequest $request, string $id)
     {
-        $validated = $request->validated();
         $banner = Banner::findOrFail($id);
+
+        $this->authorize('update', $banner);
+
+        $validated = $request->validated();
 
         $data = [
             'text_color' => $validated['text_color'],
@@ -173,6 +189,9 @@ class BannerController extends Controller
     public function destroy(string $id)
     {
         $banner = Banner::withTrashed()->findOrFail($id);
+
+        $this->authorize('delete', $banner);
+
         $banner->delete();
 
         return response()->json([
@@ -184,6 +203,9 @@ class BannerController extends Controller
     public function restore(string $id)
     {
         $banner = Banner::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $banner);
+
         $banner->restore();
 
         return response()->json([

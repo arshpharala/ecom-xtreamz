@@ -1245,6 +1245,7 @@ main {
 .product-card .image-box .product-img {
   max-height: 200px;
   object-fit: contain;
+  overflow: hidden;
   transition: max-height 0.3s ease;
   mix-blend-mode: darken;
 }

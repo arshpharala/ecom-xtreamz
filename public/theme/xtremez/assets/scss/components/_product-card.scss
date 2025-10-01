@@ -36,7 +36,7 @@
         background: #fff;
         transform: scale(0.95); // ✅ shrink card slightly (5%)
         // box-shadow: 36px 36px 36px rgba(0, 0, 0, 0.18); // ✅ darker, deeper shadow
-            box-shadow: var(--color-grey) 0px 0px 0px 13px;
+        box-shadow: var(--color-grey) 0px 0px 0px 13px;
         .image-box {
             height: 180px;
 
@@ -61,6 +61,7 @@
         .product-img {
             max-height: 200px;
             object-fit: contain;
+            overflow: hidden;
             transition: max-height 0.3s ease;
             mix-blend-mode: darken;
         }
@@ -117,7 +118,7 @@
         display: flex;
         flex-direction: column;
 
-        a{
+        a {
             text-decoration: none;
         }
 

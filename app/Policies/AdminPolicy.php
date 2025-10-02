@@ -38,7 +38,7 @@ class AdminPolicy
      */
     public function update(Admin|User $user, Admin $admin): bool
     {
-        return $user->has_permission('Admin', 'Edit');
+        return $user->has_permission('Admin', 'Update');
     }
 
     /**

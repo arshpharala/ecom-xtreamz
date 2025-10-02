@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\Admin;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class AdminSeeder extends Seeder
 {
@@ -13,9 +14,17 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        Admin::updateOrCreate(['email' => 'admin@example.com'], [
-            'name' => 'Admin',
-            'password' => bcrypt('Pa$$w0rd')
+        $admin = Admin::firstOrCreate(['email' => 'admin@example.com'], [
+            'name' => 'Super  Admin',
+            'password' => bcrypt('Pa$$w0rd'),
+            'is_active' => 1
         ]);
+
+        $superAdminRole = Role::firstOrCreate(
+            ['name' => 'SuperAdmin'],
+            ['is_active' => true]
+        );
+
+        $admin->roles()->syncWithoutDetaching([$superAdminRole->id]);
     }
 }

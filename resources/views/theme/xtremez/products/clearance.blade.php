@@ -57,7 +57,7 @@
           method: "GET",
           data: {
             page: page,
-            offer: 1
+            offer_id: 1
           },
           dataType: "json",
           success: function(response) {
@@ -65,8 +65,6 @@
               const html = response.data.products.map((product) =>
                 render_product_card(product, "col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3")
               );
-
-              console.log(html);
 
               $("#clearance-products").html(html);
 

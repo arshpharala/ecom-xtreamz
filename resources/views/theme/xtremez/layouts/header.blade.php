@@ -79,37 +79,53 @@
 
 
   <!-- Mobile Drawer -->
-  <div class="mobile-nav-drawer">
-    <nav class="mobile-nav">
-      <ul class="nav flex-column">
+  <div class="mobile-nav-drawer" id="mobileNavDrawer">
+    <nav class="mobile-nav d-flex flex-column h-100">
+      <!-- Drawer Header with Close -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{{ route('home') }}" class="navbar-brand">
+          <img src="{{ asset(setting('site_logo', 'theme/xtremez/assets/images/logo.png')) }}"
+            alt="{{ setting('site_title', 'Xtremez') }}" style="max-height:32px;">
+        </a>
+        <button class="btn-circle-outline" id="mobileNavClose" aria-label="Close navigation">
+          <i class="bi bi-x-lg fs-5"></i>
+        </button>
+      </div>
 
-        <li class="nav-item border-bottom">
-          <a href="{{ route('home') }}" class="nav-link">Home</a>
-        </li>
-
-        @foreach (menu_categories(10) as $category)
-          @if ($category->children->count() > 0)
-            <li class="nav-item border-bottom"><a href="{{ route('products', ['category' => $category->slug]) }}"
-                class="nav-link">{{ $category->name }}</a></li>
-          @else
-            <li class="nav-item border-bottom"><a href="{{ route('products', ['category' => $category->slug]) }}"
-                class="nav-link">{{ $category->name }}</a></li>
-          @endif
-        @endforeach
-
-        <!-- Sign In inside mobile drawer -->
-        @guest
-          <li class="nav-item mt-3">
-            <a href="{{ route('login') }}" class="btn btn-outline-primary btn-rounded w-100">Sign In</a>
+      <!-- Drawer Body (scrollable) -->
+      <div class="flex-grow-1 overflow-auto">
+        <ul class="nav flex-column">
+          <li class="nav-item border-bottom">
+            <a href="{{ route('home') }}" class="nav-link">Home</a>
           </li>
-        @endguest
 
-        <!-- Contact Us inside mobile drawer -->
-        <li class="nav-item mt-2">
-          <a href="{{ route('contact-us') }}" class="btn btn-primary btn-rounded w-100">Contact Us</a>
-        </li>
-      </ul>
+          @foreach (menu_categories(10) as $category)
+            @if ($category->children->count() > 0)
+              <li class="nav-item border-bottom">
+                <a href="{{ route('products', ['category' => $category->slug]) }}"
+                  class="nav-link d-flex justify-content-between align-items-center">
+                  {{ $category->name }} <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            @else
+              <li class="nav-item border-bottom">
+                <a href="{{ route('products', ['category' => $category->slug]) }}"
+                  class="nav-link">{{ $category->name }}</a>
+              </li>
+            @endif
+          @endforeach
+        </ul>
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="mt-4">
+        @guest
+          <a href="{{ route('login') }}" class="btn btn-outline-primary w-100 mb-2">Sign In</a>
+        @endguest
+        <a href="{{ route('contact-us') }}" class="btn btn-primary w-100">Contact Us</a>
+      </div>
     </nav>
-    <div class="nav-mask"></div>
+    <div class="nav-mask" id="mobileNavMask"></div>
   </div>
+
 </header>

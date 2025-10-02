@@ -393,3 +393,16 @@ $(document).on("click", ".wishlist-btn", function () {
             alert("Unable to update wishlist.");
         });
 });
+
+$(function () {
+    let $drawer = $("#mobileNavDrawer");
+    let $mask = $("#mobileNavMask");
+
+    $("#mobileNavToggle").on("click", function () {
+        $drawer.addClass("active");
+    });
+
+    $("#mobileNavClose, #mobileNavMask").on("click", function () {
+        $drawer.removeClass("active");
+    });
+});

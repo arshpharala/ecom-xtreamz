@@ -564,7 +564,6 @@ main {
   /* --- Sticky state --- */
   /* --- Top Row --- */
   /* --- Bottom Row --- */
-  /* --- Mobile Drawer --- */
   /* --- Responsive Rules --- */
 }
 .main-header.is-sticky {
@@ -738,11 +737,23 @@ main {
   z-index: 200;
   transform: translateX(-100%);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 2rem 1.25rem;
+  padding: 1.5rem 1rem;
 }
-.main-header .mobile-nav-drawer .mobile-nav .nav-link {
+.main-header .mobile-nav-drawer .nav-link {
   padding: 0.85rem 0;
-  font-size: var(--font-size-lg);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--color-dark);
+}
+.main-header .mobile-nav-drawer .nav-link:hover {
+  color: var(--color-primary);
+}
+.main-header .mobile-nav-drawer.active .mobile-nav {
+  transform: translateX(0);
+}
+.main-header .mobile-nav-drawer.active .nav-mask {
+  opacity: 1;
+  pointer-events: auto;
 }
 .main-header .mobile-nav-drawer .nav-mask {
   position: fixed;
@@ -751,17 +762,10 @@ main {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.28);
+  background: rgba(0, 0, 0, 0.4);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.28s;
-}
-.main-header .mobile-nav-drawer.active .mobile-nav {
-  transform: translateX(0);
-}
-.main-header .mobile-nav-drawer.active .nav-mask {
-  opacity: 1;
-  pointer-events: auto;
+  transition: opacity 0.3s ease;
 }
 @media (max-width: 991px) {
   .main-header .header-bottom {

@@ -28,6 +28,7 @@ class ProductVariantRepository
             'sort_by'
         ]);
 
+
         $filters['attributes'] = collect(Request::all())
             ->filter(fn($val, $key) => str_starts_with($key, 'attr_'))
             ->mapWithKeys(fn($val, $key) => [str_replace('attr_', '', $key) => $val])

@@ -40,13 +40,17 @@ class HomeController extends Controller
             ->ordered()
             ->get();
 
+        $page = (new PageRepository())->findBySlug('home');
+
+        $data['page']               = $page->load('metas', 'translation');
+        $data['meta']               = $page ? $page->metaForLocale() :  null;
         $data['banners']            = $banners;
-        $data['locale']     = $locale;
-        $data['categories'] = $categories;
-        $data['brands']     = $brands;
-        $data['giftSetProducts'] = $giftSetProducts;
-        $data['promoOffers'] = $promoOffers;
-        $data['bannerOffers'] = $bannerOffers;
+        $data['locale']             = $locale;
+        $data['categories']         = $categories;
+        $data['brands']             = $brands;
+        $data['giftSetProducts']    = $giftSetProducts;
+        $data['promoOffers']        = $promoOffers;
+        $data['bannerOffers']       = $bannerOffers;
 
 
         return view('theme.xtremez.home', $data);

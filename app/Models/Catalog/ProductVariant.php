@@ -135,7 +135,9 @@ class ProductVariant extends Model
             ->when($filters['is_featured'] ?? null, fn($q, $v) => $q->where('products.is_featured', $v))
             ->when($filters['show_in_slider'] ?? null, fn($q, $v) => $q->where('products.show_in_slider', $v))
             ->when($filters['category'] ?? null, function ($q, $v) use ($categoryId) {
-                $q->where('categories.id', $categoryId)->orWhere('categories.parent_id', $categoryId);
+                $q->where(function ($subQ) use ($categoryId) {
+                    $subQ->where('categories.id', $categoryId)->orWhere('categories.parent_id', $categoryId);
+                });
             })
             ->when($filters['category_id'] ?? null, fn($q, $v) => $q->where('products.category_id', $v)->orWhere('categories.parent_id', $v))
             ->when($filters['brand_id'] ?? null, fn($q, $v) => $q->where('products.brand_id', $v))

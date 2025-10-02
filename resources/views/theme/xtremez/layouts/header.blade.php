@@ -76,17 +76,26 @@
     </div>
   </div>
 
+
+
   <!-- Mobile Drawer -->
   <div class="mobile-nav-drawer">
     <nav class="mobile-nav">
       <ul class="nav flex-column">
-        <li class="nav-item"><a href="#" class="nav-link">Sustainable</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Apparel</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Tech</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Drinkware</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Bags</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Office</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Other Brands</a></li>
+
+        <li class="nav-item border-bottom">
+          <a href="{{ route('home') }}" class="nav-link">Home</a>
+        </li>
+
+        @foreach (menu_categories(10) as $category)
+          @if ($category->children->count() > 0)
+            <li class="nav-item border-bottom"><a href="{{ route('products', ['category' => $category->slug]) }}"
+                class="nav-link">{{ $category->name }}</a></li>
+          @else
+            <li class="nav-item border-bottom"><a href="{{ route('products', ['category' => $category->slug]) }}"
+                class="nav-link">{{ $category->name }}</a></li>
+          @endif
+        @endforeach
 
         <!-- Sign In inside mobile drawer -->
         @guest

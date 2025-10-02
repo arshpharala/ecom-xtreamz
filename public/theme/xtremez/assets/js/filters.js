@@ -254,7 +254,7 @@ $(function () {
     function loadInitialAttributeFilters(categoryId) {
         if (!categoryId) return;
 
-        $.get(`/ajax/category/${categoryId}/attributes`, function (res) {
+        $.get(appUrl +`/ajax/category/${categoryId}/attributes`, function (res) {
             if (res.success) {
                 renderDynamicAttributeFilters(res.attributes);
             }

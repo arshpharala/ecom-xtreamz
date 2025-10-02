@@ -770,6 +770,16 @@ main {
   .main-header .header-actions .btn-rounded {
     display: none !important;
   }
+  .main-header .header-top .navbar-brand img {
+    max-height: 24px;
+  }
+  .main-header .header-top .cart-link {
+    font-size: 0.85rem;
+  }
+  .main-header .header-top .btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 1.2rem;
+  }
 }
 @media (min-width: 992px) {
   .main-header .mobile-nav-drawer {

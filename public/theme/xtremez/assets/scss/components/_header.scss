@@ -243,13 +243,29 @@
     }
 
     /* --- Responsive Rules --- */
-    @media (max-width: $screen-lg - 1) {
+    @media (max-width: ($screen-lg - 1)) {
         .header-bottom {
             display: none !important;
         } // hide second row
         .header-actions .btn-rounded {
             display: none !important;
         } // hide Sign In
+
+        .header-top {
+            .navbar-brand {
+                img {
+                    max-height: 24px;
+                }
+            }
+            .cart-link {
+                font-size: 0.85rem;
+            }
+
+            .btn {
+                font-size: 0.85rem;
+                padding: 0.5rem 1.2rem;
+            }
+        }
     }
 
     @media (min-width: $screen-lg) {

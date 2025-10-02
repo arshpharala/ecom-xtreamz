@@ -236,9 +236,9 @@ function render_pagination(pagination) {
     $pagination.empty();
 
     for (let i = 1; i <= pagination.last_page; i++) {
-        const active = i === pagination.current_page ? "active" : "";
+        const active = i == pagination.current_page ? "active" : "";
         $pagination.append(
-            `<li class="page-item ${active}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`
+            `<li class="page-item ${active}"><a class="page-link ${active}" href="#" data-page="${i}">${i}</a></li>`
         );
     }
 }

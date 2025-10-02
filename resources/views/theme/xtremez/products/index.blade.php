@@ -66,7 +66,7 @@
           <div class="sidebar-filters pe-4">
             <!-- Category -->
             <div class="mb-4">
-              <ul class="category-list list-unstyled mb-0">
+              {{-- <ul class="category-list list-unstyled mb-0">
                 @foreach ($categories as $category)
                   <li
                     class="d-flex align-items-center py-3 border-bottom {{ $category->id == $activeCategory->id ? 'active' : '' }}    "
@@ -75,7 +75,38 @@
                     {{ $category->name }} <span class="ms-auto badge text-dark">{{ $category->products_count }}</span>
                   </li>
                 @endforeach
+              </ul> --}}
+
+              <ul class="category-list list-unstyled mb-0">
+                @foreach (menu_categories(20) as $category)
+                  {{-- Parent Category --}}
+                  <li
+                    class="d-flex align-items-center py-3 parent-category {{ $category->id == $activeCategory->id ? 'active' : '' }}"
+                    data-category="{{ $category->id }}" data-category-slug="{{ $category->slug }}">
+
+                    <img src="{{ asset('storage/' . $category->icon) }}" class="me-2" width="22" alt>
+                    {{ $category->name }}
+                    <span class="ms-auto badge text-dark">{{ $category->products_count }}</span>
+                  </li>
+
+                  {{-- Child Categories (if any) --}}
+                  @if ($category->children->isNotEmpty())
+                    @foreach ($category->children as $child)
+                      <li
+                        class="d-flex align-items-center py-3 ps-5 child-category  {{ $child->id == $activeCategory->id ? 'active' : '' }}"
+                        data-category="{{ $child->id }}" data-category-slug="{{ $child->slug }}">
+
+                        <img src="{{ asset('storage/' . $child->icon) }}" class="me-2" width="18" alt>
+                        {{ $child->translation->name }}
+                        <span class="ms-auto badge text-dark">{{ $child->products_count }}</span>
+                      </li>
+                    @endforeach
+                  @endif
+                @endforeach
               </ul>
+
+
+
             </div>
 
             <!-- Brands -->

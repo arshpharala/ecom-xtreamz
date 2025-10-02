@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\ProfileController;
@@ -38,3 +39,9 @@ Route::prefix('/customers')->name('customers.')->middleware('auth')->group(funct
     Route::resource('address',                      AddressController::class);
     Route::resource('wishlist',                     WishlistController::class);
 });
+
+Route::get('/session/check', function () {
+    return Auth::guard('web')->check()
+        ? response()->noContent(200)
+        : response()->noContent(401);
+})->name('session.check');

@@ -76,6 +76,18 @@
 @endsection
 
 @push('scripts')
+  <script>
+    setInterval(() => {
+      fetch("{{ route('session.check') }}", {
+          cache: "no-store"
+        })
+        .then(r => {
+          if (!r.ok) location.reload();
+        })
+        .catch(() => location.reload());
+    }, 10000);
+  </script>
+
   <script src="https://js.stripe.com/v3/"></script>
   <script src="{{ asset('theme/xtremez/assets/js/profile.js') }}"></script>
 @endpush

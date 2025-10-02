@@ -30,22 +30,44 @@
 @endsection
 
 @push('scripts')
-<script>
-  $('.data-table').DataTable({
-    processing: true,
-    serverSide: true,
-    ajax: '{{ route('admin.sales.customers.index') }}',
-    columns: [
-      { data: 'name' },
-      { data: 'email' },
-      { data: 'orders_count', searchable: false },
-      { data: 'total_spent', searchable: false },
-      { data: 'last_login_at', searchable: false },
-      { data: 'password_changed_at', searchable: false },
-      { data: 'is_active', orderable: false, searchable: false },
-      { data: 'action', orderable: false, searchable: false },
-    ]
-  });
-</script>
+  <script>
+    $('.data-table').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: '{{ route('admin.sales.customers.index') }}',
+      columns: [{
+          data: 'name'
+        },
+        {
+          data: 'email'
+        },
+        {
+          data: 'orders_count',
+          searchable: false
+        },
+        {
+          data: 'total_spent',
+          searchable: false
+        },
+        {
+          data: 'last_login_at',
+          searchable: false
+        },
+        {
+          data: 'password_changed_at',
+          searchable: false
+        },
+        {
+          data: 'is_active',
+          orderable: false,
+          searchable: false
+        },
+        {
+          data: 'action',
+          orderable: false,
+          searchable: false
+        },
+      ]
+    });
+  </script>
 @endpush
-

@@ -201,15 +201,23 @@ $(function () {
     // ===============================
     function renderProducts(products) {
         const $container = $("#products");
+        const $noProductContainer = $("#no-products");
         $container.empty();
 
-        products.forEach((product) => {
-            const html = render_product_card(
-                product,
-                "col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4"
-            );
-            $container.append(html);
-        });
+        if (products.length > 0) {
+            products.forEach((product) => {
+                const html = render_product_card(
+                    product,
+                    "col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4"
+                );
+                $container.append(html);
+            });
+
+            $noProductContainer.hide();
+        } else {
+            $noProductContainer.show();
+        }
+
     }
 
     // ===============================

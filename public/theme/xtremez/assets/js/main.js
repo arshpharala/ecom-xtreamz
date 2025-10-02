@@ -235,6 +235,10 @@ function render_pagination(pagination) {
     const $pagination = $(".pagination");
     $pagination.empty();
 
+    if (pagination.last_page == 1) {
+        return ;
+    }
+
     for (let i = 1; i <= pagination.last_page; i++) {
         const active = i == pagination.current_page ? "active" : "";
         $pagination.append(

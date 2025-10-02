@@ -98,10 +98,10 @@
             <div class="mb-4">
               <h5 class="fs-3 mb-3x ">Tags</h5>
               @foreach ($tags as $tag)
-              <div class="form-check">
-                <input class="form-check-input cc-form-check-input" type="checkbox" id="tag_{{ $tag->id }}">
-                <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
-              </div>
+                <div class="form-check">
+                  <input class="form-check-input cc-form-check-input" type="checkbox" id="tag_{{ $tag->id }}">
+                  <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
+                </div>
               @endforeach
             </div>
 
@@ -125,6 +125,15 @@
           <!-- Product Grid -->
           <div class="row g-4" id="products">
           </div>
+
+          <div class="row" id="no-products"
+            style="display: none; height: 50vh; display: flex; justify-content: center; align-items: center; background: none;">
+            <div class="col-md-4 text-center">
+              <img src="{{ asset('theme/xtremez/assets/images/no-product.png') }}" alt="No Products"
+                style="max-height: 80vh; max-width: 100%; object-fit: contain; background: none;">
+            </div>
+          </div>
+
 
           <!-- Pagination -->
           <nav class="d-flex justify-content-center my-5 pagination-section">

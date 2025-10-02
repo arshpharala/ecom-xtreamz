@@ -133,8 +133,10 @@ $(function () {
         let filters = {};
 
         // Active category
-        const activeCategory = $(".category-list li.active").data("category-slug");
-        if (activeCategory) filters.category= activeCategory;
+        const activeCategory = $(".category-list li.active").data(
+            "category-slug"
+        );
+        if (activeCategory) filters.category = activeCategory;
 
         // All select inputs (including dynamic attributes)
         $(".theme-select").each(function () {
@@ -151,14 +153,17 @@ $(function () {
             })
             .get();
 
-
         // Price
         filters.price_min = $("#priceLabelMinSidebar")
             .text()
-            .replace(/[^0-9.,]/g, "").replace(/,/g, "").trim();
+            .replace(/[^0-9.,]/g, "")
+            .replace(/,/g, "")
+            .trim();
         filters.price_max = $("#priceLabelMaxSidebar")
             .text()
-            .replace(/[^0-9.,]/g, "").replace(/,/g, "").trim();
+            .replace(/[^0-9.,]/g, "")
+            .replace(/,/g, "")
+            .trim();
 
         // filters.price_min = $("#priceLabelMinSidebar")
         //     .text()
@@ -203,6 +208,7 @@ $(function () {
         const $container = $("#products");
         const $noProductContainer = $("#no-products");
         $container.empty();
+        $noProductContainer.hide();
 
         if (products.length > 0) {
             products.forEach((product) => {
@@ -212,12 +218,9 @@ $(function () {
                 );
                 $container.append(html);
             });
-
-            $noProductContainer.hide();
         } else {
             $noProductContainer.show();
         }
-
     }
 
     // ===============================
@@ -262,11 +265,14 @@ $(function () {
     function loadInitialAttributeFilters(categoryId) {
         if (!categoryId) return;
 
-        $.get(appUrl +`/ajax/category/${categoryId}/attributes`, function (res) {
-            if (res.success) {
-                renderDynamicAttributeFilters(res.attributes);
+        $.get(
+            appUrl + `/ajax/category/${categoryId}/attributes`,
+            function (res) {
+                if (res.success) {
+                    renderDynamicAttributeFilters(res.attributes);
+                }
             }
-        });
+        );
     }
 
     // ===============================
@@ -316,6 +322,7 @@ $(function () {
     $(document).on("click", ".pagination .page-link", function (e) {
         e.preventDefault();
         const page = $(this).data("page");
+        $("html, body").animate({ scrollTop: 0 }, 100);
         if (page) fetchProducts(page);
     });
 

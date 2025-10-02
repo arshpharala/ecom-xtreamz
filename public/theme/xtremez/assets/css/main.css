@@ -897,7 +897,27 @@ main {
 }
 .pagination-section .pagination .page-link:hover, .pagination-section .pagination .page-link.active {
   background: #e8f4f4;
-  color: #006a7b;
+  color: var(--color-primary);
+}
+.pagination-section .pagination .page-prev .page-link,
+.pagination-section .pagination .page-next .page-link {
+  border-radius: 4px;
+  color: var(--color-primary);
+  padding: 6px 14px;
+  background: #fff;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.pagination-section .pagination .page-prev .page-link:hover,
+.pagination-section .pagination .page-next .page-link:hover {
+  background: var(--color-primary);
+  color: var(--color-light);
+}
+.pagination-section .pagination .page-prev.disabled .page-link,
+.pagination-section .pagination .page-next.disabled .page-link {
+  color: #aaa;
+  background: #f8f9fa;
+  cursor: not-allowed;
 }
 
 .hero-section {

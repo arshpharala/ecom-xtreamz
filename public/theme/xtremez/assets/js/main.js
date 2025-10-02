@@ -231,18 +231,114 @@ function render_product_card(product, grid = false) {
       </div>`;
 }
 
+// function render_pagination(pagination) {
+//     const $pagination = $(".pagination");
+//     $pagination.empty();
+
+//     if (pagination.last_page == 1) {
+//         return;
+//     }
+
+//     for (let i = 1; i <= pagination.last_page; i++) {
+//         const active = i == pagination.current_page ? "active" : "";
+//         $pagination.append(
+//             `<li class="page-item ${active}"><a class="page-link ${active}" href="#" data-page="${i}">${i}</a></li>`
+//         );
+//     }
+// }
+
 function render_pagination(pagination) {
     const $pagination = $(".pagination");
     $pagination.empty();
 
-    if (pagination.last_page == 1) {
-        return;
+    if (pagination.last_page <= 1) return;
+
+    const total = pagination.last_page;
+    const current = pagination.current_page;
+
+    // Prev Button
+    if (current > 1) {
+        $pagination.append(
+            `<li class="page-item page-prev">
+                <a class="page-link" href="#" data-page="${
+                    current - 1
+                }">Prev</a>
+             </li>`
+        );
+    } else {
+        $pagination.append(
+            `<li class="page-item page-prev disabled">
+                <span class="page-link">Prev</span>
+             </li>`
+        );
     }
 
-    for (let i = 1; i <= pagination.last_page; i++) {
-        const active = i == pagination.current_page ? "active" : "";
+    if (total <= 6) {
+        for (let i = 1; i <= total; i++) {
+            const active = i === current ? "active" : "";
+            $pagination.append(
+                `<li class="page-item ${active}">
+                    <a class="page-link ${active}" href="#" data-page="${i}">${i}</a>
+                 </li>`
+            );
+        }
+    } else {
+        for (let i = 1; i <= 2; i++) {
+            const active = i === current ? "active" : "";
+            $pagination.append(
+                `<li class="page-item ${active}">
+                    <a class="page-link ${active}" href="#" data-page="${i}">${i}</a>
+                 </li>`
+            );
+        }
+
+        if (current > 4) {
+            $pagination.append(
+                `<li class="page-item disabled"><span class="page-link">...</span></li>`
+            );
+        }
+
+        for (let i = current - 1; i <= current + 1; i++) {
+            if (i > 2 && i < total - 1) {
+                const active = i === current ? "active" : "";
+                $pagination.append(
+                    `<li class="page-item ${active}">
+                        <a class="page-link ${active}" href="#" data-page="${i}">${i}</a>
+                     </li>`
+                );
+            }
+        }
+
+        if (current < total - 3) {
+            $pagination.append(
+                `<li class="page-item disabled"><span class="page-link">...</span></li>`
+            );
+        }
+
+        for (let i = total - 1; i <= total; i++) {
+            const active = i === current ? "active" : "";
+            $pagination.append(
+                `<li class="page-item ${active}">
+                    <a class="page-link ${active}" href="#" data-page="${i}">${i}</a>
+                 </li>`
+            );
+        }
+    }
+
+    // Next Button
+    if (current < total) {
         $pagination.append(
-            `<li class="page-item ${active}"><a class="page-link ${active}" href="#" data-page="${i}">${i}</a></li>`
+            `<li class="page-item page-next">
+                <a class="page-link" href="#" data-page="${
+                    current + 1
+                }">Next</a>
+             </li>`
+        );
+    } else {
+        $pagination.append(
+            `<li class="page-item page-next disabled">
+                <span class="page-link">Next</span>
+             </li>`
         );
     }
 }

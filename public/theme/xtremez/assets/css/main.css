@@ -813,14 +813,18 @@ main {
   margin-bottom: 1rem;
   text-transform: uppercase;
 }
-.site-footer .footer-top .footer-links a, .site-footer .footer-top p {
+.site-footer .footer-top .footer-links {
+  display: flex;
+  flex-direction: column;
+}
+.site-footer .footer-top .footer-links a, .site-footer .footer-top .footer-links p {
   color: var(--color-light-muted);
   font-size: 0.9rem;
   text-decoration: none !important;
   display: inline-block;
   margin-bottom: 0.5rem;
 }
-.site-footer .footer-top .footer-links a:hover, .site-footer .footer-top p:hover {
+.site-footer .footer-top .footer-links a:hover, .site-footer .footer-top .footer-links p:hover {
   color: var(--color-secondary);
 }
 .site-footer .footer-top .social-icons a {

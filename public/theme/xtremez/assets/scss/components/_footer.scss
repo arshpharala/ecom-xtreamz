@@ -21,14 +21,18 @@
             margin-bottom: 1rem;
             text-transform: uppercase;
         }
-        .footer-links a,p {
-            color: var(--color-light-muted);
-            font-size: 0.9rem;
-            text-decoration: none !important;
-            display: inline-block;
-            margin-bottom: 0.5rem;
-            &:hover {
-                color: var(--color-secondary);
+        .footer-links{
+            display: flex;
+            flex-direction: column;
+            a,p {
+                color: var(--color-light-muted);
+                font-size: 0.9rem;
+                text-decoration: none !important;
+                display: inline-block;
+                margin-bottom: 0.5rem;
+                &:hover {
+                    color: var(--color-secondary);
+                }
             }
         }
         .social-icons a {

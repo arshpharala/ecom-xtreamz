@@ -2087,10 +2087,8 @@ main {
     padding: 2rem 1.5rem;
   }
   .brochure-section .brochure-title {
-    font-size: 2rem;
-  }
-  .brochure-section .brochure-btn {
-    margin-top: 1rem;
+    margin: 1rem;
+    font-size: 2.5rem !important;
   }
 }
 
@@ -2156,6 +2154,12 @@ main {
   background: var(--color-secondary);
   color: var(--color-light);
   transform: translateY(-1px);
+}
+@media (max-width: 991.98px) {
+  .newsletter-section .newsletter-title {
+    margin: 1rem;
+    font-size: 2.5rem !important;
+  }
 }
 
 .product-detail {

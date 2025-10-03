@@ -2048,8 +2048,24 @@ main {
 .offer-banner .action-area a:hover {
   font-size: var(--font-size-6xl);
 }
-.offer-banner img {
+.offer-banner .promo-img {
   max-width: 100%;
+}
+@media (max-width: 991px) {
+  .offer-banner .title-area {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  .offer-banner .title-area .title {
+    font-size: var(--font-size-8xl);
+  }
+  .offer-banner .title-area .title span {
+    font-size: var(--font-size-11xl);
+  }
+  .offer-banner .action-area {
+    align-items: center;
+    padding: 2rem;
+  }
 }
 
 .brochure-section {
@@ -2102,7 +2118,6 @@ main {
 @media (max-width: 991.98px) {
   .brochure-section {
     text-align: center;
-    padding: 2rem 1.5rem;
   }
   .brochure-section .brochure-title {
     margin: 1rem;

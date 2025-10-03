@@ -43,7 +43,26 @@
         }
     }
 
-    img {
+    .promo-img {
         max-width: 100%;
+    }
+
+    @media (max-width: ($screen-lg - 1)) {
+        .title-area {
+            margin-top: 2rem;
+            text-align: center;
+
+            .title{
+                font-size: var(--font-size-8xl);
+                span{
+                    font-size: var(--font-size-11xl);
+                }
+            }
+        }
+
+        .action-area{
+            align-items: center;
+            padding: 2rem;
+        }
     }
 }

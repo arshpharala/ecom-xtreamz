@@ -80,7 +80,8 @@
         <div class="heading-row animate-on-scroll" data-animate="fade-up">
           <h2 class="section-title fs-1 text-center m-0 text-uppercase">Browse by Category</h2>
         </div>
-        <p class="text-center animate-on-scroll" data-animate="fade-up">Explore our store the easy way: shop by category and enjoy a seamless, organized shopping
+        <p class="text-center animate-on-scroll" data-animate="fade-up">Explore our store the easy way: shop by category
+          and enjoy a seamless, organized shopping
           experience.</p>
       </div>
     </section>
@@ -140,8 +141,8 @@
             <div class="col-md-12">
               <div class="container">
                 <div class="row">
-                  <div class="col-md-5">
-                    <div class="title-area h-100">
+                  <div class="col-md-5 d-flex flex-row">
+                    <div class="title-area">
                       <h3 class="title">Get
                         <span>
                           {{ $tile->title }}
@@ -149,11 +150,11 @@
                       </h3>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-4 d-flex flex-row">
                     <img src="{{ $tile->image }}" alt="{{ $tile->title }}" class="promo-img">
                   </div>
-                  <div class="col-md-3">
-                    <div class="action-area h-100">
+                  <div class="col-md-3 d-flex flex-row">
+                    <div class="action-area w-100">
                       <a href="http://">Shop Now</a>
                     </div>
                   </div>
@@ -255,7 +256,8 @@
       <!-- Globe Icon -->
       <img src="{{ asset('assets/images/globe.png') }}" alt="Eco Icon" class="eco-icon">
 
-      <img src="{{ asset('assets/images/sustainable-products.png') }}" alt="Sustainable Products" class="sustainable-image img-fluid">
+      <img src="{{ asset('assets/images/sustainable-products.png') }}" alt="Sustainable Products"
+        class="sustainable-image img-fluid">
     </div>
   </section>
 
@@ -357,10 +359,12 @@
       <p class="newsletter-subtitle">Get in touch with us</p>
       <h2 class="newsletter-title">Our Newsletter</h2>
 
-      <form id="newsletter-form" class="newsletter-form ajax-form" action="{{ route('ajax.subscribe') }}" method="POST">
+      <form id="newsletter-form" class="newsletter-form ajax-form" action="{{ route('ajax.subscribe') }}"
+        method="POST">
         <div class="newsletter-input d-flex align-items-center">
           <i class="bi bi-envelope icon"></i>
-          <input type="email" name="subscriber_email" class="form-control" placeholder="Your Email Address" required>
+          <input type="email" name="subscriber_email" class="form-control" placeholder="Your Email Address"
+            required>
           <button type="submit" class="btn-submit">
             <i class="bi bi-arrow-right"></i>
           </button>

@@ -25,7 +25,7 @@
 
         <!-- Sign In (desktop only) -->
         @guest
-          <a href="{{ route('login') }}" class="btn btn-outline-dark">SIGN IN</a>
+          <a href="{{ route('login') }}" class="btn btn-outline-dark d-none d-md-flex">SIGN IN</a>
         @endguest
 
         <!-- Hamburger toggle (mobile only) -->

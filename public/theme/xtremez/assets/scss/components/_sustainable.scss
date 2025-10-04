@@ -133,11 +133,15 @@
   }
 
   @media (max-width: $screen-sm) {
-    .sustainable-banner {
-      padding: 1.5rem;
+
+    .sustainable-text{
+        margin-bottom: 0rem;
+        .title {
+          font-size: 2.5rem;
+        }
     }
-    .sustainable-text .title {
-      font-size: 1.6rem;
+    .sustainable-image{
+        padding-top: 2rem;
     }
     .eco-icon {
       width: 50px;

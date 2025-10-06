@@ -2115,12 +2115,13 @@ main {
   font-size: var(--font-size-7xl);
   color: #555;
   font-weight: 600;
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.75rem;
 }
 .brochure-section .brochure-text .title {
   font-size: var(--font-size-16xl);
   font-weight: 800;
   color: #111;
+  line-height: 0.9;
   margin-bottom: 1.5rem;
 }
 .brochure-section .brochure-text .brochure-btn {

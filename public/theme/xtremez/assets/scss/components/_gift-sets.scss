@@ -109,6 +109,7 @@
             .gift-box-item {
                 display: flex;
                 flex-direction: row;
+                height: 100%;
                 justify-content: space-between;
                 gap: 3rem;
 
@@ -124,6 +125,7 @@
                     flex: 1;
                     flex-direction: column;
                     align-items: end;
+                    justify-content: center;
                     .gift-img {
                         max-width: 100%;
                         object-fit: contain;
@@ -134,27 +136,80 @@
             }
         }
     }
-
+    @media (max-width: ($screen-xl - 1)) {
+        .gift-box-item {
+            gap: 1.5rem !important;
+            .price {
+                font-size: var(--font-size-5xl) !important;
+            }
+        }
+    }
     @media (max-width: ($screen-lg - 1)) {
         .gift-set-boxes {
             gap: 1.5rem;
 
-            
-
-
-            .gift-right-half {
-                .gift-box-item {
+            .gift-img {
+                max-width: 80% !important;
+                max-height: 80% !important;
+            }
+        }
+        .gift-left {
+            .gift-box-item {
+                .gift-content-box {
                     flex-direction: column;
+                    justify-content: space-between;
+                }
 
-                    .gift-img-box {
-                        align-items: center;
-                        justify-content: center;
+                flex-direction: row !important;
+                .gift-content-box {
+                    flex: 1;
+                }
 
-                        .gift-img {
-                            max-width: 70%;
-                            max-height: 70%;
-                        }
-                    }
+                .gift-img-box {
+                    flex: 1;
+                }
+            }
+        }
+
+        .gift-right-half {
+            .gift-box-item {
+                flex-direction: row !important;
+                gap: 1rem;
+
+                .gift-content-box {
+                    flex: 1;
+                }
+
+                .gift-img-box {
+                    flex: 1;
+                }
+            }
+        }
+
+        .gift-box-item {
+            gap: 1.5rem;
+            .price {
+                font-size: var(--font-size-5xl) !important;
+            }
+        }
+    }
+
+    @media (max-width: ($screen-md - 1)) {
+        .gift-left {
+            .gift-box-item {
+                flex-direction: column !important;
+                .gift-img-box {
+                    align-items: center !important;
+                }
+            }
+        }
+
+        .gift-right-half {
+            .gift-box-item {
+                flex-direction: column !important;
+
+                .gift-img-box {
+                    align-items: center !important;
                 }
             }
         }

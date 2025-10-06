@@ -8,12 +8,19 @@
                 <div class="gift-box-item">
                   <div class="gift-content-box">
                     <p class="fs-5 fw-bold my-3">{{ $product->name }}</p>
-
+                    <div class="price-bar d-none d-md-flex d-lg-none">
+                      <div class="price">
+                        {!! price_format(active_currency(true)->code, $product->price) !!}
+                      </div>
+                      <div class="btn-circle">
+                        <i class="bi bi-arrow-right fw-bold"></i>
+                      </div>
+                    </div>
                   </div>
                   <div class="gift-img-box">
                     <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="gift-img">
                   </div>
-                  <div class="price-bar align-self-center">
+                  <div class="price-bar align-self-center d-flex d-md-none d-lg-flex">
                     <div class="price">
                       {!! price_format(active_currency(true)->code, $product->price) !!}
                     </div>
@@ -33,7 +40,7 @@
                 <div class="gift-box-item">
                   <div class="gift-content-box">
                     <p class="fs-5 fw-bold my-3">{{ $product->name }}</p>
-                    <div class="price-bar d-none d-md-flex">
+                    <div class="price-bar d-none d-md-flex d-lg-flex">
                       <div class="price">
                         {!! price_format(active_currency(true)->code, $product->price) !!}
                       </div>
@@ -47,7 +54,7 @@
                     <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="gift-img">
                   </div>
                 </div>
-                <div class="price-bar align-self-center d-flex d-md-none">
+                <div class="price-bar align-self-center d-flex d-md-none d-lg-none">
                   <div class="price">
                     {!! price_format(active_currency(true)->code, $product->price) !!}
                   </div>

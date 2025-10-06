@@ -3,7 +3,7 @@
       <div class="features-strip">
         <div class="row gap-3 align-items-center text-start">
 
-          <div class="col-12 col-sm-6 col-lg d-flex">
+          <div class="col-12 col-sm-6 col-md-5 col-lg d-flex">
             <div class="item w-100">
               <div class="icon-wrap"><i class="bi bi-truck"></i></div>
               <div>
@@ -13,7 +13,7 @@
             </div>
           </div>
 
-          <div class="col-12 col-sm-6 col-lg d-flex">
+          <div class="col-12 col-sm-6 col-md-5 col-lg d-flex">
             <div class="item w-100">
               <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
               <div>
@@ -23,7 +23,7 @@
             </div>
           </div>
 
-          <div class="col-12 col-sm-6 col-lg d-flex">
+          <div class="col-12 col-sm-6 col-md-5 col-lg d-flex">
             <div class="item w-100">
               <div class="icon-wrap"><i class="bi bi-recycle"></i></div>
               <div>
@@ -33,7 +33,7 @@
             </div>
           </div>
 
-          <div class="col-12 col-sm-6 col-lg d-flex">
+          <div class="col-12 col-sm-6 col-md-5 col-lg d-flex">
             <div class="item w-100">
               <div class="icon-wrap"><i class="bi bi-headset"></i></div>
               <div>

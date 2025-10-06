@@ -1640,6 +1640,7 @@ main {
     right: auto;
     width: 80%;
     margin: 0 auto;
+    padding-top: 2rem;
   }
   .sustainable-section .eco-icon {
     width: 80px;
@@ -1647,7 +1648,7 @@ main {
     right: 10px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .sustainable-section .sustainable-banner {
     padding: 2rem 1.5rem;
   }

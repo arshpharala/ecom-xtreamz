@@ -1631,6 +1631,9 @@ main {
     margin-bottom: 2rem;
     max-width: 100%;
   }
+  .sustainable-section .title {
+    font-size: var(--font-size-14xl) !important;
+  }
   .sustainable-section .sustainable-image {
     position: relative;
     top: auto;
@@ -1660,7 +1663,7 @@ main {
     margin-bottom: 0rem;
   }
   .sustainable-section .sustainable-text .title {
-    font-size: var(--font-size-11xl);
+    font-size: var(--font-size-11xl) !important;
   }
   .sustainable-section .sustainable-text .subtitle {
     font-size: var(--font-size-5xl);
@@ -2007,6 +2010,22 @@ main {
 @media (max-width: 991px) {
   .offer-banner .title-area {
     margin-top: 2rem;
+    text-align: start;
+  }
+  .offer-banner .title-area .title {
+    font-size: var(--font-size-8xl);
+  }
+  .offer-banner .title-area .title span {
+    font-size: var(--font-size-14xl);
+  }
+  .offer-banner .action-area {
+    align-items: start;
+    padding: 2rem 0;
+  }
+}
+@media (max-width: 575px) {
+  .offer-banner .title-area {
+    margin-top: 2rem;
     text-align: center;
   }
   .offer-banner .title-area .title {
@@ -2017,7 +2036,7 @@ main {
   }
   .offer-banner .action-area {
     align-items: center;
-    padding: 2rem;
+    padding: 2rem 0;
   }
 }
 
@@ -2046,7 +2065,7 @@ main {
   font-weight: 600;
   margin-bottom: 0.1rem;
 }
-.brochure-section .brochure-text .brochure-title {
+.brochure-section .brochure-text .title {
   font-size: var(--font-size-16xl);
   font-weight: 800;
   color: #111;
@@ -2068,13 +2087,12 @@ main {
   background: #111;
   color: #fff;
 }
-@media (max-width: 991.98px) {
+@media (max-width: 991px) {
   .brochure-section {
     text-align: center;
   }
-  .brochure-section .brochure-title {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+  .brochure-section .title {
+    font-size: var(--font-size-14xl) !important;
   }
 }
 @media (max-width: 575px) {
@@ -2083,6 +2101,9 @@ main {
   }
   .brochure-section .brochure-box .brochure-text {
     padding: 1rem;
+  }
+  .brochure-section .brochure-box .brochure-text .title {
+    font-size: var(--font-size-11xl) !important;
   }
   .brochure-section .brochure-box .brochure-text .subtitle {
     font-size: var(--font-size-5xl);
@@ -2152,7 +2173,15 @@ main {
   color: var(--color-light);
   transform: translateY(-1px);
 }
+@media (max-width: 991px) {
+  .newsletter-section .newsletter-title {
+    font-size: var(--font-size-14xl);
+  }
+}
 @media (max-width: 575px) {
+  .newsletter-section .newsletter-title {
+    font-size: var(--font-size-11xl);
+  }
   .newsletter-section .subtitle {
     font-size: var(--font-size-5xl);
   }

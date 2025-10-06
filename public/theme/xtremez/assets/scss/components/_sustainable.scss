@@ -1,154 +1,157 @@
 .sustainable-section {
-  position: relative;
-
-  .sustainable-banner {
-    background: #f5faf7;
-    border-radius: 20px;
-    padding: 5rem 6rem;
     position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
 
-  /* Left text */
-  .sustainable-text {
-    max-width: 420px;
-    z-index: 3;
-
-    .subtitle {
-      font-size: var(--font-size-7xl);
-      font-weight: 500;
-      color: #111;
-      margin-bottom: 0.1rem;
-    }
-
-    .title {
-      font-size: var(--font-size-16xl);
-      font-weight: 700;
-      line-height: 1.1;
-      color: #59a25b;
-      margin-bottom: 1.5rem;
-    }
-
-    .cta-link {
-      font-size: var(--font-size-7xl);
-      font-weight: 700;
-      color: #111;
-      text-decoration: none;
-      border-bottom: 3px solid #59a25b;
-    //   padding-bottom: 3px;
-      transition: color 0.2s ease, border-color 0.2s ease;
-
-      &:hover {
-        color: #1b7c3b;
-        border-color: #111;
-      }
-    }
-  }
-
-  /* Product image (right) */
-  .sustainable-image {
-    position: absolute;
-    top: 30px;
-    right: 80px;
-    width: 60%;  // responsive scaling
-    max-width: 720px;
-    height: auto;
-    z-index: 2;
-
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-
-  /* Globe icon (floating top-right) */
-  .eco-icon {
-    position: absolute;
-    top: -40px;
-    right: 60px;
-    width: 140px;
-    height: auto;
-    z-index: 3;
-  }
-
-  /* ✅ Responsive tweaks */
-  @media (max-width: $screen-xl) {
     .sustainable-banner {
-      padding: 4rem 3rem;
+        background: #f5faf7;
+        border-radius: 20px;
+        padding: 5rem 6rem;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
-    .sustainable-image {
-      width: 50%;
-      right: 40px;
-    }
-    .eco-icon {
-      width: 100px;
-      top: -30px;
-      right: 20px;
-    }
-  }
 
-  @media (max-width: ($screen-lg - 1 )) {
-    .sustainable-banner {
-      flex-direction: column;
-      text-align: center;
-      padding: 3rem 2rem;
-    }
+    /* Left text */
     .sustainable-text {
-      margin-bottom: 2rem;
-      max-width: 100%;
-    }
-    .sustainable-image {
-      position: relative;
-      top: auto;
-      right: auto;
-      width: 80%;
-      margin: 0 auto;
-    }
-    .eco-icon {
-      width: 80px;
-      top: -20px;
-      right: 10px;
-    }
-  }
+        max-width: 420px;
+        z-index: 3;
 
-  @media (max-width: $screen-md) {
-    .sustainable-banner {
-      padding: 2rem 1.5rem;
-    }
-    .sustainable-image {
-      width: 100%;
-    }
-    .eco-icon {
-      width: 60px;
-    }
-  }
+        .subtitle {
+            font-size: var(--font-size-7xl);
+            font-weight: 500;
+            color: #111;
+            margin-bottom: 0.1rem;
+        }
 
-  @media (max-width: ($screen-sm - 1)) {
-
-    .sustainable-text{
-        margin-bottom: 0rem;
         .title {
-          font-size: var(--font-size-11xl);
+            font-size: var(--font-size-16xl);
+            font-weight: 700;
+            line-height: 1.1;
+            color: #59a25b;
+            margin-bottom: 1.5rem;
         }
 
-        .subtitle{
-            font-size: var(--font-size-5xl);
-        }
+        .cta-link {
+            font-size: var(--font-size-7xl);
+            font-weight: 700;
+            color: #111;
+            text-decoration: none;
+            border-bottom: 3px solid #59a25b;
+            //   padding-bottom: 3px;
+            transition: color 0.2s ease, border-color 0.2s ease;
 
-        .cta-link{
-            font-size: var(--font-size-5xl);
+            &:hover {
+                color: #1b7c3b;
+                border-color: #111;
+            }
         }
     }
-    .sustainable-image{
-        padding-top: 2rem;
+
+    /* Product image (right) */
+    .sustainable-image {
+        position: absolute;
+        top: 30px;
+        right: 80px;
+        width: 60%; // responsive scaling
+        max-width: 720px;
+        height: auto;
+        z-index: 2;
+
+        img {
+            width: 100%;
+            height: auto;
+        }
     }
+
+    /* Globe icon (floating top-right) */
     .eco-icon {
-      width: 50px;
-      top: -15px;
-      right: 5px;
+        position: absolute;
+        top: -40px;
+        right: 60px;
+        width: 140px;
+        height: auto;
+        z-index: 3;
     }
-  }
+
+    /* ✅ Responsive tweaks */
+    @media (max-width: $screen-xl) {
+        .sustainable-banner {
+            padding: 4rem 3rem;
+        }
+        .sustainable-image {
+            width: 50%;
+            right: 40px;
+        }
+        .eco-icon {
+            width: 100px;
+            top: -30px;
+            right: 20px;
+        }
+    }
+
+    @media (max-width: ($screen-lg - 1 )) {
+        .sustainable-banner {
+            flex-direction: column;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        .sustainable-text {
+            margin-bottom: 2rem;
+            max-width: 100%;
+        }
+
+        .title {
+            font-size: var(--font-size-14xl)  !important;
+        }
+        .sustainable-image {
+            position: relative;
+            top: auto;
+            right: auto;
+            width: 80%;
+            margin: 0 auto;
+        }
+        .eco-icon {
+            width: 80px;
+            top: -20px;
+            right: 10px;
+        }
+    }
+
+    @media (max-width: $screen-md) {
+        .sustainable-banner {
+            padding: 2rem 1.5rem;
+        }
+        .sustainable-image {
+            width: 100%;
+        }
+        .eco-icon {
+            width: 60px;
+        }
+    }
+
+    @media (max-width: ($screen-sm - 1)) {
+        .sustainable-text {
+            margin-bottom: 0rem;
+            .title {
+                font-size: var(--font-size-11xl) !important;
+            }
+
+            .subtitle {
+                font-size: var(--font-size-5xl);
+            }
+
+            .cta-link {
+                font-size: var(--font-size-5xl);
+            }
+        }
+        .sustainable-image {
+            padding-top: 2rem;
+        }
+        .eco-icon {
+            width: 50px;
+            top: -15px;
+            right: 5px;
+        }
+    }
 }

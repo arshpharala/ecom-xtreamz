@@ -55,6 +55,24 @@
     @media (max-width: ($screen-lg - 1)) {
         .title-area {
             margin-top: 2rem;
+            text-align: start;
+
+            .title{
+                font-size: var(--font-size-8xl);
+                span{
+                    font-size: var(--font-size-14xl);
+                }
+            }
+        }
+
+        .action-area{
+            align-items: start;
+            padding: 2rem 0;
+        }
+    }
+    @media (max-width: ($screen-sm - 1)) {
+        .title-area {
+            margin-top: 2rem;
             text-align: center;
 
             .title{
@@ -67,7 +85,7 @@
 
         .action-area{
             align-items: center;
-            padding: 2rem;
+            padding: 2rem 0;
         }
     }
 }

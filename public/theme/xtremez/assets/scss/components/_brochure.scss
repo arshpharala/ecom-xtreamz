@@ -23,8 +23,8 @@
             margin-bottom: 0.1rem;
         }
 
-        .brochure-title {
-            font-size: var(--font-size-16xl); // close to your screenshot
+        .title {
+            font-size: var(--font-size-16xl);
             font-weight: 800;
             color: #111;
             line-height: 0.9;
@@ -50,22 +50,25 @@
     }
 
     /* ✅ Responsive adjustments */
-    @media (max-width: 991.98px) {
+    @media (max-width: ($screen-lg - 1)) {
         text-align: center;
 
-        .brochure-title {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+        .title {
+            font-size: var(--font-size-14xl) !important;
         }
     }
 
     @media (max-width: ($screen-sm - 1)) {
         .brochure-box {
-            .brochure-img{
+            .brochure-img {
                 padding: 1rem;
             }
             .brochure-text {
                 padding: 1rem;
+
+                .title {
+                    font-size: var(--font-size-11xl) !important;
+                }
 
                 .subtitle {
                     font-size: var(--font-size-5xl);

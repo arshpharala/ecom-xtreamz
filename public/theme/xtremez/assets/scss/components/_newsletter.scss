@@ -71,12 +71,15 @@
 
     @media (max-width: ($screen-lg - 1)) {
         .newsletter-title {
-            // font-size: var(--font-size-11xl)
+            font-size: var(--font-size-14xl);
         }
     }
 
     @media (max-width: ($screen-sm - 1)) {
 
+        .newsletter-title {
+            font-size: var(--font-size-11xl);
+        }
         .subtitle{
             font-size: var(--font-size-5xl);
         }

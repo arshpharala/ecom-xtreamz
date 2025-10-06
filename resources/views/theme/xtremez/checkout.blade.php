@@ -53,7 +53,7 @@
     <div class="container">
       <div class="heading-row position-relative">
         <div class="left-tools">
-          <a href="{{ url()->previous() }}" class="btn btn-secondary">
+          <a href="{{ url()->previous() }}" class="btn btn-secondary d-none d-md-flex">
             <i class="bi bi-arrow-left me-2"></i> <span class="d-none d-md-inline">BACK</span>
           </a>
         </div>

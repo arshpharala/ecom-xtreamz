@@ -148,6 +148,10 @@
         padding: 14px 28px;
     }
 
+    .product-description {
+        padding: 3rem;
+    }
+
     @media (max-width: #{$screen-md - 1}) {
         .main-image {
             height: 30vh;
@@ -163,6 +167,10 @@
             .thumb-nav {
                 height: 100px !important;
             }
+        }
+
+        .product-description {
+            padding: 3rem 1rem !important;
         }
     }
 

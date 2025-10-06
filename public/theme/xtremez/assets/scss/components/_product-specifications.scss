@@ -1,52 +1,61 @@
 .product-specifications {
-	background-color: #f3f3f3;
+    background-color: #f3f3f3;
 
-	.spec-box {
-		.section-title {
-			color: #4b9aa5;
-		}
+    .spec-box {
+        padding: 3rem;
+        .section-title {
+            color: #4b9aa5;
+        }
 
-		.specs-table {
-			width: 100%;
-			font-size: var(--font-size-md);
-			margin-top: -1rem !important;
+        .specs-table {
+            width: 100%;
+            font-size: var(--font-size-md);
+            margin-top: -1rem !important;
 
-			th {
-				background-color: transparent;
-				font-weight: 600;
-				font-size: var(--font-size-md);
-				padding: 0 0 0 0;
-			}
+            th {
+                background-color: transparent;
+                font-weight: 600;
+                font-size: var(--font-size-md);
+                padding: 0 0 0 0;
+            }
 
-			tbody {
-				td {
-					padding: 0.75rem 0;
-					border-color: #d9d9d9;
+            tbody {
+                td {
+                    padding: 0.75rem 0;
+                    border-color: #d9d9d9;
 
-					&:first-child {
-						width: 25%;
-					}
-				}
-			}
+                    &:first-child {
+                        width: 25%;
+                    }
+                }
+            }
 
-			// tr:last-child td {
-			//   border-bottom: none;
-			// }
-		}
-	}
+            // tr:last-child td {
+            //   border-bottom: none;
+            // }
+        }
+    }
 
-	@media (max-width: #{$screen-lg - 1}) {
-		.spec-box {
-			.specs-table {
-				tbody {
-          td{
-						width: 50% !important;
-            &:last-child {
-            text-align: end;
-					}
-          }
-				}
-			}
-		}
-	}
+    @media (max-width: #{$screen-lg - 1}) {
+        .spec-box {
+            padding: 3rem 1rem !important;
+            .specs-table {
+                tbody {
+                    tr{
+                        &:last-child{
+                            td{
+                                border: none;
+                            }
+                        }
+                    }
+                    td {
+                        width: 50% !important;
+                        &:last-child {
+                            text-align: end;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

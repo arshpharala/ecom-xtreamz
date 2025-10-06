@@ -2367,6 +2367,9 @@ main {
   border-radius: 0%;
   padding: 14px 28px;
 }
+.product-detail .product-description {
+  padding: 3rem;
+}
 @media (max-width: 767px) {
   .product-detail .main-image {
     height: 30vh;
@@ -2377,6 +2380,9 @@ main {
   }
   .product-detail .thumbnail-carousel .thumb-nav {
     height: 100px !important;
+  }
+  .product-detail .product-description {
+    padding: 3rem 1rem !important;
   }
 }
 @media (max-width: 575px) {
@@ -2394,6 +2400,9 @@ main {
 
 .product-specifications {
   background-color: #f3f3f3;
+}
+.product-specifications .spec-box {
+  padding: 3rem;
 }
 .product-specifications .spec-box .section-title {
   color: #4b9aa5;
@@ -2417,6 +2426,12 @@ main {
   width: 25%;
 }
 @media (max-width: 991px) {
+  .product-specifications .spec-box {
+    padding: 3rem 1rem !important;
+  }
+  .product-specifications .spec-box .specs-table tbody tr:last-child td {
+    border: none;
+  }
   .product-specifications .spec-box .specs-table tbody td {
     width: 50% !important;
   }

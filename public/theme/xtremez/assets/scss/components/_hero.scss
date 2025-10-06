@@ -153,6 +153,12 @@
             right: 2vh !important;
         }
     }
+
+    @media (max-width: #{$screen-sm - 1}) {
+        .hero-title {
+            font-size: var(--font-size-12xl) !important;
+        }
+    }
 }
 
 .search-bar-wrapper {

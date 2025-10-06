@@ -1078,6 +1078,11 @@ main {
     right: 2vh !important;
   }
 }
+@media (max-width: 575px) {
+  .hero-section .hero-title {
+    font-size: var(--font-size-12xl) !important;
+  }
+}
 
 .search-bar-wrapper {
   background-color: var(--color-light);

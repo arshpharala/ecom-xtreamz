@@ -12,9 +12,9 @@
                       <div class="price">
                         {!! price_format(active_currency(true)->code, $product->price) !!}
                       </div>
-                      <div class="btn-circle">
+                      <a class="btn-circle" href="{{ $product->link }}">
                         <i class="bi bi-arrow-right fw-bold"></i>
-                      </div>
+                      </a>
                     </div>
                   </div>
                   <div class="gift-img-box">
@@ -44,9 +44,9 @@
                       <div class="price">
                         {!! price_format(active_currency(true)->code, $product->price) !!}
                       </div>
-                      <div class="btn-circle">
+                      <a class="btn-circle" href="{{ $product->link }}">
                         <i class="bi bi-arrow-right fw-bold"></i>
-                      </div>
+                      </a>
                     </div>
 
                   </div>
@@ -58,9 +58,9 @@
                   <div class="price">
                     {!! price_format(active_currency(true)->code, $product->price) !!}
                   </div>
-                  <div class="btn-circle">
+                  <a class="btn-circle" href="{{ $product->link }}">
                     <i class="bi bi-arrow-right fw-bold"></i>
-                  </div>
+                  </a>
                 </div>
               </div>
             @endforeach

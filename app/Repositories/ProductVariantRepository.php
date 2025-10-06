@@ -128,7 +128,7 @@ class ProductVariantRepository
             ->map(function ($variant) {
 
                 $variant->image = $variant->file_path ? 'storage/' . $variant->file_path : 'default.jpg';
-                $variant->link = route('products.show', ['slug' => $variant->slug, 'varient' => $variant->id]);
+                $variant->link = route('products.show', ['slug' => $variant->slug, 'variant' => $variant->id]);
 
                 return $variant;
             });

@@ -1261,7 +1261,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 380px;
+  min-height: 410px;
   transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 .product-card:hover {

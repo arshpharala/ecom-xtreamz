@@ -5,7 +5,7 @@
 @endphp
 <section class="heading-section pt-5">
   <div class="container">
-    <div class="heading-row align-items-baseline d-flex justify-content-between">
+    <div class="heading-row align-items-center d-flex justify-content-between">
       <div class="animate-on-scroll" data-animate="fade-right">
         <h2 class="section-title fs-1 m-0 text-uppercase">{{ $sectionName }}</h2>
         <div class="heading-wrapper">
@@ -13,19 +13,12 @@
         </div>
       </div>
       <div class="section-nav  d-flex animate-on-scroll" data-animate="fade-left">
-        <div id="product{{ $id }}Prev" class="btn-circle-outline" style="margin: 50px 0 0 0 ">
+        <div id="product{{ $id }}Prev" class="btn-circle-outline" style="margin:0 0 0 0 ">
           <i class="bi bi-arrow-left fw-bold"></i>
         </div>
-        <div id="product{{ $id }}Next" class="btn-circle-outline" style="margin: 50px 0 0 10px ">
+        <div id="product{{ $id }}Next" class="btn-circle-outline" style="margin: 0 0 0 10px ">
           <i class="bi bi-arrow-right fw-bold"></i>
         </div>
-
-        {{-- <button id="product{{ $id }}Prev" class="btn btn-link p-0 me-2 text-secondary">
-          <i class="bi bi-chevron-left"></i>
-        </button>
-        <button id="product{{ $id }}Next" class="btn btn-link p-0 text-secondary">
-          <i class="bi bi-chevron-right"></i>
-        </button> --}}
       </div>
     </div>
   </div>

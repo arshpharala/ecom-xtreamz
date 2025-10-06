@@ -33,4 +33,8 @@
             margin-right: 2px;
         }
     }
+
+    @media (max-width: ($screen-lg - 1)) {
+        display: none;
+    }
 }

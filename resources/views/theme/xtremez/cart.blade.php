@@ -68,12 +68,12 @@
                     <div class="align-items-end col-md col-xl d-md-flex d-none flex-column">
                       <div class="qty-delete-box d-flex flex-row gap-2">
                         <div class="cart-qty-box d-flex flex-column">
-                          <div class="cart-qty-val text-center">{{ $variant->qty }}</div>
+                          <div class="cart-qty-val text-center bg-white">{{ $variant->qty }}</div>
                           <button class="btn btn-trash"><i class="bi bi-trash"></i></button>
                         </div>
                         <div class="d-flex cart-qty-box flex-column">
-                          <button class="btn qty-btn plus border border-1"><i class="bi bi-plus"></i></button>
-                          <button class="btn qty-btn minus border border-1"><i class="bi bi-dash"></i></button>
+                          <button class="btn qty-btn plus"><i class="bi bi-plus"></i></button>
+                          <button class="btn qty-btn minus"><i class="bi bi-dash"></i></button>
                         </div>
                       </div>
                     </div>
@@ -82,7 +82,7 @@
                       <div class="qty-delete-box-mobile w-100 d-flex justify-content-between align-items-center">
                         <div class="cart-qty-box d-flex align-items-center">
                           <button class="btn qty-btn minus"><i class="bi bi-dash"></i></button>
-                          <div class="cart-qty-val text-center">{{ $variant->qty }}</div>
+                          <div class="cart-qty-val text-center bg-white">{{ $variant->qty }}</div>
                           <button class="btn qty-btn plus"><i class="bi bi-plus"></i></button>
                         </div>
                         <button class="btn btn-trash ms-2"><i class="bi bi-trash"></i></button>

@@ -111,7 +111,7 @@
       <div class="container">
         <div class="row g-3 g-lg-4 d-flex animate-on-scroll" data-animate="zoom-out">
           @foreach ($categories as $category)
-            <div class="col-12 col-md-4 flex-fill">
+            <div class="col-12 col-lg-4 flex-fill">
               <a href="{{ $category->link }}" class="promo-tile" style="background: {{ $category->background_color }}">
                 <div class="promo-copy d-flex flex-column h-100 justify-content-around">
                   <h3 class="title">{{ $category->name }}</h3>

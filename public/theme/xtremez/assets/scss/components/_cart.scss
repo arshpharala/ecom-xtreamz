@@ -25,8 +25,8 @@
 			justify-content: center;
 			// border-radius: 3px;
 			.cart-img {
-				max-width: 64px;
-				max-height: 64px;
+				max-width: 80px;
+				max-height: 80px;
 				object-fit: contain;
 			}
 		}
@@ -48,7 +48,7 @@
 					width: 24px;
 					height: 24px;
 					background: #fff;
-					border: 1px solid #d1d1d1;
+					border: 1px solid var(--color-border);
 					border-radius: 0;
 					font-size: var(--font-size-md);
 					padding: 0;
@@ -63,7 +63,7 @@
 			.btn-trash {
 				width: 48px;
 				height: 48px;
-				background: var(--color-background);
+				background: var(--color-light);
 				border: none;
 				// border-radius: 2px;
 				font-size: var(--font-size-6xl);
@@ -92,7 +92,7 @@
 			margin-bottom: 1.5rem;
 		}
 		.border-top {
-			border-top: 1px solid #b7cccc !important;
+			border-top: 1px solid var(--color-border) !important;
 			margin-top: 1rem;
 		}
 		.btn-apply {

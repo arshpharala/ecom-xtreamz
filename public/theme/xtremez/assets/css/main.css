@@ -19,6 +19,7 @@
   --color-blue-light: #eaf6fb;
   --color-background: #f7f7f7;
   --color-footer: #1a1a1a;
+  --color-border: #dee2e6;
 }
 
 :root {
@@ -555,6 +556,11 @@ main {
 .announcement a i {
   font-size: var(--font-size-sm);
   margin-right: 2px;
+}
+@media (max-width: 991px) {
+  .announcement {
+    display: none;
+  }
 }
 
 .main-header {
@@ -1914,12 +1920,12 @@ main {
     font-size: 2.4rem;
   }
 }
-@media (max-width: 991.98px) {
+@media (max-width: 991px) {
   .promo-tiles .promo-tile .promo-copy {
     max-width: 60%;
   }
 }
-@media (max-width: 767.98px) {
+@media (max-width: 767px) {
   .promo-tiles .promo-tile {
     min-height: 190px;
     padding: 22px 18px;
@@ -1935,7 +1941,7 @@ main {
     right: 14px;
   }
 }
-@media (max-width: 575.98px) {
+@media (max-width: 575px) {
   .promo-tiles .promo-tile .promo-copy {
     max-width: 70%;
   }
@@ -2453,8 +2459,8 @@ main {
   justify-content: center;
 }
 .cart-section .cart-item .cart-img-box .cart-img {
-  max-width: 64px;
-  max-height: 64px;
+  max-width: 80px;
+  max-height: 80px;
   object-fit: contain;
 }
 .cart-section .cart-item .cart-product-title {
@@ -2473,7 +2479,7 @@ main {
   width: 24px;
   height: 24px;
   background: #fff;
-  border: 1px solid #d1d1d1;
+  border: 1px solid var(--color-border);
   border-radius: 0;
   font-size: var(--font-size-md);
   padding: 0;
@@ -2489,7 +2495,7 @@ main {
 .cart-section .cart-item .qty-delete-box-mobile .btn-trash {
   width: 48px;
   height: 48px;
-  background: var(--color-background);
+  background: var(--color-light);
   border: none;
   font-size: var(--font-size-6xl);
   margin-top: 10px;
@@ -2514,7 +2520,7 @@ main {
   margin-bottom: 1.5rem;
 }
 .cart-section .cart-summary .border-top {
-  border-top: 1px solid #b7cccc !important;
+  border-top: 1px solid var(--color-border) !important;
   margin-top: 1rem;
 }
 .cart-section .cart-summary .btn-apply {

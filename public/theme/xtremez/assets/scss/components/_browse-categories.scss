@@ -1,78 +1,89 @@
 .browse-categories {
-  --circle-size: 112px;
-  --circle-bg: #98b1c7;                 /* soft blue disc */
-  --label-color: #111;
-  --ring: var(--color-secondary);       /* your theme accent */
-  background-color: var(--color-light);
+    --circle-size: 112px;
+    --circle-bg: #98b1c7; /* soft blue disc */
+    --label-color: #111;
+    --ring: var(--color-secondary); /* your theme accent */
+    background-color: var(--color-light);
 
-  .category-icons {
-    /* using grid via Bootstrap row/cols already */
-  }
-
-  .category-item {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .6rem;
-    text-decoration: none;
-    will-change: transform;
-    transition: transform .2s ease;
-    outline: none;
-
-    &:hover { transform: translateY(-4px); }
-    &:focus-visible .category-badge { box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
-  }
-
-  .category-badge {
-    width: var(--circle-size);
-    height: var(--circle-size);
-    border-radius: 999px;
-    background: radial-gradient(76% 76% at 50% 50%, var(--circle-bg) 0%, #8da6ba 100%);
-    position: relative;
-    overflow: hidden;
-    display: grid; place-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    transition: box-shadow .2s ease, transform .2s ease;
-
-    img {
-      width: 110%;
-      height: 110%;
-      object-fit: contain;
-      transform: translate(2%, 2%);   /* slight offset like your ref */
-      pointer-events: none;
-      user-select: none;
-      filter: none;
-      transition: filter .2s ease, transform .2s ease;
+    .category-icons {
+        /* using grid via Bootstrap row/cols already */
     }
-  }
 
-  .category-label {
-    max-width: calc(var(--circle-size) + 30px);
-    color: var(--label-color);
-    font-weight: 700;
-    font-size: .98rem;
-    line-height: 1.25;
-  }
+    .category-item {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem;
+        text-decoration: none;
+        will-change: transform;
+        transition: transform 0.2s ease;
+        outline: none;
 
-  /* Active state: ring + subtle pop + slight image brighten */
-  .category-item.is-active .category-badge {
-    box-shadow:
-      0 0 0 3px #fff,
-      0 0 0 5px var(--ring),
-      0 6px 16px rgba(0,0,0,.12);
-    transform: translateY(-2px);
-  }
-  .category-item.is-active img {
-    filter: brightness(1.05) contrast(1.02);
-  }
+        &:hover {
+            transform: translateY(-4px);
+        }
+        &:focus-visible .category-badge {
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+        }
+    }
 
-  /* Sizes */
-  @media (max-width: 991.98px) {
-    --circle-size: 100px;
-    .category-label { font-size: .95rem; }
-  }
-  @media (max-width: 575.98px) {
-    --circle-size: 88px;
-    .category-label { font-size: .92rem; }
-  }
+    .category-badge {
+        width: var(--circle-size);
+        height: var(--circle-size);
+        border-radius: 999px;
+        background: radial-gradient(
+            76% 76% at 50% 50%,
+            var(--circle-bg) 0%,
+            #8da6ba 100%
+        );
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+        img {
+            width: 110%;
+            height: 110%;
+            object-fit: contain;
+            transform: translate(2%, 2%); /* slight offset like your ref */
+            pointer-events: none;
+            user-select: none;
+            filter: none;
+            transition: filter 0.2s ease, transform 0.2s ease;
+        }
+    }
+
+    .category-label {
+        max-width: calc(var(--circle-size) + 30px);
+        color: var(--label-color);
+        font-weight: 700;
+        font-size: 0.98rem;
+        line-height: 1.25;
+    }
+
+    /* Active state: ring + subtle pop + slight image brighten */
+    .category-item.is-active .category-badge {
+        box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--ring),
+            0 6px 16px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+    .category-item.is-active img {
+        filter: brightness(1.05) contrast(1.02);
+    }
+
+    /* Sizes */
+    @media (max-width: 991.98px) {
+        --circle-size: 100px;
+        .category-label {
+            font-size: 0.95rem;
+        }
+    }
+    @media (max-width: 575.98px) {
+        --circle-size: 88px;
+        .category-label {
+            font-size: 0.92rem;
+        }
+    }
 }

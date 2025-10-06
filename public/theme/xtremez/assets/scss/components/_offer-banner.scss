@@ -1,6 +1,11 @@
 .offer-banner {
     position: relative;
 
+    .container{
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+    }
+
     .title-area {
         display: flex;
         flex-direction: column;
@@ -14,7 +19,7 @@
 
             span {
                 font-weight: 600;
-                font-size: 5rem;
+                font-size: var(--font-size-16xl);
             }
         }
     }

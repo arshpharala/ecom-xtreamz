@@ -141,23 +141,28 @@
             <div class="col-md-12">
               <div class="container">
                 <div class="row">
-                  <div class="col-md-5 d-flex flex-row">
+                  <div class="col-md-6 col-lg-5 d-flex flex-row">
                     <div class="title-area">
                       <h3 class="title">Get
                         <span>
                           {{ $tile->title }}
                         </span>
                       </h3>
+                      <div class="action-area w-100 d-none d-md-flex d-lg-none">
+                        <a href="http://">Shop Now</a>
+                      </div>
+
                     </div>
                   </div>
-                  <div class="col-md-4 d-flex flex-row">
+                  <div class="col-md-6 col-lg-4 d-flex flex-row">
                     <img src="{{ $tile->image }}" alt="{{ $tile->title }}" class="promo-img">
                   </div>
-                  <div class="col-md-3 d-flex flex-row">
+                  <div class="col-md-3 col-lg-3 d-flex d-sm-none d-lg-flex flex-row">
                     <div class="action-area w-100">
                       <a href="http://">Shop Now</a>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>

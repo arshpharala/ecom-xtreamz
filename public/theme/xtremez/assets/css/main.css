@@ -44,7 +44,7 @@
   --font-size-13xl: 3.1rem;
   --font-size-14xl: 3.5rem;
   --font-size-15xl: 3.75rem;
-  --font-size-16xl: 5em;
+  --font-size-16xl: 5rem;
 }
 
 html {
@@ -1953,6 +1953,10 @@ main {
 .offer-banner {
   position: relative;
 }
+.offer-banner .container {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
 .offer-banner .title-area {
   display: flex;
   flex-direction: column;
@@ -1967,7 +1971,7 @@ main {
 }
 .offer-banner .title-area .title span {
   font-weight: 600;
-  font-size: 5rem;
+  font-size: var(--font-size-16xl);
 }
 .offer-banner .action-area {
   display: flex;

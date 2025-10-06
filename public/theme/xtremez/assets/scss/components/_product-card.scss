@@ -126,6 +126,13 @@
             font-weight: 600;
             font-size: 1rem;
             color: #222;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; // show only 2 lines
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4; // adjust spacing
+            max-height: calc(1.4em * 2);
         }
 
         .product-category {

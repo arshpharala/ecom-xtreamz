@@ -1345,6 +1345,13 @@ main {
   font-weight: 600;
   font-size: 1rem;
   color: #222;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  max-height: 2.8em;
 }
 .product-card .stats-container .product-category {
   font-size: 0.8rem;

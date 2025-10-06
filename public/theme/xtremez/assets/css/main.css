@@ -1561,7 +1561,7 @@ main {
   max-width: 420px;
   z-index: 3;
 }
-.sustainable-section .sustainable-text .eyebrow {
+.sustainable-section .sustainable-text .subtitle {
   font-size: var(--font-size-7xl);
   font-weight: 500;
   color: #111;
@@ -1621,7 +1621,7 @@ main {
     right: 20px;
   }
 }
-@media (max-width: 992px) {
+@media (max-width: 991px) {
   .sustainable-section .sustainable-banner {
     flex-direction: column;
     text-align: center;
@@ -1630,9 +1630,6 @@ main {
   .sustainable-section .sustainable-text {
     margin-bottom: 2rem;
     max-width: 100%;
-  }
-  .sustainable-section .sustainable-text .title {
-    font-size: 2.5rem;
   }
   .sustainable-section .sustainable-image {
     position: relative;
@@ -1651,9 +1648,6 @@ main {
   .sustainable-section .sustainable-banner {
     padding: 2rem 1.5rem;
   }
-  .sustainable-section .sustainable-text .title {
-    font-size: 2rem;
-  }
   .sustainable-section .sustainable-image {
     width: 100%;
   }
@@ -1661,12 +1655,18 @@ main {
     width: 60px;
   }
 }
-@media (max-width: 576px) {
+@media (max-width: 575px) {
   .sustainable-section .sustainable-text {
     margin-bottom: 0rem;
   }
   .sustainable-section .sustainable-text .title {
-    font-size: 2.5rem;
+    font-size: var(--font-size-11xl);
+  }
+  .sustainable-section .sustainable-text .subtitle {
+    font-size: var(--font-size-5xl);
+  }
+  .sustainable-section .sustainable-text .cta-link {
+    font-size: var(--font-size-5xl);
   }
   .sustainable-section .sustainable-image {
     padding-top: 2rem;
@@ -2040,7 +2040,7 @@ main {
 .brochure-section .brochure-text {
   padding: 1rem 3rem;
 }
-.brochure-section .brochure-text .brochure-subtitle {
+.brochure-section .brochure-text .subtitle {
   font-size: var(--font-size-7xl);
   color: #555;
   font-weight: 600;
@@ -2073,8 +2073,20 @@ main {
     text-align: center;
   }
   .brochure-section .brochure-title {
-    margin: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     font-size: 2.5rem !important;
+  }
+}
+@media (max-width: 575px) {
+  .brochure-section .brochure-box .brochure-img {
+    padding: 1rem;
+  }
+  .brochure-section .brochure-box .brochure-text {
+    padding: 1rem;
+  }
+  .brochure-section .brochure-box .brochure-text .subtitle {
+    font-size: var(--font-size-5xl);
   }
 }
 
@@ -2082,7 +2094,7 @@ main {
   background: var(--color-blue-light);
   padding: 5rem 1rem;
 }
-.newsletter-section .newsletter-subtitle {
+.newsletter-section .subtitle {
   font-size: var(--font-size-7xl);
   color: #555;
   font-weight: 600;
@@ -2141,10 +2153,14 @@ main {
   color: var(--color-light);
   transform: translateY(-1px);
 }
-@media (max-width: 991.98px) {
+@media (max-width: 991px) {
   .newsletter-section .newsletter-title {
-    margin: 1rem;
-    font-size: 2.5rem !important;
+    font-size: var(--font-size-11xl);
+  }
+}
+@media (max-width: 575px) {
+  .newsletter-section .subtitle {
+    font-size: var(--font-size-5xl);
   }
 }
 

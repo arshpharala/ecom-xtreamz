@@ -251,7 +251,7 @@
 
         <!-- Left: Text -->
         <div class="sustainable-text">
-          <p class="eyebrow">Eco Collection</p>
+          <p class="subtitle">Eco Collection</p>
           <h2 class="title">Sustainable<br>Products</h2>
           <a href="{{ route('products') }}" class="cta-link">Shop Now</a>
         </div>
@@ -348,7 +348,7 @@
 
           <!-- Right: Text -->
           <div class="col-lg-6 brochure-text">
-            <p class="brochure-subtitle">A wide collection of creatives</p>
+            <p class="subtitle">A wide collection of creatives</p>
             <h2 class="brochure-title">Our 2024 Gifts<br>Collection</h2>
             <a href="#" class="btn brochure-btn">View Brochure</a>
           </div>
@@ -361,7 +361,7 @@
 
   <section class="newsletter-section mt-5">
     <div class="container text-center">
-      <p class="newsletter-subtitle">Get in touch with us</p>
+      <p class="subtitle">Get in touch with us</p>
       <h2 class="newsletter-title">Our Newsletter</h2>
 
       <form id="newsletter-form" class="newsletter-form ajax-form" action="{{ route('ajax.subscribe') }}"

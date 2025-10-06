@@ -3048,7 +3048,7 @@ main {
   background-color: #25d366 !important;
   color: var(--color-secondary) !important;
   border-radius: 50% !important;
-  display: flex !important;
+  display: flex;
   align-items: center !important;
   justify-content: center !important;
   box-shadow: 0 8px 25px -5px rgba(45, 62, 79, 0.3) !important;

@@ -226,12 +226,47 @@ $(function () {
     // ===============================
     // 8. Render Attribute Filters Dynamically
     // ===============================
+    // function renderDynamicAttributeFilters(attributes) {
+    //     const $container = $("#dynamic-attribute-filters");
+    //     const urlParams = new URLSearchParams(window.location.search);
+
+    //     $container.empty();
+    //     activeAttributeKeys = []; // Reset tracked keys
+
+    //     attributes.forEach((attr) => {
+    //         const key = `attr_${attr.id}`;
+    //         activeAttributeKeys.push(key);
+
+    //         const selectedValue = urlParams.get(key) || "";
+
+    //         const $wrapper = $(
+    //             `<div class="mb-4"><h5 class="fs-3 mb-3">${attr.name}</h5></div>`
+    //         );
+    //         const $select =
+    //             $(`<select class="form-select theme-select" name="${key}" data-attribute="${attr.id}">
+    //                           <option value="">Select ${attr.name}</option>
+    //                        </select>`);
+
+    //         $.each(attr.values, function (id, val) {
+    //             const selected = id === selectedValue ? "selected" : "";
+    //             $select.append(
+    //                 `<option value="${id}" ${selected}>${val}</option>`
+    //             );
+    //         });
+
+    //         $wrapper.append($select);
+    //         $container.append($wrapper);
+    //     });
+    // }
+
     function renderDynamicAttributeFilters(attributes) {
-        const $container = $("#dynamic-attribute-filters");
+        const $containers = $(".dynamic-attribute-filters"); // all containers
         const urlParams = new URLSearchParams(window.location.search);
 
-        $container.empty();
         activeAttributeKeys = []; // Reset tracked keys
+
+        // clear all containers first
+        $containers.empty();
 
         attributes.forEach((attr) => {
             const key = `attr_${attr.id}`;
@@ -239,23 +274,31 @@ $(function () {
 
             const selectedValue = urlParams.get(key) || "";
 
-            const $wrapper = $(
-                `<div class="mb-4"><h5 class="fs-3 mb-3">${attr.name}</h5></div>`
-            );
-            const $select =
-                $(`<select class="form-select theme-select" name="${key}" data-attribute="${attr.id}">
-                              <option value="">Select ${attr.name}</option>
-                           </select>`);
+            const $wrapper = $(`
+            <div class="mb-4">
+                <h5 class="fs-3 mb-3">${attr.name}</h5>
+            </div>
+        `);
+
+            const $select = $(`
+            <select class="form-select theme-select" name="${key}" data-attribute="${attr.id}">
+                <option value="">Select ${attr.name}</option>
+            </select>
+        `);
 
             $.each(attr.values, function (id, val) {
-                const selected = id === selectedValue ? "selected" : "";
+                const selected = id == selectedValue ? "selected" : "";
                 $select.append(
                     `<option value="${id}" ${selected}>${val}</option>`
                 );
             });
 
             $wrapper.append($select);
-            $container.append($wrapper);
+
+            // append to each container
+            $containers.each(function () {
+                $(this).append($wrapper.clone()); // clone ensures independent copies
+            });
         });
     }
 

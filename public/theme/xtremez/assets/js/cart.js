@@ -101,7 +101,7 @@ function updateCartCount(cart) {
     }else{
         $("body").find("#cart-items-count").hide();
     }
-    
+
     $("body").find(".cart-total").html(cart.total_with_currency);
     $("body")
         .find(".cart-sub-total")
@@ -177,14 +177,15 @@ $(document).on("click", ".buy-now-btn", function () {
     const isAlreadyInCart = $btn.hasClass("in-cart");
 
     if (isAlreadyInCart) {
-        window.location.href = "/cart";
+
+        window.location.href = `${appUrl}/cart/`;
         return;
     }
 
     addToCart(variantId, qty, function (success) {
         if (success) {
             $btn.addClass("in-cart");
-            window.location.href = "/cart";
+            window.location.href = `${appUrl}/cart/`;
         } else {
             alert("Failed to proceed.");
         }

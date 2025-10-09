@@ -139,7 +139,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           if (!r.ok) location.reload();
         })
         .catch(() => location.reload());
-    }, 10000);
+    }, 100000);
   </script>
 
 

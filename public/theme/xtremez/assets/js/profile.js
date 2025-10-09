@@ -34,6 +34,9 @@ $(function () {
     const mobileAccordion = $("#mobileProfileAccordion");
     const defaultTab = "profile";
 
+    // Load default content immediately on page load
+    loadTabContent(defaultTab, contentContainer);
+
     // Load HTML component into given target
     function loadTabContent(tabId, $target, callback = null) {
         const path = `${appUrl}/customers/profile/tab/${tabId}`;

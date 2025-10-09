@@ -85,7 +85,7 @@
           if (!r.ok) location.reload();
         })
         .catch(() => location.reload());
-    }, 10000);
+    }, 100000);
   </script>
 
   <script src="https://js.stripe.com/v3/"></script>

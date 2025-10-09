@@ -75,6 +75,8 @@ function handleValidationErrors(xhr, form) {
             text:
                 xhr.responseJSON.message || "Please fix the form errors below.",
             timer: 3000,
+            confirmButtonColor: "#5fa6ac",
+            cancelButtonColor: "#020202ff",
         });
 
         $.each(errors, function (field, messages) {

@@ -1,14 +1,76 @@
-$("#selectAll").on("change", function () {
-    const checked = $(this).is(":checked");
-    $(".cart-item:visible .form-check-input").prop("checked", checked);
-});
-
-// Sync checkbox with Select All
-$(".cart-items").on("change", ".form-check-input", function () {
+function updateCartSelectionState() {
     const $checkboxes = $(".cart-item:visible .form-check-input");
     const total = $checkboxes.length;
     const checked = $checkboxes.filter(":checked").length;
-    $("#selectAll").prop("checked", checked === total);
+
+    // Update "Select All" checkbox
+    $("#selectAll").prop("checked", checked === total && total > 0);
+
+    // Show/hide clear button
+    if (checked > 0) {
+        $(".clear-cart").show();
+    } else {
+        $(".clear-cart").hide();
+    }
+
+    return { total, checked }; // optional return if you want to use the counts
+}
+
+function clearSelectedCartItems(onSuccess = null) {
+    const selectedIds = $(".cart-item:visible .form-check-input:checked")
+        .map(function () {
+            return $(this).closest(".cart-item").data("variant-id");
+        })
+        .get();
+
+    if (selectedIds.length === 0) {
+        alert("Please select at least one item to remove.");
+        return;
+    }
+
+    $.ajax({
+        url: `${appUrl}/ajax/cart/clear-selected`,
+        method: "DELETE",
+        data: { variant_ids: selectedIds },
+        success: function (res) {
+            if (typeof onSuccess === "function") {
+                onSuccess(res);
+            }
+
+            if (!res.cart || Object.keys(res.cart.items || {}).length === 0) {
+                location.reload();
+                return;
+            }
+        },
+        error: function (res) {
+            alert(
+                res.responseJSON?.message || "Failed to clear selected items."
+            );
+        },
+    });
+}
+
+// When individual checkbox changes
+$(".cart-items").on("change", ".form-check-input", function () {
+    updateCartSelectionState();
+});
+
+// When "Select All" changes
+$("#selectAll").on("change", function () {
+    const checked = $(this).is(":checked");
+    $(".cart-item:visible .form-check-input").prop("checked", checked);
+    updateCartSelectionState();
+});
+
+$(".clear-cart a").on("click", function () {
+    if (!confirm("Are you sure you want to remove selected items?")) return;
+
+    clearSelectedCartItems(function (res) {
+        updateCartCount(res.cart);
+        $(".cart-item:visible .form-check-input:checked")
+            .closest(".cart-item")
+            .remove();
+    });
 });
 
 $(".cart-items").on("click", ".qty-btn", function () {
@@ -19,7 +81,6 @@ $(".cart-items").on("click", ".qty-btn", function () {
     let qty = $cartItem.data("qty") || 1;
     const isPlus = $(this).hasClass("plus");
     const newQty = isPlus ? qty + 1 : Math.max(1, qty - 1);
-
 
     updateCartVariantQty(variantId, newQty, function (res) {
         $cartItem.data("qty", newQty);

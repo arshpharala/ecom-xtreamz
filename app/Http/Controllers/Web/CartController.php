@@ -141,4 +141,26 @@ class CartController extends Controller
             'message' => $message,
         ]);
     }
+
+    public function clearSelected(Request $request)
+    {
+        $request->validate([
+            'variant_ids' => 'required|array|min:1',
+            'variant_ids.*' => 'uuid',
+        ]);
+
+        $variantIds = $request->variant_ids;
+
+        foreach ($variantIds as $variantId) {
+            $this->cart->remove($variantId);
+        }
+
+        $message = $this->cart->refresh();
+
+        return response()->json([
+            'success' => true,
+            'cart'    => $this->cart->get(),
+            'message' => $message ?: 'Selected items removed successfully.',
+        ]);
+    }
 }

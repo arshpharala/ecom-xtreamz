@@ -42,6 +42,9 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('category/{category}/attributes',        [ProductController::class, 'getCategoryAttributes'])->name('category.attributes');
     Route::get('/variants/resolve',                     [ProductController::class, 'resolve'])->name('variants.resolve');
 
+    Route::delete('/cart/clear-selected',     [CartController::class, 'clearSelected'])->name('cart.clear-selected');
+
+
     Route::get('cities/{province}',                     [AddressController::class, 'getCities'])->name('province.cities');
     Route::get('areas/{city}',                          [AddressController::class, 'getAreas'])->name('city.areas');
 

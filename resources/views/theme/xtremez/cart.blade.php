@@ -32,11 +32,17 @@
   <section class="cart-section pb-5">
     <div class="container">
       <div class="row">
-        <div class="col-md-12">
-          <div class="cart-selectall d-flex align-items-center mb-3 d-none d-md-flex">
-            <input type="checkbox" id="selectAll" class="cc-form-check-input form-check-input me-2" />
-            <label for="selectAll" class="form-label mb-0">Select
-              all</label>
+        <div class="col-md-12 col-lg-7 col-xl-8">
+          <div class="cart-selectall d-flex align-items-center justify-content-between mb-3 d-none d-md-flex">
+            <div>
+                <input type="checkbox" id="selectAll" class="cc-form-check-input form-check-input me-2" />
+                <label for="selectAll" class="form-label mb-0">Select
+                  all</label>
+            </div>
+
+            <div class="clear-cart" style="display: none">
+                <a href="#">Clear Items</a>
+            </div>
           </div>
         </div>
       </div>

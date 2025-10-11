@@ -160,6 +160,8 @@ if (!function_exists('price_format')) {
             $currency->group_separator ?? ','
         );
 
+        $formattedAmount = '<span class="variant-price">' . str_replace('&#xa0;', '&nbsp;', $formattedAmount) . '</span>';
+
         return $currency->currency_position === 'Left'
             ? $currency->symbol . ' ' .  $formattedAmount
             : $formattedAmount . $currency->symbol;

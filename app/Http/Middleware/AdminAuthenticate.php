@@ -22,6 +22,11 @@ class AdminAuthenticate
 
         Auth::shouldUse('admin'); // Handle Authorization
 
+        if (!Auth::guard('admin')->user()->is_active) {
+            Auth::logout();
+            return redirect()->route('admin.login');
+        }
+
         return $next($request);
     }
 }

@@ -51,6 +51,7 @@ $(function () {
             const variant = window.variant;
             const currency = $("meta[name='currency']").attr("content");
 
+
             const hasOffer = variant?.offer_data?.has_offer === true;
             const discountedPrice = parseFloat(
                 variant?.offer_data?.discounted_price || 0
@@ -66,7 +67,8 @@ $(function () {
                 html += `<span class="text-muted text-decoration-line-through ms-2">${variant?.price_with_currency}</span>`;
                 html += `<span class="badge bg-secondary ms-2">${offerLabel}</span>`;
             } else {
-                html += `<span>${formatPrice(currency, originalPrice)}</span>`;
+                // html += `<span>${formatPrice(currency, originalPrice)}</span>`;
+                html += `<span>${variant?.price_with_currency}</span>`;
             }
             // if (hasOffer && discountedPrice > 0) {
             //     html += `<span class="text-danger fw-bold ms-2">${formatPrice(

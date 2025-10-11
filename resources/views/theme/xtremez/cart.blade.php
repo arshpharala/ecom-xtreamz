@@ -41,7 +41,7 @@
             </div>
 
             <div class="clear-cart" style="display: none">
-                <a href="#">Clear Items</a>
+                <a href="#" class="text-dark">Clear Items</a>
             </div>
           </div>
         </div>

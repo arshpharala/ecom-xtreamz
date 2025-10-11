@@ -187,9 +187,11 @@ function render_product_card(product, grid = false) {
 
           <!-- Image -->
           <div class="image-box">
+          <a href="${product.link}">
             <img src="${product.image}" alt="${
         product.name
     }" class="product-img"/>
+    </a>
 
             ${hasOffer ? `<div class="offer-badge">${offerText}</div>` : ""}
 

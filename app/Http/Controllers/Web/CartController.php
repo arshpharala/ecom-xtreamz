@@ -86,6 +86,20 @@ class CartController extends Controller
         $variant = ProductVariant::with('offers')->findOrFail($variantId);
         $qty = $request->qty;
 
+        if ($qty < 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Quantity must be at least 1.'
+            ], 400);
+        }
+
+        if (!$variant->stock || $variant->stock < $qty) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient stock available.'
+            ], 400);
+        }
+
         $pricing = PriceService::calculateDiscountedPrice($variant);
 
         if (!$this->cart->getItem($variant->id)) {

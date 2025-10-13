@@ -55,4 +55,20 @@ class StoreOrderRequest extends FormRequest
             }
         });
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required_without' => 'Please enter your full name.',
+            'phone.required_without' => 'Please provide a phone number.',
+            'province_id.required_without' => 'Please select a province.',
+            'city_id.required_without' => 'Please select a city.',
+            'area_id.required_without' => 'Please select an area.',
+            'address.required_without' => 'Please provide your address details.',
+
+            // Optional — customize email duplication message (if you want)
+            'email.required' => 'Please enter your email address.',
+            'email.email' => 'Please enter a valid email address.',
+        ];
+    }
 }

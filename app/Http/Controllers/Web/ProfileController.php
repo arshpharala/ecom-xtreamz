@@ -70,7 +70,7 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . auth()->id(),
-            'mobile' => 'nullable|string|max:20',
+            'mobile' => 'required|string|max:20',
             'dob' => 'nullable|date',
             'gender' => 'nullable|in:male,female',
         ]);

@@ -16,7 +16,7 @@
       @foreach (menu_categories(20) as $category)
         {{-- Parent Category --}}
         <li
-          class="d-flex align-items-center py-3 parent-category {{ $category->id == $activeCategory->id ? 'active' : '' }}"
+          class="d-flex align-items-center py-3 parent-category {{ $category->id == ($activeCategory->id ?? null) ? 'active' : '' }}"
           data-category="{{ $category->id }}" data-category-slug="{{ $category->slug }}">
 
           <img src="{{ asset('storage/' . $category->icon) }}" class="me-2" width="22" alt>
@@ -28,7 +28,7 @@
         @if ($category->children->isNotEmpty())
           @foreach ($category->children as $child)
             <li
-              class="d-flex align-items-center py-3 ps-5 child-category  {{ $child->id == $activeCategory->id ? 'active' : '' }}"
+              class="d-flex align-items-center py-3 ps-5 child-category  {{ $child->id == ($activeCategory->id ?? null) ? 'active' : '' }}"
               data-category="{{ $child->id }}" data-category-slug="{{ $child->slug }}">
 
               <img src="{{ asset('storage/' . $child->icon) }}" class="me-2" width="18" alt>
@@ -65,7 +65,7 @@
     <h5 class="fs-3 mb-3x ">Tags</h5>
     @foreach ($tags as $tag)
       <div class="form-check">
-        <input class="form-check-input cc-form-check-input" type="checkbox" id="tag_{{ $tag->id }}">
+        <input class="form-check-input cc-form-check-input" type="checkbox" id="tag_{{ $tag->id }}" @checked(in_array($tag->name, (request()->tags ?? [])))>
         <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
       </div>
     @endforeach

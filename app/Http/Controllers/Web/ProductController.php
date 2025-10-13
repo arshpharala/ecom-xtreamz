@@ -48,11 +48,11 @@ class ProductController extends Controller
             $activeCategory = $categories->where('id', request()->category_id)->first();
         }
 
-        if (empty($activeCategory)) {
-            $activeCategory = $categories->first();
-        }
+        // if (empty($activeCategory)) {
+        //     $activeCategory = $categories->first();
+        // }
 
-        $data['activeCategory'] = $activeCategory;
+        $data['activeCategory'] = $activeCategory ?? null;
         $data['categories']     = $categories;
         $data['brands']         = $brands;
         $data['tags']           = $tags;

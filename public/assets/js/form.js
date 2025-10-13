@@ -12,11 +12,23 @@ function handleFormSubmission(formSelector) {
         form.find(".invalid-feedback").remove();
 
         const originalText = submitBtn.html();
-        submitBtn
-            .prop("disabled", true)
-            .html(
-                '<span class="spinner-border spinner-border-sm me-1"></span> Please wait...'
-            );
+
+        if (submitBtn.data('loading-text') == 'spinner') {
+
+            submitBtn
+                .prop("disabled", true)
+                .html(
+                    '<span class="spinner-border spinner-border-sm me-1"></span>'
+                );
+        }else{
+
+            submitBtn
+                .prop("disabled", true)
+                .html(
+                    '<span class="spinner-border spinner-border-sm me-1"></span> Please wait...'
+                );
+        }
+
 
         const formData = new FormData(this);
 

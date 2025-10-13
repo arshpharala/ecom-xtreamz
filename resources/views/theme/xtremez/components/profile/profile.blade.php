@@ -1,5 +1,6 @@
 <div id="profile" class="profile-tab">
-  <form class="profile-main bg-white p-4 ajax-form border border-2 shadow" method="POST" action="{{ route('customers.profile.update') }}">
+  <form class="profile-main bg-white p-4 ajax-form border border-2 shadow" method="POST"
+    action="{{ route('customers.profile.update') }}">
     @csrf
     <div class="row g-4 p-4">
       {{-- Full Name --}}
@@ -36,6 +37,8 @@
             <i class="bi bi-pencil"></i>
           </button>
         </div>
+
+        <div id="mobile-error"></div>
       </div>
 
       {{-- Birthday --}}
@@ -80,5 +83,26 @@
     $("form.ajax-form").each(function() {
       handleFormSubmission(this);
     });
+
+
+    $('#mobile').on('input', function() {
+      let value = $(this).val();
+
+      // Allow only numbers, +, -, and spaces
+      value = value.replace(/[^0-9+\-\s]/g, '');
+      $(this).val(value);
+
+      // Regex to match international formats (+971..., 971..., +44..., etc.)
+      const pattern = /^\+?\d{1,4}?[-\s]?\d{6,14}$/;
+
+      if (!pattern.test(value)) {
+        this.setCustomValidity(
+        'Enter a valid mobile number, e.g. +971-504532525 or 97150323234.');
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+
+
   });
 </script>

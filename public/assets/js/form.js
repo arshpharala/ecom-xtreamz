@@ -93,16 +93,33 @@ function handleValidationErrors(xhr, form) {
             if (input.length) {
                 input.addClass("is-invalid");
 
-                if (!input.next(".invalid-feedback").length) {
-                    input.after(
-                        `<div class="invalid-feedback">${messages[0]}</div>`
-                    );
+                // Check for a predefined error container
+                const errorContainer = form.find(`#${field}-error`);
+
+
+
+                if (errorContainer.length) {
+                    // Use existing error div
+                    errorContainer.text(messages[0]).addClass('invalid-feedback').show();
+                } else {
+                    // Otherwise, append dynamically
+                    if (!input.next(".invalid-feedback").length) {
+                        input.after(
+                            `<div class="invalid-feedback">${messages[0]}</div>`
+                        );
+                    }
                 }
 
-                // Remove error dynamically on change
-                input.on("input change", function () {
+                // Remove error dynamically on change/input
+                input.off("input change").on("input change", function () {
                     $(this).removeClass("is-invalid");
-                    $(this).next(".invalid-feedback").remove();
+
+                    // Remove or clear error messages
+                    if (errorContainer.length) {
+                        errorContainer.text("").hide();
+                    } else {
+                        $(this).next(".invalid-feedback").remove();
+                    }
                 });
             }
         });

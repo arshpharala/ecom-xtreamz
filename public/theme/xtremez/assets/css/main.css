@@ -2751,23 +2751,25 @@ main {
 }
 .order-summary-section .order-item {
   align-items: center;
-  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
 }
 .order-summary-section .order-item:last-child {
-  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 .order-summary-section .order-item .order-item-img {
   width: 48px;
   height: 48px;
-  background: #e7f6fa;
+  border: 1px solid #ddd;
   border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .order-summary-section .order-item .order-item-img img {
-  max-width: 36px;
-  max-height: 36px;
+  max-width: 40px;
+  max-height: 40px;
   object-fit: contain;
 }
 

@@ -51,7 +51,7 @@
       @endif
 
       {{-- Add New Card Form --}}
-      <div class="col-md-8">
+      <div class="col-md-12 col-lg-8">
         <form id="card-form">
           <div class="fw-semibold mb-2">Add New Card</div>
 
@@ -62,7 +62,7 @@
           <div id="card-element" class="form-control theme-input p-3 mb-3" style="border: 1px solid #ccc;"></div>
           <div id="card-errors" class="text-danger mb-3"></div>
 
-          <button type="button" id="save-card-btn" class="btn btn-save btn-secondary">SAVE CHANGES</button>
+          <button type="button" id="save-card-btn" class="btn btn-save btn-secondary">SAVE CARD</button>
         </form>
       </div>
 

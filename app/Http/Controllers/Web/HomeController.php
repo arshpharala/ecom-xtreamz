@@ -85,14 +85,6 @@ class HomeController extends Controller
 
     public function subscribe(Request $request)
     {
-        // Throttle per IP (5 requests/minute)
-        $key = 'subscribe:' . $request->ip();
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            return response()->json(['message' => __('Too many attempts. Try again later.')], 429);
-        }
-        RateLimiter::hit($key, 60);
-
-        // Validate request (with honeypot)
         $data = $request->validate([
             'subscriber_email' => 'required|email|unique:subscribers,email',
             'extra_field'      => 'max:0' // honeypot (must stay empty)

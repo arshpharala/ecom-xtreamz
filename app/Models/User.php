@@ -10,11 +10,13 @@ use App\Models\Cart\Order;
 use App\Models\Cart\UserCard;
 use Laravel\Cashier\Billable;
 use App\Models\Cart\BillingAddress;
+use App\Notifications\CustomVerifyEmail;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, Billable;
@@ -37,6 +39,7 @@ class User extends Authenticatable
         'stripe_id',
         'provider_name',
         'provider_id',
+        'email_verified_at'
     ];
 
     /**
@@ -108,5 +111,10 @@ class User extends Authenticatable
     {
         $url = route('password.reset', ['token' => $token, 'email' => $this->email]);
         $this->notify(new \App\Notifications\CustomResetPassword($url));
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomVerifyEmail);
     }
 }

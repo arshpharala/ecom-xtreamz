@@ -12,7 +12,7 @@
             </a>
           </li>
           <li class="breadcrumb-item active text-white" aria-current="page" title="Search">
-            My Cart
+            My Profile
           </li>
         </ol>
       </nav>
@@ -28,6 +28,29 @@
       </div>
     </div>
   </section>
+
+  @if (is_null(auth()->user()->email_verified_at))
+    <section class="profile-section pb-5" id="verifySection">
+      <div class="container text-center">
+        <div class="alert alert-info rounded-0" role="alert">
+          <h4 class="alert-heading">Email Verification Required</h4>
+          <p>Please verify your email address to access your profile features.</p>
+          <hr>
+          <p class="mb-3">
+            Check your inbox for a verification email.
+          </p>
+
+          <form method="POST" action="{{ route('verification.send') }}" class="d-inline-block ajax-form">
+            @csrf
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-envelope-check me-1"></i> Resend Verification Email
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  @endif
+
 
   <section class="profile-section pb-5">
     <div class="container">

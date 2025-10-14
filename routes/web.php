@@ -53,7 +53,7 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
 
     Route::get('currencies',                            [HomeController::class, 'currencies']);
 
-    Route::post('subscribe',                             [HomeController::class, 'subscribe'])->name('subscribe');
+    Route::post('subscribe',                             [HomeController::class, 'subscribe'])->name('subscribe')->middleware('throttle:3,1');;
 });
 
 

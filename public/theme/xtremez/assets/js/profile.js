@@ -64,6 +64,10 @@ $(function () {
         const tabId = $el.data("tab");
         const heading = $el.data("heading");
 
+        if (!tabId) {
+            return;
+        }
+
         $(".profile-link").removeClass("active");
         $el.addClass("active");
         $(".section-title").text(heading);

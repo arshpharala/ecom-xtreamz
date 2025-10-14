@@ -19,15 +19,22 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password/{token}',           [LoginController::class, 'resetPasswordForm'])->name('password.reset');
     Route::post('/reset-password',                  [LoginController::class, 'resetPassword'])->name('password.update');
 
+
     Route::get('auth/{provider}/login',             ProviderRedirectController::class)->name('auth.provider.login');
     Route::get('auth/{provider}/callback',          ProviderCallbackController::class)->name('auth.provider.callback');
 });
+
+
+Route::get('verify-email',                      [LoginController::class, 'verifyEmailNotice'])->name('verification.notice');
+Route::get('verify-email/{id}/{hash}',          [LoginController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
+Route::post('email/verification-notification',  [LoginController::class, 'resendVerificationEmail'])->name('verification.send')->middleware('throttle:1,0.5');
+
 
 Route::middleware('auth')->group(function () {
     Route::post('logout',                           [LoginController::class, 'destroy'])->name('logout');
 });
 
-Route::prefix('/customers')->name('customers.')->middleware('auth')->group(function () {
+Route::prefix('/customers')->name('customers.')->middleware('auth', 'verified')->group(function () {
     Route::get('profile',                           [ProfileController::class, 'profile'])->name('profile');
     Route::get('profile/tab/{tab}',                 [ProfileController::class, 'loadTab'])->name('profile.tab');
     Route::post('profile/update',                   [ProfileController::class, 'update'])->name('profile.update');

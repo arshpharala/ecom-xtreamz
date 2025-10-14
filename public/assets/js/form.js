@@ -13,22 +13,19 @@ function handleFormSubmission(formSelector) {
 
         const originalText = submitBtn.html();
 
-        if (submitBtn.data('loading-text') == 'spinner') {
-
+        if (submitBtn.data("loading-text") == "spinner") {
             submitBtn
                 .prop("disabled", true)
                 .html(
                     '<span class="spinner-border spinner-border-sm me-1"></span>'
                 );
-        }else{
-
+        } else {
             submitBtn
                 .prop("disabled", true)
                 .html(
                     '<span class="spinner-border spinner-border-sm me-1"></span> Please wait...'
                 );
         }
-
 
         const formData = new FormData(this);
 
@@ -53,6 +50,7 @@ function handleFormSubmission(formSelector) {
                 Swal.fire({
                     icon: "success",
                     title: "Success!",
+                    iconColor: "#39767b",
                     text: response.message || "Form submitted successfully.",
                     timer: 2000,
                     showConfirmButton: false,
@@ -76,73 +74,141 @@ function handleFormSubmission(formSelector) {
         });
     });
 }
-
+/**
+ * Master error handler
+ */
 function handleValidationErrors(xhr, form) {
-    if (xhr.status === 422 && xhr.responseJSON?.errors) {
-        const errors = xhr.responseJSON.errors;
-
-        Swal.fire({
-            icon: "error",
-            title: "Validation Error",
-            text:
-                xhr.responseJSON.message || "Please fix the form errors below.",
-            timer: 3000,
-            confirmButtonColor: "#5fa6ac",
-            cancelButtonColor: "#020202ff",
-        });
-
-        $.each(errors, function (field, messages) {
-            let input = form.find(`[name="${field}"]`);
-
-            // Handle nested fields like "address.city"
-            if (input.length === 0 && field.includes(".")) {
-                const flatName = field
-                    .replace(/\./g, "\\.")
-                    .replace(/\[\]/g, "");
-                input = form.find(`[name="${flatName}"]`);
-            }
-
-            if (input.length) {
-                input.addClass("is-invalid");
-
-                // Check for a predefined error container
-                const errorContainer = form.find(`#${field}-error`);
-
-
-
-                if (errorContainer.length) {
-                    // Use existing error div
-                    errorContainer.text(messages[0]).addClass('invalid-feedback').show();
-                } else {
-                    // Otherwise, append dynamically
-                    if (!input.next(".invalid-feedback").length) {
-                        input.after(
-                            `<div class="invalid-feedback">${messages[0]}</div>`
-                        );
-                    }
-                }
-
-                // Remove error dynamically on change/input
-                input.off("input change").on("input change", function () {
-                    $(this).removeClass("is-invalid");
-
-                    // Remove or clear error messages
-                    if (errorContainer.length) {
-                        errorContainer.text("").hide();
-                    } else {
-                        $(this).next(".invalid-feedback").remove();
-                    }
-                });
-            }
-        });
-    } else {
-        Swal.fire({
-            icon: "error",
-            title: "Server Error",
-            text: "Something went wrong. Please try again.",
-        });
-        console.error(xhr);
+    switch (xhr.status) {
+        case 422:
+            return handleValidationError422(xhr, form);
+        case 429:
+            return handleTooManyRequests429(xhr);
+        case 401:
+            return handleUnauthorized401(xhr);
+        case 403:
+            return handleForbidden403(xhr);
+        default:
+            return handleServerError(xhr);
     }
+}
+
+/**
+ * 422 – Validation errors
+ */
+function handleValidationError422(xhr, form) {
+    if (!xhr.responseJSON?.errors) {
+        return handleServerError(xhr);
+    }
+
+    const errors = xhr.responseJSON.errors;
+
+    Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        text: xhr.responseJSON.message || "Please fix the form errors below.",
+        timer: 3000,
+        confirmButtonColor: "#39767b",
+    });
+
+    $.each(errors, function (field, messages) {
+        let input = form.find(`[name="${field}"]`);
+
+        // Handle nested fields like "address.city"
+        if (input.length === 0 && field.includes(".")) {
+            const flatName = field.replace(/\./g, "\\.").replace(/\[\]/g, "");
+            input = form.find(`[name="${flatName}"]`);
+        }
+
+        if (input.length) {
+            input.addClass("is-invalid");
+
+            // Find predefined error container if available
+            const errorContainer = form.find(`#${field}-error`);
+
+            if (errorContainer.length) {
+                errorContainer
+                    .text(messages[0])
+                    .addClass("invalid-feedback")
+                    .show();
+            } else if (!input.next(".invalid-feedback").length) {
+                input.after(
+                    `<div class="invalid-feedback">${messages[0]}</div>`
+                );
+            }
+
+            // Remove error dynamically when user edits input
+            input.off("input change").on("input change", function () {
+                $(this).removeClass("is-invalid");
+                if (errorContainer.length) {
+                    errorContainer.text("").hide();
+                } else {
+                    $(this).next(".invalid-feedback").remove();
+                }
+            });
+        }
+    });
+}
+
+/**
+ * 429 – Too many requests
+ */
+function handleTooManyRequests429(xhr) {
+    const retryAfter = xhr.getResponseHeader("Retry-After") || 60;
+    Swal.fire({
+        icon: "warning",
+        title: "Too Many Requests",
+        text:
+            xhr.responseJSON?.message ||
+            `You’ve made too many requests. Please try again after ${retryAfter} seconds.`,
+        confirmButtonColor: "#39767b",
+    });
+}
+
+/**
+ * 401 – Unauthorized
+ */
+function handleUnauthorized401(xhr) {
+    Swal.fire({
+        icon: "warning",
+        title: "Unauthorized",
+        text:
+            xhr.responseJSON?.message ||
+            "Your session has expired. Please log in again.",
+        confirmButtonText: "Login",
+        confirmButtonColor: "#39767b",
+    }).then(() => {
+        location.reload(); // or redirect to login if needed
+    });
+}
+
+/**
+ * 403 – Forbidden
+ */
+function handleForbidden403(xhr) {
+    Swal.fire({
+        icon: "error",
+        title: "Access Denied",
+        text:
+            xhr.responseJSON?.message ||
+            "You do not have permission to perform this action.",
+        confirmButtonColor: "#39767b",
+    });
+}
+
+/**
+ * 500+ – Server or unexpected errors
+ */
+function handleServerError(xhr) {
+    Swal.fire({
+        icon: "error",
+        title: "Server Error",
+        text:
+            xhr.responseJSON?.message ||
+            "Something went wrong. Please try again later.",
+        confirmButtonColor: "#39767b",
+    });
+
+    console.error("Server error:", xhr);
 }
 
 $(document).ready(function () {

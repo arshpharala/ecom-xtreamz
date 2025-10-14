@@ -5,12 +5,16 @@
     </div>
 
     <!-- Pagination -->
-      <nav class="d-flex justify-content-center my-5 pagination-section">
-        <ul class="pagination mb-0">
+    <nav class="d-flex justify-content-center my-5 pagination-section">
+      <ul class="pagination mb-0">
 
-        </ul>
-      </nav>
+      </ul>
+    </nav>
+    <div class="order-item text-center py-5 text-muted" id="no-product" style="display: none">
+      No products found in your wishlist.
+    </div>
   </div>
+
 </div>
 
 <script>
@@ -34,12 +38,12 @@
               render_product_card(product, "col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6")
             );
 
-            $("#wishlist-products").html(html);
+            $('#whislist').find("#wishlist-products").html(html);
 
             render_pagination(response.data.pagination);
 
           } else {
-            $("#wishlist-products").html(`<p class="text-muted">No products found.</p>`);
+            $("#no-product").show();
           }
         },
         error: function() {

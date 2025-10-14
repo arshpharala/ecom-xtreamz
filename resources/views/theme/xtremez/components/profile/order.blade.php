@@ -1,5 +1,5 @@
 <div id="order" class="profile-tab">
-  <div class="profile-main bg-white p-4 border border-2 shadow rounded-3">
+  <div class="profile-main bg-white p-4 border border-2 shadow">
     <div class="row g-4 p-4">
       <div class="col-md-12">
         <div class="order-list">
@@ -46,7 +46,7 @@
               </div>
             </div>
           @empty
-            <div class="order-item text-center py-5 text-muted border rounded">
+            <div class="order-item text-center py-5 text-muted">
               No orders found yet.
             </div>
           @endforelse

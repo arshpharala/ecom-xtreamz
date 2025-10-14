@@ -2865,8 +2865,8 @@ main {
   color: var(--color-secondary);
 }
 .profile-section .profile-main {
-  max-width: 800px;
   margin: 0 auto;
+  min-height: 440px;
 }
 .profile-section .profile-main .input-group {
   border: 1px solid #ddd;

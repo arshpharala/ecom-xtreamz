@@ -20,6 +20,7 @@ class ProfileController extends Controller
     public function profile()
     {
         $user = auth()->user();
+
         return view('theme.xtremez.customers.profile');
     }
 

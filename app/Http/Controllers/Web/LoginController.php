@@ -22,6 +22,11 @@ class LoginController extends Controller
     public function create()
     {
         if (Auth::check()) {
+
+            if (!Auth::user()->email_verified_at) {
+                return redirect()->route('verification.notice');
+            }
+
             return redirect()->route('customers.profile');
         }
         return view('theme.xtremez.auth.login');
@@ -147,6 +152,60 @@ class LoginController extends Controller
             ], 422);
         }
     }
+
+    function verifyEmailNotice()
+    {
+        if (auth()->user()->hasVerifiedEmail()) {
+            return redirect()->route('customers.profile');
+        }
+
+        return view('theme.xtremez.auth.verify-email');
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $user = User::find($request->route('id'));
+
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['email' => 'User not found.']);
+        }
+
+        if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+            return redirect()->route('login')->withErrors(['email' => 'Invalid verification link.']);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('customers.profile');
+        }
+
+        $user->markEmailAsVerified();
+
+        event(new \Illuminate\Auth\Events\Verified($user));
+
+        Auth::login($user);
+
+        return redirect()->route('customers.profile')->with('status', 'Email verified successfully.');
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Email already verified.',
+                'redirect' => route('customers.profile')
+            ], 400);
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Verification link sent successfully.'
+        ]);
+    }
+
+
 
     /**
      * Destroy an authenticated session.

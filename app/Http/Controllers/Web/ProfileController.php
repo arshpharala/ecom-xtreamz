@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Web;
 use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\PaymentMethod;
-use Illuminate\Http\Request;
-use App\Services\StripeService;
-use App\Http\Controllers\Controller;
 use App\Models\CMS\Province;
+use Illuminate\Http\Request;
+use Laravel\Cashier\Cashier;
+use App\Services\StripeService;
+use App\Models\CMS\PaymentGateway;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\ValidationException;
@@ -36,6 +38,12 @@ class ProfileController extends Controller
                 break;
             case 'wishlist':
                 $user = $user->load('wishlist');
+                break;
+            case 'payment':
+                // $stripe = new StripeService(); // sets key from DB automatically
+                $stripe       = PaymentGateway::active()->where('gateway', 'Stripe')->first();
+                config(['cashier.secret' => $stripe->secret]);
+                $data['stripe']       = $stripe;
                 break;
 
             default:

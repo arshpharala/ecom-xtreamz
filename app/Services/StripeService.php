@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use Stripe\Stripe;
-use App\Models\User;
 use Stripe\Customer;
-use App\Models\Address;
 use Stripe\PaymentIntent;
 use Stripe\PaymentMethod;
+use App\Models\User;
+use App\Models\Address;
 use App\Models\CMS\PaymentGateway;
+use Illuminate\Support\Facades\Cache;
 
 class StripeService
 {
@@ -16,12 +17,15 @@ class StripeService
 
     public function __construct()
     {
-        $this->gateway = PaymentGateway::where('gateway', 'stripe')
-            ->where('is_active', true)
-            ->first();
+        // Cache the gateway for 5 minutes to avoid repeated DB hits
+        $this->gateway = Cache::remember('active_stripe_gateway', 300, function () {
+            return PaymentGateway::where('gateway', 'stripe')
+                ->where('is_active', true)
+                ->first();
+        });
 
-        if (!$this->gateway || !$this->gateway->secret) {
-            throw new \Exception("Stripe gateway is not configured.");
+        if (!$this->gateway || empty($this->gateway->secret)) {
+            throw new \Exception('Stripe gateway is not configured properly.');
         }
 
         Stripe::setApiKey($this->gateway->secret);
@@ -39,6 +43,7 @@ class StripeService
                 'email' => $user->email,
                 'name'  => $user->name,
             ]);
+
             $user->update(['stripe_id' => $customer->id]);
         }
     }
@@ -50,22 +55,24 @@ class StripeService
         Customer::update($user->stripe_id, [
             'address' => [
                 'line1'       => $address->address,
-                'city'        => $address->city->name,
-                'state'       => $address->province->name,
+                'city'        => optional($address->city)->name,
+                'state'       => optional($address->province)->name,
                 'postal_code' => $address->postal_code ?? '00000',
-                'country'     => $address->country->code,
+                'country'     => optional($address->country)->code ?? 'AE',
             ],
-            'name'    => $address->name,
-            'phone'   => $address->phone ?? null,
+            'name'  => $address->name,
+            'phone' => $address->phone ?? null,
         ]);
     }
 
-    public function createIntentForNewCard($user, $amount, $metadata = [])
+    public function createIntentForNewCard(User $user, float $amount, array $metadata = [])
     {
+        $this->ensureStripeCustomer($user);
+
         return PaymentIntent::create([
-            'amount' => (int)($amount * 100),
-            'currency' => active_currency(),
-            'customer' => $user->stripe_id ?? NULL,
+            'amount' => (int) ($amount * 100),
+            'currency' => strtolower(active_currency() ?? 'aed'),
+            'customer' => $user->stripe_id,
             'automatic_payment_methods' => ['enabled' => true],
             'metadata' => $metadata,
         ]);
@@ -73,11 +80,12 @@ class StripeService
 
     public function chargeSavedCard(User $user, string $paymentMethodId, float $amount, array $meta = [])
     {
-
         try {
+            $this->ensureStripeCustomer($user);
+
             return PaymentIntent::create([
                 'amount' => (int) ($amount * 100),
-                'currency' => active_currency(),
+                'currency' => strtolower(active_currency() ?? 'aed'),
                 'customer' => $user->stripe_id,
                 'payment_method' => $paymentMethodId,
                 'off_session' => true,
@@ -85,8 +93,7 @@ class StripeService
                 'metadata' => $meta,
             ]);
         } catch (\Stripe\Exception\CardException $e) {
-
-            return [  // This card requires authentication
+            return [
                 'requires_action' => true,
                 'payment_intent_id' => $e->getError()->payment_intent->id ?? null,
                 'client_secret' => $e->getError()->payment_intent->client_secret ?? null,
@@ -96,12 +103,12 @@ class StripeService
 
     public function saveCardForUser(User $user, string $paymentMethodId): void
     {
-        $this->ensureStripeCustomer($user); // Ensures stripe_id
+        $this->ensureStripeCustomer($user);
 
         $paymentMethod = PaymentMethod::retrieve($paymentMethodId);
         $paymentMethod->attach(['customer' => $user->stripe_id]);
 
-        // Set as default
+        // Make it default
         Customer::update($user->stripe_id, [
             'invoice_settings' => [
                 'default_payment_method' => $paymentMethodId,

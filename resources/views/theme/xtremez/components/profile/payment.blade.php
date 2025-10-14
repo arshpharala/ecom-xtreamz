@@ -3,43 +3,52 @@
     <div class="row g-4 p-4">
 
       {{-- Saved Cards Section --}}
-      <div class="col-md-12">
-        <div class="fw-semibold mb-2">Saved Cards</div>
 
-        @forelse ($user->paymentMethods() as $card)
-          @php
-            $brand = strtolower($card->card->brand);
-            $last4 = $card->card->last4;
-            $expMonth = str_pad($card->card->exp_month, 2, '0', STR_PAD_LEFT);
-            $expYear = $card->card->exp_year;
-            $isDefault = $user->defaultPaymentMethod()?->id === $card->id;
-          @endphp
+      @php
+        $paymentMethods = $user->paymentMethods();
+      @endphp
 
-          <div class="card-list-box border d-flex align-items-center justify-content-between mb-4">
-            <div class="card-list d-flex align-items-center gap-3 flex-grow-1 p-3">
-              <img src="{{ asset('theme/xtremez/assets/icons/' . $brand . '.png') }}" alt="Card"
-                style="width: 38px; height: 25px;">
-              <span class="text-black-50">**** {{ $last4 }}</span>
-              <div class="ms-5" style="letter-spacing: 1.2px;">
-                <span class="text-black-50">EXPIRES <span
-                    class="text-black">{{ $expMonth }}/{{ $expYear }}</span></span>
-                @if ($isDefault)
-                  <span class="badge bg-success ms-3">Default</span>
-                @endif
+      @if ($paymentMethods->isNotEmpty())
+
+        <div class="col-md-12">
+          <div class="fw-semibold mb-2">Saved Cards</div>
+
+          @forelse ($paymentMethods as $card)
+            @php
+              $brand = strtolower($card->card->brand);
+              $last4 = $card->card->last4;
+              $expMonth = str_pad($card->card->exp_month, 2, '0', STR_PAD_LEFT);
+              $expYear = $card->card->exp_year;
+              $isDefault = $user->defaultPaymentMethod()?->id === $card->id;
+            @endphp
+
+            <div class="card-list-box border d-flex align-items-center justify-content-between mb-4">
+              <div class="card-list d-flex align-items-center gap-3 flex-grow-1 p-3">
+                <img src="{{ asset('theme/xtremez/assets/icons/' . $brand . '.png') }}" alt="Card"
+                  style="width: 38px; height: 25px;">
+                <span class="text-black-50">**** {{ $last4 }}</span>
+                <div class="ms-5" style="letter-spacing: 1.2px;">
+                  <span class="text-black-50">EXPIRES <span
+                      class="text-black">{{ $expMonth }}/{{ $expYear }}</span></span>
+                  @if ($isDefault)
+                    <span class="badge bg-success ms-3">Default</span>
+                  @endif
+                </div>
+              </div>
+
+              <div>
+                <button type="button" class="btn btn-delete p-3"
+                  data-url="{{ route('customers.cart.delete', ['card' => $card->id]) }}">
+                  <i class="bi bi-trash"></i>
+                </button>
               </div>
             </div>
+          @empty
+            <div class="text-muted">No saved cards.</div>
+          @endforelse
+        </div>
 
-            <div>
-              <button type="button" class="btn btn-delete p-3"
-                data-url="{{ route('customers.cart.delete', ['card' => $card->id]) }}">
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
-          </div>
-        @empty
-          <div class="text-muted">No saved cards.</div>
-        @endforelse
-      </div>
+      @endif
 
       {{-- Add New Card Form --}}
       <div class="col-md-8">
@@ -65,7 +74,7 @@
   window.initStripeCardForm = function() {
 
 
-    const stripeKey = "{{ env('STRIPE_KEY') }}";
+    const stripeKey = "{{ $stripe->key }}";
     const stripe = Stripe(stripeKey);
     const elements = stripe.elements();
 

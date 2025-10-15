@@ -24,7 +24,8 @@ class Order extends Model
         'currency_id',
         'sub_total',
         'tax',
-        'total'
+        'total',
+        'email_sent'
     ];
 
     protected static function booted()

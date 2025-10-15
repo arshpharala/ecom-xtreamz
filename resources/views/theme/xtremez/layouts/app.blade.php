@@ -43,7 +43,7 @@
       font-family: 'UAESymbol';
       src: url('{{ asset('assets/fonts/font.woff2') }}') format('woff2'),
         url('{{ asset('assets/fonts/font.woff') }}') format('woff'),
-        url('{{ asset('assets/fonts/fontD.ttf') }}') format('truetype');
+        url('{{ asset('assets/fonts/font.ttf') }}') format('truetype');
     }
 
     .dirham-symbol {

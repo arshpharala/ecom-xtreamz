@@ -14,15 +14,17 @@ use App\Services\CartService;
 use App\Services\StripeService;
 use App\Models\Cart\CouponUsage;
 use Illuminate\Http\JsonResponse;
+use App\Models\CMS\PaymentGateway;
 use Illuminate\Support\Facades\DB;
 use App\Models\Cart\BillingAddress;
+use App\Notifications\OrderSuccess;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Paypal\PaypalService;
 use App\Repositories\AddressRepository;
 use App\Http\Requests\StoreOrderRequest;
-use App\Models\CMS\PaymentGateway;
+use Illuminate\Support\Facades\Notification;
 
 class CheckoutController extends Controller
 {
@@ -320,9 +322,18 @@ class CheckoutController extends Controller
 
     public function thankYou(string $orderNumber)
     {
-        $data['order']  = Order::where('order_number', $orderNumber)->firstOrFail();
-
+        $order = Order::where('order_number', $orderNumber)->firstOrFail();
+        $data['order'] = $order->load(['lineItems.productVariant.product', 'address', 'user']);
         $this->cart->clear();
+        // return view('emails.order-success', $data);
+
+        if ($order->email && !$order->email_sent) {
+            // $order->user?->notify(new OrderSuccess($order)); // if user logged in
+
+            Notification::route('mail', $order->email)
+                ->notify(new OrderSuccess($order));
+            $order->update(['email_sent' => true]);
+        }
 
         return view('theme.xtremez.order-confirmation', $data);
     }

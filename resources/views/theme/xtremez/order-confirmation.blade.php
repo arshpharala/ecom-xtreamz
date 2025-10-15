@@ -40,17 +40,13 @@
               <div class="col-6">
                 <div class="fw-bold">Billing address</div>
                 <div>
-                  {{ $order->address->address }}<br>
-                  {{ $order->address->landmark }}<br>
-                  {{ $order->address->city->name }}, {{ $order->address->province->name }}
+                  {!! $order->address->render() !!}
                 </div>
               </div>
               <div class="col-6">
                 <div class="fw-bold">Shipping address</div>
                 <div>
-                  {{ $order->address->address }}<br>
-                  {{ $order->address->landmark }}<br>
-                  {{ $order->address->city->name }}, {{ $order->address->province->name }}
+                  {!! $order->address->render() !!}
                 </div>
               </div>
             </div>

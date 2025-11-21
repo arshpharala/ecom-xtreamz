@@ -19,7 +19,7 @@ class BrandController extends Controller
      */
     public function index(Request $request)
     {
-        // $this->authorize('viewAny', Brand::class);
+        $this->authorize('viewAny', Brand::class);
 
         if ($request->ajax()) {
             $brands = Brand::withTrashed();

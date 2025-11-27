@@ -140,7 +140,7 @@
               class="footer-mini-links list-unstyled d-flex flex-wrap gap-3 mb-0 justify-content-center justify-content-md-start">
               <li><a href="#">Sitemap</a></li>
               <li><a href="#">Careers</a></li>
-              <li><a href="#">Support</a></li>
+              {{-- <li><a href="#">Support</a></li> --}}
             </ul>
           </div>
           <div class="col-12 col-md-4 text-center order-1 order-md-2">

@@ -64,6 +64,7 @@ class HomeController extends Controller
         $page = (new PageRepository())->findOrFailBySlug($slug);
 
         $data['page'] = $page;
+        $data['meta']               = $page ? $page->metaForLocale() :  null;
 
         return view('theme.xtremez.page', $data);
     }

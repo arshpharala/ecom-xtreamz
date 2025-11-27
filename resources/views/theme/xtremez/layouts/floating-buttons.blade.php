@@ -8,7 +8,7 @@
 </section>
 
 
-<a href="#" role="button" target="_blank" class="chat-widget btn-chat d-none d-md-flex">
+<a href="https://wa.me/971522621345" role="button" target="_blank" class="chat-widget btn-chat d-none d-md-flex">
   <span class="chat-widget__icon"></span>
   <div class="chat-widget__label">
     <div class="chat-widget__label-text">Need help? Chat with us</div>

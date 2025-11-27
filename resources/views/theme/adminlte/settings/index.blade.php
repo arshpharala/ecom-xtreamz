@@ -70,6 +70,11 @@
                       <input type="text" class="form-control" name="copyright" value="{{ setting('copyright') }}">
                     </div>
 
+                    <div class="mb-4">
+                      <h5 class="mb-3">Tiny MC Key</h5>
+                      <input type="text" class="form-control" name="tiny_mc_key" value="{{ setting('tiny_mc_key') }}">
+                    </div>
+
 
                   </div>
 

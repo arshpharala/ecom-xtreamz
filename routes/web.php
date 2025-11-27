@@ -15,6 +15,10 @@ Route::get('/',                                         [HomeController::class, 
 Route::get('about-us',                                  [HomeController::class, 'page'])->name('about-us');
 Route::get('contact-us',                                [HomeController::class, 'page'])->name('contact-us');
 Route::get('policy',                                    [HomeController::class, 'page'])->name('policy');
+Route::get('faq',                                    [HomeController::class, 'page'])->name('faq');
+Route::get('terms-and-conditions',                                    [HomeController::class, 'page'])->name('terms-and-conditions');
+Route::get('shipping-policy',                   [HomeController::class, 'page'])->name('shipping-policy');
+Route::get('return-and-refunds',                   [HomeController::class, 'page'])->name('return-and-refunds');
 
 Route::get('clearance',                                 [ProductController::class, 'clearance'])->name('clearance');
 Route::get('featured',                                  [ProductController::class, 'featured'])->name('featured');

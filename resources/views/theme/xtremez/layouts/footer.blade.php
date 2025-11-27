@@ -93,7 +93,7 @@
             <ul class="footer-links list-unstyled">
               <li><a href="{{ route('about-us') }}">About</a></li>
               <li><a href="{{ route('contact-us') }}">Contact</a></li>
-              <li><a href="#">FAQ</a></li>
+              <li><a href="{{ route('faq') }}">FAQ</a></li>
               <li><a href="{{ route('customers.profile') }}">My Account</a></li>
             </ul>
           </div>
@@ -103,9 +103,9 @@
             <h6 class="footer-title">Policies</h6>
             <ul class="footer-links list-unstyled">
               <li><a href="{{ route('policy') }}">Privacy Policy</a></li>
-              <li><a href="#">Terms & Conditions</a></li>
-              <li><a href="#">Shipping Policy</a></li>
-              <li><a href="#">Returns & Refunds</a></li>
+              <li><a href="{{ route('terms-and-conditions') }}">Terms & Conditions</a></li>
+              <li><a href="{{ route('shipping-policy') }}">Shipping Policy</a></li>
+              <li><a href="{{ route('return-and-refunds') }}">Returns & Refunds</a></li>
             </ul>
           </div>
 

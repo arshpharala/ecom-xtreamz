@@ -69,12 +69,12 @@ class ProductController extends Controller
         $selected       = $this->getSelectedAttributes($productVariant);
         // $allVariants    = $this->formatAllVariants($product);
 
-        return view('theme.xtremez.products.show', compact(
-            'productVariant',
-            'attributes',
-            'selected',
-            // 'allVariants'
-        ));
+        $data['productVariant'] = $productVariant;
+        $data['product']        = $product;
+        $data['selected']       = $selected;
+        $data['meta']           = $product ? $product->metaForLocale() :  null;
+
+        return view('theme.xtremez.products.show', $data);
     }
 
     public function resolve(Request $request)

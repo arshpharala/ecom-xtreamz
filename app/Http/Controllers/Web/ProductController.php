@@ -71,6 +71,7 @@ class ProductController extends Controller
 
         $data['productVariant'] = $productVariant;
         $data['product']        = $product;
+        $data['attributes']        = $attributes;
         $data['selected']       = $selected;
         $data['meta']           = $product ? $product->metaForLocale() :  null;
 

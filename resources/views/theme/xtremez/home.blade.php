@@ -50,7 +50,7 @@
 
     <section class="heading-section py-5">
       <div class="container">
-        <div class="heading-row     >
+        <div class="heading-row">
           <h2 class="section-title fs-1 text-center m-0 text-uppercase">Browse by Category</h2>
         </div>
         <p class="text-center animate-on-scroll" data-animate="fade-up">Explore our store the easy way: shop by category

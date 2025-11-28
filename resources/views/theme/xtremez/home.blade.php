@@ -217,7 +217,7 @@
           <!-- Right: Text -->
           <div class="col-lg-6 brochure-text">
             <p class="subtitle">A wide collection of creatives</p>
-            <h2 class="title">Our 2024 Gifts<br>Collection</h2>
+            <h2 class="title">Our {{ today()->year }} Gifts<br>Collection</h2>
             <a href="#" class="btn brochure-btn">View Brochure</a>
           </div>
 

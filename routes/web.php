@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\HomeController;
@@ -60,11 +61,15 @@ Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::post('subscribe',                             [HomeController::class, 'subscribe'])->name('subscribe')->middleware('throttle:3,1');;
 });
 
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/sitemap-static.xml', [SitemapController::class, 'static']);
+Route::get('/sitemap-products.xml', [SitemapController::class, 'products']);
 
-Route::get('email', function () {
-    $order = \App\Models\Cart\Order::oldest()->first();
-    return view('email.order-success', compact('order'));
-});
+
+// Route::get('email', function () {
+//     $order = \App\Models\Cart\Order::oldest()->first();
+//     return view('email.order-success', compact('order'));
+// });
 
 
 Route::get('clear', function () {

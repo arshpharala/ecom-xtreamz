@@ -145,13 +145,13 @@
           <div class="col-12 col-md-4 text-center text-md-start order-2 order-md-1">
             <ul
               class="footer-mini-links list-unstyled d-flex flex-wrap gap-3 mb-0 justify-content-center justify-content-md-start">
-              <li><a href="#">Sitemap</a></li>
+              <li><a href="{{ route('sitemap') }}">Sitemap</a></li>
               <li><a href="#">Careers</a></li>
               {{-- <li><a href="#">Support</a></li> --}}
             </ul>
           </div>
           <div class="col-12 col-md-4 text-center order-1 order-md-2">
-            <small class="copy">COPYRIGHT 2025 - XTREMEZ | ALL RIGHTS RESERVED</small>
+            <small class="copy">COPYRIGHT {{ today()->year }} - XTREMEZ | ALL RIGHTS RESERVED</small>
           </div>
           <div class="col-12 col-md-4 text-center text-md-end order-3">
             <ul class="payment-icons list-unstyled d-flex gap-2 mb-0 justify-content-center justify-content-md-end">

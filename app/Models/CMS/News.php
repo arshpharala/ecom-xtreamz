@@ -42,7 +42,7 @@ class News extends Model
 
     public function category()
     {
-        return $this->belongTo(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function translations()

@@ -23,7 +23,7 @@ class DashboardController extends Controller
 
     public function metrics(Request $request)
     {
-        $ordersQuery = Order::query();
+        $ordersQuery = Order::query()->paid();
         $this->applyDateFilters($ordersQuery, $request);
 
         $salesTotal = (clone $ordersQuery)->sum('total');

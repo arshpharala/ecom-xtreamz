@@ -51,7 +51,6 @@ $(function () {
             const variant = window.variant;
             const currency = $("meta[name='currency']").attr("content");
 
-
             const hasOffer = variant?.offer_data?.has_offer === true;
             const discountedPrice = parseFloat(
                 variant?.offer_data?.discounted_price || 0
@@ -278,10 +277,17 @@ $(function () {
         });
     }
 
+    // function updateUrlVariantId() {
+    //     const url = new URL(window.location.href);
+    //     url.searchParams.set("variant", window.variant.id);
+    //     history.pushState({}, "", url);
+    // }
+
     function updateUrlVariantId() {
         const url = new URL(window.location.href);
-        url.searchParams.set("variant", window.variant.id);
-        history.pushState({}, "", url);
+        const productSlug = url.pathname.split("/")[2];
+        const newPath = `/products/${productSlug}/variant/${window.variant.id}`;
+        history.pushState({}, "", newPath);
     }
 
     // Init qty price on load

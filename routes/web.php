@@ -24,7 +24,8 @@ Route::get('return-and-refunds',                   [HomeController::class, 'page
 Route::get('clearance',                                 [ProductController::class, 'clearance'])->name('clearance');
 Route::get('featured',                                  [ProductController::class, 'featured'])->name('featured');
 Route::get('products',                                  [ProductController::class, 'index'])->name('products');
-Route::get('products/{slug}',                           [ProductController::class, 'show'])->name('products.show');
+// Route::get('products/{slug}',                           [ProductController::class, 'show'])->name('products.show');
+Route::get('products/{slug}/variant/{variant}',                           [ProductController::class, 'show'])->name('products.show');
 
 Route::get('search',                                    [SearchController::class, 'search'])->name('search');
 

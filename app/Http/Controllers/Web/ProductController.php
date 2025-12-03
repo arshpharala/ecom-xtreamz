@@ -60,9 +60,9 @@ class ProductController extends Controller
         return view('theme.xtremez.products.index', $data);;
     }
 
-    public function show($slug, Request $request)
+    public function show($slug, $variantId, Request $request)
     {
-        $variantId      = $request->query('variant');
+        // $variantId      = $request->query('variant');
         $productVariant = $this->getProductVariant($variantId);
         $product        = $this->getProductWithAttributes($productVariant->product_id);
         $attributes     = $this->extractAttributesFromVariants($product);

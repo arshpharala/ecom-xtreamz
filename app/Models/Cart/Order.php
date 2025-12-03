@@ -55,6 +55,11 @@ class Order extends Model
         return $prefix . '-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
     }
 
+    function scopePaid($query)
+    {
+        return $query->where('payment_status', 'paid');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

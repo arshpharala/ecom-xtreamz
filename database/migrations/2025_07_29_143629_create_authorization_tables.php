@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index()->unique();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
 
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index()->unique();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
 
@@ -27,6 +29,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('module_id')->index();
             $table->string('name');
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
 
             $table->unique(['module_id', 'name'], 'unique_module_permission');

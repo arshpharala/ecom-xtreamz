@@ -18,7 +18,8 @@ class Tag extends Model
         'name',
         'position',
         'is_active',
-
+        'reference_id',
+        'reference_name'
     ];
 
     /**

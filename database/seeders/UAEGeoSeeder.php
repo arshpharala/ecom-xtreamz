@@ -16,7 +16,7 @@ class UAEGeoSeeder extends Seeder
         DB::transaction(function () {
             $countryId = DB::table('countries')->insertGetId([
                 'name' => 'United Arab Emirates',
-                'code' => 'UAE',
+                'code' => 'ae',
                 'created_at' => now(),
                 'updated_at' => now()
             ]);

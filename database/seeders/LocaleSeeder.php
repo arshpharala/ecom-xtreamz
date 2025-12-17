@@ -13,7 +13,7 @@ class LocaleSeeder extends Seeder
      */
     public function run(): void
     {
-        Locale::updateOrCreate(['code' => 'en'], [
+        Locale::updateOrCreate(['code' => 'en-ae'], [
             'name' => 'English',
             'direction' => 'ltr'
         ]);

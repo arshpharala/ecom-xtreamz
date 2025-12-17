@@ -20,7 +20,9 @@ class Brand extends Model
         'slug',
         'logo',
         'is_active',
-        'position'
+        'position',
+        'reference_id', //api
+        'reference_name',
     ];
 
     function scopeActive($builder)

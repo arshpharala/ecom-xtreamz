@@ -81,3 +81,9 @@ Route::get('clear', function () {
     \Illuminate\Support\Facades\Artisan::call('config:clear');
     return 'Cleared!';
 });
+
+
+Route::get('fetch', function () {
+    \Illuminate\Support\Facades\Artisan::call('app:fetch-data');
+    return 'Done';
+});

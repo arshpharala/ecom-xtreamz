@@ -29,6 +29,7 @@ class Category extends Model
         'show_on_homepage',
         'text_color',
         'background_color',
+        'reference_id', // api reference id
     ];
 
     function scopeVisible($query)

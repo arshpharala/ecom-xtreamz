@@ -13,7 +13,7 @@ class Attribute extends Model
     use HasFactory, SoftDeletes, HasUuids;
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'reference_id', 'reference_name'];
 
     public function values()
     {

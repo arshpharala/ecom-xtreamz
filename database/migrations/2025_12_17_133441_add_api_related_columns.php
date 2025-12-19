@@ -33,6 +33,20 @@ return new class extends Migration
             $table->integer('reference_id')->nullable()->after('id');
             $table->string('reference_name')->nullable()->after('reference_id');
         });
+
+        Schema::table('attribute_values', function (Blueprint $table) {
+            $table->integer('reference_id')->nullable()->after('id')->index();
+            $table->string('reference_value')->nullable()->after('reference_id');
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->integer('reference_id')->nullable()->after('id')->index();
+        });
+
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->integer('reference_id')->nullable()->after('id')->index();
+            $table->string('reference_sku')->nullable()->after('reference_id')->index();
+        });
     }
 
     /**
@@ -58,6 +72,18 @@ return new class extends Migration
 
         Schema::table('attributes', function (Blueprint $table) {
             $table->dropColumn(['reference_id', 'reference_name']);
+        });
+
+        Schema::table('attribute_values', function (Blueprint $table) {
+            $table->dropColumn(['reference_id', 'reference_value']);
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('reference_id');
+        });
+
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->dropColumn(['reference_id', 'reference_sku']);
         });
     }
 };

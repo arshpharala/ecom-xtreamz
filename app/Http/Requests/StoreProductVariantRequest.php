@@ -6,29 +6,29 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductVariantRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'sku' => 'required|string|max:255|unique:product_variants',
+            'sku'   => 'required|string|max:255|unique:product_variants,sku',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
-            'attributes' => 'required|array',
-            'attributes.*' => 'required|exists:attribute_values,id',
+
+            // Attributes OPTIONAL
+            'attributes'    => 'nullable|array',
+            'attributes.*'  => 'nullable|exists:attribute_values,id',
+
+            // Tags OPTIONAL
             'tags'          => 'nullable|array',
             'tags.*'        => 'nullable|exists:tags,id',
+
+            // Packaging OPTIONAL
+            'packaging'     => 'nullable|array',
+            'packaging.*'   => 'nullable|string|max:255',
         ];
     }
 }

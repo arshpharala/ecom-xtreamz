@@ -51,41 +51,32 @@
             </div>
           @endforeach
         </div>
-        <div class="col-6">
+        <div class="col-12 mt-3">
+          <h5 class="mb-3">
+            <i class="fas fa-box-open"></i> Packaging Details
+            <small class="text-muted">(optional)</small>
+          </h5>
 
-          <div class="form-group">
-            <label for="length">Length</label>
-            <input type="number" name="length" class="form-control" step="0.01"
-              value="{{ $variant->shipping->length ?? null }}">
+          <div class="row">
+            @foreach ($packagings as $packaging)
+              @php
+                $existing = $variant->packagings->firstWhere('id', $packaging->id);
+              @endphp
+
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="text-muted">
+                    {{ $packaging->name }}
+                  </label>
+
+                  <input type="text" name="packaging[{{ $packaging->id }}]" class="form-control"
+                    placeholder="Enter {{ strtolower($packaging->name) }}" value="{{ $existing?->pivot?->value }}">
+                </div>
+              </div>
+            @endforeach
           </div>
         </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="width">Width</label>
-            <input type="number" name="width" class="form-control" step="0.01"
-              value="{{ $variant->shipping->width ?? null }}">
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="height">Height</label>
-            <input type="number" name="height" class="form-control" step="0.01"
-              value="{{ $variant->shipping->height ?? null }}">
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="weight">Weight (kgs)</label>
-            <input type="number" name="weight" class="form-control" step="0.01"
-              value="{{ $variant->shipping->weight ?? null }}">
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="weight">Qty (per carton)</label>
-            <input type="number" name="qty_per_carton" class="form-control" value="{{ $variant->shipping->qty_per_carton ?? null }}">
-          </div>
-        </div>
+
         <div class="col-12">
 
           <!-- ...Other Fields... -->
@@ -94,7 +85,8 @@
             <div class="upload__box">
               <div class="upload__btn-box">
                 <label class="upload__btn btn btn-outline-primary">Upload images
-                  <input type="file" name="attachments[]" multiple data-max_length="5" class="upload__inputfile"  accept="image/*" />
+                  <input type="file" name="attachments[]" multiple data-max_length="5" class="upload__inputfile"
+                    accept="image/*" />
                 </label>
               </div>
               <div class="upload__img-wrap uploaded-image-box"></div>
@@ -103,7 +95,7 @@
                 <div class="uploaded-image-box">
                   @foreach ($variant->attachments as $attachment)
                     <div class="uploaded-image" id="image_{{ $attachment->id }}">
-                      <img src="{{ asset('storage/' . $attachment->file_path) }}" class="img-thumbnail">
+                      <img src="{{ $attachment->url }}" class="img-thumbnail">
                       <button type="button" class="delete-image-btn btn-delete" data-refresh="false"
                         data-remove="#image_{{ $attachment->id }}" data-id="{{ $attachment->id }}"
                         data-url="{{ route('admin.cms.attachments.destroy', $attachment->id) }}">
@@ -124,7 +116,8 @@
           <h5 class="fs-3 mb-3x ">Tags</h5>
           @foreach ($tags as $tag)
             <div class="form-check">
-              <input class="form-check-input cc-form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}" @checked($tag->checked)>
+              <input class="form-check-input cc-form-check-input" type="checkbox" name="tags[]"
+                value="{{ $tag->id }}" id="tag_{{ $tag->id }}" @checked($tag->checked)>
               <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
             </div>
           @endforeach

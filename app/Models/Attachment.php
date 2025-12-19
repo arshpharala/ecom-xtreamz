@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,5 +19,17 @@ class Attachment extends Model
     public function attachable()
     {
         return $this->morphTo();
+    }
+
+
+    public function getUrlAttribute(): string
+    {
+        // If already a full URL (http / https), return as-is
+        if (Str::startsWith($this->file_path, ['http://', 'https://'])) {
+            return $this->file_path;
+        }
+
+        // Otherwise treat as local storage file
+        return asset('storage/' . $this->file_path);
     }
 }

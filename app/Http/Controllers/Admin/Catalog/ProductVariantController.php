@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Catalog;
 
+use App\Models\CMS\Tag;
 use Illuminate\Http\Request;
+use App\Models\CMS\Packaging;
 use App\Models\Catalog\Product;
 use App\Models\Catalog\Attribute;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalog\ProductVariant;
 use App\Http\Requests\StoreProductVariantRequest;
 use App\Http\Requests\UpdateProductVariantRequest;
-use App\Models\CMS\Tag;
+use App\Models\Catalog\ProductVariantPackaging;
 
 class ProductVariantController extends Controller
 {
@@ -50,13 +52,14 @@ class ProductVariantController extends Controller
         });
 
         $tags = Tag::get();
-
+        $packagings = Packaging::where('is_active', 1)->get();
         $lastSKU = ProductVariant::latest()->limit(1)->value('sku');
         $data['lastSKU'] = $lastSKU;
 
         $data['attributes'] = $attributes;
         $data['product']    = $product;
         $data['tags']       = $tags;
+        $data['packagings']       = $packagings;
 
         $response['view'] = view('theme.adminlte.catalog.products.variants.create', $data)->render();
 
@@ -72,31 +75,56 @@ class ProductVariantController extends Controller
         $product = Product::findOrFail($productId);
 
         DB::beginTransaction();
+
         try {
 
-            $variant = ProductVariant::withTrashed()->firstOrNew(['product_id' => $productId, 'id' => $request['id'] ?? null]);
-
-            $variant->sku           = $request['sku'];
-            $variant->price         = $request['price'];
-            $variant->stock         = $request['stock'];
-            $variant->deleted_at    = null;
+            /* ===============================
+           CREATE VARIANT (NEW ONLY)
+        =============================== */
+            $variant = new ProductVariant();
+            $variant->product_id = $productId;
+            $variant->sku        = $request->sku;
+            $variant->price      = $request->price;
+            $variant->stock      = $request->stock;
             $variant->save();
 
-            $variant->attributeValues()->sync(array_values($request['attributes']));
-            $variant->tags()->sync(array_values($request['tags'] ?? []));
+            /* ===============================
+           ATTRIBUTES (OPTIONAL)
+        =============================== */
+            if ($request->filled('attributes')) {
+                $variant->attributeValues()->sync(
+                    array_filter(array_values($request->attributes))
+                );
+            }
 
-            $variant->shipping()->updateOrCreate(
-                [],
-                [
-                    'length'            => $request['length'],
-                    'width'             => $request['width'],
-                    'height'            => $request['height'],
-                    'weight'            => $request['weight'],
-                    'qty_per_carton'    => $request['qty_per_carton'],
-                ]
-            );
+            /* ===============================
+           TAGS (OPTIONAL)
+        =============================== */
+            if ($request->filled('tags')) {
+                $variant->tags()->sync(array_values($request->tags));
+            }
 
-            // Attachments (keep old, add new)
+            /* ===============================
+           PACKAGING (OPTIONAL)
+        =============================== */
+            if ($request->filled('packaging')) {
+                foreach ($request->packaging as $packagingId => $value) {
+
+                    if (blank($value)) {
+                        continue;
+                    }
+
+                    ProductVariantPackaging::create([
+                        'product_variant_id' => $variant->id,
+                        'packaging_id'       => $packagingId,
+                        'value'              => $value,
+                    ]);
+                }
+            }
+
+            /* ===============================
+           ATTACHMENTS (UNCHANGED)
+        =============================== */
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
                     $variant->attachments()->create([
@@ -114,11 +142,12 @@ class ProductVariantController extends Controller
         }
 
         return response()->json([
-            'success' => true,
-            'message' => 'Variant Added Successfully.',
-            'redirect' => route('admin.catalog.products.edit', ['product' => $productId])
+            'success'  => true,
+            'message'  => 'Variant saved successfully.',
+            'redirect' => route('admin.catalog.products.edit', ['product' => $productId]),
         ]);
     }
+
 
     public function edit($productId, $id)
     {
@@ -138,11 +167,12 @@ class ProductVariantController extends Controller
             $tag->checked = $variant->tags->contains($tag->id);
             return $tag;
         });
-
+        $packagings = Packaging::where('is_active', 1)->get();
         $data['attributes'] = $attributes;
         $data['product']    = $product;
         $data['variant']    = $variant;
         $data['tags']       = $tags;
+        $data['packagings']       = $packagings;
 
         $response['view'] = view('theme.adminlte.catalog.products.variants.edit', $data)->render();
 
@@ -154,35 +184,63 @@ class ProductVariantController extends Controller
 
     public function update(UpdateProductVariantRequest $request, $productId, $id)
     {
-
-        $product    = Product::findOrFail($productId);
-        $variant    = ProductVariant::whereProductId($productId)->findOrFail($id);
+        $product = Product::findOrFail($productId);
+        $variant = ProductVariant::whereProductId($productId)->findOrFail($id);
 
         DB::beginTransaction();
 
         try {
-            $variant->sku           = $request['sku'];
-            $variant->price         = $request['price'];
-            $variant->stock         = $request['stock'];
-            // $variant->deleted_at    = null;
-            $variant->save();
 
-            $variant->attributeValues()->sync(array_values($request['attributes']));
-            $variant->tags()->sync(array_values($request['tags'] ?? []));
+            /* ===============================
+           BASIC VARIANT DATA
+        =============================== */
+            $variant->update([
+                'sku'   => $request->sku,
+                'price' => $request->price,
+                'stock' => $request->stock,
+            ]);
 
-            $variant->shipping()->updateOrCreate(
-                [],
-                [
-                    'length'            => $request['length'],
-                    'width'             => $request['width'],
-                    'height'            => $request['height'],
-                    'weight'            => $request['weight'],
-                    'qty_per_carton'    => $request['qty_per_carton'],
-                ]
-            );
+            /* ===============================
+           ATTRIBUTES (OPTIONAL)
+        =============================== */
+            if ($request->has('attributes')) {
+                $variant->attributeValues()->sync(
+                    array_filter(array_values($request->attributes))
+                );
+            }
 
+            /* ===============================
+           TAGS (OPTIONAL)
+        =============================== */
+            if ($request->has('tags')) {
+                $variant->tags()->sync(array_values($request->tags ?? []));
+            }
 
-            // Attachments (keep old, add new)
+            /* ===============================
+           PACKAGING (SYNC WITH DELETE)
+        =============================== */
+            $submittedPackaging = collect($request->packaging ?? [])
+                ->filter(fn($value) => filled($value));
+
+            \App\Models\Catalog\ProductVariantPackaging::where('product_variant_id', $variant->id)
+                ->whereNotIn('packaging_id', $submittedPackaging->keys())
+                ->delete();
+
+            foreach ($submittedPackaging as $packagingId => $value) {
+                \App\Models\Catalog\ProductVariantPackaging::updateOrCreate(
+                    [
+                        'product_variant_id' => $variant->id,
+                        'packaging_id'       => $packagingId,
+                    ],
+                    [
+                        'value' => $value,
+                    ]
+                );
+            }
+
+            /* ===============================
+           ATTACHMENTS (UNCHANGED)
+        =============================== */
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
                     $variant->attachments()->create([
@@ -200,11 +258,13 @@ class ProductVariantController extends Controller
         }
 
         return response()->json([
-            'success' => true,
-            'message' => 'Variant Updated Successfully.',
-            'redirect' => route('admin.catalog.products.edit', ['product' => $productId])
+            'success'  => true,
+            'message'  => 'Variant updated successfully.',
+            'redirect' => route('admin.catalog.products.edit', ['product' => $productId]),
         ]);
     }
+
+
 
 
     public function storeMultiple(Request $request, $productId)

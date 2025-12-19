@@ -25,12 +25,18 @@ class Product extends Model
         'is_featured',
         'is_new',
         'show_in_slider',
-        'position'
+        'position',
+        'reference_id'
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_products');
     }
 
     public function brand()

@@ -5,13 +5,14 @@ namespace App\Models\Catalog;
 use App\Models\CMS\Tag;
 use App\Models\Wishlist;
 use App\Models\Attachment;
+use Illuminate\Support\Arr;
+use App\Models\CMS\Packaging;
 use App\Models\Catalog\Product;
 use App\Models\Catalog\AttributeValue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Arr;
 
 class ProductVariant extends Model
 {
@@ -19,7 +20,7 @@ class ProductVariant extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['product_id', 'sku', 'price', 'stock', 'deleted_at'];
+    protected $fillable = ['product_id', 'sku', 'price', 'stock', 'deleted_at', 'reference_id', 'reference_sku'];
 
     public function scopeWithActiveProducts($query)
     {
@@ -31,6 +32,14 @@ class ProductVariant extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function packagings()
+    {
+        return $this->belongsToMany(
+            Packaging::class,
+            'product_variant_packagings'
+        )->withPivot('value');
     }
 
 

@@ -50,37 +50,28 @@
             </div>
           @endforeach
         </div>
-        <div class="col-6">
+        <div class="col-12 mt-3">
+          <h5 class="mb-3">
+            <i class="fas fa-box-open"></i> Packaging Details
+            <small class="text-muted">(optional)</small>
+          </h5>
 
-          <div class="form-group">
-            <label for="length">Length</label>
-            <input type="number" name="length" class="form-control" step="0.01" value="10">
+          <div class="row">
+            @foreach ($packagings as $packaging)
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="text-muted">
+                    {{ $packaging->name }}
+                  </label>
+
+                  <input type="text" name="packaging[{{ $packaging->id }}]" class="form-control"
+                    placeholder="Enter {{ strtolower($packaging->name) }}" value="">
+                </div>
+              </div>
+            @endforeach
           </div>
         </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="width">Width</label>
-            <input type="number" name="width" class="form-control" step="0.01" value="10">
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="height">Height</label>
-            <input type="number" name="height" class="form-control" step="0.01" value="10">
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="weight">Weight (kgs)</label>
-            <input type="number" name="weight" class="form-control" step="0.01" value="0.10">
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="weight">Qty (per carton)</label>
-            <input type="number" name="qty_per_carton" class="form-control" value="1">
-          </div>
-        </div>
+
         <div class="col-12">
 
           <!-- ...Other Fields... -->
@@ -104,7 +95,8 @@
           <h5 class="fs-3 mb-3x ">Tags</h5>
           @foreach ($tags as $tag)
             <div class="form-check">
-              <input class="form-check-input cc-form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag_{{ $tag->id }}">
+              <input class="form-check-input cc-form-check-input" type="checkbox" name="tags[]"
+                value="{{ $tag->id }}" id="tag_{{ $tag->id }}">
               <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
             </div>
           @endforeach

@@ -11,7 +11,7 @@ class AttributeValue extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['attribute_id', 'value'];
+    protected $fillable = ['attribute_id', 'value', 'reference_id', 'reference_value'];
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;

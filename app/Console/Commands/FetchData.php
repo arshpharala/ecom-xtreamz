@@ -2,236 +2,349 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Catalog\Attribute;
-use App\Models\CMS\Color;
-use Illuminate\Support\Str;
-use App\Models\Catalog\Brand;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+
+/* ================= MODELS ================= */
+
+use App\Models\Catalog\Brand;
 use App\Models\Catalog\Category;
-use App\Models\CMS\Packaging;
+use App\Models\Catalog\Product;
+use App\Models\Catalog\ProductVariant;
+use App\Models\Catalog\Attribute;
+use App\Models\Catalog\AttributeValue;
+use App\Models\Catalog\ProductVariantPackaging;
+
 use App\Models\CMS\Tag;
+use App\Models\CMS\Packaging;
 
 class FetchData extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'app:fetch-data';
+    protected $description = 'Safe Jasani catalog sync (products, variants, prices, stock, packaging, tags)';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Fetch data from an external API and store it in the database';
+    /** In-memory maps */
+    protected array $priceMap = [];
+    protected array $stockMap = [];
 
-    /**
-     * Execute the console command.
-     */
+    /* =====================================================
+       HANDLE (ORCHESTRATION ONLY)
+    ===================================================== */
+
     public function handle()
     {
+        ini_set('max_execution_time', '300');
 
-        $response = @file_get_contents('products.json');
-        if ($response === false) {
-            $this->error('Failed to fetch data from the API.');
+        $products = $this->loadProducts();
+        $this->loadPrices();
+        $this->loadStock();
+
+        if (empty($products)) {
+            $this->error('No products found.');
             return 1;
         }
-        $data = json_decode($response, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $this->error('Invalid JSON response from the API.');
-            return 1;
-        }
 
-        $ids = [];
-        foreach ($data as $key => $p) {
+        DB::transaction(fn() => $this->syncCatalog($products));
 
-            $brandId        = null;
-            $colorId        = null;
-            $categoryIds    = [];
-            $tagIds         = [];
-
-            // dd($p);
-
-
-            if ($p['default_code'] == 'ADF Black-3XL') {
-                $ids[] = $p;
-            }
-
-
-
-            if (!empty($p['product_template_attribute_value_ids']) && count($p['product_template_attribute_value_ids']) > 1) {
-                dd($p['product_template_attribute_value_ids'], $p);
-            }
-            // if (!empty($p['product_template_attribute_value_ids'])) {
-            //     $this->storeAttributes($p['product_template_attribute_value_ids']);
-            // }
-
-
-
-            /**
-             * Step 1: Store Packaging Related Data
-             */
-            if (!empty($p['specifications']['Packing'])) {
-                $this->storePackaging($p['specifications']['Packing']);
-            }
-
-            /**
-             * Step 2: Store Brand Related Data
-             * @return int $brandId
-             */
-            if (!empty($p['brand_id']) && is_array($p['brand_id'])) {
-                $brandId = $this->storeBrand($p['brand_id']);
-            }
-
-            /**
-             * Step 3: Store Color Related Data
-             * @return int $colorId
-             */
-            if (!empty($p['color'])) {
-                $colorId = $this->storeColor($p['color']);
-            }
-
-            /**
-             * Step 4: Store Tag Related Data
-             * @return array $tagIds
-             */
-            if (!empty($p['product_template_tags'])) {
-                $tagIds = $this->storeTags($p['product_template_tags']);
-            }
-
-
-            /**
-             * Step 5: Store Category Related Data
-             * @return array $categoryIds
-             */
-            $apiCategories = $p['public_categ_ids'];
-            if (!empty($apiCategories) && is_array($apiCategories)) {
-                $categoryIds = $this->storeCategories($apiCategories);
-            }
-        }
-
-        dd($ids);
-
-
-        $this->info('Data fetched and stored successfully.');
+        $this->info('Catalog sync completed successfully.');
         return 0;
     }
 
-    public function storeBrand($apiBrand)
+    /* =====================================================
+       LOADERS
+    ===================================================== */
+
+    protected function loadProducts(): array
     {
-        $apiBrandId = $apiBrand[0];
-        $apiBrandName = $apiBrand[1];
+        $path = public_path('products.json');
 
-        $brand = Brand::firstOrNew(['reference_id' => $apiBrandId]);
-
-        if (!$brand->exists) {
-            $brand->name = $apiBrandName;
-            $brand->slug = Str::slug($apiBrandName);
-            $brand->is_active = 1;
+        if (!file_exists($path)) {
+            return [];
         }
 
-        $brand->reference_name = $apiBrandName;
-        $brand->save();
-
-        return $brand->id;
+        return json_decode(file_get_contents($path), true) ?? [];
     }
 
-    public function storeCategories($apiCategories)
+    protected function loadPrices(): void
     {
-        $categoryIds = [];
-        foreach ($apiCategories as $apiCategory) {
-            $apiCategoryId      = $apiCategory['id'];
-            $apiCategoryName    = $apiCategory['name'];
+        $path = public_path('products-price.json');
 
-            $category = Category::firstOrNew(['reference_id' => $apiCategoryId]);
+        if (!file_exists($path)) {
+            return;
+        }
 
-            if (!$category->exists) {
-                $category->slug = Str::slug($apiCategoryName);
-                $category->is_visible = 1;
+        foreach (json_decode(file_get_contents($path), true) ?? [] as $row) {
+            if (!empty($row['id'])) {
+                $this->priceMap[$row['id']] = (float) $row['price'];
             }
+        }
+    }
 
-            $category->save();
+    protected function loadStock(): void
+    {
+        $path = public_path('product-stock.json');
 
+        if (!file_exists($path)) {
+            return;
+        }
 
-            $translation = $category->translations()->firstOrNew(['locale' => 'en-ae'], ['reference_name' => $apiCategoryName]);
-
-            if (!$translation->exists) {
-                $translation->name = $apiCategoryName;
-                $translation->save();
+        foreach (json_decode(file_get_contents($path), true) ?? [] as $row) {
+            if (!empty($row['id'])) {
+                $this->stockMap[$row['id']] = (int) ($row['net_available_qty'] ?? 0);
             }
-
-            $translation->save();
-
-            $categoryIds[$category->id] = $category->id; // Unique category IDs
         }
-
-        return $categoryIds;
     }
 
-    function storeColor($apiColor)
+    /* =====================================================
+       CORE SYNC
+    ===================================================== */
+
+    protected function syncCatalog(array $data): void
     {
-        $color = Color::firstOrNew(['name' => $apiColor]);
+        collect($data)->groupBy('parent_id')->each(function ($variants) {
 
-        if (!$color->exists) {
-            $color->is_active = 1;
-        }
+            $base = $variants->first();
 
-        $color->save();
+            $brandId = !empty($base['brand_id'])
+                ? $this->storeBrand($base['brand_id'])
+                : null;
 
-        return $color->id;
-    }
+            $categoryIds = $this->storeCategories($base['public_categ_ids'] ?? []);
+            $this->storeTags($base['product_template_tags'] ?? []);
 
-    function storeTags($apiTags)
-    {
-        $tagIds = [];
-        foreach ($apiTags as $apiTag) {
-            $apiTagId   = $apiTag['id'];
-            $apiTagName = $apiTag['name'];
+            $product = $this->storeProduct($base, $brandId, $categoryIds);
 
-            $tag = Tag::firstOrNew(['reference_id' => $apiTagId], ['reference_name' => $apiTagName]);
+            foreach ($variants as $variantData) {
 
-            if (!$tag->exists) {
-                $tag->name = $apiTagName;
-                $tag->is_active = 1;
+                $attributeValueIds = $this->storeAttributes(
+                    $variantData['product_template_attribute_value_ids'] ?? []
+                );
+
+                $variant = $this->storeVariant($product, $variantData, $attributeValueIds);
+
+                $this->storeVariantImages($variant, $variantData);
+                $this->storeVariantPackaging($variant, $variantData);
+
+                if (!empty($base['product_template_tags'])) {
+                    $this->attachVariantTags($variant, $base['product_template_tags']);
+                }
             }
-
-            $tag->save();
-
-            $tagIds[$tag->id] = $tag->id; // Unique tag IDs
-        }
-
-        return $tagIds;
-    }
-
-    function storePackaging($apiPackaging)
-    {
-        $packagingNames = collect($apiPackaging)
-            ->flatMap(fn($fieldsArray) => array_keys($fieldsArray))
-            ->unique()
-            ->values();
-
-        $packagingNames->each(function ($packagingName) {
-            Packaging::firstOrCreate(
-                ['reference_name' => $packagingName],
-                [
-                    'name' => $packagingName,
-                    'description' => null,
-                    'is_active' => 1,
-                ]
-            );
         });
     }
 
-    function storeAttributes($apiAttributes)
+    /* =====================================================
+       MASTER DATA
+    ===================================================== */
+
+    protected function storeBrand(array $apiBrand): string
     {
+        [$referenceId, $name] = $apiBrand;
 
-        foreach ($apiAttributes as $apiAttribute) {
-            $referenceId        = $apiAttribute['id'];
-            $referenceName      = $apiAttribute['display_name'];
+        return Brand::updateOrCreate(
+            ['reference_id' => $referenceId],
+            [
+                'name'           => $name,
+                'reference_name' => $name,
+                'slug'           => Str::slug($name),
+                'is_active'      => 1,
+            ]
+        )->id;
+    }
 
-            $attribute = Attribute::firstOrCreate(['reference_id' => $referenceId], ['reference_name' => $referenceName, 'name' => $referenceName]);
+    protected function storeCategories(array $categories): array
+    {
+        $ids = [];
+
+        foreach ($categories as $cat) {
+            $category = Category::updateOrCreate(
+                ['reference_id' => $cat['id']],
+                [
+                    'slug'       => Str::slug($cat['name']),
+                    'is_visible' => 1,
+                ]
+            );
+
+            $category->translations()->updateOrCreate(
+                ['locale' => 'en-ae'],
+                [
+                    'name'           => $cat['name'],
+                    'reference_name' => $cat['name'],
+                ]
+            );
+
+            $ids[$category->id] = $category->id;
         }
+
+        return $ids;
+    }
+
+    protected function storeTags(array $tags): void
+    {
+        foreach ($tags as $tag) {
+            Tag::updateOrCreate(
+                ['reference_id' => $tag['id']],
+                [
+                    'name'           => $tag['name'],
+                    'reference_name' => $tag['name'],
+                    'is_active'      => 1,
+                ]
+            );
+        }
+    }
+
+    protected function storeAttributes(array $attrs): array
+    {
+        $ids = [];
+
+        foreach ($attrs as $attr) {
+
+            if (!str_contains($attr['display_name'], ':')) {
+                continue;
+            }
+
+            [$name, $value] = array_map('trim', explode(':', $attr['display_name'], 2));
+
+            $attribute = Attribute::updateOrCreate(
+                ['name' => $name],
+                ['reference_name' => $name]
+            );
+
+            $valueModel = AttributeValue::updateOrCreate(
+                ['reference_id' => $attr['id']],
+                [
+                    'attribute_id'    => $attribute->id,
+                    'value'           => $value,
+                    'reference_value' => $value,
+                ]
+            );
+
+            $ids[] = $valueModel->id;
+        }
+
+        return array_values(array_unique($ids));
+    }
+
+    /* =====================================================
+       PRODUCT & VARIANT
+    ===================================================== */
+
+    protected function storeProduct(array $apiProduct, ?string $brandId, array $categoryIds): Product
+    {
+        $referenceId = $apiProduct['parent_id'];
+
+        $product = Product::updateOrCreate(
+            ['reference_id' => $referenceId],
+            [
+                'brand_id'    => $brandId,
+                'category_id' => array_key_first($categoryIds),
+                'slug'        => 'product-' . $referenceId,
+                'is_active'   => 1,
+            ]
+        );
+
+        $product->translations()->updateOrCreate(
+            ['locale' => 'en-ae'],
+            [
+                'name'        => $apiProduct['name'],
+                'description' => $apiProduct['description_sale'] ?? null,
+            ]
+        );
+
+        if ($categoryIds) {
+            $product->categories()->sync($categoryIds);
+        }
+
+        return $product;
+    }
+
+    protected function storeVariant(Product $product, array $apiVariant, array $attributeValueIds): ProductVariant
+    {
+        $refId = $apiVariant['id'];
+
+        $variant = ProductVariant::updateOrCreate(
+            ['reference_id' => $refId],
+            [
+                'product_id' => $product->id,
+                'sku'        => ($apiVariant['default_code'] ?? 'JASANI') . '-' . $refId,
+                'price'      => $this->priceMap[$refId] ?? 10,
+                'stock'      => $this->stockMap[$refId] ?? 0,
+            ]
+        );
+
+        if ($attributeValueIds) {
+            $variant->attributeValues()->sync($attributeValueIds);
+        }
+
+        return $variant;
+    }
+
+    /* =====================================================
+       IMAGES (URL ONLY)
+    ===================================================== */
+
+    protected function storeVariantImages(ProductVariant $variant, array $data): void
+    {
+        $urls = [];
+
+        if (!empty($data['image_url'])) {
+            $urls[] = $data['image_url'];
+        }
+
+        foreach ($data['images'] ?? [] as $group) {
+            foreach ($group as $img) {
+                if (!empty($img['image_url'])) {
+                    $urls[] = $img['image_url'];
+                }
+            }
+        }
+
+        foreach (array_unique($urls) as $url) {
+            $variant->attachments()->firstOrCreate(
+                ['file_name' => sha1($url)],
+                ['file_path' => $url, 'file_type' => 'image']
+            );
+        }
+    }
+
+    /* =====================================================
+       PACKAGING
+    ===================================================== */
+
+    protected function storeVariantPackaging(ProductVariant $variant, array $data): void
+    {
+        if (empty($data['specifications']['Packing'])) {
+            return;
+        }
+
+        ProductVariantPackaging::where('product_variant_id', $variant->id)->delete();
+
+        foreach ($data['specifications']['Packing'] as $row) {
+            foreach ($row as $label => $value) {
+
+                $packaging = Packaging::updateOrCreate(
+                    ['reference_name' => trim($label)],
+                    ['name' => trim($label), 'is_active' => 1]
+                );
+
+                ProductVariantPackaging::updateOrCreate(
+                    [
+                        'product_variant_id' => $variant->id,
+                        'packaging_id'       => $packaging->id,
+                    ],
+                    ['value' => trim($value)]
+                );
+            }
+        }
+    }
+
+    /* =====================================================
+       TAGS → VARIANT
+    ===================================================== */
+
+    protected function attachVariantTags(ProductVariant $variant, array $tags): void
+    {
+        $tagIds = Tag::whereIn('reference_id', collect($tags)->pluck('id'))->pluck('id')->toArray();
+        $variant->tags()->sync($tagIds);
     }
 }

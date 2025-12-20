@@ -13,8 +13,7 @@
               </ul> --}}
 
     <ul class="category-list list-unstyled mb-0">
-      @foreach (menu_categories(20) as $category)
-        {{-- Parent Category --}}
+      @foreach ($sidebarCategories as $category)
         <li
           class="d-flex align-items-center py-3 parent-category {{ $category->id == ($activeCategory->id ?? null) ? 'active' : '' }}"
           data-category="{{ $category->id }}" data-category-slug="{{ $category->slug }}">
@@ -24,7 +23,6 @@
           <span class="ms-auto badge text-dark">{{ $category->products_count }}</span>
         </li>
 
-        {{-- Child Categories (if any) --}}
         @if ($category->children->isNotEmpty())
           @foreach ($category->children as $child)
             <li
@@ -65,7 +63,8 @@
     <h5 class="fs-3 mb-3x ">Tags</h5>
     @foreach ($tags as $tag)
       <div class="form-check">
-        <input class="form-check-input cc-form-check-input" type="checkbox" id="tag_{{ $tag->id }}" @checked(in_array($tag->name, (request()->tags ?? [])))>
+        <input class="form-check-input cc-form-check-input" type="checkbox" id="tag_{{ $tag->id }}"
+          @checked(in_array($tag->name, request()->tags ?? []))>
         <label class="form-check-label" for="tag_{{ $tag->id }}">{{ $tag->name }}</label>
       </div>
     @endforeach

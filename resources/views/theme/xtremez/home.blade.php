@@ -84,7 +84,7 @@
     @include('theme.xtremez.components.products.carousel', [
         'id' => 'new',
         'sectionName' => 'New Arrivals',
-        'productUrl' => route('ajax.get-products', ['is_new' => 1]),
+        'productUrl' => route('ajax.get-products', ['tags' => ['New Arrival']]),
     ])
 
     @foreach ($promoOffers->take(3) as $tile)
@@ -130,7 +130,7 @@
   @include('theme.xtremez.components.products.carousel', [
       'id' => 'featured',
       'sectionName' => 'Featured Products',
-      'productUrl' => route('ajax.get-products', ['is_featured' => 1]),
+      'productUrl' => route('ajax.get-products', ['tags' => ['On Sale']]),
   ])
 
 

@@ -105,6 +105,7 @@ class CategoryController extends Controller
             'parent_id'  => $validated['parent_id'] ?? null,
             'position'   => $validated['position'] ?? 0,
             'is_visible' => $validated['is_visible'] ?? false,
+            'show_in_menu' => $validated['show_in_menu'] ?? false,
         ]);
         foreach ($validated['name'] as $locale => $name) {
             $category->translations()->create(['locale' => $locale, 'name' => $name]);
@@ -196,6 +197,7 @@ class CategoryController extends Controller
             'parent_id'         => $validated['parent_id'] ?? null,
             'position'          => $validated['position'] ?? 0,
             'is_visible'        => $validated['is_visible'] ?? false,
+            'show_in_menu'      => $validated['show_in_menu'] ?? false,
             'show_on_homepage'  => $validated['show_on_homepage'] ?? false,
             'image'             => $validated['image'] ?? $category->image,
             'banner_image'      => $validated['banner_image'] ?? $category->banner_image,

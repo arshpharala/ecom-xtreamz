@@ -231,23 +231,29 @@ $(function () {
             $(".thumb-wrapper").html(thumbs.join(""));
         }
 
-        if (variant.shipping) {
+        if (variant.packagings && variant.packagings.length) {
+            const getPackagingValue = (label) => {
+                const item = variant.packagings.find((p) =>
+                    p.name.toLowerCase().includes(label.toLowerCase())
+                );
+                return item ? item.pivot.value : "NA";
+            };
+
             $(".specs-table")
                 .find("#product-qty-per-carton")
-                .text(`${variant.shipping.qty_per_carton ?? "NA"} pcs`);
+                .text(getPackagingValue("qty"));
+
             $(".specs-table")
                 .find("#product-carton-gross-weight")
-                .text(`${variant.shipping.weight ?? "NA"} kgs`);
+                .text(getPackagingValue("gross weight"));
+
             $(".specs-table")
                 .find("#product-carton-dimenssions")
-                .text(
-                    `${variant.shipping.length ?? "NA"} x ${
-                        variant.shipping.width ?? "NA"
-                    } x ${variant.shipping.height ?? "NA"} cm`
-                );
+                .text(getPackagingValue("dimension"));
+
             $(".specs-table")
                 .find("#product-sku")
-                .text(`${variant.sku ?? "NA"}`);
+                .text(variant.sku ?? "NA");
         }
 
         updateCartButtonState(variant);

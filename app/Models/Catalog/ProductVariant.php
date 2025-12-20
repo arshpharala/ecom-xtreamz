@@ -95,6 +95,7 @@ class ProductVariant extends Model
                 $join->on('categories.id', '=', 'category_translations.category_id')
                     ->where('category_translations.locale', $locale);
             })
+            ->leftJoin('category_products', 'category_products.product_id', '=', 'products.id')
             ->leftJoin('brands', 'brands.id', '=', 'products.brand_id')
             ->leftJoin('attachments as main_attachment', function ($join) {
                 $join->on('main_attachment.attachable_id', '=', 'product_variants.id')
@@ -140,12 +141,14 @@ class ProductVariant extends Model
         }
 
         return $query
+            ->when($filters['exclude_ids'] ?? null, fn($q, $v) => $q->whereNotIn('product_variants.id', $v))
             ->when($filters['is_new'] ?? null, fn($q, $v) => $q->where('product_variants.created_at', '>=', now()->subDays(60)))
             ->when($filters['is_featured'] ?? null, fn($q, $v) => $q->where('products.is_featured', $v))
             ->when($filters['show_in_slider'] ?? null, fn($q, $v) => $q->where('products.show_in_slider', $v))
             ->when($filters['category'] ?? null, function ($q, $v) use ($categoryId) {
                 $q->where(function ($subQ) use ($categoryId) {
-                    $subQ->where('categories.id', $categoryId)->orWhere('categories.parent_id', $categoryId);
+                    $subQ->where('categories.id', $categoryId)->orWhere('categories.parent_id', $categoryId)
+                        ->orWhere('category_products.category_id', $categoryId);
                 });
             })
             ->when($filters['category_id'] ?? null, fn($q, $v) => $q->where('products.category_id', $v)->orWhere('categories.parent_id', $v))

@@ -249,12 +249,29 @@ if (!function_exists('menu_categories')) {
         return Category::visible()
             ->withJoins()
             ->withSelection()
-            ->whereNull('parent_id')
+            ->where('show_in_menu', 1)
+            // ->whereNull('parent_id')
             ->with(['children' => function ($q) {
                 $q->visible()->applySorting('position')->with('translation');
             }])
             ->applySorting('position')
             ->limit($limit)
             ->get();
+    }
+}
+if (!function_exists('get_attachment_url')) {
+    /**
+     * Get the attachment URL for a given file path.
+     * @param string $filePath
+     * @return string
+     */
+    function get_attachment_url(string $filePath): string
+    {
+        if (Str::startsWith($filePath, ['http://', 'https://'])) {
+            return $filePath;
+        }
+        $pathInfo = pathinfo($filePath);
+        $thumbnailPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_thumb.' . $pathInfo['extension'];
+        return asset('storage/' . $thumbnailPath);
     }
 }

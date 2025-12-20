@@ -134,6 +134,14 @@
                 </div>
               </div>
 
+              <div class="form-group col-md-6">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" name="show_in_menu" value="1" class="custom-control-input" id="show_in_menu"
+                    {{ old('show_in_menu', $category->show_in_menu) ? 'checked' : '' }}>
+                  <label class="custom-control-label" for="show_in_menu">Show in Menu</label>
+                </div>
+              </div>
+
               {{-- NEW: Show on Homepage --}}
               <div class="form-group col-md-6">
                 <div class="custom-control custom-switch">

@@ -26,6 +26,18 @@ class ProductController extends Controller
         $this->cart = $cart;
     }
 
+    function sidebarCategories()
+    {
+        return Category::visible()
+            ->withJoins()
+            ->withSelection()
+            ->whereNull('parent_id')
+            ->with(['children' => function ($q) {
+                $q->visible()->applySorting('position')->with('translation');
+            }])
+            ->applySorting('position')
+            ->get();
+    }
     function index()
     {
         $locale     = app()->getLocale();
@@ -52,6 +64,7 @@ class ProductController extends Controller
         //     $activeCategory = $categories->first();
         // }
 
+        $data['sidebarCategories'] = $this->sidebarCategories();
         $data['activeCategory'] = $activeCategory ?? null;
         $data['categories']     = $categories;
         $data['brands']         = $brands;
@@ -92,11 +105,11 @@ class ProductController extends Controller
         $variant = ProductVariant::withJoins()
             ->withSelection()
             ->where('product_variants.id', $variant->id)
-            ->with(['shipping', 'attachments', 'attributeValues.attribute', 'offers'])
+            ->with(['packagings', 'attachments', 'attributeValues.attribute', 'offers'])
             ->firstOrFail();
 
         $variant                = $this->repository->transform($variant);
-        $variant->images        = $variant->attachments->map(fn($a) => asset('storage/' . $a->file_path));
+        $variant->images        = $variant->attachments->map(fn($a) => get_attachment_url($a->file_path));
         $variant->combination   = collect($variant->attributeValues)
             ->mapWithKeys(function ($val) {
                 return [Str::slug($val->attribute->name) => $val->value];

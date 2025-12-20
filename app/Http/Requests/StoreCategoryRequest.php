@@ -30,7 +30,8 @@ class StoreCategoryRequest extends FormRequest
             'attributes' => 'nullable|array',
             'attributes.*' => 'uuid|exists:attributes,id',
             'position'  => 'nullable|integer',
-            'is_visible' => 'boolean'
+            'is_visible' => 'boolean',
+            'show_in_menu' => 'boolean'
         ];
     }
 }

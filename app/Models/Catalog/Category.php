@@ -16,6 +16,7 @@ class Category extends Model
 
     protected $casts = [
         'is_visible' => 'boolean',
+        'show_in_menu' => 'boolean',
     ];
 
     protected $fillable = [
@@ -26,6 +27,7 @@ class Category extends Model
         'parent_id',
         'position',
         'is_visible',
+        'show_in_menu',
         'show_on_homepage',
         'text_color',
         'background_color',

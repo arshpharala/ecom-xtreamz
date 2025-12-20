@@ -25,7 +25,8 @@ class ProductVariantRepository
             'offer',
             'tags',
             'search',
-            'sort_by'
+            'sort_by',
+            'exclude_ids',
         ]);
 
 
@@ -62,7 +63,8 @@ class ProductVariantRepository
     public function transform($productVariant)
     {
         $productVariant->link       = route('products.show', ['slug' => $productVariant->slug, 'variant' => $productVariant->id]);
-        $productVariant->image      = $productVariant->file_path ? asset('storage/' . $productVariant->file_path) : null;
+        // $productVariant->image      = $productVariant->file_path ? asset('storage/' . $productVariant->file_path) : null;
+        $productVariant->image = get_attachment_url($productVariant->file_path);
         $productVariant->currency   = active_currency();
         $productVariant->price_with_currency   = price_format(active_currency(), $productVariant->price);
         $productVariant->cart_item  = (new CartService())->getItem($productVariant->id);
@@ -127,7 +129,8 @@ class ProductVariantRepository
             ->get()
             ->map(function ($variant) {
 
-                $variant->image = $variant->file_path ? 'storage/' . $variant->file_path : 'default.jpg';
+                // $variant->image = $variant->file_path ? 'storage/' . $variant->file_path : 'default.jpg';
+                $variant->image = get_attachment_url($variant->file_path);
                 $variant->link = route('products.show', ['slug' => $variant->slug, 'variant' => $variant->id]);
 
                 return $variant;

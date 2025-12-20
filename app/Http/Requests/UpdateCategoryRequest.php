@@ -38,6 +38,7 @@ class UpdateCategoryRequest extends FormRequest
 
             'position'  => 'nullable|integer',
             'is_visible' => 'boolean',
+            'show_in_menu' => 'boolean',
             'show_on_homepage' => 'boolean',
 
             'text_color' => 'nullable|string|max:7',

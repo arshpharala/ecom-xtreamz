@@ -39,7 +39,7 @@ class CategoryRepository
     {
         Request::merge([
             'show_on_homepage' => 1,
-            'product' => true
+            // 'product' => true
         ]);
 
         return $this->getCategories($perPage);

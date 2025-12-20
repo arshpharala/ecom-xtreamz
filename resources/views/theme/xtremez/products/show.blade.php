@@ -46,7 +46,7 @@
         <!-- Left: Image Gallery -->
         <div class="col-12 col-lg-6">
           <div class="main-image position-relative bg-white">
-            <img id="zoomImage" src="{{ asset('storage/' . $productVariant->file_path) }}" alt="Product Image"
+            <img id="zoomImage" src="{{ get_attachment_url($productVariant->file_path) }}" alt="Product Image"
               class="img-fluid w-75 mx-auto d-block">
           </div>
 
@@ -56,8 +56,8 @@
             </button>
             <div class="thumb-wrapper d-flex overflow-auto">
               @foreach ($productVariant->attachments as $image)
-                <img src="{{ asset('storage/' . $image->file_path) }}"
-                  data-large="{{ asset('storage/' . $image->file_path) }}"
+                <img src="{{ get_attachment_url($image->file_path) }}" alt="img-thumbnail"
+                  data-large="{{ get_attachment_url($image->file_path) }}"
                   class="thumb-item {{ $loop->first ? 'active' : '' }} me-2" />
               @endforeach
             </div>
@@ -91,19 +91,19 @@
               <span class="text-danger fw-bold">
                 {!! $productVariant->offer_data['discounted_price_with_currency'] !!}
                 {{-- {{ active_currency() }} {{ number_format($discountedPrice, 2) }} --}}
-            </span>
-            <span class="text-muted text-decoration-line-through ms-2">
+              </span>
+              <span class="text-muted text-decoration-line-through ms-2">
                 {{-- {{ active_currency() }} {{ number_format($productVariant->price, 2) }} --}}
 
                 {!! $productVariant->price_with_currency !!}
-            </span>
-            <span class="badge bg-secondary ms-2">{{ $productVariant->offer_data['label'] }}</span>
+              </span>
+              <span class="badge bg-secondary ms-2">{{ $productVariant->offer_data['label'] }}</span>
             @else
-            <span>
+              <span>
                 {!! $productVariant->price_with_currency !!}
                 {{-- {{ price_format(active_currency(), number_format($productVariant->price, 2)) }} --}}
                 {{-- {{ active_currency() }} {{ number_format($productVariant->price, 2) }} --}}
-                </span>
+              </span>
             @endif
           </div>
 
@@ -203,39 +203,56 @@
 
           <tbody>
             <tr>
-              <td class="">Brand</td>
+              <td>Brand</td>
               <td id="product-brand">{{ $productVariant->brand_name ?? 'NA' }}</td>
             </tr>
           </tbody>
+
           <thead>
             <tr>
               <th colspan="2" class="pt-5 pb-2 text-dark fw-bold">Packing</th>
             </tr>
           </thead>
+
           <tbody>
+            @php
+              $packagingMap = $productVariant->packagings->mapWithKeys(
+                  fn($p) => [
+                      strtolower($p->name) => $p->pivot->value,
+                  ],
+              );
+            @endphp
+
             <tr>
-              <td class="">Qty per Carton</td>
-              <td id="product-qty-per-carton">{{ $productVariant->shipping?->qty_per_carton ?? 'NA' }} pcs</td>
-            </tr>
-            <tr>
-              <td class="">Carton Gross Weight</td>
-              <td id="product-carton-gross-weight">
-                {{ $productVariant->shipping?->weight }}
-                kgs
+              <td>Qty per Carton</td>
+              <td id="product-qty-per-carton">
+                {{ $packagingMap['qty per carton'] ?? 'NA' }}
               </td>
             </tr>
+
             <tr>
-              <td class="">Carton Dimensions (cm)</td>
-              <td id="product-carton-dimenssions">{{ $productVariant->shipping?->length }} x
-                {{ $productVariant->shipping?->width }} x
-                {{ $productVariant->shipping?->height }} cm</td>
+              <td>Carton Gross Weight</td>
+              <td id="product-carton-gross-weight">
+                {{ $packagingMap['carton gross weight (kgs / carton)'] ?? 'NA' }}
+              </td>
             </tr>
+
             <tr>
-              <td class="">HS / Commodity Code</td>
-              <td id="product-sku">{{ $productVariant->sku ?? 'NA' }}</td>
+              <td>Carton Dimensions (cm)</td>
+              <td id="product-carton-dimenssions">
+                {{ $packagingMap['carton dimensions (cm)'] ?? 'NA' }}
+              </td>
+            </tr>
+
+            <tr>
+              <td>HS / Commodity Code</td>
+              <td id="product-hs-code">
+                {{ $packagingMap['hs / commodity code'] ?? 'NA' }}
+              </td>
             </tr>
           </tbody>
         </table>
+
       </div>
     </div>
   </section>
@@ -275,7 +292,7 @@
 
     window.ajaxVarianrURL = "{{ route('ajax.variants.resolve') }}";
 
-    window.ajaxProductURL = "{{ route('ajax.get-products') }}";
+    window.ajaxProductURL = "{{ route('ajax.get-products', ['exclude_ids' => [$productVariant->id]]) }}";
     window.activeCategoryId = "{{ $productVariant->category_id }}";
   </script>
 

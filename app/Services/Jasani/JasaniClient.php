@@ -83,10 +83,10 @@ class JasaniClient
                 'data'            => $data,
             ];
 
-            // Storage::disk('local')->put(
-            //     $fileName,
-            //     json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-            // );
+            Storage::disk('local')->put(
+                $fileName,
+                json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+            );
 
             $this->log($type, $url, true, count($data), 200, 'Fetched successfully');
 

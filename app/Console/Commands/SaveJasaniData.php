@@ -261,27 +261,63 @@ class SaveJasaniData extends Command
     {
         $refId = $apiProduct['parent_id'];
 
+        // 1️⃣ Generate base slug from product name
+        $baseSlug = Str::slug($apiProduct['name']);
+
+        // 2️⃣ Resolve unique slug (safe for re-sync)
+        $slug = $this->generateUniqueProductSlug($baseSlug, $refId);
+
+        // 3️⃣ Store / Update product
         $product = Product::updateOrCreate(
             ['reference_id' => $refId],
             [
                 'brand_id'    => $brandId,
                 'category_id' => $categoryIds ? array_key_first($categoryIds) : null,
-                'slug'        => 'product-' . $refId,
+                'slug'        => $slug,
                 'is_active'   => 1,
             ]
         );
 
+        // 4️⃣ Translation
         $product->translations()->updateOrCreate(
             ['locale' => 'en-ae'],
-            ['name' => $apiProduct['name'], 'description' => $apiProduct['description_sale'] ?? null]
+            [
+                'name'        => $apiProduct['name'],
+                'description' => $apiProduct['description_sale'] ?? null,
+            ]
         );
 
+        // 5️⃣ Categories
         if ($categoryIds) {
             $product->categories()->sync($categoryIds);
         }
 
         return $product;
     }
+
+
+    protected function generateUniqueProductSlug(string $baseSlug, int $referenceId): string
+    {
+        // Check if product already exists (same reference_id)
+        $existing = Product::where('reference_id', $referenceId)->first();
+
+        // if ($existing) {
+        //     return $existing->slug;
+        // }
+
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (
+            Product::where('slug', $slug)->exists()
+        ) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
+
 
     protected function storeVariant(Product $product, array $apiVariant, array $attributeValueIds): ProductVariant
     {

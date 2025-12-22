@@ -301,9 +301,9 @@ class SaveJasaniData extends Command
         // Check if product already exists (same reference_id)
         $existing = Product::where('reference_id', $referenceId)->first();
 
-        // if ($existing) {
-        //     return $existing->slug;
-        // }
+        if ($existing) {
+            return $existing->slug;
+        }
 
         $slug = $baseSlug;
         $counter = 1;

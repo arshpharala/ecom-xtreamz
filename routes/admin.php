@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CMS\TagController;
+use App\Http\Controllers\Admin\CMS\NewsController;
 use App\Http\Controllers\Admin\CMS\PageController;
 use App\Http\Controllers\Admin\Auth\RoleController;
 use App\Http\Controllers\Admin\CMS\EmailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Auth\AdminController;
+use App\Http\Controllers\Admin\CMS\BannerController;
 use App\Http\Controllers\Admin\CMS\LocaleController;
 use App\Http\Controllers\Admin\Auth\ModuleController;
 use App\Http\Controllers\Admin\CMS\CountryController;
@@ -18,21 +20,20 @@ use App\Http\Controllers\Admin\Catalog\BrandController;
 use App\Http\Controllers\Admin\Catalog\OfferController;
 use App\Http\Controllers\Admin\Catalog\CouponController;
 use App\Http\Controllers\Admin\Catalog\VendorController;
+use App\Http\Controllers\Admin\CMS\ApiSyncLogController;
 use App\Http\Controllers\Admin\CMS\AttachmentController;
 use App\Http\Controllers\Admin\CMS\EmailAdminController;
 use App\Http\Controllers\Admin\Sales\CustomerController;
 use App\Http\Controllers\Admin\Auth\PermissionController;
 use App\Http\Controllers\Admin\Catalog\ProductController;
+use App\Http\Controllers\Admin\CMS\TestimonialController;
 use App\Http\Controllers\Admin\Catalog\CategoryController;
+use App\Http\Controllers\Admin\Sales\SubscriberController;
 use App\Http\Controllers\Admin\Catalog\AttributeController;
 use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Inventory\InventorySourceController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
-use App\Http\Controllers\Admin\CMS\BannerController;
-use App\Http\Controllers\Admin\CMS\NewsController;
-use App\Http\Controllers\Admin\CMS\TestimonialController;
-use App\Http\Controllers\Admin\Sales\SubscriberController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/',                     'dashboard')->name('dashboard');
@@ -137,6 +138,8 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
 
     Route::resource('banners', BannerController::class);
     Route::delete('banners/{banner}/restore', [BannerController::class, 'restore'])->name('banners.restore');
+
+    Route::resource('api-sync-logs',                      ApiSyncLogController::class)->only(['index', 'show']);
 
     Route::post('upload/tinymce',                            [TinyMCEController::class, 'upload'])->name('upload.tinymce');
 });

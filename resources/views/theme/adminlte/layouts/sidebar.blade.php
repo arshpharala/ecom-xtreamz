@@ -303,6 +303,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ route('admin.cms.api-sync-logs.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>API Logs</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ route('admin.cms.settings.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Configuration</p>

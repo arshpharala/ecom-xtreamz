@@ -20,7 +20,7 @@ class ProductVariant extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['product_id', 'sku', 'price', 'stock', 'deleted_at', 'reference_id', 'reference_sku'];
+    protected $fillable = ['product_id', 'sku', 'is_primary', 'price', 'stock', 'deleted_at', 'reference_id', 'reference_sku'];
 
     public function scopeWithActiveProducts($query)
     {
@@ -121,6 +121,7 @@ class ProductVariant extends Model
             'product_translations.description',
             'product_variants.price',
             'product_variants.stock',
+            'product_variants.is_primary',
 
 
             'products.category_id',

@@ -158,7 +158,7 @@ class SaveJasaniData extends Command
                     $variantData['product_template_attribute_value_ids'] ?? []
                 );
 
-                $variant = $this->storeVariant($product, $variantData, $attributeValueIds);
+                $variant = $this->storeVariant($product, $variantData, $attributeValueIds, $base);
 
                 $this->storeVariantImages($variant, $variantData);
                 $this->storeVariantPackaging($variant, $variantData);
@@ -319,10 +319,9 @@ class SaveJasaniData extends Command
     }
 
 
-    protected function storeVariant(Product $product, array $apiVariant, array $attributeValueIds): ProductVariant
+    protected function storeVariant(Product $product, array $apiVariant, array $attributeValueIds, $parentVariant): ProductVariant
     {
         $refId = (int) $apiVariant['id'];
-
         $price = 0;
         if (!empty($this->priceMap[$refId])) {
             $price = $this->priceMap[$refId] * 2;
@@ -335,6 +334,7 @@ class SaveJasaniData extends Command
                 'sku'        => ($apiVariant['default_code'] ?? 'JASANI') . '-' . $refId,
                 'price'      => $price,
                 'stock'      => $this->stockMap[$refId] ?? 0,
+                'is_primary' => $parentVariant['id'] == $apiVariant['id'],
             ]
         );
 

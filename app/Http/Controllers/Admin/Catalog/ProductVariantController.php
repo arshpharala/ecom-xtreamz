@@ -86,7 +86,15 @@ class ProductVariantController extends Controller
             $variant->sku        = $request->sku;
             $variant->price      = $request->price;
             $variant->stock      = $request->stock;
+            $variant->is_primary = $request->boolean('is_primary');
             $variant->save();
+
+            // ENSURE ONLY ONE PRIMARY
+            if ($variant->is_primary) {
+                ProductVariant::where('product_id', $productId)
+                    ->where('id', '!=', $variant->id)
+                    ->update(['is_primary' => false]);
+            }
 
             /* ===============================
            ATTRIBUTES (OPTIONAL)
@@ -198,7 +206,16 @@ class ProductVariantController extends Controller
                 'sku'   => $request->sku,
                 'price' => $request->price,
                 'stock' => $request->stock,
+                'is_primary' => $request->boolean('is_primary')
             ]);
+
+            // ENSURE ONLY ONE PRIMARY
+            if ($variant->is_primary) {
+                ProductVariant::where('product_id', $productId)
+                    ->where('id', '!=', $variant->id)
+                    ->update(['is_primary' => false]);
+            }
+
 
             /* ===============================
            ATTRIBUTES (OPTIONAL)

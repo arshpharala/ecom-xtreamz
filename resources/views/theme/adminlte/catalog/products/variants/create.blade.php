@@ -17,6 +17,22 @@
       <div class="row">
 
         <div class="col-12">
+          <div class="form-check form-switch">
+            <input class="form-check-input primary-variant-checkbox" type="checkbox" name="is_primary" value="1"
+              id="is_primary" {{ isset($variant) && $variant->is_primary ? 'checked' : '' }}>
+
+            <label class="form-check-label fw-bold" for="is_primary">
+              Primary Variant
+            </label>
+
+            <small class="text-muted d-block">
+              Only one variant per product can be primary
+            </small>
+          </div>
+        </div>
+
+
+        <div class="col-12">
           <div class="form-group">
             <label for="">SKU / Product Code</label>
             <input type="text" name="sku" class="form-control" value="{{ $lastSKU ?? '' }}" required>

@@ -17,6 +17,7 @@ class StoreProductVariantRequest extends FormRequest
             'sku'   => 'required|string|max:255|unique:product_variants,sku',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'is_primary' => 'nullable|boolean',
 
             // Attributes OPTIONAL
             'attributes'    => 'nullable|array',

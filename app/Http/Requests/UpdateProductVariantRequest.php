@@ -20,6 +20,7 @@ class UpdateProductVariantRequest extends FormRequest
 
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'is_primary' => 'nullable|boolean',
 
             // Attributes OPTIONAL
             'attributes'    => 'nullable|array',

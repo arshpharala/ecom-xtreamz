@@ -15,7 +15,7 @@
     <ul class="category-list list-unstyled mb-0">
       @foreach ($sidebarCategories as $category)
         <li
-          class="d-flex align-items-center py-3 parent-category {{ $category->id == ($activeCategory->id ?? null) ? 'active' : '' }}"
+          class="d-flex align-items-center py-3 parent-category {{ $category->id == ($activeCategory->id ?? null) ? 'active' : '' }} {{ $category->children->count() ? 'has-children' : '' }}"
           data-category="{{ $category->id }}" data-category-slug="{{ $category->slug }}">
 
           <img src="{{ asset('storage/' . $category->icon) }}" class="me-2" width="22" alt>

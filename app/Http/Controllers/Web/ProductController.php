@@ -86,7 +86,13 @@ class ProductController extends Controller
         $data['product']        = $product;
         $data['attributes']        = $attributes;
         $data['selected']       = $selected;
-        $data['meta']           = $product ? $product->metaForLocale() :  null;
+
+        if (empty($product->metaForLocale()->meta_title)) {
+            $data['meta']           = (object)['meta_title' => $productVariant->name, 'meta_description' => Str::limit($productVariant->description, 160)];
+        } else {
+            $data['meta']           = $product ? $product->metaForLocale() :  null;
+        }
+
 
         return view('theme.xtremez.products.show', $data);
     }

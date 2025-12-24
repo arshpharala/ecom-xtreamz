@@ -4,6 +4,9 @@
 let activeAttributeKeys = []; // Used to track current dynamic attributes for cleanup
 let currencySymbol = $("meta[name='currency-symbol']").attr("content") || "AED";
 
+const $productscontainer = $("#products");
+const $noProductContainer = $("#no-products");
+
 // ===============================
 // 1. Price Slider Initialization
 // ===============================
@@ -192,11 +195,17 @@ $(function () {
             url: window.ajaxProductURL,
             method: "GET",
             data: { ...filters, page },
+            beforeSend: function () {
+                $("#loader").show();
+            },
             success: function (res) {
                 if (res.success) {
                     renderProducts(res.data.products);
                     render_pagination(res.data.pagination);
                 }
+            },
+            complete: function () {
+                $("#loader").hide();
             },
         });
     }
@@ -205,20 +214,20 @@ $(function () {
     // 7. Render Product Grid
     // ===============================
     function renderProducts(products) {
-        const $container = $("#products");
-        const $noProductContainer = $("#no-products");
-        $container.empty();
+        $productscontainer.empty();
         $noProductContainer.hide();
 
         if (products.length > 0) {
+            $productscontainer.show();
             products.forEach((product) => {
                 const html = render_product_card(
                     product,
                     "col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4"
                 );
-                $container.append(html);
+                $productscontainer.append(html);
             });
         } else {
+            $productscontainer.hide();
             $noProductContainer.show();
         }
     }

@@ -17,7 +17,7 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-0 py-2">
           <li class="breadcrumb-item">
-            <a href="#" class="text-white" title="All Products">
+            <a href="{{ route('products') }}" class="text-white" title="All Products">
               <!-- <i class="bi bi-house"></i> -->
               All Products
             </a>

@@ -72,16 +72,26 @@
         <main class="col-lg-9 col-md-8">
 
           <!-- Product Grid -->
-          <div class="row g-4" id="products">
+          <div class="row g-4" id="products" style="display: none;">
+          </div>
+
+          <div class="row" id="loader"
+            style="display: none; height: 50vh; justify-content: center; align-items: center; background: none;">
+            <div class="col-md-4 text-center">
+              <div class="spinner-border" style="width: 4rem; height: 4rem;" role="status">
+                <span class="sr-only"></span>
+              </div>
+            </div>
           </div>
 
           <div class="row" id="no-products"
-            style="display: none; height: 50vh; display: flex; justify-content: center; align-items: center; background: none;">
+            style="display: none; height: 50vh; justify-content: center; align-items: center; background: none;">
             <div class="col-md-4 text-center">
               <img src="{{ asset('theme/xtremez/assets/images/no-product.png') }}" alt="No Products"
                 style="max-height: 80vh; max-width: 100%; object-fit: contain; background: none;">
             </div>
           </div>
+
 
 
           <!-- Pagination -->

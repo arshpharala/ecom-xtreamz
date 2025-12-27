@@ -122,7 +122,7 @@ class LoginController extends Controller
 
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
+            function ($user) use ($request, &$resetUser) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
                 ])->save();
@@ -133,24 +133,24 @@ class LoginController extends Controller
             }
         );
 
-        if ($status === Password::PASSWORD_RESET) {
+        if ($status === Password::PASSWORD_RESET && $resetUser) {
 
             Auth::login($resetUser);
 
             return response()->json([
-                'success' => true,
-                'message' => __($status),
-                'redirect' => route('customers.profile')
+                'success'  => true,
+                'message'  => __($status),
+                'redirect' => route('customers.profile'),
             ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                "message" => __($status),
-                'errors' => [
-                    'email' => [__($status)],
-                ]
-            ], 422);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => __($status),
+            'errors'  => [
+                'email' => [__($status)],
+            ],
+        ], 422);
     }
 
     function verifyEmailNotice()

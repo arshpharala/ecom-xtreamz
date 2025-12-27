@@ -8,6 +8,7 @@
         'stripe' => ['visa.png', 'mastercard.png', 'amex.png'],
         'paypal' => ['paypal.webp'],
         'razorpay' => ['razorpay.png'],
+        'mashreq' => ['visa.png', 'mastercard.png', 'applepay.png'],
     ];
   @endphp
 

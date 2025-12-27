@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use Stripe\Stripe;
 use App\Models\User;
-use Stripe\PaymentIntent;
 use App\Models\Cart\Order;
 use Illuminate\Support\Str;
 use App\Models\CMS\Currency;
@@ -24,228 +22,227 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\Paypal\PaypalService;
 use App\Repositories\AddressRepository;
 use App\Http\Requests\StoreOrderRequest;
+use App\Services\Mashreq\MashreqService;
 use Illuminate\Support\Facades\Notification;
 
 class CheckoutController extends Controller
 {
-    protected $cart;
-    protected $stripe;
-    protected $addressRepository;
-    protected $userRepository;
+    protected CartService $cart;
+    protected AddressRepository $addressRepository;
+    protected UserRepository $userRepository;
 
     public function __construct()
     {
-        $this->cart                 = new CartService();
-        $this->stripe               = new StripeService();
-        $this->addressRepository    = new AddressRepository(app());
-        $this->userRepository       = new UserRepository(app());
+        $this->cart              = new CartService();
+        $this->addressRepository = new AddressRepository(app());
+        $this->userRepository    = new UserRepository(app());
     }
 
-    function checkout(Request $request)
+    /* ======================================================
+     | Checkout Page
+     ====================================================== */
+    public function checkout(Request $request)
     {
-        abort_if($this->cart->getItemCount() == 0, 404);
+        abort_if($this->cart->getItemCount() === 0, 404);
 
-        $data['provinces']      = Province::where('country_id', 1)->get();
-        $data['gateways']       = PaymentGateway::active()->get();
+        $data['provinces'] = Province::where('country_id', 1)->get();
+        $data['gateways']  = PaymentGateway::active()->get();
 
         if (Auth::check()) {
-            $user                   = $request->user();
-            $data['user']           = $user;
-            $data['addresses']      = $user->addresses()->latest()->get();
-            $data['cards']          = $user->cards()->latest()->get();
+            $user              = $request->user();
+            $data['user']      = $user;
+            $data['addresses'] = $user->addresses()->latest()->get();
+            $data['cards']     = $user->cards()->latest()->get();
         }
 
         return view('theme.xtremez.checkout', $data);
     }
 
+    /* ======================================================
+     | Process Order (ENTRY POINT)
+     ====================================================== */
     public function processOrder(StoreOrderRequest $request)
     {
-        abort_if($this->cart->getItemCount() == 0, 'Cart is empty.');
+        abort_if($this->cart->getItemCount() === 0, 'Cart is empty.');
+
         DB::beginTransaction();
 
         try {
             $user    = Auth::check() ? $request->user() : $this->createUser($request);
             $address = $this->getOrCreateAddress($request, $user);
             $order   = $this->createOrder($user, $address->id, $request->payment_method);
+
             $this->storeLineItems($order);
 
             $response = match ($request->payment_method) {
-                'stripe'   => $this->handleStripePayment($request, $order, $user),
-                'paypal' => $this->handlePaypalPayment($request, $order, $user),
-                default => abort(400, 'Invalid payment method'),
+                'stripe'  => $this->handleStripePayment($request, $order, $user),
+                'paypal'  => $this->handlePaypalPayment($request, $order, $user),
+                'mashreq' => $this->handleMashreqPayment($order),
+                default   => abort(400, 'Invalid payment method'),
             };
 
             DB::commit();
-
             return $response;
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
             DB::rollBack();
-            throw $th;
+            throw $e;
         }
     }
 
-
-    function createUser($request)
+    /* ======================================================
+     | USER & ADDRESS
+     ====================================================== */
+    protected function createUser(Request $request): User
     {
-        $user = User::where('email', $request->email)->first();
+        $existing = User::where('email', $request->email)->first();
 
-        if ($user) {
-            if (!$user->is_active || $user->is_guest) {
-                return $user;
+        if ($existing) {
+            if (!$existing->is_guest) {
+                abort(403, 'An account with this email already exists. Please log in.');
             }
-
-            abort(403, 'An account with this email already exists. Please log in to continue.');
+            return $existing;
         }
 
-
-        $data = [
+        return $this->userRepository->create([
             'name'      => $request->name,
             'email'     => $request->email,
             'password'  => bcrypt(Str::uuid()),
-            'is_active' => 0,
-            'is_guest'  => true
-        ];
-
-        return $this->userRepository->create($data);
+            'is_active' => false,
+            'is_guest'  => true,
+        ]);
     }
 
-
-    protected function getOrCreateAddress(Request $request, $user)
+    protected function getOrCreateAddress(Request $request, User $user)
     {
         if ($request->filled('saved_address_id')) {
             return $user->addresses()->findOrFail($request->saved_address_id);
         }
 
-        $obj = [
-            'user_id'       => $user->id,
-            'email'         => $request->email ?? $user->email,
-            'name'          => $request->name,
-            'phone'         => $request->phone,
-            'country_id'    => active_country()->id,
-            'province_id'   => $request->province_id,
-            'city_id'       => $request->city_id,
-            'area_id'       => $request->area_id,
-            'address'       => $request->address,
-            'landmark'      => $request->landmark,
-        ];
-
-        return $this->addressRepository->create($obj);
-    }
-
-    protected function createOrder($user, $addressId, $paymentMethod)
-    {
-        return Order::create([
-            'order_number'          => Str::uuid(),
-            'user_id'               => $user->id,
-            'billing_address_id'    => $addressId,
-            'email'                 => $user->email,
-            'payment_method'        => $paymentMethod,
-            'payment_status'        => 'pending',
-            'currency_id'           => Currency::where('code', active_currency())->value('id'),
-            'sub_total'             => $this->cart->getSubTotal(),
-            'tax'                   => $this->cart->getTax(),
-            'total'                 => $this->cart->getTotal(),
+        return $this->addressRepository->create([
+            'user_id'     => $user->id,
+            'email'       => $request->email ?? $user->email,
+            'name'        => $request->name,
+            'phone'       => $request->phone,
+            'country_id'  => active_country()->id,
+            'province_id' => $request->province_id,
+            'city_id'     => $request->city_id,
+            'area_id'     => $request->area_id,
+            'address'     => $request->address,
+            'landmark'    => $request->landmark,
         ]);
     }
 
-    protected function storeLineItems(Order $order)
+    /* ======================================================
+     | ORDER CREATION
+     ====================================================== */
+    protected function createOrder(User $user, int $addressId, string $paymentMethod): Order
+    {
+        return Order::create([
+            'order_number'       => Str::uuid(),
+            'user_id'            => $user->id,
+            'billing_address_id' => $addressId,
+            'email'              => $user->email,
+            'payment_method'     => $paymentMethod,
+            'payment_status'     => 'pending',
+            'currency_id'        => Currency::where('code', active_currency())->value('id'),
+            'sub_total'          => $this->cart->getSubTotal(),
+            'tax'                => $this->cart->getTax(),
+            'total'              => $this->cart->getTotal(),
+        ]);
+    }
+
+    protected function storeLineItems(Order $order): void
     {
         foreach ($this->cart->getItems() as $variantId => $item) {
             $order->lineItems()->create([
-                'product_variant_id'    => $variantId,
-                'quantity'              => $item['qty'],
-                'price'                 => $item['price'],
-                'subtotal'              => $item['subtotal'],
+                'product_variant_id' => $variantId,
+                'quantity'           => $item['qty'],
+                'price'              => $item['price'],
+                'subtotal'           => $item['subtotal'],
             ]);
         }
     }
 
-    public function handleStripePayment(Request $request, Order $order, $user)
+    /* ======================================================
+     | STRIPE (INITIATE)
+     ====================================================== */
+    protected function handleStripePayment(Request $request, Order $order, User $user)
     {
-        $stripe     = new StripeService();
+        $stripe = new StripeService();
 
         $stripe->ensureStripeCustomer($user);
         $stripe->syncBillingAddress($user, $order->address);
 
         if ($request->filled('saved_card_id')) {
 
-            $card       = $user->cards()->findOrFail($request->saved_card_id);
-            $intent     = $stripe->chargeSavedCard($user, $card->card_token, $total, ['order_id' => $order->id]);
+            $card   = $user->cards()->findOrFail($request->saved_card_id);
+            $intent = $stripe->chargeSavedCard(
+                $user,
+                $card->card_token,
+                $order->total,
+                ['order_id' => $order->id]
+            );
 
-            if (isset($intent['requires_action']) && $intent['requires_action']) {
-
+            if (!empty($intent['requires_action'])) {
                 return response()->json([
-                    'requires_action'       => true,
-                    'clientSecret'          => $intent['client_secret'],
-                    'order_id'              => $order->id,
-                    'order_number'          => $order->order_number,
+                    'requires_action' => true,
+                    'clientSecret'    => $intent['client_secret'],
+                    'order_id'        => $order->id,
+                    'order_number'    => $order->order_number,
                 ]);
+            }
+
+            if ($intent->status !== 'succeeded') {
+                return back()->withErrors(['stripe' => 'Card payment failed']);
             }
 
             $order->update([
-                'external_reference'        => $intent->id,
-                'payment_status'            => $intent->status === 'succeeded' ? 'paid' : 'pending',
+                'payment_status'     => 'paid',
+                'external_reference' => $intent->id,
             ]);
 
-            if ($intent->status !== 'succeeded') {
-                return back()->withErrors(['stripe' => 'Card payment failed.']);
-            }
-
-            if ($this->cart->hasCoupon()) {
-                CouponUsage::create([
-                    'coupon_id' => $this->cart->getCoupon()['id'],
-                    'user_id'   => $user->id,
-                    'order_id'  => $order->id
-                ]);
-            }
-
+            $this->applyCoupon($order);
             $this->cart->clear();
 
-            return redirect()->route('order.summary', $order->id);
+            return redirect()->route('order.summary', $order->order_number);
         }
 
+        $intent = $stripe->createIntentForNewCard($user, $order->total, [
+            'order_id' => $order->id,
+        ]);
 
-        $intent = $stripe->createIntentForNewCard($user, $order->total, ['order_id' => $order->id]);
         $order->update(['external_reference' => $intent->id]);
 
-        $this->cart->clear();
-
         return response()->json([
-            'clientSecret'  => $intent->client_secret,
-            'order_id'      => $order->id,
-            'order_number'  => $order->order_number,
+            'clientSecret' => $intent->client_secret,
+            'order_id'     => $order->id,
+            'order_number' => $order->order_number,
         ]);
     }
 
+    /* ======================================================
+     | STRIPE (CONFIRM / CAPTURE)
+     ====================================================== */
     public function confirmStripePayment(Request $request)
     {
         $request->validate([
-            'order_id'     => 'required|integer',
+            'order_id'          => 'required|integer',
             'payment_intent_id' => 'required|string',
         ]);
 
-        $order = Order::findOrFail($request->order_id);
-
-        // Optionally fetch payment intent from Stripe to double-check
+        $order  = Order::findOrFail($request->order_id);
         $intent = \Stripe\PaymentIntent::retrieve($request->payment_intent_id);
 
         if ($intent->status !== 'succeeded') {
-            return response()->json(['message' => 'Payment not completed.'], 422);
+            return response()->json(['message' => 'Payment not completed'], 422);
         }
 
         $order->update([
-            'payment_status' => 'paid',
+            'payment_status'     => 'paid',
             'external_reference' => $intent->id,
         ]);
 
-        if ($this->cart->hasCoupon()) {
-            CouponUsage::create([
-                'coupon_id' => $this->cart->getCoupon()['id'],
-                'user_id'   => $user->id,
-                'order_id'  => $order->id
-            ]);
-        }
-
+        $this->applyCoupon($order);
         $this->cart->clear();
 
         return response()->json([
@@ -253,88 +250,146 @@ class CheckoutController extends Controller
         ]);
     }
 
-
-    protected function handlePaypalPayment(Request $request, Order $order, $user)
+    /* ======================================================
+     | PAYPAL (INITIATE)
+     ====================================================== */
+    protected function handlePaypalPayment(Request $request, Order $order, User $user)
     {
         session(['paypal_temp_order_id' => $order->id]);
 
         $paypal = new PaypalService();
 
-        $order = $paypal->createOrder([
-            'purchase_units' => [
-                [
-                    'amount' => [
-                        'currency_code' => $paypal->getCurrency(),
-                        'value'         => price_convert($order->total, active_currency(), $paypal->getCurrency()),
-                    ]
-                ]
-            ]
+        $response = $paypal->createOrder([
+            'purchase_units' => [[
+                'amount' => [
+                    'currency_code' => $paypal->getCurrency(),
+                    'value' => price_convert(
+                        $order->total,
+                        active_currency(),
+                        $paypal->getCurrency()
+                    ),
+                ],
+            ]],
         ]);
 
-        $orderId = $order['id'];
-        $approvalLink = collect($order['links'])->firstWhere('rel', 'approve')['href'];
-
-        if (!$approvalLink) {
-            return response()->json(['message' => 'Failed to create PayPal order'], 422);
-        }
-
-        return response()->json(['id' => $orderId]);
+        return response()->json(['id' => $response['id']]);
     }
 
-
-
+    /* ======================================================
+     | PAYPAL (CAPTURE)
+     ====================================================== */
     public function capturePaypalOrder(Request $request, PaypalService $paypal): JsonResponse
     {
-        $request->validate([
-            'order_id' => 'required|string',
-        ]);
-        if (!$request->order_id) {
-            return response()->json(['message' => 'Order ID is required'], 422);
-        }
+        $request->validate(['order_id' => 'required|string']);
 
-        $paypalResponse = $paypal->captureOrder($request->order_id);
+        $response = $paypal->captureOrder($request->order_id);
 
-        if (!$paypalResponse || $paypalResponse['status'] !== 'COMPLETED') {
+        if (!$response || $response['status'] !== 'COMPLETED') {
             return response()->json(['message' => 'Capture failed'], 422);
         }
 
-        $orderId = session('paypal_temp_order_id');
-        $order = Order::findOrFail($orderId);
+        $order = Order::findOrFail(session('paypal_temp_order_id'));
 
         $order->update([
-            'payment_status'       => 'paid',
-            'external_reference'   => $paypalResponse['id'],
+            'payment_status'     => 'paid',
+            'external_reference' => $response['id'],
         ]);
 
-        if ($this->cart->hasCoupon()) {
-            CouponUsage::create([
-                'coupon_id' => $this->cart->getCoupon()['id'],
-                'user_id'   => $order->user->id,
-                'order_id'  => $order->id
-            ]);
-        }
-
+        $this->applyCoupon($order);
         $this->cart->clear();
 
-        return response()->json(['redirect' => route('order.summary', $order->order_number)]);
+        return response()->json([
+            'redirect' => route('order.summary', $order->order_number),
+        ]);
     }
 
+    /* ======================================================
+     | MASHREQ (INITIATE)
+     ====================================================== */
+    protected function handleMashreqPayment(Order $order)
+    {
+        abort_if($order->payment_status === 'paid', 400, 'Order already paid');
 
+        $mashreq = new MashreqService();
+        $session = $mashreq->createSession($order);
+
+        abort_if(!isset($session['session']['id']), 500, 'Mashreq session failed');
+
+        $order->update([
+            'external_reference' => $session['session']['id'],
+            'payment_status'     => 'pending',
+        ]);
+
+        return response()->json([
+            'type'       => 'mashreq',
+            'session_id' => $session['session']['id'],
+            'order_id'   => $order->id,
+        ]);
+    }
+
+    /* ======================================================
+     | MASHREQ (RETURN / VERIFY)
+     ====================================================== */
+    public function mashreqReturn(Request $request)
+    {
+        $order = Order::findOrFail($request->input('order_id'));
+
+        if ($order->payment_status === 'paid') {
+            return redirect()->route('order.summary', $order->order_number);
+        }
+
+        $verify = (new MashreqService())->verifyOrder($order);
+
+        if ($verify['status'] === 'PAID') {
+            $order->update([
+                'payment_status'     => 'paid',
+                'external_reference' => $verify['transaction_id'],
+            ]);
+
+            $this->applyCoupon($order);
+            $this->cart->clear();
+
+            return redirect()->route('order.summary', $order->order_number);
+        }
+
+        $order->update(['payment_status' => 'failed']);
+
+        return redirect()->route('checkout')
+            ->withErrors(['payment' => 'Payment failed or cancelled']);
+    }
+
+    /* ======================================================
+     | THANK YOU
+     ====================================================== */
     public function thankYou(string $orderNumber)
     {
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
+
         $data['order'] = $order->load(['lineItems.productVariant.product', 'address', 'user']);
         $this->cart->clear();
-        // return view('emails.order-success', $data);
 
         if ($order->email && !$order->email_sent) {
-            // $order->user?->notify(new OrderSuccess($order)); // if user logged in
-
             Notification::route('mail', $order->email)
                 ->notify(new OrderSuccess($order));
+
             $order->update(['email_sent' => true]);
         }
 
         return view('theme.xtremez.order-confirmation', $data);
+    }
+
+    /* ======================================================
+     | COUPON HELPER (UNCHANGED LOGIC)
+     ====================================================== */
+    protected function applyCoupon(Order $order): void
+    {
+        if ($this->cart->hasCoupon()) {
+            CouponUsage::firstOrCreate([
+                'coupon_id' => $this->cart->getCoupon()['id'],
+                'order_id'  => $order->id,
+            ], [
+                'user_id' => $order->user_id,
+            ]);
+        }
     }
 }

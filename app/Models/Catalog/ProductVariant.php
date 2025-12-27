@@ -200,7 +200,7 @@ class ProductVariant extends Model
         $attachment = $this->attachments->first();
 
         if ($attachment) {
-            return asset('storage/' . $attachment->file_path);
+            return get_attachment_url($attachment->file_path);
         }
         return asset('assets/images/no-image.jpg'); // Default image if no thumbnail is set
     }

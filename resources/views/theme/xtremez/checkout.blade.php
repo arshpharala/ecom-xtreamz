@@ -18,6 +18,11 @@
       @case('razorpay')
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       @break
+
+      @case('mashreq')
+        <script src="https://test-gateway.mastercard.com/checkout/version/62/checkout.js"></script>
+      @break
+
     @endswitch
   @endforeach
 @endpush
@@ -149,6 +154,20 @@
 
 @push('scripts')
   <script src="{{ asset('assets/js/checkout.js') }}"></script>
-  <script src="{{ asset('assets/js/stripe.js') }}"></script>
-  <script src="{{ asset('assets/js/paypal.js') }}"></script>
-@endpush
+
+  @foreach ($gateways as $gateway)
+    @switch($gateway->gateway)
+      @case('stripe')
+        <script src="{{ asset('assets/js/stripe.js') }}"></script>
+      @break
+
+      @case('paypal')
+        <script src="{{ asset('assets/js/paypal.js') }}"></script>
+      @break
+
+      @case('mashreq')
+        <script src="{{ asset('assets/js/mashreq.js') }}"></script>
+      @break
+    @endswitch
+    @endforeach
+  @endpush

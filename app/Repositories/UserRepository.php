@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use App\Models\CMS\PaymentGateway;
 use App\Services\StripeService;
 use Prettus\Repository\Eloquent\BaseRepository;
 
@@ -17,38 +18,38 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * Create.
-     *
-     * @return mixed
+     * Create user
      */
     public function create(array $attributes)
     {
-        $object = parent::create($attributes);
+        $user = parent::create($attributes);
 
-        (new StripeService())->ensureStripeCustomer($object);
+        /**
+         * ✅ Create Stripe customer ONLY if Stripe gateway is active
+         */
+        $stripeEnabled = PaymentGateway::where('gateway', 'stripe')
+            ->where('is_active', 1)
+            ->exists();
 
-        $object->refresh();
+        if ($stripeEnabled) {
+            // Lazy-load StripeService only when needed
+            (new StripeService())->ensureStripeCustomer($user);
+            $user->refresh();
+        }
 
-        return $object;
+        return $user;
     }
 
     /**
-     * Update.
-     *
-     * @return mixed
+     * Update user
      */
     public function update(array $attributes, $id)
     {
-        $object = parent::update($attributes, $id);
-
-        return $object;
+        return parent::update($attributes, $id);
     }
 
     /**
-     * Delete.
-     *
-     * @param  int  $id
-     * @return bool
+     * Delete user
      */
     public function delete($id)
     {
@@ -56,11 +57,6 @@ class UserRepository extends BaseRepository
             return false;
         }
 
-        if ($this->model->destroy($id)) {
-
-            return true;
-        }
-
-        return false;
+        return (bool) $this->model->destroy($id);
     }
 }

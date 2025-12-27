@@ -166,7 +166,7 @@
               <form action="{{ route('admin.cms.payment-gateways.store') }}" method="POST" enctype="multipart/form-data"
                 class="ajax-form">
                 @csrf
-\
+
               <div class="row">
                 <div class="col-12">
                   @foreach ($gatwayConfig as $gatewayKey => $gatewayConfig)

@@ -15,6 +15,10 @@ $(document).ready(function () {
             $cardSection.hide();
             $paypalContainer.show();
             $placeOrderBtn.hide(); // hide for PayPal
+        } else if (value === "mashreq") {
+            $cardSection.hide();
+            $paypalContainer.hide();
+            $placeOrderBtn.show();
         } else {
             $cardSection.hide();
             $paypalContainer.hide();

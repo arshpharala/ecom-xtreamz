@@ -40,6 +40,8 @@ Route::post('/paypal/capture',                          [CheckoutController::cla
 Route::post('/stripe/create-intent',                    [CheckoutController::class, 'createStripeIntent'])->name('stripe.create-intent');
 Route::post('/stripe/confirm-payment',                  [CheckoutController::class, 'confirmStripePayment'])->name('stripe.confirm-payment');
 
+Route::get('mashreq/return',                [CheckoutController::class, 'mashreqReturn'])->name('mashreq.return');
+
 
 Route::get('/order-summary/{order}',                    [CheckoutController::class, 'thankYou'])->name('order.summary');
 

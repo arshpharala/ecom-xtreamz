@@ -259,6 +259,53 @@ if (!function_exists('menu_categories')) {
             ->get();
     }
 }
+if (!function_exists('header_menu')) {
+
+    function header_menu(): array
+    {
+        $menus = [];
+
+        foreach (config('menu.header') as $item) {
+
+            $menu = [
+                'label'     => $item['label'],
+                'url'       => $item['url'] ?? '#',
+                'dropdown'  => $item['dropdown'] ?? false,
+                'type'      => $item['type'],
+                'class'     => $item['class'] ?? null,
+                'links'     => collect(),
+                'categories' => collect(),
+            ];
+
+            /* CATEGORY BASED DROPDOWN */
+            if (
+                $item['type'] === 'category'
+                && $item['dropdown']
+                && !empty($item['menu_tag'])
+            ) {
+                $menu['categories'] = Category::visible()
+                    ->where('menu_tag', $item['menu_tag'])
+                    // ->whereNull('parent_id')
+                    ->with(['children' => function ($q) {
+                        $q->visible()->applySorting('position')->with('translation');
+                    }])
+                    ->applySorting('position')
+                    ->get();
+            }
+
+            /* STATIC LINKS DROPDOWN */
+            if ($item['type'] === 'static' && $item['dropdown']) {
+                $menu['links'] = collect($item['links'] ?? []);
+            }
+
+            $menus[] = $menu;
+        }
+
+        return $menus;
+    }
+}
+
+
 if (!function_exists('get_attachment_url')) {
     /**
      * Get the attachment URL for a given file path.

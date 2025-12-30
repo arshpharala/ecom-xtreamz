@@ -39,34 +39,103 @@
   <!-- Bottom Row (hidden on mobile) -->
   <div class="header-bottom border-top d-none d-lg-block">
     <div class="container d-flex justify-content-between align-items-center">
+      @if (false)
+        <!-- Navigation -->
+        <nav class="main-nav">
+          <ul class="nav align-items-center">
 
-      <!-- Navigation -->
+            @foreach (menu_categories(10) as $category)
+              @if ($category->children->count() > 0)
+                <li class="nav-item dropdown">
+                  <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link has-submenu">
+                    {{ $category->name }} <i class="bi bi-chevron-down ms-1"></i>
+                  </a>
+                  <ul class="submenu mt-2">
+                    @foreach ($category->children as $child)
+                      <li>
+                        <a href="{{ route('products', ['category' => $child->slug]) }}">
+                          <i class="bi bi-circle"></i> {{ $child->translation->name }}
+                        </a>
+                      </li>
+                    @endforeach
+                  </ul>
+                </li>
+              @else
+                <li class="nav-item">
+                  <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link">
+                    {{ $category->name }}
+                  </a>
+                </li>
+              @endif
+            @endforeach
+          </ul>
+        </nav>
+      @endif
+
       <nav class="main-nav">
         <ul class="nav align-items-center">
-          @foreach (menu_categories(10) as $category)
-            @if ($category->children->count() > 0)
-              <li class="nav-item dropdown">
-                <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link has-submenu">
-                  {{ $category->name }} <i class="bi bi-chevron-down ms-1"></i>
-                </a>
-                <ul class="submenu mt-2">
-                  @foreach ($category->children as $child)
-                    <li>
-                      <a href="{{ route('products', ['category' => $child->slug]) }}">
-                        <i class="bi bi-circle"></i> {{ $child->translation->name }}
-                      </a>
-                    </li>
-                  @endforeach
-                </ul>
-              </li>
-            @else
-              <li class="nav-item">
-                <a href="{{ route('products', ['category' => $category->slug]) }}" class="nav-link">
-                  {{ $category->name }}
+
+          @foreach (header_menu() as $menu)
+
+            {{-- NORMAL LINK --}}
+            @if (!$menu['dropdown'])
+              <li class="nav-item {{ $menu['class'] ?? '' }}">
+                <a href="{{ $menu['url'] }}" class="nav-link">
+                  {{ $menu['label'] }}
                 </a>
               </li>
             @endif
+
+            {{-- DROPDOWN --}}
+            @if ($menu['dropdown'])
+              <li class="nav-item dropdown">
+                <a href="{{ $menu['url'] }}" class="nav-link has-submenu">
+                  {{ $menu['label'] }} <i class="bi bi-chevron-down ms-1"></i>
+                </a>
+
+                <ul class="submenu mt-2">
+
+                  {{-- STATIC LINKS --}}
+                  @if ($menu['type'] === 'static')
+                    @foreach ($menu['links'] as $link)
+                      <li>
+                        <a href="{{ $link['url'] }}">
+                          {{ $link['label'] }}
+                        </a>
+                      </li>
+                    @endforeach
+                  @endif
+
+                  {{-- CATEGORY LINKS --}}
+                  @if ($menu['type'] === 'category')
+                    @foreach ($menu['categories'] as $category)
+                      <li class="{{ $category->children->count() ? 'has-children' : '' }}">
+                        <a href="{{ route('products', ['category' => $category->slug]) }}">
+                          {{ $category->translation->name }}
+                        </a>
+
+                        @if ($category->children->count())
+                          <ul class="submenu">
+                            @foreach ($category->children as $child)
+                              <li>
+                                <a href="{{ route('products', ['category' => $child->slug]) }}">
+                                  <i class="bi bi-circle"></i>
+                                  {{ $child->translation->name }}
+                                </a>
+                              </li>
+                            @endforeach
+                          </ul>
+                        @endif
+                      </li>
+                    @endforeach
+                  @endif
+
+                </ul>
+              </li>
+            @endif
+
           @endforeach
+
         </ul>
       </nav>
 

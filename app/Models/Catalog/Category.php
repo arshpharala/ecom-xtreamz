@@ -29,6 +29,7 @@ class Category extends Model
         'is_visible',
         'show_in_menu',
         'show_on_homepage',
+        'menu_tag',
         'text_color',
         'background_color',
         'reference_id', // api reference id

@@ -40,6 +40,7 @@ class UpdateCategoryRequest extends FormRequest
             'is_visible' => 'boolean',
             'show_in_menu' => 'boolean',
             'show_on_homepage' => 'boolean',
+            'menu_tag' => ['nullable', 'string', 'max:100'],
 
             'text_color' => 'nullable|string|max:7',
             'background_color' => 'nullable|string|max:7',

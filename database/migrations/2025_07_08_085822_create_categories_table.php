@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('icon')->nullable();
             $table->uuid('parent_id')->nullable()->index();
             $table->integer('position')->default(0);
+            $table->string('menu_tag', 100)->nullable();
             $table->boolean('is_visible')->default(true);
             $table->timestamps();
             $table->softDeletes();

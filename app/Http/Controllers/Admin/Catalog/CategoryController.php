@@ -142,9 +142,14 @@ class CategoryController extends Controller
         $categories     = Category::where('id', '!=', $category->id)->get();
         $attributes     = Attribute::all();
 
+        $menuTags = collect(config('menu.header'))
+            ->filter(fn($item) => ($item['type'] ?? null) === 'category')
+            ->mapWithKeys(fn($item, $key) => [$key => $item['label']]);
+
         $data['category']       = $category;
         $data['categories']     = $categories;
         $data['attributes']     = $attributes;
+        $data['menuTags']       = $menuTags;
 
         return view('theme.adminlte.catalog.categories.edit', $data);
     }
@@ -203,6 +208,7 @@ class CategoryController extends Controller
             'banner_image'      => $validated['banner_image'] ?? $category->banner_image,
             'text_color'        => $validated['text_color'] ?? $category->text_color,
             'background_color'  => $validated['background_color'] ?? $category->background_color,
+            'menu_tag'          => $validated['menu_tag'] ?? null,
         ]);
 
 

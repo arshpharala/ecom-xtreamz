@@ -119,6 +119,28 @@
       {{-- Sidebar Card (Meta/Options) --}}
       <div class="col-md-4">
         <div class="card card-secondary">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="menu_tag">Menu Group</label>
+
+              <select name="menu_tag" id="menu_tag" class="form-control">
+                <option value="">— Not in Menu —</option>
+
+                @foreach ($menuTags as $tag => $label)
+                  <option value="{{ $tag }}" {{ $category->menu_tag === $tag ? 'selected' : '' }}>
+                    {{ $label }}
+                  </option>
+                @endforeach
+              </select>
+
+              <small class="text-muted">
+                Controls which header menu this category appears under
+              </small>
+            </div>
+
+          </div>
+        </div>
+        <div class="card card-secondary">
           <div class="card-header">
             <h3 class="card-title">Category Options</h3>
           </div>

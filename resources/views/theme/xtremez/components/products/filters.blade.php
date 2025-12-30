@@ -73,7 +73,7 @@
   <!-- Price Range -->
   <div class="price-range-wrapper cc-price-range mb-4 d-none d-md-block">
     <div class="d-flex justify-content-between align-items-center mb-2">
-      <span id="priceLabelMinSidebar" class="price-label">{!! price_format(active_currency(), 10) !!}</span>
+      <span id="priceLabelMinSidebar" class="price-label">{!! price_format(active_currency(), 0) !!}</span>
       <span id="priceLabelMaxSidebar" class="price-label">{!! price_format(active_currency(), 2000) !!}</span>
     </div>
     <div id="price-slider-sidebar"></div>
@@ -81,7 +81,7 @@
 
   <div class="price-range-wrapper cc-price-range mb-4 d-block d-md-none">
     <div class="d-flex justify-content-between align-items-center mb-2">
-      <span id="priceLabelMinModal" class="price-label">{!! price_format(active_currency(), 10) !!}</span>
+      <span id="priceLabelMinModal" class="price-label">{!! price_format(active_currency(), 0) !!}</span>
       <span id="priceLabelMaxModal" class="price-label">{!! price_format(active_currency(), 2000) !!}</span>
     </div>
     <div id="price-slider-modal"></div>

@@ -14,7 +14,7 @@ function initPriceSlider(
     sliderId,
     labelMinId,
     labelMaxId,
-    startMin = 5,
+    startMin = 0,
     startMax = 2000,
     onChange = null
 ) {
@@ -64,7 +64,7 @@ $(function () {
         "price-slider-sidebar",
         "priceLabelMinSidebar",
         "priceLabelMaxSidebar",
-        5,
+        0,
         2000,
         () => fetchProducts(1)
     );
@@ -342,7 +342,7 @@ $(function () {
             "price-slider-sidebar",
             "priceLabelMinSidebar",
             "priceLabelMaxSidebar",
-            5,
+            0,
             2000,
             () => fetchProducts(1)
         );

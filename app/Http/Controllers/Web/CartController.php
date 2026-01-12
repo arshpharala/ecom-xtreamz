@@ -55,6 +55,14 @@ class CartController extends Controller
         $variant = ProductVariant::with('offers')->findOrFail($request->variant_id);
         $qty = $request->qty;
 
+        // Check stock availability
+        if (!$variant->stock || $variant->stock < $qty) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient stock available.'
+            ], 400);
+        }
+
         $pricing = PriceService::calculateDiscountedPrice($variant);
 
         $this->cart->add(
@@ -115,6 +123,14 @@ class CartController extends Controller
                 ]
             );
         } else {
+            // Check stock availability before updating
+            if (!$variant->stock || $variant->stock < $qty) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Insufficient stock available.'
+                ], 400);
+            }
+
             $this->cart->update($variant->id, $qty);
         }
 

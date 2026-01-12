@@ -171,7 +171,13 @@ function addToCart(variantId, qty, callback) {
                 callback(false);
             }
         },
-        error: function () {
+        error: function (res) {
+            if (res.responseJSON && res.responseJSON.message) {
+                alert(res.responseJSON.message);
+            } else {
+                alert("Failed to add to cart.");
+            }
+
             callback(false);
         },
     });
@@ -192,8 +198,6 @@ $(document).on("click", ".add-to-cart-btn", function () {
         if (success) {
             $btn.find(".add-to-cart").hide();
             $btn.find(".added-to-cart").show();
-        } else {
-            alert("Failed to add to cart.");
         }
     });
 });
@@ -214,8 +218,6 @@ $(document).on("click", ".buy-now-btn", function () {
         if (success) {
             $btn.addClass("in-cart");
             window.location.href = `${appUrl}/cart/`;
-        } else {
-            alert("Failed to proceed.");
         }
     });
 });

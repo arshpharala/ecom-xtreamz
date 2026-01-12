@@ -196,6 +196,7 @@ $(function () {
             method: "GET",
             data: { ...filters, page },
             beforeSend: function () {
+                $productscontainer.empty();
                 $("#loader").show();
             },
             success: function (res) {

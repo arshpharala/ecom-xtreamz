@@ -1290,6 +1290,7 @@ main {
   justify-content: center;
   align-items: center;
   height: 220px;
+  transition: height 0.3s ease;
 }
 .product-card .image-box .product-img {
   max-height: 200px;
@@ -1342,6 +1343,7 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease, margin-top 0.3s ease;
 }
 .product-card .stats-container a {
   text-decoration: none;
@@ -1371,7 +1373,7 @@ main {
   opacity: 0;
   max-height: 0;
   overflow: hidden;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
   /* ellipsis for 2 lines */
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -1401,8 +1403,8 @@ main {
 }
 .product-card .price-bar .cart-btn {
   border: none;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -1410,6 +1412,9 @@ main {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+.product-card .price-bar .cart-btn .bi {
+  font-size: 22px;
 }
 
 .gift-set-section {
@@ -1486,6 +1491,7 @@ main {
   max-width: 70%;
   max-height: 70%;
   object-fit: cover;
+  transition: transform 0.8s ease;
 }
 .gift-set-section .gift-set-boxes .gift-right-half {
   flex: 1 1 auto !important;
@@ -2591,6 +2597,9 @@ main {
 .product-listing-page .sidebar-filters .form-select {
   min-width: 100px;
   font-size: var(--font-size-md);
+}
+.product-listing-page .sidebar-filters .form-check-label {
+  text-transform: uppercase;
 }
 @media (max-width: 991px) {
   .product-listing-page .sidebar-filters {

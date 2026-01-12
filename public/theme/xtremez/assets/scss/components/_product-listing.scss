@@ -138,6 +138,11 @@
         .form-select {
             min-width: 100px;
             font-size: var(--font-size-md);
+
+        }
+
+        .form-check-label {
+            text-transform: uppercase;
         }
     }
 

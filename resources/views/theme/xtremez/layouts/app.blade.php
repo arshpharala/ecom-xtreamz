@@ -23,8 +23,7 @@
   <link rel="canonical" href="https://www.xtremez.com/" />
 
   <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180"
-    href="{{ asset(setting('site_favicon', 'theme/xtremez/assets/icons/apple-touch-icon.png')) }}" />
+  <link rel="icon" href="{{ asset(setting('site_favicon', 'theme/xtremez/assets/icons/apple-touch-icon.png')) }}" type="image/png">
   <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 

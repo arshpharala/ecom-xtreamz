@@ -49,7 +49,7 @@ class ProductVariantRepository
             $query->whereHas('wishlists', fn($q) => $q->where('user_id', auth()->id()));
         }
 
-        $query->groupBy('product_variants.id');
+        $query->groupBy('product_variants.id'); // Required to avoid duplicate entries due to joins
 
         // Handle pagination
         if (Request::has('page')) {

@@ -47,21 +47,15 @@
         <div class="col-12 col-lg-6">
           <div class="main-image position-relative bg-white">
             <!-- Stock Badge -->
-            @if ($productVariant->stock > 0)
-              <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-                <span
-                  style="background-color: rgba(57, 118, 123, 0.85); color: white; padding: 8px 12px; border-radius: 4px; font-weight: 500; font-size: 14px; display: inline-block;">
+            <div class="stock-badge {{ ($productVariant->stock == 0 ) ? 'out-of-stock' : '' }}">
+              <span class="stock-text">
+                @if ($productVariant->stock > 0)
                   In Stock: {{ $productVariant->stock }}
-                </span>
-              </div>
-            @else
-              <div style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-                <span
-                  style="background-color: rgba(220, 53, 69, 0.85); color: white; padding: 8px 12px; border-radius: 4px; font-weight: 500; font-size: 14px; display: inline-block;">
+                @else
                   Out of Stock
-                </span>
-              </div>
-            @endif
+                @endif
+              </span>
+            </div>
 
             <img id="zoomImage" src="{{ get_attachment_url($productVariant->file_path) }}" alt="Product Image"
               class="img-fluid w-75 mx-auto d-block">

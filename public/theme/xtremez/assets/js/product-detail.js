@@ -231,6 +231,24 @@ $(function () {
             $(".thumb-wrapper").html(thumbs.join(""));
         }
 
+        // Update Stock Badge
+        const stockBadge = $(".main-image").find(".stock-badge");
+        if (stockBadge.length) {
+            if (variant.stock > 0) {
+                stockBadge
+                    .removeClass("out-of-stock")
+                    .find(".stock-text")
+                    .html(`In Stock: <strong>${variant.stock}</strong>`);
+                stockBadge.show();
+            } else {
+                stockBadge
+                    .addClass("out-of-stock")
+                    .find(".stock-text")
+                    .html("Out of Stock");
+                stockBadge.show();
+            }
+        }
+
         if (variant.packagings && variant.packagings.length) {
             const getPackagingValue = (label) => {
                 const item = variant.packagings.find((p) =>

@@ -5,7 +5,7 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-0 py-2">
           <li class="breadcrumb-item">
-            <a href="#" class="text-white" title="Home">
+            <a href="/" class="text-white" title="Home">
               <!-- <i class="bi bi-house"></i> -->
               Home
             </a>

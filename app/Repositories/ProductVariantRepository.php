@@ -49,6 +49,8 @@ class ProductVariantRepository
             $query->whereHas('wishlists', fn($q) => $q->where('user_id', auth()->id()));
         }
 
+        $query->groupBy('product_variants.id');
+
         // Handle pagination
         if (Request::has('page')) {
             return $query->paginate($perPage)->through(function ($productVariant) {

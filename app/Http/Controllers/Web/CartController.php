@@ -30,6 +30,7 @@ class CartController extends Controller
         $variants = ProductVariant::withJoins()
             ->withSelection()
             ->whereIn('product_variants.id', $variantIds)
+            ->groupBy('product_variants.id')
             ->get()
             ->map(function ($variant) use ($items, $repository) {
                 $transform          = $repository->transform($variant);

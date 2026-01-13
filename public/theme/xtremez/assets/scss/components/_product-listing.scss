@@ -23,7 +23,8 @@
                 padding: 0;
 
                 > .parent-category,
-                > .child-category {
+                > .child-category,
+                > .grandchild-category {
                     cursor: pointer;
                     padding: 12px 14px;
                     display: flex;
@@ -56,15 +57,17 @@
                 }
 
                 &:last-child > .parent-category,
-                &:last-child > .child-category {
+                &:last-child > .child-category,
+                &:last-child > .grandchild-category {
                     border-bottom: none;
                 }
 
                 /* ===============================
-                   PARENT CATEGORY SPECIFIC
+                   LEVEL 0: PARENT CATEGORY SPECIFIC
                    =============================== */
-                > .parent-category {
+                &.parent-item > .parent-category {
                     padding-right: 36px;
+                    padding-left: 14px;
 
                     &.has-children::after {
                         content: "\F282"; /* bootstrap-icons chevron-down */
@@ -85,7 +88,60 @@
                 }
 
                 /* ===============================
-                   NESTED CHILDREN LIST
+                   LEVEL 1: CHILD ITEMS
+                   =============================== */
+                &.child-item > .child-category {
+                    padding-left: 42px;
+                    padding-right: 36px;
+                    font-size: 0.9rem;
+                    background-color: var(--color-grey);
+
+                    .badge {
+                        background: #f8f9fa;
+                    }
+
+                    &.has-children::after {
+                        content: "\F282";
+                        font-family: "bootstrap-icons";
+                        font-size: 0.7rem;
+                        position: absolute;
+                        right: 14px;
+                        top: 50%;
+                        transform: translateY(-50%) rotate(0deg);
+                        opacity: 0.5;
+                        transition: transform 0.3s ease, opacity 0.3s ease;
+                    }
+
+                    &.active {
+                        background: #e3f2fd;
+
+                        &::after {
+                            transform: translateY(-50%) rotate(180deg);
+                            opacity: 1;
+                        }
+                    }
+                }
+
+                /* ===============================
+                   LEVEL 2: GRANDCHILD ITEMS
+                   =============================== */
+                &.grandchild-item > .grandchild-category {
+                    padding-left: 70px;
+                    font-size: 0.85rem;
+                    background-color: #fafafa;
+
+                    .badge {
+                        background: #f0f0f0;
+                    }
+
+                    &.active {
+                        background: #f5f5f5;
+                        border-left-color: var(--color-primary);
+                    }
+                }
+
+                /* ===============================
+                   NESTED CHILDREN LISTS (ALL LEVELS)
                    =============================== */
                 > .category-children {
                     list-style: none;
@@ -96,23 +152,12 @@
                     transition: max-height 0.3s ease;
 
                     &.expanded {
-                        max-height: 1000px; /* Adjust as needed for many children */
+                        max-height: 2000px; /* Adjust as needed for many levels */
                     }
 
-                    .category-item > .child-category {
-                        padding-left: 42px;
-                        font-size: 0.85rem;
-                        background-color: var(--color-grey);
-
-                        .badge {
-                            background: #f8f9fa;
-                        }
-
-                        &.active {
-                            background: #e3f2fd;
-                        }
-
-                        &:last-child {
+                    .category-item {
+                        &:last-child > .child-category,
+                        &:last-child > .grandchild-category {
                             border-bottom: none;
                         }
                     }

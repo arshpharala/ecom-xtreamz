@@ -135,9 +135,9 @@ $(function () {
     function collectFilters() {
         let filters = {};
 
-        // Active category - find from either parent or child
+        // Active category - find from parent, child, or grandchild
         const $activeCategory = $(
-            ".category-list .parent-category.active, .category-list .child-category.active"
+            ".category-list .parent-category.active, .category-list .child-category.active, .category-list .grandchild-category.active"
         ).first();
         const activeCategory = $activeCategory.data("category-slug");
         if (activeCategory) filters.category = activeCategory;
@@ -334,7 +334,7 @@ $(function () {
 
         // Remove active from all categories
         $(
-            ".category-list .parent-category, .category-list .child-category"
+            ".category-list .parent-category, .category-list .child-category, .category-list .grandchild-category"
         ).removeClass("active");
 
         // Set this parent as active
@@ -344,6 +344,11 @@ $(function () {
         if (hasChildren) {
             $childrenList.toggleClass("expanded");
         }
+
+        // Collapse all other parent level-1 lists
+        $(".category-list > .parent-item > .category-children.level-1")
+            .not($childrenList)
+            .removeClass("expanded");
 
         // Load filters and fetch products
         const categoryId = $parentCategory.data("category");
@@ -364,21 +369,26 @@ $(function () {
         e.stopPropagation();
 
         const $childCategory = $(this);
-        const $categoryItem = $childCategory.closest(".category-item");
-        const $parentItem = $categoryItem.closest(".category-item");
-        const $parentCategory = $parentItem.find("> .parent-category");
-        const $childrenList = $parentItem.find("> .category-children");
+        const $childItem = $childCategory.closest(".category-item");
+        const $level1List = $childItem.closest(".category-children.level-1");
+        const $level2List = $childItem.find("> .category-children.level-2");
+        const hasChildren = $childCategory.hasClass("has-children");
 
         // Remove active from all categories
         $(
-            ".category-list .parent-category, .category-list .child-category"
+            ".category-list .parent-category, .category-list .child-category, .category-list .grandchild-category"
         ).removeClass("active");
 
         // Set this child as active
         $childCategory.addClass("active");
 
-        // Ensure parent is open
-        $childrenList.addClass("expanded");
+        // Ensure level1 is open
+        $level1List.addClass("expanded");
+
+        // Toggle level 2 expansion for this child if it has children
+        if (hasChildren) {
+            $level2List.toggleClass("expanded");
+        }
 
         // Load filters and fetch products
         const categoryId = $childCategory.data("category");
@@ -393,6 +403,48 @@ $(function () {
         );
         fetchProducts(1);
     });
+
+    // Category grandchild click - select grandchild and keep all parents open
+    $(document).on(
+        "click",
+        ".category-list .grandchild-category",
+        function (e) {
+            e.stopPropagation();
+
+            const $grandchildCategory = $(this);
+            const $level2List = $grandchildCategory.closest(
+                ".category-children.level-2"
+            );
+            const $level1List = $level2List
+                .closest(".category-item")
+                .closest(".category-children.level-1");
+
+            // Remove active from all categories
+            $(
+                ".category-list .parent-category, .category-list .child-category, .category-list .grandchild-category"
+            ).removeClass("active");
+
+            // Set this grandchild as active
+            $grandchildCategory.addClass("active");
+
+            // Open all parent levels
+            $level1List.addClass("expanded");
+            $level2List.addClass("expanded");
+
+            // Load filters and fetch products
+            const categoryId = $grandchildCategory.data("category");
+            loadInitialAttributeFilters(categoryId);
+            initPriceSlider(
+                "price-slider-sidebar",
+                "priceLabelMinSidebar",
+                "priceLabelMaxSidebar",
+                0,
+                2000,
+                () => fetchProducts(1)
+            );
+            fetchProducts(1);
+        }
+    );
 
     // Search
     let searchTimer;

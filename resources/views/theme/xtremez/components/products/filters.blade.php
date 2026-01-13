@@ -16,11 +16,14 @@
       @foreach ($sidebarCategories as $category)
         @php
           $isParentActive = $category->id == ($activeCategory->id ?? null);
-          $isChildActive = $category->children->contains('id', $activeCategory->id ?? null);
-          $shouldExpand = $isParentActive || $isChildActive;
+          $isChildOrGrandchildActive = $category->children->contains(function ($child) use ($activeCategory) {
+              return $child->id == ($activeCategory->id ?? null) ||
+                  $child->children->contains('id', $activeCategory->id ?? null);
+          });
+          $shouldExpandParent = $isParentActive || $isChildOrGrandchildActive;
         @endphp
 
-        <li class="category-item">
+        <li class="category-item parent-item">
           <div
             class="d-flex align-items-center py-3 parent-category {{ $isParentActive ? 'active' : '' }} {{ $category->children->count() ? 'has-children' : '' }}"
             data-category="{{ $category->id }}" data-category-slug="{{ $category->slug }}">
@@ -31,19 +34,44 @@
           </div>
 
           @if ($category->children->isNotEmpty())
-            <ul class="category-children list-unstyled {{ $shouldExpand ? 'expanded' : '' }}">
+            <ul class="category-children list-unstyled level-1 {{ $shouldExpandParent ? 'expanded' : '' }}">
               @foreach ($category->children as $child)
                 @php
                   $isChildItemActive = $child->id == ($activeCategory->id ?? null);
+                  $isGrandchildActive = $child->children->contains('id', $activeCategory->id ?? null);
+                  $shouldExpandChild = $isChildItemActive || $isGrandchildActive;
                 @endphp
-                <li class="category-item">
-                  <div class="d-flex align-items-center py-3 child-category {{ $isChildItemActive ? 'active' : '' }}"
+
+                <li class="category-item child-item">
+                  <div
+                    class="d-flex align-items-center py-3 child-category {{ $isChildItemActive ? 'active' : '' }} {{ $child->children->count() ? 'has-children' : '' }}"
                     data-category="{{ $child->id }}" data-category-slug="{{ $child->slug }}">
 
                     <img src="{{ asset('storage/' . $child->icon) }}" class="me-2" width="18" alt>
                     {{ $child->translation->name }}
                     <span class="ms-auto badge text-dark">{{ $child->products_count }}</span>
                   </div>
+
+                  @if ($child->children->isNotEmpty())
+                    <ul class="category-children list-unstyled level-2 {{ $shouldExpandChild ? 'expanded' : '' }}">
+                      @foreach ($child->children as $grandchild)
+                        @php
+                          $isGrandchildItemActive = $grandchild->id == ($activeCategory->id ?? null);
+                        @endphp
+
+                        <li class="category-item grandchild-item">
+                          <div
+                            class="d-flex align-items-center py-3 grandchild-category {{ $isGrandchildItemActive ? 'active' : '' }}"
+                            data-category="{{ $grandchild->id }}" data-category-slug="{{ $grandchild->slug }}">
+
+                            <img src="{{ asset('storage/' . $grandchild->icon) }}" class="me-2" width="16" alt>
+                            {{ $grandchild->translation->name }}
+                            <span class="ms-auto badge text-dark">{{ $grandchild->products_count }}</span>
+                          </div>
+                        </li>
+                      @endforeach
+                    </ul>
+                  @endif
                 </li>
               @endforeach
             </ul>

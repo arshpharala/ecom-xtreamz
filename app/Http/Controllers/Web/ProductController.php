@@ -33,7 +33,11 @@ class ProductController extends Controller
             ->withSelection()
             ->whereNull('parent_id')
             ->with(['children' => function ($q) {
-                $q->visible()->applySorting('position')->with('translation');
+                $q->visible()
+                    ->applySorting('position')
+                    ->with(['translation', 'children' => function ($q2) {
+                        $q2->visible()->applySorting('position')->with('translation');
+                    }]);
             }])
             ->applySorting('position')
             ->get();

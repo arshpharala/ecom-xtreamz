@@ -14,27 +14,41 @@
 
     <ul class="category-list list-unstyled mb-0">
       @foreach ($sidebarCategories as $category)
-        <li
-          class="d-flex align-items-center py-3 parent-category {{ $category->id == ($activeCategory->id ?? null) ? 'active' : '' }} {{ $category->children->count() ? 'has-children' : '' }}"
-          data-category="{{ $category->id }}" data-category-slug="{{ $category->slug }}">
+        @php
+          $isParentActive = $category->id == ($activeCategory->id ?? null);
+          $isChildActive = $category->children->contains('id', $activeCategory->id ?? null);
+          $shouldExpand = $isParentActive || $isChildActive;
+        @endphp
 
-          <img src="{{ asset('storage/' . $category->icon) }}" class="me-2" width="22" alt>
-          {{ $category->name }}
-          <span class="ms-auto badge text-dark">{{ $category->products_count }}</span>
+        <li class="category-item">
+          <div
+            class="d-flex align-items-center py-3 parent-category {{ $isParentActive ? 'active' : '' }} {{ $category->children->count() ? 'has-children' : '' }}"
+            data-category="{{ $category->id }}" data-category-slug="{{ $category->slug }}">
+
+            <img src="{{ asset('storage/' . $category->icon) }}" class="me-2" width="22" alt>
+            {{ $category->name }}
+            <span class="ms-auto badge text-dark">{{ $category->products_count }}</span>
+          </div>
+
+          @if ($category->children->isNotEmpty())
+            <ul class="category-children list-unstyled {{ $shouldExpand ? 'expanded' : '' }}">
+              @foreach ($category->children as $child)
+                @php
+                  $isChildItemActive = $child->id == ($activeCategory->id ?? null);
+                @endphp
+                <li class="category-item">
+                  <div class="d-flex align-items-center py-3 child-category {{ $isChildItemActive ? 'active' : '' }}"
+                    data-category="{{ $child->id }}" data-category-slug="{{ $child->slug }}">
+
+                    <img src="{{ asset('storage/' . $child->icon) }}" class="me-2" width="18" alt>
+                    {{ $child->translation->name }}
+                    <span class="ms-auto badge text-dark">{{ $child->products_count }}</span>
+                  </div>
+                </li>
+              @endforeach
+            </ul>
+          @endif
         </li>
-
-        @if ($category->children->isNotEmpty())
-          @foreach ($category->children as $child)
-            <li
-              class="d-flex align-items-center py-3 ps-5 child-category  {{ $child->id == ($activeCategory->id ?? null) ? 'active' : '' }}"
-              data-category="{{ $child->id }}" data-category-slug="{{ $child->slug }}">
-
-              <img src="{{ asset('storage/' . $child->icon) }}" class="me-2" width="18" alt>
-              {{ $child->translation->name }}
-              <span class="ms-auto badge text-dark">{{ $child->products_count }}</span>
-            </li>
-          @endforeach
-        @endif
       @endforeach
     </ul>
 

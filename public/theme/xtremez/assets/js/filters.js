@@ -135,10 +135,11 @@ $(function () {
     function collectFilters() {
         let filters = {};
 
-        // Active category
-        const activeCategory = $(".category-list li.active").data(
-            "category-slug"
-        );
+        // Active category - find from either parent or child
+        const $activeCategory = $(
+            ".category-list .parent-category.active, .category-list .child-category.active"
+        ).first();
+        const activeCategory = $activeCategory.data("category-slug");
         if (activeCategory) filters.category = activeCategory;
 
         // All select inputs (including dynamic attributes)
@@ -167,15 +168,6 @@ $(function () {
             .replace(/[^0-9.,]/g, "")
             .replace(/,/g, "")
             .trim();
-
-        // filters.price_min = $("#priceLabelMinSidebar")
-        //     .text()
-        //     .replace(currencySymbol, "")
-        //     .trim();
-        // filters.price_max = $("#priceLabelMaxSidebar")
-        //     .text()
-        //     .replace(currencySymbol, "")
-        //     .trim();
 
         // Search & Sort
         filters.search = $(".search-input").val();
@@ -331,14 +323,66 @@ $(function () {
     // ===============================
     // 11. Event Bindings
     // ===============================
-    // Category click
-    $(document).on("click", ".category-list li", function () {
-        $(".category-list li").removeClass("active");
-        $(this).addClass("active");
+    // Category parent click - toggle expand/collapse and select category
+    $(document).on("click", ".category-list .parent-category", function (e) {
+        e.stopPropagation();
 
-        const categoryId = $(this).data("category");
+        const $parentCategory = $(this);
+        const $categoryItem = $parentCategory.closest(".category-item");
+        const $childrenList = $categoryItem.find("> .category-children");
+        const hasChildren = $parentCategory.hasClass("has-children");
+
+        // Remove active from all categories
+        $(
+            ".category-list .parent-category, .category-list .child-category"
+        ).removeClass("active");
+
+        // Set this parent as active
+        $parentCategory.addClass("active");
+
+        // Toggle children expansion
+        if (hasChildren) {
+            $childrenList.toggleClass("expanded");
+        }
+
+        // Load filters and fetch products
+        const categoryId = $parentCategory.data("category");
         loadInitialAttributeFilters(categoryId);
-        // Reset sidebar slider to default
+        initPriceSlider(
+            "price-slider-sidebar",
+            "priceLabelMinSidebar",
+            "priceLabelMaxSidebar",
+            0,
+            2000,
+            () => fetchProducts(1)
+        );
+        fetchProducts(1);
+    });
+
+    // Category child click - select child and keep parent open
+    $(document).on("click", ".category-list .child-category", function (e) {
+        e.stopPropagation();
+
+        const $childCategory = $(this);
+        const $categoryItem = $childCategory.closest(".category-item");
+        const $parentItem = $categoryItem.closest(".category-item");
+        const $parentCategory = $parentItem.find("> .parent-category");
+        const $childrenList = $parentItem.find("> .category-children");
+
+        // Remove active from all categories
+        $(
+            ".category-list .parent-category, .category-list .child-category"
+        ).removeClass("active");
+
+        // Set this child as active
+        $childCategory.addClass("active");
+
+        // Ensure parent is open
+        $childrenList.addClass("expanded");
+
+        // Load filters and fetch products
+        const categoryId = $childCategory.data("category");
+        loadInitialAttributeFilters(categoryId);
         initPriceSlider(
             "price-slider-sidebar",
             "priceLabelMinSidebar",

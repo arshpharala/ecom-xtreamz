@@ -85,12 +85,14 @@ $(function () {
                 $("#total-orders").text("...");
                 $("#total-customers").text("...");
                 $("#total-products").text("...");
+                $("#pending-returns").text("...");
             },
             success: function (res) {
                 $("#total-sales").text('AED ' + res.total_sales.toFixed(2));
                 $("#total-orders").text(res.total_orders);
                 $("#total-customers").text(res.total_customers);
                 $("#total-products").text(res.total_products);
+                $("#pending-returns").text(res.pending_returns);
             },
         });
     }
@@ -139,11 +141,10 @@ $(function () {
                       <td>${order.currency} ${parseFloat(order.total).toFixed(
                         2
                     )}</td>
-                      <td><span class="badge bg-${
-                          order.payment_status === "Paid"
-                              ? "success"
-                              : "warning"
-                      }">${order.payment_status}</span></td>
+                      <td><span class="badge bg-${order.payment_status === "Paid"
+                            ? "success"
+                            : "warning"
+                        }">${order.payment_status}</span></td>
                       <td>${order.date}</td>
                     </tr>`);
                 });

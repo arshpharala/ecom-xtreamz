@@ -15,7 +15,7 @@
 @endsection
 
 @section('content')
-{{-- 
+  {{-- 
         <div class="row">
           <div class="col-12">
 
@@ -214,6 +214,33 @@
           <p><strong>Method:</strong> {{ ucfirst($order->payment_method) }}</p>
           <p><strong>Gateway Ref:</strong> {{ $order->external_reference ?? 'N/A' }}</p>
           <p><strong>Paid At:</strong> {{ $order->updated_at->format('d M Y, h:i A') }}</p>
+        </div>
+      </div>
+
+      <!-- Shipping & Delivery -->
+      <div class="card mb-4">
+        <div class="card-header"><strong>Shipping & Delivery</strong></div>
+        <div class="card-body">
+          <form action="{{ route('admin.sales.orders.update', $order->id) }}" method="POST" class="ajax-form">
+            @csrf
+            @method('PUT')
+            <div class="form-group">
+              <label>Delivery Date</label>
+              <div class="input-group">
+                <input type="datetime-local" name="delivered_at" class="form-control"
+                  value="{{ $order->delivered_at ? $order->delivered_at->format('Y-m-d\TH:i') : '' }}">
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </div>
+              <small class="text-muted">Setting this date starts the 30-day return window.</small>
+            </div>
+          </form>
+          @if ($order->delivered_at)
+            <p class="mt-2 text-success">
+              <i class="fas fa-check-circle"></i> Delivered on {{ $order->delivered_at->format('d M Y, h:i A') }}
+            </p>
+          @endif
         </div>
       </div>
     </div>

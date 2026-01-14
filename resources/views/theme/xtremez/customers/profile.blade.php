@@ -69,6 +69,11 @@
               OPTIONS</a>
             <a href="#" class="profile-link border-bottom" data-tab="order" data-heading="My Order History">MY ORDER
               HISTORY</a>
+            @if (auth()->user()->returnRequests()->count() > 0)
+              <a href="#" class="profile-link border-bottom" data-tab="returns"
+                data-heading="Returns & Refunds">RETURNS &
+                REFUNDS</a>
+            @endif
             <a href="#" class="profile-link border-bottom" data-tab="wishlist" data-heading="Wishlist">WISHLIST</a>
 
             <a href="#" class="profile-link"

@@ -113,6 +113,18 @@
                   <p>Subscribers</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.sales.return-requests.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Return Requests</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.sales.return-reasons.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Return Reasons</p>
+                </a>
+              </li>
             </ul>
           </li>
 

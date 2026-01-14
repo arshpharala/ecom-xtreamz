@@ -24,4 +24,23 @@ class OrderLineItem extends Model
     {
         return $this->belongsTo(ProductVariant::class);
     }
+
+    public function returnItems()
+    {
+        return $this->hasMany(\App\Models\Sales\ReturnRequestItem::class);
+    }
+
+    public function getReturnedQuantity(): int
+    {
+        return (int) $this->returnItems()
+            ->whereHas('returnRequest', function ($query) {
+                $query->whereNotIn('status', ['rejected']);
+            })
+            ->sum('quantity');
+    }
+
+    public function getReturnableQuantity(): int
+    {
+        return $this->quantity - $this->getReturnedQuantity();
+    }
 }

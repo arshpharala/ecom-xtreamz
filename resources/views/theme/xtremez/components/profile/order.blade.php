@@ -19,8 +19,8 @@
                   <div class="order-item d-flex align-items-center justify-content-between py-2 border-bottom">
                     <div class="d-flex align-items-center">
                       <div class="order-img-box me-3">
-                        <img src="{{ $item->productVariant->getThumbnail() }}"
-                             alt="Product" class="order-img rounded" style="width:60px; height:60px; object-fit:cover;">
+                        <img src="{{ $item->productVariant->getThumbnail() }}" alt="Product" class="order-img rounded"
+                          style="width:60px; height:60px; object-fit:cover;">
                       </div>
                       <div>
                         <div class="order-title fw-semibold">
@@ -32,17 +32,26 @@
                       </div>
                     </div>
                     <div class="order-price fw-bold text-nowrap">
-                        {!! price_format($order->currency->code, $item->subtotal) !!}
+                      {!! price_format($order->currency->code, $item->subtotal) !!}
                     </div>
                   </div>
                 @endforeach
               </div>
 
-              <div class="order-footer bg-light d-flex justify-content-between align-items-center px-3 py-2 rounded-bottom">
+              <div
+                class="order-footer bg-light d-flex justify-content-between align-items-center px-3 py-2 rounded-bottom">
                 <span class="fw-semibold">Total: {!! price_format($order->currency->code, $order->total ?? 0) !!}</span>
-                <a href="" class="btn btn-sm btn-outline-primary">
-                  View Details
-                </a>
+                <div class="d-flex gap-2">
+                  @if ($order->canBeReturned())
+                    <button type="button" class="btn btn-sm btn-primary btn-raise-return"
+                      data-order-id="{{ $order->id }}">
+                      Return Items
+                    </button>
+                  @endif
+                  <a href="" class="btn btn-sm btn-outline-primary">
+                    View Details
+                  </a>
+                </div>
               </div>
             </div>
           @empty

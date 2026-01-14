@@ -40,6 +40,15 @@ class ProfileController extends Controller
             case 'wishlist':
                 $user = $user->load('wishlist');
                 break;
+            case 'returns':
+                $user = $user->load('returnRequests.reason', 'returnRequests.items.orderLineItem.productVariant.product');
+                // Also get return reasons for the "New Return" form
+                $data['reasons'] = \App\Models\Sales\ReturnReason::active()->get();
+                // Get eligible orders (paid and within return period)
+                $data['eligibleOrders'] = $user->orders()->paid()->get()->filter(function($order) {
+                    return $order->canBeReturned();
+                });
+                break;
             case 'payment':
                 // $stripe = new StripeService(); // sets key from DB automatically
                 $stripe       = PaymentGateway::active()->where('gateway', 'Stripe')->first();

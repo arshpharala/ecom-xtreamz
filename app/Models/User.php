@@ -107,6 +107,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Wishlist::class);
     }
 
+    public function returnRequests()
+    {
+        return $this->hasMany(\App\Models\Sales\ReturnRequest::class);
+    }
+
     public function sendPasswordResetNotification($token)
     {
         $url = route('password.reset', ['token' => $token, 'email' => $this->email]);

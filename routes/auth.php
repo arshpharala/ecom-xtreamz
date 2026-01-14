@@ -45,6 +45,9 @@ Route::prefix('/customers')->name('customers.')->middleware('auth', 'verified')-
 
     Route::resource('address',                      AddressController::class);
     Route::resource('wishlist',                     WishlistController::class);
+
+    Route::get('/returns/order-items/{order}',      [App\Http\Controllers\Web\ReturnController::class, 'getOrderItems'])->name('returns.order-items');
+    Route::post('/returns',                         [App\Http\Controllers\Web\ReturnController::class, 'store'])->name('returns.store');
 });
 
 Route::get('/session/check', function () {

@@ -31,36 +31,44 @@
             <i class="far fa-calendar-alt"></i>
           </span>
         </div>
-        <input type="text" class="form-control float-right" id="dashboardDateRange" style="width: 250px;"/>
+        <input type="text" class="form-control float-right" id="dashboardDateRange" style="width: 250px;" />
       </div>
     </div>
   </div>
 @endsection
 @section('content')
-  <div class="row text-center">
-    <div class="col-md-3">
-      <div class="card p-3">
-        <h5>Total Sales</h5>
-        <h2 id="total-sales" class="skeleton-loader">...</h2>
+  <div class="row text-center mb-4">
+    <div class="col">
+      <div class="card p-3 shadow-sm border-0">
+        <h6 class="text-muted">Total Sales</h6>
+        <h2 id="total-sales" class="skeleton-loader mb-0">...</h2>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card p-3">
-        <h5>Total Orders</h5>
-        <h2 id="total-orders" class="skeleton-loader">...</h2>
+    <div class="col">
+      <div class="card p-3 shadow-sm border-0">
+        <h6 class="text-muted">Total Orders</h6>
+        <h2 id="total-orders" class="skeleton-loader mb-0">...</h2>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card p-3">
-        <h5>Total Customers</h5>
-        <h2 id="total-customers" class="skeleton-loader">...</h2>
+    <div class="col">
+      <div class="card p-3 shadow-sm border-0">
+        <h6 class="text-muted">Total Customers</h6>
+        <h2 id="total-customers" class="skeleton-loader mb-0">...</h2>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card p-3">
-        <h5>Total Products</h5>
-        <h2 id="total-products" class="skeleton-loader">...</h2>
+    <div class="col">
+      <div class="card p-3 shadow-sm border-0">
+        <h6 class="text-muted">Total Products</h6>
+        <h2 id="total-products" class="skeleton-loader mb-0">...</h2>
       </div>
+    </div>
+    <div class="col">
+      <a href="{{ route('admin.sales.return-requests.index') }}" class="text-decoration-none">
+        <div class="card p-3 shadow-sm border-0 bg-warning-light">
+          <h6 class="text-muted">Pending Returns</h6>
+          <h2 id="pending-returns" class="skeleton-loader mb-0 text-warning">...</h2>
+        </div>
+      </a>
     </div>
   </div>
 

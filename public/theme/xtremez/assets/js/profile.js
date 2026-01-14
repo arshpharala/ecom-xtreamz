@@ -92,9 +92,8 @@ $(function () {
 							${heading}
 						</button>
 					</h2>
-					<div id="${collapseId}" class="accordion-collapse collapse ${
-                isActive ? "show" : ""
-            }"
+					<div id="${collapseId}" class="accordion-collapse collapse ${isActive ? "show" : ""
+                }"
 						aria-labelledby="heading-${tabId}" data-bs-parent="#mobileProfileAccordion">
 						<div class="accordion-body p-0" data-loaded="false"></div>
 					</div>
@@ -149,6 +148,40 @@ $(function () {
         $(".profile-link").on("click", function (e) {
             e.preventDefault();
             handleSidebarClick($(this));
+        });
+
+        // Register "Return Items" button events from Orders tab
+        $("body").on("click", ".btn-raise-return", function () {
+            const orderId = $(this).data("order-id");
+            const $returnsLink = $('.profile-link[data-tab="returns"]');
+
+            if ($returnsLink.length) {
+                // 1. Link exists, use standard handler
+                handleSidebarClick($returnsLink);
+            } else {
+                // 2. Link is hidden (first return), manual load
+                $(".profile-link").removeClass("active");
+                $(".section-title").text("Returns & Refunds");
+                loadTabContent("returns", contentContainer);
+            }
+
+            // 3. Wait for content to load, then trigger the new return UI
+            const checkExist = setInterval(function () {
+                if ($("#newReturnSection").length) {
+                    $("#newReturnSection").show();
+                    $('select[name="order_id"]').val(orderId).trigger("change");
+
+                    // Scroll to the form
+                    $("html, body").animate(
+                        {
+                            scrollTop: $("#newReturnSection").offset().top - 100,
+                        },
+                        500
+                    );
+
+                    clearInterval(checkExist);
+                }
+            }, 100);
         });
     }
 });

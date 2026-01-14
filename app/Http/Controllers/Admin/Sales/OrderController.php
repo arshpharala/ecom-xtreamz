@@ -103,7 +103,20 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $order = Order::findOrFail($id);
+        
+        $data = $request->validate([
+            'delivered_at' => 'nullable|date',
+            'payment_status' => 'nullable|string',
+        ]);
+
+        $order->update($data);
+
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Order updated successfully.']);
+        }
+
+        return redirect()->back()->with('success', 'Order updated successfully.');
     }
 
     /**

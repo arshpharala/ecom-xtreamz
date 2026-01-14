@@ -7,8 +7,9 @@ use App\Models\Cart\Order;
 use Illuminate\Http\Request;
 use App\Models\Catalog\Product;
 use App\Models\Cart\OrderLineItem;
-use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Sales\ReturnRequest;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,10 +36,11 @@ class DashboardController extends Controller
         $newCustomers = (clone $usersQuery)->count();
 
         return response()->json([
-            'total_sales'     => (float) $salesTotal,
-            'total_orders'    => $ordersCount,
-            'total_customers' => $newCustomers,
-            'total_products'  => Product::count(), // products not filtered by date
+            'total_sales'      => (float) $salesTotal,
+            'total_orders'     => $ordersCount,
+            'total_customers'  => $newCustomers,
+            'total_products'   => Product::count(), // products not filtered by date
+            'pending_returns' => ReturnRequest::where('status', 'pending')->count(),
         ]);
     }
 

@@ -25,7 +25,12 @@ class Order extends Model
         'sub_total',
         'tax',
         'total',
-        'email_sent'
+        'email_sent',
+        'delivered_at'
+    ];
+
+    protected $casts = [
+        'delivered_at' => 'datetime',
     ];
 
     protected static function booted()
@@ -93,6 +98,33 @@ class Order extends Model
     public function couponUsages()
     {
         return $this->hasMany(CouponUsage::class);
+    }
+
+    public function returnRequests()
+    {
+        return $this->hasMany(\App\Models\Sales\ReturnRequest::class);
+    }
+
+    public function canBeReturned(): bool
+    {
+        // 1. Must be paid
+        if ($this->payment_status !== 'paid') {
+            return false;
+        }
+
+        // 2. Check days restriction (default 30 days if not set)
+        $policyDays = (int) (\App\Models\Setting::where('key', 'return_policy_days')->first()?->value ?? 30);
+        
+        // Use delivered_at if available, otherwise fallback to updated_at (proxy for delivery/payment)
+        $referenceDate = $this->delivered_at ?? $this->updated_at;
+
+        if ($referenceDate->addDays($policyDays)->isPast()) {
+            return false;
+        }
+
+        // 3. Check if all items are already returned (optional but good for UI)
+        // We'll handle item-level restriction in the wizard
+        return true;
     }
 
     function scopeWithJoins($query)

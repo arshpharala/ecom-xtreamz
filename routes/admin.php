@@ -98,6 +98,12 @@ Route::group(['prefix' => '/sales', 'as' => 'sales.'], function () {
     Route::resource('customers',                            CustomerController::class);
 
     Route::resource('subscribers',                          SubscriberController::class);
+
+    Route::resource('return-reasons',                       App\Http\Controllers\Admin\Sales\ReturnReasonController::class);
+    Route::delete('return-reasons/{reason}/restore',        [App\Http\Controllers\Admin\Sales\ReturnReasonController::class, 'restore'])->name('return-reasons.restore');
+
+    Route::resource('return-requests',                      App\Http\Controllers\Admin\Sales\ReturnRequestController::class);
+    Route::delete('return-requests/{request}/restore',      [App\Http\Controllers\Admin\Sales\ReturnRequestController::class, 'restore'])->name('return-requests.restore');
 });
 
 Route::group(['prefix' => '/inventory', 'as' => 'inventory.'], function () {

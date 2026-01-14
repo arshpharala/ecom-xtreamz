@@ -126,6 +126,105 @@
                     <i class="bi bi-file-earmark-arrow-down"></i> Download Shipping Label
                   </a>
                 @endif
+
+                <button type="button" class="btn btn-sm btn-dark w-100 mt-2" data-bs-toggle="modal"
+                  data-bs-target="#returnDetailsModal{{ $return->id }}">
+                  <i class="bi bi-eye"></i> View Details
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Return Details Modal -->
+          <div class="modal fade" id="returnDetailsModal{{ $return->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Return Request Detail: #{{ $return->reference_number }}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row g-4">
+                    <div class="col-md-7">
+                      <h6 class="border-bottom pb-2 mb-3">Items Information</h6>
+                      @foreach ($return->items as $item)
+                        <div class="d-flex align-items-center mb-3">
+                          <img src="{{ $item->orderLineItem->productVariant->getThumbnail() }}" alt="Product"
+                            class="rounded me-3" style="width:60px; height:60px; object-fit:cover;">
+                          <div>
+                            <div class="fw-bold">
+                              {{ $item->orderLineItem->productVariant->product->translation->name ?? 'Product' }}</div>
+                            <div class="small text-muted">
+                              SKU: {{ $item->orderLineItem->productVariant->sku }} | Qty: {{ $item->quantity }}
+                            </div>
+                            <div class="small text-primary">Price: {{ money($item->orderLineItem->price) }}</div>
+                          </div>
+                        </div>
+                      @endforeach
+
+                      <h6 class="border-bottom pb-2 mb-3 mt-4">Problem Description</h6>
+                      <p class="text-secondary small">{{ $return->description ?? 'No description provided.' }}</p>
+
+                      @if ($return->attachments->count() > 0)
+                        <h6 class="border-bottom pb-2 mb-3 mt-4">Uploaded Photos</h6>
+                        <div class="row g-2">
+                          @foreach ($return->attachments as $attachment)
+                            <div class="col-4">
+                              <a href="{{ $attachment->url }}" target="_blank">
+                                <img src="{{ $attachment->url }}" class="img-fluid img-thumbnail"
+                                  style="height: 100px; width: 100%; object-fit: cover;">
+                              </a>
+                            </div>
+                          @endforeach
+                        </div>
+                      @endif
+                    </div>
+                    <div class="col-md-5">
+                      <div class="bg-light p-3 rounded">
+                        <h6 class="border-bottom pb-2 mb-3">History & Status</h6>
+                        <div class="status-timeline small">
+                          <div
+                            class="mb-3 d-flex @if ($return->created_at) text-success @else text-muted @endif">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <div>
+                              <div class="fw-bold">Request Submitted</div>
+                              <div class="x-small">{{ $return->created_at->format('d M Y, h:i A') }}</div>
+                            </div>
+                          </div>
+                          @php $stages = ['approved' => 'Request Approved', 'shipped' => 'Package Shipped', 'received' => 'Package Received', 'refunded' => 'Refund Processed']; @endphp
+                          @foreach ($stages as $status => $label)
+                            @php $tsField = $status . '_at'; @endphp
+                            <div
+                              class="mb-3 d-flex @if ($return->$tsField) text-success @else text-muted @endif">
+                              <i
+                                class="bi @if ($return->$tsField) bi-check-circle-fill @else bi-circle @endif me-2"></i>
+                              <div>
+                                <div class="fw-bold">{{ $label }}</div>
+                                @if ($return->$tsField)
+                                  <div class="x-small">{{ $return->$tsField->format('d M Y, h:i A') }}</div>
+                                @else
+                                  <div class="x-small">Pending</div>
+                                @endif
+                              </div>
+                            </div>
+                          @endforeach
+                        </div>
+
+                        @if ($return->admin_notes)
+                          <div class="mt-4">
+                            <h6 class="border-bottom pb-2 mb-2">Internal Remarks</h6>
+                            <div class="p-2 border rounded bg-white small italic">
+                              "{{ $return->admin_notes }}"
+                            </div>
+                          </div>
+                        @endif
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
               </div>
             </div>
           </div>

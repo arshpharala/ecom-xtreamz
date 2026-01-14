@@ -41,7 +41,7 @@ class ProfileController extends Controller
                 $user = $user->load('wishlist');
                 break;
             case 'returns':
-                $user = $user->load('returnRequests.reason', 'returnRequests.items.orderLineItem.productVariant.product');
+                $user = $user->load('returnRequests.reason', 'returnRequests.items.orderLineItem.productVariant.product', 'returnRequests.attachments', 'returnRequests.order');
                 // Also get return reasons for the "New Return" form
                 $data['reasons'] = \App\Models\Sales\ReturnReason::active()->get();
                 // Get eligible orders (paid and within return period)

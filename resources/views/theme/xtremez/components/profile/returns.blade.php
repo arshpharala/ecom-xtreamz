@@ -157,7 +157,7 @@
                             <div class="small text-muted">
                               SKU: {{ $item->orderLineItem->productVariant->sku }} | Qty: {{ $item->quantity }}
                             </div>
-                            <div class="small text-primary">Price: {{ money($item->orderLineItem->price) }}</div>
+                            <div class="small text-primary">Price: {!! price_format(active_currency(), $item->orderLineItem->price) !!}</div>
                           </div>
                         </div>
                       @endforeach

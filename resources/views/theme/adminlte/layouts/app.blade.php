@@ -50,6 +50,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
     }
   </style>
 
+    <style>
+     @font-face {
+      font-family: 'UAESymbol';
+      src: url('{{ asset('assets/fonts/font.woff2') }}') format('woff2'),
+        url('{{ asset('assets/fonts/font.woff') }}') format('woff'),
+        url('{{ asset('assets/fonts/font.ttf') }}') format('truetype');
+    }
+
+    .dirham-symbol {
+      font-family: 'UAESymbol', sans-serif;
+      font-size: inherit;
+      color: inherit;
+      /* font-weight: bold; */
+    }
+  </style>
+
   @stack('head')
 
 </head>

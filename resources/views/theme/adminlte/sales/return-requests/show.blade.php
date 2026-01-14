@@ -78,9 +78,9 @@
                   </td>
                   <td class="text-center">{{ $item->orderLineItem->quantity }}</td>
                   <td class="text-center"><span class="badge badge-danger">{{ $item->quantity }}</span></td>
-                  <td class="text-right">{{ price_format(active_currency(), $item->orderLineItem->price) }}</td>
+                  <td class="text-right">{!! price_format(active_currency(), $item->orderLineItem->price) !!}</td>
                   <td class="text-right font-weight-bold">
-                    {{ price_format(active_currency(), $item->orderLineItem->price * $item->quantity) }}</td>
+                    {!! price_format(active_currency(), $item->orderLineItem->price * $item->quantity) !!}</td>
                 </tr>
               @endforeach
             </tbody>

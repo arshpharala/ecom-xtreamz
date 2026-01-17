@@ -23,6 +23,8 @@
               Gateway</a>
             <a class="nav-link" id="social-login-tab" data-bs-toggle="pill" data-bs-target="#v-pills-social-login"
               type="button" role="tab" aria-controls="v-pills-social-login" aria-selected="false">SSO</a>
+            <a class="nav-link" id="password-tab" data-bs-toggle="pill" data-bs-target="#v-pills-password" type="button"
+              role="tab" aria-controls="v-pills-password" aria-selected="false">Password</a>
 
           </div>
         </div>
@@ -72,7 +74,8 @@
 
                     <div class="mb-4">
                       <h5 class="mb-3">Tiny MC Key</h5>
-                      <input type="text" class="form-control" name="tiny_mc_key" value="{{ setting('tiny_mc_key') }}">
+                      <input type="text" class="form-control" name="tiny_mc_key"
+                        value="{{ setting('tiny_mc_key') }}">
                     </div>
 
 
@@ -163,72 +166,72 @@
             <div class="tab-pane fade" id="v-pills-payment-gateway" role="tabpanel"
               aria-labelledby="payment-gatway-tab">
 
-              <form action="{{ route('admin.cms.payment-gateways.store') }}" method="POST" enctype="multipart/form-data"
-                class="ajax-form">
+              <form action="{{ route('admin.cms.payment-gateways.store') }}" method="POST"
+                enctype="multipart/form-data" class="ajax-form">
                 @csrf
 
-              <div class="row">
-                <div class="col-12">
-                  @foreach ($gatwayConfig as $gatewayKey => $gatewayConfig)
-                    @php
-                      $pg = $gateways->firstWhere('gateway', $gatewayKey);
-                    @endphp
+                <div class="row">
+                  <div class="col-12">
+                    @foreach ($gatwayConfig as $gatewayKey => $gatewayConfig)
+                      @php
+                        $pg = $gateways->firstWhere('gateway', $gatewayKey);
+                      @endphp
 
-                    <div class="mb-5 p-4 border rounded shadow-sm bg-light">
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0 text-uppercase fw-bold">{{ $gatewayConfig['label'] }}</h5>
+                      <div class="mb-5 p-4 border rounded shadow-sm bg-light">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                          <h5 class="mb-0 text-uppercase fw-bold">{{ $gatewayConfig['label'] }}</h5>
 
-                        <div class="form-check form-switch">
-                          <input type="checkbox" name="is_active[{{ $gatewayKey }}]" class="form-check-input"
-                            value="1" {{ $pg && $pg->is_active ? 'checked' : '' }}>
-                          <label class="form-check-label ms-2">Enabled</label>
+                          <div class="form-check form-switch">
+                            <input type="checkbox" name="is_active[{{ $gatewayKey }}]" class="form-check-input"
+                              value="1" {{ $pg && $pg->is_active ? 'checked' : '' }}>
+                            <label class="form-check-label ms-2">Enabled</label>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          @foreach ($gatewayConfig['fields'] as $fieldKey => $field)
+                            @php
+                              $rawValue = $pg->$fieldKey ?? ($pg->additional[$fieldKey] ?? '');
+                              if (isset($field['encrypted']) && $field['encrypted']) {
+                                  $value = $rawValue ? mask_sensitive($rawValue) : '';
+                              } else {
+                                  $value = $rawValue ?? '';
+                              }
+                            @endphp
+
+                            <div class="col-md-6 mb-3">
+                              <label class="form-label fw-semibold">{{ $field['label'] }}
+                                @if (!empty($field['help']))
+                                  <i class="fas fa-info-circle text-muted" data-bs-toggle="tooltip"
+                                    title="{{ $field['help'] }}"></i>
+                                @endif
+                              </label>
+                              <input type="{{ $field['type'] ?? 'text' }}"
+                                name="{{ $fieldKey }}[{{ $gatewayKey }}]" class="form-control"
+                                value="{{ $value }}" placeholder="Enter {{ $field['label'] }}">
+                            </div>
+                          @endforeach
+
+                          {{-- Optional Webhook --}}
+                          @if (!empty($gatewayConfig['webhook']))
+                            <div class="col-md-12 mt-2">
+                              <label class="form-label fw-semibold">Webhook URL</label>
+                              <input type="url" name="webhook_url[{{ $gatewayKey }}]" class="form-control"
+                                value="{{ $pg->additional['webhook_url'] ?? '' }}"
+                                placeholder="Enter Webhook URL (optional)">
+                            </div>
+                          @endif
                         </div>
                       </div>
-
-                      <div class="row">
-                        @foreach ($gatewayConfig['fields'] as $fieldKey => $field)
-                          @php
-                            $rawValue = $pg->$fieldKey ?? ($pg->additional[$fieldKey] ?? '');
-                            if (isset($field['encrypted']) && $field['encrypted']) {
-                                $value = $rawValue ? mask_sensitive($rawValue) : '';
-                            } else {
-                                $value = $rawValue ?? '';
-                            }
-                          @endphp
-
-                          <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">{{ $field['label'] }}
-                              @if (!empty($field['help']))
-                                <i class="fas fa-info-circle text-muted" data-bs-toggle="tooltip"
-                                  title="{{ $field['help'] }}"></i>
-                              @endif
-                            </label>
-                            <input type="{{ $field['type'] ?? 'text' }}"
-                              name="{{ $fieldKey }}[{{ $gatewayKey }}]" class="form-control"
-                              value="{{ $value }}" placeholder="Enter {{ $field['label'] }}">
-                          </div>
-                        @endforeach
-
-                        {{-- Optional Webhook --}}
-                        @if (!empty($gatewayConfig['webhook']))
-                          <div class="col-md-12 mt-2">
-                            <label class="form-label fw-semibold">Webhook URL</label>
-                            <input type="url" name="webhook_url[{{ $gatewayKey }}]" class="form-control"
-                              value="{{ $pg->additional['webhook_url'] ?? '' }}"
-                              placeholder="Enter Webhook URL (optional)">
-                          </div>
-                        @endif
-                      </div>
-                    </div>
-                  @endforeach
+                    @endforeach
+                  </div>
                 </div>
-              </div>
 
-              <div class="row">
-                <div class="col-md-12">
-                  <button class="btn btn-primary px-5">Save</button>
+                <div class="row">
+                  <div class="col-md-12">
+                    <button class="btn btn-primary px-5">Save</button>
+                  </div>
                 </div>
-              </div>
 
               </form>
             </div>
@@ -331,6 +334,72 @@
                 <div class="row mt-3">
                   <div class="col-md-12">
                     <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div class="tab-pane fade" id="v-pills-password" role="tabpanel" aria-labelledby="password-tab">
+              <form action="{{ route('admin.cms.settings.store') }}" method="POST" enctype="multipart/form-data"
+                class="ajax-form">
+                @csrf
+
+                <div class="row">
+                  <div class="col-12">
+
+                    <div class="mb-4">
+                      <h5 class="mb-3">Minimum Password Length</h5>
+                      <input type="number" class="form-control" name="password_min_length"
+                        value="{{ setting('password_min_length', 8) }}" min="6" max="20"
+                        placeholder="Minimum length">
+                      <small class="text-muted">Minimum characters required for passwords</small>
+                    </div>
+
+                    <div class="mb-4">
+                      <h5 class="mb-3">Require Uppercase Letters</h5>
+                      <div class="form-check form-switch">
+                        <input type="hidden" name="password_require_uppercase" value="0">
+                        <input type="checkbox" class="form-check-input" id="requireUppercase"
+                          name="password_require_uppercase" value="1"
+                          {{ (bool) setting('password_require_uppercase', true) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="requireUppercase">
+                          Require at least one uppercase letter (A-Z)
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="mb-4">
+                      <h5 class="mb-3">Require Numbers</h5>
+                      <div class="form-check form-switch">
+                        <input type="hidden" name="password_require_numbers" value="0">
+                        <input type="checkbox" class="form-check-input" id="requireNumbers"
+                          name="password_require_numbers" value="1"
+                          {{ (bool) setting('password_require_numbers', true) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="requireNumbers">
+                          Require at least one number (0-9)
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="mb-4">
+                      <h5 class="mb-3">Require Special Characters</h5>
+                      <div class="form-check form-switch">
+                        <input type="hidden" name="password_require_symbols" value="0">
+                        <input type="checkbox" class="form-check-input" id="requireSymbols"
+                          name="password_require_symbols" value="1"
+                          {{ (bool) setting('password_require_symbols', false) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="requireSymbols">
+                          Require at least one special character (!@#$%^&*)
+                        </label>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary px-5">Save</button>
                   </div>
                 </div>
               </form>

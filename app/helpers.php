@@ -46,6 +46,21 @@ if (!function_exists('cart_items_count')) {
     }
 }
 
+if (!function_exists('getPasswordRule')) {
+    function getPasswordRule()
+    {
+        $minLength = (int) \App\Models\Setting::get('password_min_length', 8);
+        $requireUppercase = (bool) \App\Models\Setting::get('password_require_uppercase', true);
+        $requireNumbers = (bool) \App\Models\Setting::get('password_require_numbers', true);
+        $requireSymbols = (bool) \App\Models\Setting::get('password_require_symbols', false);
+
+        return \Illuminate\Validation\Rules\Password::min($minLength)
+            ->when($requireUppercase, fn($rule) => $rule->mixedCase())
+            ->when($requireNumbers, fn($rule) => $rule->numbers())
+            ->when($requireSymbols, fn($rule) => $rule->symbols());
+    }
+}
+
 if (!function_exists('locale')) {
     function locale()
     {

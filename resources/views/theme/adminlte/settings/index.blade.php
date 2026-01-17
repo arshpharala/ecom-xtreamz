@@ -78,6 +78,20 @@
                         value="{{ setting('tiny_mc_key') }}">
                     </div>
 
+                    <div class="mb-4">
+                      <h5 class="mb-3">Allow Negative Purchase</h5>
+                      <div class="form-check form-switch">
+                        <input type="hidden" name="allow_negative_purchase" value="0">
+                        <input type="checkbox" class="form-check-input" id="allowNegativePurchase"
+                          name="allow_negative_purchase" value="1"
+                          {{ (bool) setting('allow_negative_purchase', false) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="allowNegativePurchase">
+                          Allow users to add quantity more than available stock
+                        </label>
+                      </div>
+                      <small class="text-muted d-block mt-2">When enabled, customers can purchase items even if stock is
+                        insufficient</small>
+                    </div>
 
                   </div>
 

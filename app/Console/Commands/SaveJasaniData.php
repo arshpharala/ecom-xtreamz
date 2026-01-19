@@ -111,7 +111,7 @@ class SaveJasaniData extends Command
 
         foreach ($json['data'] ?? [] as $row) {
             if (!empty($row['id'])) {
-                $this->priceMap[(int) $row['id']] = (float) $row['price'];
+                $this->priceMap[(int) $row['id']] = (float) $row['retail_price']; // Now api sending retail_price
             }
         }
     }
@@ -324,7 +324,7 @@ class SaveJasaniData extends Command
         $refId = (int) $apiVariant['id'];
         $price = 0;
         if (!empty($this->priceMap[$refId])) {
-            $price = $this->priceMap[$refId] * 2;
+            $price = $this->priceMap[$refId]; // Use loaded price map
         }
 
         $variant = ProductVariant::updateOrCreate(

@@ -12,7 +12,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Order Confirmation - {{ $brandName }}</title>
+  <title>Order Placed - {{ $brandName }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     @font-face {
@@ -183,8 +183,8 @@
     <div class="content">
       <h1>Thank You, {{ $order->billingAddress->name ?? 'Guest' }}!</h1>
       <p>Your order <span class="order-id">#{{ $order->reference_number }}</span> has been successfully placed.</p>
-      <p>We’re processing your order and will notify you once it’s shipped.
-        A confirmation email has been sent to <strong>{{ $order->email }}</strong>.</p>
+      <p>We’re processing your order. We will notify you once it's confirmed; a confirmation email will be sent to
+        <strong>{{ $order->email }}</strong> when your order is confirmed.</p>
 
       <a href="{{ route('customers.profile') }}" class="btn" target="_blank">
         View Your Order

@@ -22,6 +22,7 @@ class OrderController extends Controller
                     'orders.reference_number',
                     'orders.total',
                     'orders.payment_status',
+                    'orders.status as order_status',
                     'orders.created_at',
                     'orders.deleted_at',
                     'users.name as user_name',
@@ -44,10 +45,19 @@ class OrderController extends Controller
                     ])->render();
                 })
                 ->editColumn('created_at', fn($row) => $row->created_at?->format('d-M-Y h:i A'))
-                ->addColumn('status', fn($row) => $row->payment_status === 'paid'
+                ->addColumn('order_status', fn($row) => '<span class="badge ' . (
+                    $row->order_status === 'fulfilled' || $row->order_status === 'delivered' ? 'badge-success' : (
+                        $row->order_status === 'placed' ? 'badge-info' : (
+                            $row->order_status === 'processing' ? 'badge-primary' : (
+                                $row->order_status === 'cancelled' ? 'badge-danger' : 'badge-secondary'
+                            )
+                        )
+                    )
+                ) . '">' . ucfirst($row->order_status) . '</span>')
+                ->addColumn('payment_status', fn($row) => $row->payment_status === 'paid'
                     ? '<span class="badge badge-success">Paid</span>'
                     : '<span class="badge badge-warning">' . ucfirst($row->payment_status) . '</span>')
-                ->rawColumns(['action', 'status'])
+                ->rawColumns(['action', 'order_status', 'payment_status'])
                 ->make(true);
         }
 
@@ -78,7 +88,9 @@ class OrderController extends Controller
         $order = Order::with([
             'billingAddress',
             'lineItems.productVariant.attributeValues.attribute',
-            'lineItems.productVariant.product'
+            'lineItems.productVariant.product',
+            'couponUsages.coupon',
+            'currency'
         ])->findOrFail($id);
 
 
@@ -104,10 +116,11 @@ class OrderController extends Controller
     public function update(Request $request, string $id)
     {
         $order = Order::findOrFail($id);
-        
+
         $data = $request->validate([
             'delivered_at' => 'nullable|date',
             'payment_status' => 'nullable|string',
+            'status' => 'nullable|string|in:draft,placed,fulfilled,processing,confirmed,cancelled'
         ]);
 
         $order->update($data);

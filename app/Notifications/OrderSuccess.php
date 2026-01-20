@@ -35,7 +35,7 @@ class OrderSuccess extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Your Order #' . $this->order->reference_number . ' is Confirmed!')
+            ->subject('Your Order #' . $this->order->reference_number . ' has been placed')
             ->view('emails.order-success', [
                 'order' => $this->order,
             ]);

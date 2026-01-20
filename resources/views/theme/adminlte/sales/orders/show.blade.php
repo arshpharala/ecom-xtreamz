@@ -10,12 +10,15 @@
       <a href="#" class="btn btn-outline-primary" target="_blank">
         <i class="fas fa-file-invoice"></i> View / Download Invoice
       </a>
+      <a href="{{ route('admin.sales.orders.index') }}" class="btn btn-outline-secondary ml-2">
+        <i class="fas fa-arrow-left"></i> Back to Orders
+      </a>
     </div>
   </div>
 @endsection
 
 @section('content')
-  {{-- 
+  {{--
         <div class="row">
           <div class="col-12">
 
@@ -217,25 +220,64 @@
         </div>
       </div>
 
-      <!-- Shipping & Delivery -->
+      <!-- Order Management -->
       <div class="card mb-4">
-        <div class="card-header"><strong>Shipping & Delivery</strong></div>
+        <div class="card-header"><strong>Order Management</strong></div>
         <div class="card-body">
-          <form action="{{ route('admin.sales.orders.update', $order->id) }}" method="POST" class="ajax-form">
+          <!-- Status Update -->
+          <form action="{{ route('admin.sales.orders.update', $order->id) }}" method="POST" class="ajax-form mb-3">
             @csrf
             @method('PUT')
             <div class="form-group">
-              <label>Delivery Date</label>
-              <div class="input-group">
-                <input type="datetime-local" name="delivered_at" class="form-control"
-                  value="{{ $order->delivered_at ? $order->delivered_at->format('Y-m-d\TH:i') : '' }}">
-                <div class="input-group-append">
-                  <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-              </div>
-              <small class="text-muted">Setting this date starts the 30-day return window.</small>
+              <label>Order Status</label>
+              <select name="status" class="form-control">
+                @php
+                  $statuses = ['draft', 'placed', 'processing', 'confirmed', 'fulfilled', 'cancelled'];
+                @endphp
+                @foreach ($statuses as $s)
+                  <option value="{{ $s }}" {{ $order->status === $s ? 'selected' : '' }}>{{ ucfirst($s) }}
+                  </option>
+                @endforeach
+              </select>
             </div>
+            <button type="submit" class="btn btn-primary">Update Status</button>
           </form>
+
+          <!-- Confirm/Cancel Actions -->
+          @if ($order->status === 'placed')
+            <div class="row">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#confirmModal">
+                  <i class="fas fa-check"></i> Confirm Order
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#cancelModal">
+                  <i class="fas fa-times"></i> Cancel Order
+                </button>
+              </div>
+            </div>
+          @endif
+
+          <!-- Delivery Date -->
+          @if ($order->status === 'confirmed' || $order->status === 'fulfilled')
+            <form action="{{ route('admin.sales.orders.update', $order->id) }}" method="POST" class="ajax-form mt-3">
+              @csrf
+              @method('PUT')
+              <div class="form-group">
+                <label>Delivery Date</label>
+                <div class="input-group">
+                  <input type="datetime-local" name="delivered_at" class="form-control"
+                    value="{{ $order->delivered_at ? $order->delivered_at->format('Y-m-d\TH:i') : '' }}">
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Update Delivery</button>
+                  </div>
+                </div>
+                <small class="text-muted">Setting this date starts the 30-day return window.</small>
+              </div>
+            </form>
+          @endif
+
           @if ($order->delivered_at)
             <p class="mt-2 text-success">
               <i class="fas fa-check-circle"></i> Delivered on {{ $order->delivered_at->format('d M Y, h:i A') }}

@@ -24,10 +24,11 @@
         <!-- Left Column -->
         <div class="col-md-6">
           <div class=" p-4 mb-3">
-            <div class="fw-bold fs-4">Your Order is Confirmed</div>
+            <div class="fw-bold fs-4">Order Placed</div>
             <div class="small mt-2 mb-0 fs-6">
-              We've accepted your order, and we're getting it ready,<br>
-              A confirmation has been sent to <span class="fw-bold">{{ $order->email }}</span>
+              We will notify you once it's confirmed.<br>
+              A confirmation email will be sent to <span class="fw-bold">{{ $order->email }}</span> when your order is
+              confirmed.
             </div>
           </div>
           <div class=" p-4">
@@ -69,7 +70,7 @@
 
                   </div>
                   <div class="fw-bold ms-2 fs-6 text-nowrap">
-                    {!! price_format($order->currency->code, ($item->price * $item->quantity )) !!}
+                    {!! price_format($order->currency->code, $item->price * $item->quantity) !!}
                   </div>
                 </div>
               @endforeach
@@ -80,18 +81,27 @@
               <li class="d-flex justify-content-between mb-1">
                 <span class="text-muted">Subtotal</span>
                 <span>
-                    {!! price_format($order->currency->code, $order->sub_total) !!}</span>
+                  {!! price_format($order->currency->code, $order->sub_total) !!}</span>
               </li>
+              @if ($order->couponUsages->count() > 0)
+                @foreach ($order->couponUsages as $couponUsage)
+
+                  <li class="d-flex justify-content-between mb-1">
+                    <span class="text-muted">Coupon ({{ $couponUsage->coupon->code }})</span>
+                    <span>-{!! price_format($order->currency->code, $couponUsage->discount_amount) !!}</span>
+                  </li>
+                @endforeach
+              @endif
               <li class="d-flex justify-content-between mb-1">
                 <span class="text-muted">Tax</span>
                 <span>
-                    {!! price_format($order->currency->code, $order->tax) !!}</span>
+                  {!! price_format($order->currency->code, $order->tax) !!}</span>
               </li>
               <hr>
               <li class="d-flex justify-content-between pt-2 fw-bold mt-2">
                 <span>Total</span>
                 <span class="text-black">
-                    {!! price_format($order->currency->code, $order->total) !!}</span>
+                  {!! price_format($order->currency->code, $order->total) !!}</span>
               </li>
             </ul>
           </div>

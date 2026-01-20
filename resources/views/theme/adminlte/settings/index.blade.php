@@ -79,6 +79,14 @@
                     </div>
 
                     <div class="mb-4">
+                      <h5 class="mb-3">Return Policy (days)</h5>
+                      <input type="number" class="form-control" name="return_policy_days"
+                        value="{{ setting('return_policy_days', 7) }}" min="0" max="365">
+                      <small class="text-muted d-block mt-1">Number of days after order date within which customers can
+                        request returns.</small>
+                    </div>
+
+                    <div class="mb-4">
                       <h5 class="mb-3">Allow Negative Purchase</h5>
                       <div class="form-check form-switch">
                         <input type="hidden" name="allow_negative_purchase" value="0">

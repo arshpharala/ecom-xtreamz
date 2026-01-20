@@ -60,7 +60,7 @@ class CouponService
             return min($coupon->value, $cartTotal);
         }
 
-        if ($coupon->type === 'percent') {
+        if ($coupon->type === 'percentage') {
             return round($cartTotal * ($coupon->value / 100), 2);
         }
 

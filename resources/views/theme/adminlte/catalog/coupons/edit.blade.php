@@ -59,13 +59,13 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               {!! Form::label('start_at', 'Start At') !!}
-              {!! Form::input('datetime-local', 'start_at', $coupon->start_at->format('Y-m-d\TH:i'), [
+              {!! Form::input('datetime-local', 'start_at', optional($coupon->start_at)->format('Y-m-d\TH:i') ?? null, [
                   'class' => 'form-control',
               ]) !!}
             </div>
             <div class="form-group col-md-6">
               {!! Form::label('end_at', 'End At') !!}
-              {!! Form::input('datetime-local', 'end_at', $coupon->end_at->format('Y-m-d\TH:i'), ['class' => 'form-control']) !!}
+              {!! Form::input('datetime-local', 'end_at', optional($coupon->end_at)->format('Y-m-d\TH:i') ?? null, ['class' => 'form-control']) !!}
             </div>
           </div>
 

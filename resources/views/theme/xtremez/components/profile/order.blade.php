@@ -6,12 +6,24 @@
 
           @forelse ($user->orders as $order)
             <div class="order-card border rounded-3 mb-4 shadow-sm">
+              @php
+                $statusClass = match ($order->status ?? '') {
+                    'fulfilled' => 'bg-success',
+                    'delivered' => 'bg-success',
+                    'processing' => 'bg-primary',
+                    'cancelled' => 'bg-danger',
+                    'placed' => 'bg-info',
+                    'pending' => 'bg-warning',
+                    'draft' => 'bg-secondary',
+                    default => 'bg-secondary',
+                };
+              @endphp
               <div class="order-header bg-light d-flex justify-content-between align-items-center px-3 py-2 rounded-top">
                 <div>
-                  <span class="fw-bold">Order #{{ $order->id }}</span>
+                  <span class="fw-bold">Order #{{ $order->reference_number }}</span>
                   <span class="text-muted small ms-2">{{ $order->created_at->format('d M Y') }}</span>
                 </div>
-                <span class="badge bg-success">{{ ucfirst($order->status) }}</span>
+                <span class="badge {{ $statusClass }}">{{ ucfirst($order->status) }}</span>
               </div>
 
               <div class="order-body p-3">
@@ -40,15 +52,10 @@
 
               <div
                 class="order-footer bg-light d-flex justify-content-between align-items-center px-3 py-2 rounded-bottom">
-                <span class="fw-semibold">Total: {!! price_format($order->currency->code, $order->total ?? 0) !!}</span>
+                <span class="fw-semibold">Total: {!! price_format($order->currency->code, $order->total ?? 0) !!} </span>
                 <div class="d-flex gap-2">
-                  @if ($order->canBeReturned())
-                    <button type="button" class="btn btn-sm btn-primary btn-raise-return"
-                      data-order-id="{{ $order->id }}">
-                      Return Items
-                    </button>
-                  @endif
-                  <a href="" class="btn btn-sm btn-outline-primary">
+
+                  <a href="{{ route('customers.orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary">
                     View Details
                   </a>
                 </div>

@@ -20,6 +20,7 @@ class Order extends Model
         'email',
         'payment_method',
         'payment_status',
+        'status',
         'external_reference',
         'currency_id',
         'sub_total',
@@ -112,9 +113,9 @@ class Order extends Model
             return false;
         }
 
-        // 2. Check days restriction (default 30 days if not set)
-        $policyDays = (int) (\App\Models\Setting::where('key', 'return_policy_days')->first()?->value ?? 30);
-        
+        // 2. Check days restriction (default 7 days if not set)
+        $policyDays = (int) (\App\Models\Setting::get('return_policy_days', 7));
+
         // Use delivered_at if available, otherwise fallback to updated_at (proxy for delivery/payment)
         $referenceDate = $this->delivered_at ?? $this->updated_at;
 

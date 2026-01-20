@@ -155,7 +155,7 @@
         <p><strong>Refund Method:</strong> {{ str_replace('_', ' ', $returnRequest->refund_method) }}</p>
       </div>
 
-      <a href="{{ route('customers.profile', ['tab' => 'returns']) }}" class="btn">
+      <a href="{{ route('customers.orders.show', $returnRequest->order_id) }}" class="btn">
         View Return History
       </a>
 

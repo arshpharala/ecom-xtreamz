@@ -46,6 +46,8 @@ Route::prefix('/customers')->name('customers.')->middleware('auth', 'verified')-
     Route::resource('address',                      AddressController::class);
     Route::resource('wishlist',                     WishlistController::class);
 
+    Route::get('/orders/{order}',                   [App\Http\Controllers\Web\Profile\OrderController::class, 'show'])->name('orders.show');
+
     Route::get('/returns/order-items/{order}',      [App\Http\Controllers\Web\ReturnController::class, 'getOrderItems'])->name('returns.order-items');
     Route::post('/returns',                         [App\Http\Controllers\Web\ReturnController::class, 'store'])->name('returns.store');
 });

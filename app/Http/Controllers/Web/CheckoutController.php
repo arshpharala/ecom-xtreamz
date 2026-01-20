@@ -144,6 +144,7 @@ class CheckoutController extends Controller
             'email'              => $user->email,
             'payment_method'     => $paymentMethod,
             'payment_status'     => 'pending',
+            'status'             => 'draft',
             'currency_id'        => Currency::where('code', active_currency())->value('id'),
             'sub_total'          => $this->cart->getSubTotal(),
             'tax'                => $this->cart->getTax(),
@@ -198,6 +199,7 @@ class CheckoutController extends Controller
 
             $order->update([
                 'payment_status'     => 'paid',
+                'status'             => 'placed',
                 'external_reference' => $intent->id,
             ]);
 
@@ -239,6 +241,7 @@ class CheckoutController extends Controller
 
         $order->update([
             'payment_status'     => 'paid',
+            'status'             => 'placed',
             'external_reference' => $intent->id,
         ]);
 
@@ -292,6 +295,7 @@ class CheckoutController extends Controller
 
         $order->update([
             'payment_status'     => 'paid',
+            'status'             => 'placed',
             'external_reference' => $response['id'],
         ]);
 
@@ -343,6 +347,7 @@ class CheckoutController extends Controller
         if ($verify['status'] === 'PAID') {
             $order->update([
                 'payment_status'     => 'paid',
+                'status'             => 'placed',
                 'external_reference' => $verify['transaction_id'],
             ]);
 
@@ -365,7 +370,7 @@ class CheckoutController extends Controller
     {
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
 
-        $data['order'] = $order->load(['lineItems.productVariant.product', 'address', 'user']);
+        $data['order'] = $order->load(['lineItems.productVariant.product', 'address', 'user', 'couponUsages.coupon']);
         $this->cart->clear();
 
         if ($order->email && !$order->email_sent) {
@@ -384,11 +389,13 @@ class CheckoutController extends Controller
     protected function applyCoupon(Order $order): void
     {
         if ($this->cart->hasCoupon()) {
+            $couponData = $this->cart->getCoupon();
             CouponUsage::firstOrCreate([
-                'coupon_id' => $this->cart->getCoupon()['id'],
+                'coupon_id' => $couponData['id'],
                 'order_id'  => $order->id,
             ], [
                 'user_id' => $order->user_id,
+                'discount_amount' => $couponData['discount'],
             ]);
         }
     }

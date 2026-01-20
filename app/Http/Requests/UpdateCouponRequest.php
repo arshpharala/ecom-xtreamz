@@ -25,7 +25,7 @@ class UpdateCouponRequest extends FormRequest
 
         return [
             'code' => 'required|string|unique:coupons,code,' . $id,
-            'type' => 'required|in:fixed,percent',
+            'type' => 'required|in:fixed,percentage',
             'value' => 'required|numeric|min:0',
             'min_cart_amount' => 'nullable|numeric|min:0',
             'start_at' => 'nullable|date',

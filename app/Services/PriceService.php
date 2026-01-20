@@ -21,7 +21,7 @@ class PriceService
         }
 
         $discount = 0;
-        if ($offer->discount_type === 'percent') {
+        if ($offer->discount_type === 'percentage') {
             $discount = $price * ($offer->discount_value / 100);
         } elseif ($offer->discount_type === 'fixed') {
             $discount = $offer->discount_value;

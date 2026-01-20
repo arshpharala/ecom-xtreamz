@@ -19,12 +19,15 @@ class ReturnController extends Controller
      */
     public function getOrderItems(Order $order)
     {
-        if (!$order->canBeReturned() || $order->user_id !== (auth()->user()?->id ?? null)) {
+        // Eligibility is encapsulated by Order::canBeReturned()
+        $ownedByUser = $order->user_id === (auth()->user()?->id ?? null);
+
+        if (! $ownedByUser || ! $order->canBeReturned()) {
             return response()->json(['error' => 'Not eligible'], 403);
         }
 
         $items = $order->lineItems()->with('productVariant.product')->get();
-        
+
         return view('theme.xtremez.components.profile._return_items_list', compact('items'))->render();
     }
 
@@ -46,7 +49,10 @@ class ReturnController extends Controller
 
         $order = Order::findOrFail($request->order_id);
 
-        if (!$order->canBeReturned() || $order->user_id !== (auth()->user()?->id ?? null)) {
+        // Enforce eligibility via Order::canBeReturned()
+        $ownedByUser = $order->user_id === (auth()->user()?->id ?? null);
+
+        if (! $ownedByUser || ! $order->canBeReturned()) {
             return response()->json(['message' => 'This order is not eligible for return.'], 403);
         }
 
@@ -82,7 +88,7 @@ class ReturnController extends Controller
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
                     $path = $file->store('returns', 'public');
-                    
+
                     $returnRequest->attachments()->create([
                         'file_path' => $path,
                         'file_name' => $file->getClientOriginalName(),
@@ -101,7 +107,7 @@ class ReturnController extends Controller
 
             return response()->json([
                 'message' => 'Return request submitted successfully!',
-                'redirect' => route('account.profile', ['tab' => 'returns'])
+                'redirect' => route('customers.orders.show', $order->id)
             ]);
         });
     }

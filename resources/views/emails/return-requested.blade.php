@@ -179,7 +179,7 @@
       </div>
 
       @if ($type === 'customer')
-        <a href="{{ route('customers.profile', ['tab' => 'returns']) }}" class="btn">
+        <a href="{{ route('customers.orders.show', $returnRequest->order_id) }}" class="btn">
           Track Return Status
         </a>
       @else

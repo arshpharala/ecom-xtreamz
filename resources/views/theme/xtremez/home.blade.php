@@ -130,7 +130,7 @@
   @include('theme.xtremez.components.products.carousel', [
       'id' => 'featured',
       'sectionName' => 'Featured Products',
-      'productUrl' => route('ajax.get-products', ['tags' => ['On Sale']]),
+      'productUrl' => route('ajax.get-products', ['tags' => ['On Sale', 'On Sale / Clearance Items']]),
   ])
 
 

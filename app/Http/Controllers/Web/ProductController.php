@@ -14,6 +14,7 @@ use App\Repositories\PageRepository;
 use App\Models\Catalog\ProductVariant;
 use App\Models\CMS\Tag;
 use App\Repositories\ProductVariantRepository;
+use App\Models\Catalog\AttributeValue;
 
 class ProductController extends Controller
 {
@@ -84,12 +85,13 @@ class ProductController extends Controller
         $product        = $this->getProductWithAttributes($productVariant->product_id);
         $attributes     = $this->extractAttributesFromVariants($product);
         $selected       = $this->getSelectedAttributes($productVariant);
-        // $allVariants    = $this->formatAllVariants($product);
+        $allVariants    = $this->formatAllVariants($product);
 
         $data['productVariant'] = $productVariant;
         $data['product']        = $product;
-        $data['attributes']        = $attributes;
+        $data['attributes']     = $attributes;
         $data['selected']       = $selected;
+        $data['allVariants']    = $allVariants;
 
         if (empty($product->metaForLocale()->meta_title)) {
             $data['meta']           = (object)['meta_title' => $productVariant->name, 'meta_description' => Str::limit($productVariant->description, 160)];
@@ -156,6 +158,38 @@ class ProductController extends Controller
                 $attributes[$attrSlug]['values'][$value->value] = $value->value;
             }
         }
+
+        // 1. Sort values within each attribute
+        foreach ($attributes as $slug => &$attr) {
+            $values = $attr['values'];
+            
+            if (Str::lower($attr['name']) === 'size') {
+                // Custom sort for sizes
+                uksort($values, function($a, $b) {
+                    $weightA = AttributeValue::getSizeSortWeight($a);
+                    $weightB = AttributeValue::getSizeSortWeight($b);
+                    
+                    if ($weightA == $weightB) return strcmp($a, $b);
+                    return $weightA - $weightB;
+                });
+            } else {
+                // Default alphabetical sort for others (like color name)
+                ksort($values);
+            }
+            
+            $attr['values'] = $values;
+        }
+
+        // 2. Sort attributes (Color always first)
+        uksort($attributes, function($a, $b) use ($attributes) {
+            $nameA = Str::lower($attributes[$a]['name']);
+            $nameB = Str::lower($attributes[$b]['name']);
+
+            if ($nameA === 'color') return -1;
+            if ($nameB === 'color') return 1;
+
+            return strcmp($nameA, $nameB);
+        });
 
         return $attributes;
     }

@@ -43,7 +43,7 @@ $(document).ready(function () {
                 $input.attr(
                     "placeholder",
                     originalText.slice(0, i) +
-                        (i < originalText.length ? "|" : "")
+                    (i < originalText.length ? "|" : "")
                 );
                 i++;
                 setTimeout(type, 30 + Math.random() * 170);
@@ -167,6 +167,60 @@ function debounce(func, delay = 300) {
 //         </div>
 //     </div>`;
 // }
+
+/**
+ * Render stock badge based on stock quantity
+ * @param {number} stock - Stock quantity
+ * @param {string|number} stockDisplay - Formatted stock display (e.g., "10+ Units", "100+ Units")
+ * @param {number} option - Display option: 1 (Icon+Text), 2 (Minimalist), 3 (Status Dot) - Default: 1
+ * @returns {string} HTML for stock badge
+ */
+function renderStockBadge(stock, stockDisplay, option = 1) {
+    if (stock === undefined || stock === null) {
+        return '';
+    }
+
+    const stockNum = parseInt(stock);
+
+    // OPTION 1: Icon + Text
+    if (option === 1) {
+        if (stockNum <= 0) {
+            return '<div class="stock-badge stock-option-1 out-of-stock"><i class="bi bi-x-circle"></i> Out of Stock</div>';
+        } else if (stockNum <= 5) {
+            return `<div class="stock-badge stock-option-1 low-stock"><i class="bi bi-exclamation-triangle"></i> Only ${stockNum} Left</div>`;
+        } else {
+            const displayText = stockDisplay || 'In Stock';
+            return `<div class="stock-badge stock-option-1 in-stock"><i class="bi bi-check-circle"></i> ${displayText}</div>`;
+        }
+    }
+
+    // OPTION 2: Minimalist Text Only
+    if (option === 2) {
+        if (stockNum <= 0) {
+            return '<div class="stock-badge stock-option-2 out-of-stock">Sold Out</div>';
+        } else if (stockNum <= 5) {
+            return `<div class="stock-badge stock-option-2 low-stock">${stockNum} Left</div>`;
+        } else {
+            const displayText = stockDisplay || 'Available';
+            return `<div class="stock-badge stock-option-2 in-stock">${displayText}</div>`;
+        }
+    }
+
+    // OPTION 3: Status Dot + Compact Text
+    if (option === 3) {
+        if (stockNum <= 0) {
+            return '<div class="stock-badge stock-option-3 out-of-stock">Out of Stock</div>';
+        } else if (stockNum <= 5) {
+            return `<div class="stock-badge stock-option-3 low-stock">${stockNum} in stock</div>`;
+        } else {
+            return `<div class="stock-badge stock-option-3 in-stock">In Stock (${stockDisplay})</div>`;
+        }
+    }
+
+    // Default to option 1 if invalid option provided
+    return renderStockBadge(stock, stockDisplay, 1);
+}
+
 function render_product_card(product, grid = false) {
     const hasOffer = product.offer_data?.has_offer;
     const offerText = hasOffer ? product.offer_data.label : "";
@@ -188,9 +242,8 @@ function render_product_card(product, grid = false) {
           <!-- Image -->
           <div class="image-box">
           <a href="${product.link}">
-            <img src="${product.image}" alt="${
-        product.name
-    }" class="product-img"/>
+            <img src="${product.image}" alt="${product.name
+        }" class="product-img"/>
     </a>
 
             ${hasOffer ? `<div class="offer-badge">${offerText}</div>` : ""}
@@ -201,6 +254,8 @@ function render_product_card(product, grid = false) {
               <i class="bi bi-heart"></i>
               <i class="bi bi-heart-fill"></i>
             </button>
+
+            ${renderStockBadge(product.stock, product.stock_display, 3)}
           </div>
 
           <!-- Title & Category -->
@@ -216,15 +271,12 @@ function render_product_card(product, grid = false) {
               <div class="price-wrap">
                 ${displayPrice} ${originalPrice}
               </div>
-              <button class="cart-btn add-to-cart-btn" data-variant-id="${
-                  product.id
-              }">
-                <i class="bi bi-cart add-to-cart"  style="${
-                    product.is_in_cart ? "display:none;" : ""
-                }"></i>
-                <i class="bi bi-cart-check added-to-cart" style="${
-                    product.is_in_cart ? "" : "display:none;"
-                }"></i>
+              <button class="cart-btn add-to-cart-btn" data-variant-id="${product.id
+        }" ${product.stock <= 0 ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                <i class="bi ${product.stock <= 0 ? 'bi-x-circle' : 'bi-cart'} add-to-cart"  style="${product.is_in_cart ? "display:none;" : ""
+        }"></i>
+                <i class="bi bi-cart-check added-to-cart" style="${product.is_in_cart ? "" : "display:none;"
+        }"></i>
               </button>
             </div>
           </div>
@@ -262,9 +314,8 @@ function render_pagination(pagination) {
     if (current > 1) {
         $pagination.append(
             `<li class="page-item page-prev">
-                <a class="page-link" href="#" data-page="${
-                    current - 1
-                }">Prev</a>
+                <a class="page-link" href="#" data-page="${current - 1
+            }">Prev</a>
              </li>`
         );
     } else {
@@ -331,9 +382,8 @@ function render_pagination(pagination) {
     if (current < total) {
         $pagination.append(
             `<li class="page-item page-next">
-                <a class="page-link" href="#" data-page="${
-                    current + 1
-                }">Next</a>
+                <a class="page-link" href="#" data-page="${current + 1
+            }">Next</a>
              </li>`
         );
     } else {

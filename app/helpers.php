@@ -327,8 +327,12 @@ if (!function_exists('get_attachment_url')) {
      * @param string $filePath
      * @return string
      */
-    function get_attachment_url(string $filePath): string
+    function get_attachment_url(string|null $filePath): string
     {
+        if (!$filePath) {
+            return '';
+        }
+
         if (Str::startsWith($filePath, ['http://', 'https://'])) {
             return $filePath;
         }

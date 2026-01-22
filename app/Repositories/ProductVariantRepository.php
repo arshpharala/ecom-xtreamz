@@ -29,10 +29,9 @@ class ProductVariantRepository
             'exclude_ids',
         ]);
 
-
         $filters['attributes'] = collect(Request::all())
-            ->filter(fn($val, $key) => str_starts_with($key, 'attr_'))
-            ->mapWithKeys(fn($val, $key) => [str_replace('attr_', '', $key) => $val])
+            ->filter(fn ($val, $key) => str_starts_with($key, 'attr_'))
+            ->mapWithKeys(fn ($val, $key) => [str_replace('attr_', '', $key) => $val])
             ->toArray();
 
         $query = ProductVariant::withJoins()
@@ -45,8 +44,8 @@ class ProductVariantRepository
             ->withSelection()
             ->withActiveProducts();
 
-        if (auth()->check() && !empty($filters['is_wishlisted'])) {
-            $query->whereHas('wishlists', fn($q) => $q->where('user_id', auth()->id()));
+        if (auth()->check() && ! empty($filters['is_wishlisted'])) {
+            $query->whereHas('wishlists', fn ($q) => $q->where('user_id', auth()->id()));
         }
 
         $query->groupBy('product_variants.id'); // Required to avoid duplicate entries due to joins
@@ -65,12 +64,12 @@ class ProductVariantRepository
 
     public function transform($productVariant)
     {
-        $productVariant->link       = route('products.show', ['slug' => $productVariant->slug, 'variant' => $productVariant->id]);
+        $productVariant->link = route('products.show', ['slug' => $productVariant->slug, 'variant' => $productVariant->id]);
         // $productVariant->image      = $productVariant->file_path ? asset('storage/' . $productVariant->file_path) : null;
         $productVariant->image = get_attachment_url($productVariant->file_path);
-        $productVariant->currency   = active_currency();
-        $productVariant->price_with_currency   = price_format(active_currency(), $productVariant->price);
-        $productVariant->cart_item  = (new CartService())->getItem($productVariant->id);
+        $productVariant->currency = active_currency();
+        $productVariant->price_with_currency = price_format(active_currency(), $productVariant->price);
+        $productVariant->cart_item = (new CartService)->getItem($productVariant->id);
         $productVariant->is_in_cart = $productVariant->cart_item ? true : false;
 
         $productVariant->offer_data = $this->transformOffer($productVariant);
@@ -79,39 +78,75 @@ class ProductVariantRepository
             $productVariant->is_wishlisted = Wishlist::isWishlisted(auth()->id(), $productVariant->id);
         }
 
+        // Resolve stock display
+        $stockData = $this->resolveStock($productVariant);
+        $productVariant->stock = $stockData['stock'];
+        $productVariant->stock_display = $stockData['stock_display'];
+
         return $productVariant;
+    }
+
+    /**
+     * Resolve stock display based on quantity thresholds
+     *
+     * @param  ProductVariant  $variant
+     * @return array ['stock' => int, 'stock_display' => string]
+     */
+    public function resolveStock($variant)
+    {
+        $stock = $variant->stock ?? 0;
+
+        if ($stock >= 1000) {
+            return [
+                'stock' => $stock,
+                'stock_display' => '1000+ Units',
+            ];
+        } elseif ($stock >= 100) {
+            return [
+                'stock' => $stock,
+                'stock_display' => '100+ Units',
+            ];
+        } elseif ($stock >= 10) {
+            return [
+                'stock' => $stock,
+                'stock_display' => '10+ Units',
+            ];
+        } else {
+            return [
+                'stock' => $stock,
+                'stock_display' => $stock,
+            ];
+        }
     }
 
     protected function transformOffer($variant)
     {
         $offer = $variant->activeOffer();
 
-        if (!$offer) {
+        if (! $offer) {
             return [
-                'has_offer'         => false,
-                'discounted_price'  => null,
-                'label'             => null,
-                'title'             => null,
+                'has_offer' => false,
+                'discounted_price' => null,
+                'label' => null,
+                'title' => null,
             ];
         }
 
         $discountedPrice = null;
         if ($offer->discount_type === 'percent') {
-            $discountedPrice    = round($variant->price * (1 - $offer->discount_value / 100), 2);
+            $discountedPrice = round($variant->price * (1 - $offer->discount_value / 100), 2);
         } elseif ($offer->discount_type === 'fixed') {
-            $discountedPrice    = max(0, $variant->price - $offer->discount_value);
+            $discountedPrice = max(0, $variant->price - $offer->discount_value);
         }
 
         return [
-            'has_offer'         => true,
-            'discounted_price'  => $discountedPrice,
-            'discounted_price_with_currency'  => price_format(active_currency(), $discountedPrice),
-            'label'             => $offer->label,
-            'title'             => $offer->translation->title ?? '',
+            'has_offer' => true,
+            'discounted_price' => $discountedPrice,
+            'discounted_price_with_currency' => price_format(active_currency(), $discountedPrice),
+            'label' => $offer->label,
+            'title' => $offer->translation->title ?? '',
         ];
     }
-
-
 
     public function getGiftProducts($categorySlug = 'gift-sets', $limit = 3)
     {

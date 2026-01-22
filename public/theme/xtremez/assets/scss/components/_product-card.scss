@@ -13,6 +13,7 @@
         color: var(--color-dark);
         opacity: 0.5;
         transition: opacity 0.2s;
+
         &:hover {
             opacity: 1;
         }
@@ -37,18 +38,21 @@
         transform: scale(0.95); // ✅ shrink card slightly (5%)
         // box-shadow: 36px 36px 36px rgba(0, 0, 0, 0.18); // ✅ darker, deeper shadow
         box-shadow: var(--color-grey) 0px 0px 0px 13px;
+
         .image-box {
             height: 180px;
 
             img.product-img {
-                max-height: 160px; /* shrink */
+                max-height: 160px;
+                /* shrink */
             }
         }
 
         .stats-container {
             .product-description {
                 opacity: 1;
-                max-height: 48px; /* 2 lines */
+                max-height: 48px;
+                /* 2 lines */
             }
         }
     }
@@ -99,6 +103,7 @@
             i.bi-heart {
                 color: #333;
             }
+
             i.bi-heart-fill {
                 color: #e63946;
                 display: none;
@@ -108,9 +113,55 @@
                 i.bi-heart {
                     display: none;
                 }
+
                 i.bi-heart-fill {
                     display: inline;
                 }
+            }
+        }
+
+        .stock-badge {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+            // Icon spacing for Option 1
+            i.bi {
+                margin-right: 4px;
+                font-size: 0.75rem;
+            }
+
+            // Status dot for Option 3
+            .status-dot {
+                display: inline-block;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                margin-right: 6px;
+                background: currentColor;
+            }
+
+            &.in-stock {
+                background: var(--color-secondary);
+                color: #fff;
+            }
+
+            &.low-stock {
+                background: var(--color-warning);
+                color: #fff;
+            }
+
+            &.out-of-stock {
+                background: var(--color-danger);
+                color: #fff;
             }
         }
     }

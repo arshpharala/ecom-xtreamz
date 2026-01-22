@@ -47,7 +47,7 @@
         <div class="col-12 col-lg-6">
           <div class="main-image position-relative bg-white">
             <!-- Stock Badge -->
-            <div class="stock-badge {{ ($productVariant->stock == 0 ) ? 'out-of-stock' : '' }}">
+            <div class="stock-badge {{ $productVariant->stock == 0 ? 'out-of-stock' : '' }}">
               <span class="stock-text">
                 @if ($productVariant->stock > 0)
                   In Stock: {{ $productVariant->stock }}
@@ -119,46 +119,105 @@
           </div>
 
           <div class="d-flex align-items-center justify-content-start gap-4 py-3 flex-wrap product-options">
-            <!-- Quantity -->
-            <div class="d-flex align-items-center gap-2">
-              <div>
-                <label class="form-label mb-0">Quantity</label>
-                <div class="qty-wrapper d-flex align-items-center">
-                  {{-- <i class="bi bi-dash-circle qty-btn minus" id="qtyMinus"></i> --}}
-                  <i class="bi bi-dash-circle qty-btn minus"></i>
-                  <input type="text" id="qtyInput" class="qty-input py-1"
-                    value="{{ $productVariant->cart_item['qty'] ?? 1 }}" />
-                  <i class="bi bi-plus-circle qty-btn plus"></i>
-                  {{-- <i class="bi bi-plus-circle qty-btn plus" id="qtyPlus"></i> --}}
+            @php
+              $hasSizeAttribute = collect($attributes)->contains(fn($attr) => Str::lower($attr['name']) === 'size');
+            @endphp
+
+            @unless ($hasSizeAttribute)
+              <!-- Quantity -->
+              <div class="d-flex align-items-center gap-2">
+                <div>
+                  <label class="form-label mb-0">Quantity</label>
+                  <div class="qty-wrapper d-flex align-items-center">
+                    {{-- <i class="bi bi-dash-circle qty-btn minus" id="qtyMinus"></i> --}}
+                    <i class="bi bi-dash-circle qty-btn minus"></i>
+                    <input type="text" id="qtyInput" class="qty-input py-1"
+                      value="{{ $productVariant->cart_item['qty'] ?? 1 }}" />
+                    <i class="bi bi-plus-circle qty-btn plus"></i>
+                    {{-- <i class="bi bi-plus-circle qty-btn plus" id="qtyPlus"></i> --}}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Divider -->
-            <div class="vr-line d-none d-md-block"></div>
+              <!-- Divider -->
+              <div class="vr-line d-none d-md-block"></div>
+            @endunless
 
             <!-- Dynamic Attributes -->
             <!-- Dynamic Attributes -->
             @foreach ($attributes as $slug => $attr)
-              <div class="attribute-groupd-flex align-items-center gap-3" data-attr="{{ $slug }}">
-                <label class="form-label mb-1">{{ $attr['name'] }}</label>
-                <div class="d-flex flex-wrap gap-2 attribute-options">
-                  @foreach ($attr['values'] as $val)
-                    @php
-                      $isColor = Str::lower($attr['name']) === 'color';
-                      $isActive = isset($selected[$slug]) && $selected[$slug] === $val;
-                    @endphp
-                    <div
-                      class="variant-option {{ $isColor ? 'color-swatch' : 'option-box' }} {{ $isActive ? 'active' : '' }}"
-                      data-value="{{ $val }}" data-attr="{{ $slug }}"
-                      style="{{ $isColor ? "background:$val;" : '' }}">
-                      @unless ($isColor)
-                        <span class="option-text">{{ $val }}</span>
-                      @endunless
-                    </div>
-                  @endforeach
+              @php
+                $isSizeAttribute = Str::lower($attr['name']) === 'size';
+              @endphp
+
+              @if ($isSizeAttribute)
+                {{-- SIZE ATTRIBUTE: Show inline quantity inputs --}}
+                <div class="size-quantity-selector w-100" data-attr="{{ $slug }}">
+                  <label class="form-label mb-2 fw-bold">{{ $attr['name'] }} & Quantity</label>
+                  <div class="size-qty-grid">
+                    @foreach ($attr['values'] as $sizeValue)
+                      @php
+                        // Find the variant for this size
+                        $sizeVariant = $product->variants->first(function ($v) use ($sizeValue) {
+                            return $v->attributeValues->contains(function ($av) use ($sizeValue) {
+                                return Str::lower($av->attribute->name) === 'size' && $av->value === $sizeValue;
+                            });
+                        });
+                        $variantStock = $sizeVariant->stock ?? 0;
+                        $isActive = isset($selected[$slug]) && $selected[$slug] === $sizeValue;
+                      @endphp
+                      <div class="size-qty-item {{ $variantStock <= 0 ? 'out-of-stock' : '' }}">
+                        <label class="size-label">{{ $sizeValue }}</label>
+                        <input type="number" class="size-qty-input" data-size="{{ $sizeValue }}"
+                          data-variant-id="{{ $sizeVariant->id ?? '' }}" data-stock="{{ $variantStock }}" min="0"
+                          max="{{ $variantStock }}" value="0" placeholder="0"
+                          {{ $variantStock <= 0 ? 'disabled' : '' }} />
+                        <small
+                          class="stock-info">{{ $variantStock > 0 ? "Stock: $variantStock" : 'Out of Stock' }}</small>
+                      </div>
+                    @endforeach
+                  </div>
                 </div>
-              </div>
+              @else
+                {{-- OTHER ATTRIBUTES: Show improved selector --}}
+                <div class="attribute-group w-100" data-attr="{{ $slug }}">
+                  <label class="form-label mb-2 fw-bold">{{ $attr['name'] }}</label>
+                  <div class="d-flex flex-wrap gap-3 attribute-options">
+                    @foreach ($attr['values'] as $val)
+                      @php
+                        $isColor = Str::lower($attr['name']) === 'color';
+                        $isActive = isset($selected[$slug]) && $selected[$slug] === $val;
+
+                        // For colors, find a representative variant image
+                        $variantThumb = null;
+                        if ($isColor) {
+                            $colorVariant = $product->variants->first(function ($v) use ($val) {
+                                return $v->attributeValues->contains(function ($av) use ($val) {
+                                    return Str::lower($av->attribute->name) === 'color' && $av->value === $val;
+                                });
+                            });
+
+                            $variantThumb = $colorVariant ? get_attachment_url($colorVariant->attachments->first()->file_path) : null;
+                        }
+                      @endphp
+                      <div
+                        class="variant-option {{ $isColor ? 'color-variant-option' : 'option-box' }} {{ $isActive ? 'active' : '' }}"
+                        data-value="{{ $val }}" data-attr="{{ $slug }}">
+                        @if ($isColor)
+                          @if ($variantThumb)
+                            <img src="{{ $variantThumb }}" alt="{{ $val }}" class="color-thumb">
+                          @else
+                            <div class="color-placeholder" style="background:{{ $val }};"></div>
+                          @endif
+                          <span class="option-text">{{ $val }}</span>
+                        @else
+                          <span class="option-text">{{ $val }}</span>
+                        @endif
+                      </div>
+                    @endforeach
+                  </div>
+                </div>
+              @endif
             @endforeach
 
 
@@ -293,7 +352,7 @@
 
 @push('scripts')
   <script>
-    {{-- window.allVariants = @json($allVariants); --}}
+    window.allVariants = @json($allVariants);
     window.selectedAttributes = @json($selected);
 
     window.variant = @json($productVariant);
@@ -310,5 +369,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
+  <script src="{{ asset('theme/xtremez/assets/js/size-quantity-handler.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/product-detail.js') }}"></script>
 @endpush

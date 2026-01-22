@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Attachment;
 use App\Notifications\ReturnRequestCreated;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class ReturnController extends Controller
 {
@@ -20,7 +21,7 @@ class ReturnController extends Controller
     public function getOrderItems(Order $order)
     {
         // Eligibility is encapsulated by Order::canBeReturned()
-        $ownedByUser = $order->user_id === (auth()->user()?->id ?? null);
+        $ownedByUser = $order->user_id === (\Auth::user()?->id ?? null);
 
         if (! $ownedByUser || ! $order->canBeReturned()) {
             return response()->json(['error' => 'Not eligible'], 403);
@@ -50,21 +51,21 @@ class ReturnController extends Controller
         $order = Order::findOrFail($request->order_id);
 
         // Enforce eligibility via Order::canBeReturned()
-        $ownedByUser = $order->user_id === (auth()->user()?->id ?? null);
+        $ownedByUser = $order->user_id === (\Auth::user()?->id ?? null);
 
         if (! $ownedByUser || ! $order->canBeReturned()) {
             return response()->json(['message' => 'This order is not eligible for return.'], 403);
         }
 
         return DB::transaction(function () use ($request, $order) {
-            $user = auth()->user();
+            $user = \Auth::user();
             $returnRequest = ReturnRequest::create([
                 'order_id' => $order->id,
                 'user_id' => $user->id,
                 'return_reason_id' => $request->return_reason_id,
                 'description' => $request->description,
                 'refund_method' => $request->refund_method,
-                'status' => 'pending',
+                'status' => ReturnRequest::STATUS_REQUESTED,
                 'refund_status' => 'pending',
             ]);
 
@@ -97,6 +98,15 @@ class ReturnController extends Controller
                     ]);
                 }
             }
+
+            // Record Initial Timeline
+            $returnRequest->timelines()->create([
+                'actor_type' => 'user',
+                'actor_id' => $user->id,
+                'title' => 'Return Request Submitted',
+                'new_status' => ReturnRequest::STATUS_REQUESTED,
+                'remarks' => 'Customer submitted a return request for ' . $returnRequest->items->sum('quantity') . ' item(s).',
+            ]);
 
             // Notify Customer
             $user->notify(new ReturnRequestCreated($returnRequest, 'customer'));

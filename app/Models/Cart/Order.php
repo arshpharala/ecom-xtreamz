@@ -27,7 +27,10 @@ class Order extends Model
         'tax',
         'total',
         'email_sent',
-        'delivered_at'
+        'delivered_at',
+        'tracking_number',
+        'tracking_link',
+        'tracking_status',
     ];
 
     protected $casts = [

@@ -38,21 +38,23 @@
                         <div class="order-title fw-semibold">
                           {{ $item->productVariant->product->translation->name ?? 'N/A' }}
                         </div>
-                        <div class="small text-muted">
+                        {{-- <div class="small text-muted">
                           Variant: {{ $item->productVariant->sku ?? 'Default' }}
-                        </div>
+                        </div> --}}
                       </div>
                     </div>
-                    <div class="order-price fw-bold text-nowrap">
+                    {{-- <div class="order-price fw-bold text-nowrap">
                       {!! price_format($order->currency->code, $item->subtotal) !!}
-                    </div>
+                    </div> --}}
                   </div>
                 @endforeach
               </div>
 
               <div
                 class="order-footer bg-light d-flex justify-content-between align-items-center px-3 py-2 rounded-bottom">
-                <span class="fw-semibold">Total: {!! price_format($order->currency->code, $order->total ?? 0) !!} </span>
+                <span class="fw-semibold">
+                  {{-- Total: {!! price_format($order->currency->code, $order->total ?? 0) !!}  --}}
+                </span>
                 <div class="d-flex gap-2">
 
                   <a href="{{ route('customers.orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary">

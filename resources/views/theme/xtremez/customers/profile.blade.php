@@ -64,7 +64,7 @@
               PASSWORD</a>
             <a href="#" class="profile-link border-bottom" data-tab="address" data-heading="Address Book">ADDRESS
               BOOK</a>
-            <a href="#" class="profile-link border-bottom" data-tab="payment" data-heading="My Payment Options">MY
+            <a href="#" class="profile-link border-bottom d-none" data-tab="payment" data-heading="My Payment Options">MY
               PAYMENT
               OPTIONS</a>
             <a href="#" class="profile-link border-bottom" data-tab="order" data-heading="My Order History">MY ORDER

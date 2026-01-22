@@ -313,15 +313,71 @@
                   <span class="badge badge-light">{{ $val->attribute->name }}: {{ $val->value }}</span>
                 @endforeach
               </td>
-              <td>{{ $item->quantity }}</td>
-              <td>{{ number_format($item->price, 2) }} {{ strtoupper(active_currency()) }}</td>
-              <td>{{ number_format($item->subtotal, 2) }} {{ strtoupper(active_currency()) }}</td>
+              <td>{{ number_format($item->quantity) }}</td>
+              <td>{!! price_format($order->currency->code, $item->price) !!}</td>
+              <td>{!! price_format($order->currency->code, $item->subtotal) !!}</td>
             </tr>
           @endforeach
         </tbody>
       </table>
     </div>
   </div>
+
+  <!-- Related Return Requests -->
+  @if ($order->returnRequests->count() > 0)
+    <div class="card mb-4 border-info card-outline">
+      <div class="card-header bg-light">
+        <h3 class="card-title text-info"><i class="fas fa-undo-alt mr-1"></i> <strong>Linked Return Requests</strong></h3>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th>RMA #</th>
+              <th>Status</th>
+              <th>Items</th>
+              <th>Total Value</th>
+              <th>Created</th>
+              <th class="text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($order->returnRequests as $rr)
+              <tr>
+                <td class="align-middle"><strong>{{ $rr->reference_number }}</strong></td>
+                <td class="align-middle">
+                  @php
+                    $badges = [
+                        'requested' => 'badge-warning',
+                        'accepted' => 'badge-info',
+                        'in_transit' => 'badge-primary',
+                        'received' => 'badge-purple',
+                        'under_inspection' => 'badge-warning',
+                        'resolving' => 'badge-info',
+                        'completed' => 'badge-success',
+                        'rejected' => 'badge-danger',
+                    ];
+                  @endphp
+                  <span class="badge {{ $badges[$rr->status] ?? 'badge-secondary' }}">
+                    {{ strtoupper(str_replace('_', ' ', $rr->status)) }}
+                  </span>
+                </td>
+                <td class="align-middle text-muted">{{ $rr->items->sum('quantity') }} items</td>
+                <td class="align-middle">{!! price_format($order->currency->code, $rr->items->sum(fn($i) => $i->quantity * $i->orderLineItem->price)) !!}</td>
+                <td class="align-middle small">{{ $rr->created_at->format('d M Y, h:i A') }}</td>
+                <td class="text-right align-middle">
+                  <a href="{{ route('admin.sales.return-requests.show', $rr->id) }}"
+                    class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-eye"></i> Manage
+                  </a>
+                </td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+  @endif
 
   <!-- Order Totals -->
   <div class="row">

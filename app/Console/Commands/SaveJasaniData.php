@@ -2,29 +2,30 @@
 
 namespace App\Console\Commands;
 
-use App\Models\CMS\Tag;
-use Illuminate\Support\Str;
-use App\Models\Catalog\Brand;
-
-/* ================= MODELS ================= */
-use App\Models\CMS\Packaging;
-use App\Models\CMS\ApiSyncLog;
-use App\Models\Catalog\Product;
-use Illuminate\Console\Command;
-use App\Models\Catalog\Category;
 use App\Models\Catalog\Attribute;
-use Illuminate\Support\Facades\DB;
 use App\Models\Catalog\AttributeValue;
+use App\Models\Catalog\Brand;
+/* ================= MODELS ================= */
+use App\Models\Catalog\Category;
+use App\Models\Catalog\Product;
 use App\Models\Catalog\ProductVariant;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Catalog\ProductVariantPackaging;
+use App\Models\CMS\ApiSyncLog;
+use App\Models\CMS\Packaging;
+use App\Models\CMS\Tag;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SaveJasaniData extends Command
 {
     protected $signature = 'jasani:save';
+
     protected $description = 'Save Jasani catalog sync (products, variants, prices, stock, packaging, tags)';
 
     protected array $priceMap = [];
+
     protected array $stockMap = [];
 
     /* =====================================================
@@ -41,47 +42,48 @@ class SaveJasaniData extends Command
 
         if (empty($products)) {
             ApiSyncLog::create([
-                'source'        => 'Jasani',
-                'endpoint'      => 'catalog',
-                'success'       => false,
+                'source' => 'Jasani',
+                'endpoint' => 'catalog',
+                'success' => false,
                 'total_records' => 0,
-                'message'       => 'Product data empty – sync aborted',
-                'fetched_at'    => now(),
+                'message' => 'Product data empty – sync aborted',
+                'fetched_at' => now(),
             ]);
 
             $this->error('No products found.');
+
             return Command::FAILURE;
         }
 
         try {
-            DB::transaction(fn() => $this->syncCatalog($products));
+            DB::transaction(fn () => $this->syncCatalog($products));
 
             ApiSyncLog::create([
-                'source'        => 'Jasani',
-                'endpoint'      => 'catalog',
-                'success'       => true,
+                'source' => 'Jasani',
+                'endpoint' => 'catalog',
+                'success' => true,
                 'total_records' => count($products),
-                'message'       => 'Catalog saved successfully',
-                'fetched_at'    => now(),
+                'message' => 'Catalog saved successfully',
+                'fetched_at' => now(),
             ]);
 
             $this->info('Catalog sync completed successfully.');
+
             return Command::SUCCESS;
         } catch (\Throwable $e) {
 
             ApiSyncLog::create([
-                'source'        => 'Jasani',
-                'endpoint'      => 'catalog',
-                'success'       => false,
+                'source' => 'Jasani',
+                'endpoint' => 'catalog',
+                'success' => false,
                 'total_records' => 0,
-                'message'       => $e->getMessage(),
-                'fetched_at'    => now(),
+                'message' => $e->getMessage(),
+                'fetched_at' => now(),
             ]);
 
             throw $e;
         }
     }
-
 
     /* =====================================================
        LOADERS (FIXED)
@@ -91,11 +93,12 @@ class SaveJasaniData extends Command
     {
         $path = Storage::disk('local')->path('jasani-products.json');
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             return [];
         }
 
         $json = json_decode(file_get_contents($path), true);
+
         return $json['data'] ?? [];
     }
 
@@ -103,14 +106,14 @@ class SaveJasaniData extends Command
     {
         $path = Storage::disk('local')->path('jasani-products-price.json');
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             return;
         }
 
         $json = json_decode(file_get_contents($path), true);
 
         foreach ($json['data'] ?? [] as $row) {
-            if (!empty($row['id'])) {
+            if (! empty($row['id'])) {
                 $this->priceMap[(int) $row['id']] = (float) $row['retail_price']; // Now api sending retail_price
             }
         }
@@ -120,14 +123,14 @@ class SaveJasaniData extends Command
     {
         $path = Storage::disk('local')->path('jasani-product-stock.json');
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             return;
         }
 
         $json = json_decode(file_get_contents($path), true);
 
         foreach ($json['data'] ?? [] as $row) {
-            if (!empty($row['id'])) {
+            if (! empty($row['id'])) {
                 $this->stockMap[(int) $row['id']] = (int) ($row['net_available_qty'] ?? 0);
             }
         }
@@ -143,7 +146,7 @@ class SaveJasaniData extends Command
 
             $base = $variants->first();
 
-            $brandId = !empty($base['brand_id']) && is_array($base['brand_id'])
+            $brandId = ! empty($base['brand_id']) && is_array($base['brand_id'])
                 ? $this->storeBrand($base['brand_id'])
                 : null;
 
@@ -152,18 +155,21 @@ class SaveJasaniData extends Command
 
             $product = $this->storeProduct($base, $brandId, $categoryIds);
 
+            // Pre-resolve primary variant ID for this product group
+            $primaryVariantId = $this->resolvePrimaryVariantId($variants, $base);
+
             foreach ($variants as $variantData) {
 
                 $attributeValueIds = $this->storeAttributes(
                     $variantData['product_template_attribute_value_ids'] ?? []
                 );
 
-                $variant = $this->storeVariant($product, $variantData, $attributeValueIds, $base);
+                $variant = $this->storeVariant($product, $variantData, $attributeValueIds, $primaryVariantId);
 
                 $this->storeVariantImages($variant, $variantData);
                 $this->storeVariantPackaging($variant, $variantData);
 
-                if (!empty($base['product_template_tags'])) {
+                if (! empty($base['product_template_tags'])) {
                     $this->attachVariantTags($variant, $base['product_template_tags']);
                 }
             }
@@ -181,10 +187,10 @@ class SaveJasaniData extends Command
         return Brand::updateOrCreate(
             ['reference_id' => $referenceId],
             [
-                'name'           => $name,
+                'name' => $name,
                 'reference_name' => $name,
-                'slug'           => Str::slug($name),
-                'is_active'      => 1,
+                'slug' => Str::slug($name),
+                'is_active' => 1,
             ]
         )->id;
     }
@@ -227,7 +233,7 @@ class SaveJasaniData extends Command
 
         foreach ($attrs as $attr) {
 
-            if (empty($attr['display_name']) || !str_contains($attr['display_name'], ':')) {
+            if (empty($attr['display_name']) || ! str_contains($attr['display_name'], ':')) {
                 continue;
             }
 
@@ -241,8 +247,8 @@ class SaveJasaniData extends Command
             $valueModel = AttributeValue::updateOrCreate(
                 ['reference_id' => $attr['id']],
                 [
-                    'attribute_id'    => $attribute->id,
-                    'value'           => $value,
+                    'attribute_id' => $attribute->id,
+                    'value' => $value,
                     'reference_value' => $value,
                 ]
             );
@@ -271,10 +277,10 @@ class SaveJasaniData extends Command
         $product = Product::updateOrCreate(
             ['reference_id' => $refId],
             [
-                'brand_id'    => $brandId,
+                'brand_id' => $brandId,
                 'category_id' => $categoryIds ? array_key_first($categoryIds) : null,
-                'slug'        => $slug,
-                'is_active'   => 1,
+                'slug' => $slug,
+                'is_active' => 1,
             ]
         );
 
@@ -282,7 +288,7 @@ class SaveJasaniData extends Command
         $product->translations()->updateOrCreate(
             ['locale' => 'en-ae'],
             [
-                'name'        => $apiProduct['name'],
+                'name' => $apiProduct['name'],
                 'description' => $apiProduct['description_sale'] ?? null,
             ]
         );
@@ -294,7 +300,6 @@ class SaveJasaniData extends Command
 
         return $product;
     }
-
 
     protected function generateUniqueProductSlug(string $baseSlug, int $referenceId): string
     {
@@ -311,19 +316,18 @@ class SaveJasaniData extends Command
         while (
             Product::where('slug', $slug)->exists()
         ) {
-            $slug = $baseSlug . '-' . $counter;
+            $slug = $baseSlug.'-'.$counter;
             $counter++;
         }
 
         return $slug;
     }
 
-
-    protected function storeVariant(Product $product, array $apiVariant, array $attributeValueIds, $parentVariant): ProductVariant
+    protected function storeVariant(Product $product, array $apiVariant, array $attributeValueIds, int $primaryVariantId): ProductVariant
     {
         $refId = (int) $apiVariant['id'];
         $price = 0;
-        if (!empty($this->priceMap[$refId])) {
+        if (! empty($this->priceMap[$refId])) {
             $price = $this->priceMap[$refId]; // Use loaded price map
         }
 
@@ -331,10 +335,10 @@ class SaveJasaniData extends Command
             ['reference_id' => $refId],
             [
                 'product_id' => $product->id,
-                'sku'        => ($apiVariant['default_code'] ?? 'JASANI') . '-' . $refId,
-                'price'      => $price,
-                'stock'      => $this->stockMap[$refId] ?? 0,
-                'is_primary' => $parentVariant['id'] == $apiVariant['id'],
+                'sku' => ($apiVariant['default_code'] ?? 'JASANI').'-'.$refId,
+                'price' => $price,
+                'stock' => $this->stockMap[$refId] ?? 0,
+                'is_primary' => $refId === $primaryVariantId,
             ]
         );
 
@@ -345,6 +349,71 @@ class SaveJasaniData extends Command
         return $variant;
     }
 
+    /**
+     * Resolve the best primary variant based on size and stock.
+     */
+    protected function resolvePrimaryVariantId($variants, $parentVariant): int
+    {
+        $priorities = ['Small', 'Medium', 'Large', 'XL', 'XXL', '3XL', '4XL'];
+
+        // 1. Try to find a variant matching priority size AND having stock
+        foreach ($priorities as $size) {
+            foreach ($variants as $v) {
+                $refId = (int) $v['id'];
+                $stock = $this->stockMap[$refId] ?? 0;
+
+                if ($stock > 0 && $this->variantHasSize($v, $size)) {
+                    return $refId;
+                }
+            }
+        }
+
+        // 2. Fallback to parent variant ID if it exists in the list
+        $parentId = (int) $parentVariant['id'];
+        foreach ($variants as $v) {
+            if ((int) $v['id'] === $parentId) {
+                return $parentId;
+            }
+        }
+
+        // 3. Fallback to any variant with size 'Small'
+        foreach ($variants as $v) {
+            if ($this->variantHasSize($v, 'Small')) {
+                return (int) $v['id'];
+            }
+        }
+
+        // 4. Final fallback: first variant in the list
+        return (int) $variants->first()['id'];
+    }
+
+    /**
+     * Check if variant has a specific size in its attributes.
+     */
+    protected function variantHasSize(array $variant, string $size): bool
+    {
+        $attrs = $variant['product_template_attribute_value_ids'] ?? [];
+        foreach ($attrs as $attr) {
+            if (empty($attr['display_name'])) {
+                continue;
+            }
+
+            $parts = explode(':', $attr['display_name']);
+            if (count($parts) < 2) {
+                continue;
+            }
+
+            $attrName = trim($parts[0]);
+            $attrValue = trim($parts[1]);
+
+            if (Str::lower($attrName) === 'size' && Str::lower($attrValue) === Str::lower($size)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /* =====================================================
        IMAGES
     ===================================================== */
@@ -353,13 +422,13 @@ class SaveJasaniData extends Command
     {
         $urls = [];
 
-        if (!empty($data['image_url'])) {
+        if (! empty($data['image_url'])) {
             $urls[] = $data['image_url'];
         }
 
         foreach ($data['images'] ?? [] as $group) {
             foreach ($group as $img) {
-                if (!empty($img['image_url'])) {
+                if (! empty($img['image_url'])) {
                     $urls[] = $img['image_url'];
                 }
             }
@@ -388,7 +457,9 @@ class SaveJasaniData extends Command
         foreach ($data['specifications']['Packing'] as $row) {
             foreach ($row as $label => $value) {
 
-                if (!$label || !$value) continue;
+                if (! $label || ! $value) {
+                    continue;
+                }
 
                 $packaging = Packaging::updateOrCreate(
                     ['reference_name' => trim($label)],
@@ -398,7 +469,7 @@ class SaveJasaniData extends Command
                 ProductVariantPackaging::updateOrCreate(
                     [
                         'product_variant_id' => $variant->id,
-                        'packaging_id'       => $packaging->id,
+                        'packaging_id' => $packaging->id,
                     ],
                     ['value' => trim($value)]
                 );

@@ -7,6 +7,7 @@ use App\Models\Catalog\AttributeValue;
 use App\Models\Catalog\Brand;
 /* ================= MODELS ================= */
 use App\Models\Catalog\Category;
+use App\Models\Catalog\Inventory;
 use App\Models\Catalog\Product;
 use App\Models\Catalog\ProductVariant;
 use App\Models\Catalog\ProductVariantPackaging;
@@ -124,6 +125,10 @@ class SaveJasaniData extends Command
         $path = Storage::disk('local')->path('jasani-product-stock.json');
 
         if (! file_exists($path)) {
+            $path = Storage::disk('local')->path('private/jasani-product-stock.json');
+        }
+
+        if (! file_exists($path)) {
             return;
         }
 
@@ -131,7 +136,7 @@ class SaveJasaniData extends Command
 
         foreach ($json['data'] ?? [] as $row) {
             if (! empty($row['id'])) {
-                $this->stockMap[(int) $row['id']] = (int) ($row['net_available_qty'] ?? 0);
+                $this->stockMap[(int) $row['id']] = $row; // Store full row
             }
         }
     }
@@ -331,16 +336,38 @@ class SaveJasaniData extends Command
             $price = $this->priceMap[$refId]; // Use loaded price map
         }
 
+        $stockData = $this->stockMap[$refId] ?? null;
+        $netQty = (int) ($stockData['net_available_qty'] ?? 0);
+
         $variant = ProductVariant::updateOrCreate(
             ['reference_id' => $refId],
             [
                 'product_id' => $product->id,
                 'sku' => ($apiVariant['default_code'] ?? 'JASANI').'-'.$refId,
                 'price' => $price,
-                'stock' => $this->stockMap[$refId] ?? 0,
+                'stock' => $netQty,
                 'is_primary' => $refId === $primaryVariantId,
             ]
         );
+
+        // Store detailed inventory
+        if ($stockData) {
+            $incomingDate = $stockData['incoming_date'] ?? null;
+            if ($incomingDate === false) {
+                $incomingDate = null;
+            }
+
+            Inventory::updateOrCreate(
+                ['product_variant_id' => $variant->id],
+                [
+                    'blocked_qty' => (int) ($stockData['blocked_qty'] ?? 0),
+                    'net_available_qty' => (int) ($stockData['net_available_qty'] ?? 0),
+                    'incoming_qty' => (int) ($stockData['incoming_qty'] ?? 0),
+                    'total_qty' => (int) ($stockData['total_qty'] ?? 0),
+                    'incoming_date' => $incomingDate,
+                ]
+            );
+        }
 
         if ($attributeValueIds) {
             $variant->attributeValues()->sync($attributeValueIds);
@@ -360,7 +387,8 @@ class SaveJasaniData extends Command
         foreach ($priorities as $size) {
             foreach ($variants as $v) {
                 $refId = (int) $v['id'];
-                $stock = $this->stockMap[$refId] ?? 0;
+                $stockData = $this->stockMap[$refId] ?? null;
+                $stock = (int) ($stockData['net_available_qty'] ?? 0);
 
                 if ($stock > 0 && $this->variantHasSize($v, $size)) {
                     return $refId;

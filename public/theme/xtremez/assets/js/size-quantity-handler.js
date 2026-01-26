@@ -205,11 +205,16 @@ $(document).ready(function () {
                     0,
                 );
 
-                // Update cart count
-                $.get(appUrl + "/cart/count", function (data) {
-                    $("#cart-count").text(data.count);
-                    $(".cart-count").text(data.count);
-                });
+                if (responses.length > 0) {
+                    $("#cart-count").text(responses[0].cart.count);
+                    $(".cart-count").text(responses[0].cart.count);
+                    $("#cart-items-count").text(responses[0].cart.count);
+                    if (responses[0].cart.count > 0) {
+                        $("#cart-items-count").show();
+                    } else {
+                        $("#cart-items-count").hide();
+                    }
+                }
 
                 Swal.fire({
                     icon: "success",

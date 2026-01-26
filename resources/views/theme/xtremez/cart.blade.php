@@ -35,13 +35,13 @@
         <div class="col-md-12 col-lg-7 col-xl-8">
           <div class="cart-selectall d-flex align-items-center justify-content-between mb-3 d-none d-md-flex">
             <div>
-                <input type="checkbox" id="selectAll" class="cc-form-check-input form-check-input me-2" />
-                <label for="selectAll" class="form-label mb-0">Select
-                  all</label>
+              <input type="checkbox" id="selectAll" class="cc-form-check-input form-check-input me-2" />
+              <label for="selectAll" class="form-label mb-0">Select
+                all</label>
             </div>
 
             <div class="clear-cart" style="display: none">
-                <a href="#" class="text-dark">Clear Items</a>
+              <a href="#" class="text-dark">Clear Items</a>
             </div>
           </div>
         </div>
@@ -65,10 +65,19 @@
                       <img src="{{ asset($variant->image) }}" class="cart-img" alt="{{ $variant->name }}" />
                     </div>
 
-                    <div class="col-9 col-md-6 cart-product-title d-flex align-self-start">
-                      <span class="fw-bold m-4">
+                    <div class="col-9 col-md-6 cart-product-title d-flex flex-column align-self-start">
+                      <span class="fw-bold mb-2">
                         {{ $variant->name }}
                       </span>
+                      @if (isset($variant->variant_attributes) && $variant->variant_attributes->count() > 0)
+                        <div class="variant-details d-flex flex-wrap gap-1">
+                          @foreach ($variant->variant_attributes as $attribute)
+                            <span class="badge bg-light text-dark small">
+                              {{ ucfirst($attribute['attribute_name']) }}: {{ $attribute['value'] }}
+                            </span>
+                          @endforeach
+                        </div>
+                      @endif
                     </div>
 
                     <div class="align-items-end col-md col-xl d-md-flex d-none flex-column">
@@ -123,7 +132,7 @@
                 <div class="text-center text-black-50 mt-3">
 
                   <p class="fs-4">
-                      Your cart is empty.
+                    Your cart is empty.
                   </p>
                 </div>
 
@@ -178,7 +187,8 @@
               </div>
             </form>
             <a class="btn btn-secondary btn-checkout w-100" href="{{ route('checkout') }}">
-              CHECKOUT <img src="{{ asset('theme/xtremez/assets/icons/right-arrow.png') }}" alt="arrow-icon" class="ms-1">
+              CHECKOUT <img src="{{ asset('theme/xtremez/assets/icons/right-arrow.png') }}" alt="arrow-icon"
+                class="ms-1">
             </a>
           </div>
         </div>

@@ -44,7 +44,7 @@ function clearSelectedCartItems(onSuccess = null) {
         },
         error: function (res) {
             alert(
-                res.responseJSON?.message || "Failed to clear selected items."
+                res.responseJSON?.message || "Failed to clear selected items.",
             );
         },
     });
@@ -194,11 +194,28 @@ $(document).on("click", ".add-to-cart-btn", function () {
     const variantId = $btn.attr("data-variant-id");
     const qty = parseInt($($btn.data("qty-selector")).val()) || 1;
 
-    addToCart(variantId, qty, function (success) {
-        if (success) {
-            $btn.find(".add-to-cart").hide();
-            $btn.find(".added-to-cart").show();
-        }
+    // Check if product has multiple variants
+    $.ajax({
+        url: `${appUrl}/ajax/check-multiple-variants`,
+        method: "POST",
+        data: { variant_id: variantId },
+        success: function (res) {
+            if (res.has_multiple_variants) {
+                // Redirect to product detail page
+                window.location.href = res.product_url;
+            } else {
+                // Add to cart directly
+                addToCart(variantId, qty, function (success) {
+                    if (success) {
+                        $btn.find(".add-to-cart").hide();
+                        $btn.find(".added-to-cart").show();
+                    }
+                });
+            }
+        },
+        error: function () {
+            alert("Failed to check product variants.");
+        },
     });
 });
 

@@ -57,7 +57,7 @@ class SaveJasaniData extends Command
         }
 
         try {
-            DB::transaction(fn () => $this->syncCatalog($products));
+            DB::transaction(fn() => $this->syncCatalog($products));
 
             ApiSyncLog::create([
                 'source' => 'Jasani',
@@ -321,7 +321,7 @@ class SaveJasaniData extends Command
         while (
             Product::where('slug', $slug)->exists()
         ) {
-            $slug = $baseSlug.'-'.$counter;
+            $slug = $baseSlug . '-' . $counter;
             $counter++;
         }
 
@@ -343,7 +343,7 @@ class SaveJasaniData extends Command
             ['reference_id' => $refId],
             [
                 'product_id' => $product->id,
-                'sku' => ($apiVariant['default_code'] ?? 'JASANI').'-'.$refId,
+                'sku' => ($apiVariant['default_code'] ?? 'JASANI') . '-' . $refId,
                 'price' => $price,
                 'stock' => $netQty,
                 'is_primary' => $refId === $primaryVariantId,
@@ -377,42 +377,85 @@ class SaveJasaniData extends Command
     }
 
     /**
-     * Resolve the best primary variant based on size and stock.
+     * Resolve the primary variant:
+     * Small (with stock) -> Medium (with stock) -> Large (with stock)
      */
     protected function resolvePrimaryVariantId($variants, $parentVariant): int
     {
-        $priorities = ['Small', 'Medium', 'Large', 'XL', 'XXL', '3XL', '4XL'];
+        // Only 3 size priorities as per requirement
+        $priorities = ['Small', 'Medium', 'Large'];
 
-        // 1. Try to find a variant matching priority size AND having stock
+        // 1) Try to find priority size AND having stock > 0
         foreach ($priorities as $size) {
+
+            $bestRefId = null;
+            $bestStock = 0;
+
             foreach ($variants as $v) {
-                $refId = (int) $v['id'];
+
+                $refId = (int) ($v['id'] ?? 0);
+                if (! $refId) {
+                    continue;
+                }
+
                 $stockData = $this->stockMap[$refId] ?? null;
                 $stock = (int) ($stockData['net_available_qty'] ?? 0);
 
-                if ($stock > 0 && $this->variantHasSize($v, $size)) {
-                    return $refId;
+                if ($stock <= 0) {
+                    continue;
+                }
+
+                if ($this->variantHasSize($v, $size)) {
+
+                    // If multiple same-size variants exist, pick the one with higher stock
+                    if ($stock > $bestStock) {
+                        $bestStock = $stock;
+                        $bestRefId = $refId;
+                    }
+                }
+            }
+
+            if ($bestRefId) {
+                return $bestRefId;
+            }
+        }
+
+        // 2) If none found (Small/Medium/Large with stock), fallback to ANY in-stock variant
+        $bestRefId = null;
+        $bestStock = 0;
+
+        foreach ($variants as $v) {
+            $refId = (int) ($v['id'] ?? 0);
+            if (! $refId) {
+                continue;
+            }
+
+            $stockData = $this->stockMap[$refId] ?? null;
+            $stock = (int) ($stockData['net_available_qty'] ?? 0);
+
+            if ($stock > $bestStock) {
+                $bestStock = $stock;
+                $bestRefId = $refId;
+            }
+        }
+
+        if ($bestRefId) {
+            return $bestRefId;
+        }
+
+        // 3) Fallback to parent variant ID if it exists in the list
+        $parentId = (int) ($parentVariant['id'] ?? 0);
+
+        if ($parentId) {
+            foreach ($variants as $v) {
+                if ((int) ($v['id'] ?? 0) === $parentId) {
+                    return $parentId;
                 }
             }
         }
 
-        // 2. Fallback to parent variant ID if it exists in the list
-        $parentId = (int) $parentVariant['id'];
-        foreach ($variants as $v) {
-            if ((int) $v['id'] === $parentId) {
-                return $parentId;
-            }
-        }
-
-        // 3. Fallback to any variant with size 'Small'
-        foreach ($variants as $v) {
-            if ($this->variantHasSize($v, 'Small')) {
-                return (int) $v['id'];
-            }
-        }
-
-        // 4. Final fallback: first variant in the list
-        return (int) $variants->first()['id'];
+        // 4) Final fallback: first variant in the list
+        return (int) ($variants->first()['id'] ?? 0);
     }
 
     /**

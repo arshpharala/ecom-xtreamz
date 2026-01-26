@@ -53,7 +53,7 @@ $(function () {
 
             const hasOffer = variant?.offer_data?.has_offer === true;
             const discountedPrice = parseFloat(
-                variant?.offer_data?.discounted_price || 0
+                variant?.offer_data?.discounted_price || 0,
             );
             const originalPrice = parseFloat(variant?.price || 0);
             const offerLabel = variant?.offer_data?.label || "";
@@ -88,7 +88,7 @@ $(function () {
             console.error("Error updating price display:", err);
             const fallbackCurrency = $("meta[name='currency']").attr("content");
             $("#priceDisplay").html(
-                `<span>${formatPrice(fallbackCurrency, 0)}</span>`
+                `<span>${formatPrice(fallbackCurrency, 0)}</span>`,
             );
         }
     }
@@ -174,7 +174,7 @@ $(function () {
 
         for (const [attr, value] of Object.entries(variant.combination)) {
             $(
-                `.variant-option[data-attr="${attr}"][data-value="${value}"]`
+                `.variant-option[data-attr="${attr}"][data-value="${value}"]`,
             ).addClass("active");
         }
     }
@@ -192,6 +192,17 @@ $(function () {
             $addBtn.find(".add-to-cart").show();
             $addBtn.find(".added-to-cart").hide();
             $addBtn.removeClass("in-cart");
+        }
+    }
+
+    function updateAddToCartButtonState() {
+        const qty = parseInt($("#qtyInput").val()) || 0;
+        const $addToCartBtn = $(".add-to-cart-btn");
+
+        if (qty > 0) {
+            $addToCartBtn.prop("disabled", false);
+        } else {
+            $addToCartBtn.prop("disabled", true);
         }
     }
 
@@ -226,7 +237,7 @@ $(function () {
                 (src, idx) =>
                     `<img src="${src}" data-large="${src}" class="thumb-item ${
                         idx === 0 ? "active" : ""
-                    } me-2"/>`
+                    } me-2"/>`,
             );
             $(".thumb-wrapper").html(thumbs.join(""));
         }
@@ -252,7 +263,7 @@ $(function () {
         if (variant.packagings && variant.packagings.length) {
             const getPackagingValue = (label) => {
                 const item = variant.packagings.find((p) =>
-                    p.name.toLowerCase().includes(label.toLowerCase())
+                    p.name.toLowerCase().includes(label.toLowerCase()),
                 );
                 return item ? item.pivot.value : "NA";
             };
@@ -341,6 +352,14 @@ $(function () {
         if (window.selectedAttributes[attr] === val) {
             $(this).addClass("active");
         }
+    });
+
+    // Initialize add-to-cart button state
+    updateAddToCartButtonState();
+
+    // Handle manual input changes on quantity field
+    $("#qtyInput").on("input", function () {
+        updateAddToCartButtonState();
     });
 
     // Variant switch

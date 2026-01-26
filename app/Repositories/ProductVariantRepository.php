@@ -30,8 +30,8 @@ class ProductVariantRepository
         ]);
 
         $filters['attributes'] = collect(Request::all())
-            ->filter(fn ($val, $key) => str_starts_with($key, 'attr_'))
-            ->mapWithKeys(fn ($val, $key) => [str_replace('attr_', '', $key) => $val])
+            ->filter(fn($val, $key) => str_starts_with($key, 'attr_'))
+            ->mapWithKeys(fn($val, $key) => [str_replace('attr_', '', $key) => $val])
             ->toArray();
 
         $query = ProductVariant::withJoins()
@@ -45,7 +45,7 @@ class ProductVariantRepository
             ->withActiveProducts();
 
         if (auth()->check() && ! empty($filters['is_wishlisted'])) {
-            $query->whereHas('wishlists', fn ($q) => $q->where('user_id', auth()->id()));
+            $query->whereHas('wishlists', fn($q) => $q->where('user_id', auth()->id()));
         }
 
         $query->groupBy('product_variants.id'); // Required to avoid duplicate entries due to joins
@@ -196,5 +196,16 @@ class ProductVariantRepository
         }
 
         return $productVariant->variants->first();
+    }
+
+    public function hasMultipleVariants(string $productId): bool
+    {
+        return ProductVariant::where('product_id', $productId)->count() > 1;
+    }
+
+    public function getProductIdFromVariantId(string $variantId): ?string
+    {
+        $variant = ProductVariant::find($variantId);
+        return $variant ? $variant->product_id : null;
     }
 }

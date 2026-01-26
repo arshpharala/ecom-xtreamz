@@ -29,12 +29,22 @@ class CartController extends Controller
 
         $variants = ProductVariant::withJoins()
             ->withSelection()
+            ->with(['attributeValues.attribute'])
             ->whereIn('product_variants.id', $variantIds)
             ->groupBy('product_variants.id')
             ->get()
             ->map(function ($variant) use ($items, $repository) {
                 $transform          = $repository->transform($variant);
                 $transform->qty     = $items[$variant->variant_id]['qty'] ?? 1;
+
+                // Add variant attributes for display
+                $transform->variant_attributes = $variant->attributeValues->map(function ($attrValue) {
+                    return [
+                        'attribute_name' => $attrValue->attribute->name,
+                        'value' => $attrValue->value
+                    ];
+                });
+
                 return $transform;
             });
 
@@ -48,11 +58,14 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'variant_id' => 'required|uuid',
+            'variant_id' => 'nullable|uuid',
+            'product_variant_id' => 'nullable|uuid',
             'qty'        => 'required|integer|min:1',
         ]);
 
-        $variant = ProductVariant::with('offers')->findOrFail($request->variant_id);
+        $variantId = $request->variant_id ?: $request->product_variant_id;
+
+        $variant = ProductVariant::with('offers')->findOrFail($variantId);
         $qty = $request->qty;
 
         // Check stock availability

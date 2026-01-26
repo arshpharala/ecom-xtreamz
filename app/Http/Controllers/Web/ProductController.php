@@ -27,6 +27,10 @@ class ProductController extends Controller
         $this->cart = $cart;
     }
 
+    /* ======================================================
+        LISTING
+    ====================================================== */
+
     function sidebarCategories()
     {
         return Category::visible()
@@ -43,19 +47,21 @@ class ProductController extends Controller
             ->applySorting('position')
             ->get();
     }
+
     function index()
     {
-        $locale     = app()->getLocale();
-        $categories = Category::visible()->leftJoin('category_translations', function ($join) use ($locale) {
-            $join->on('category_translations.category_id', 'categories.id')->where('locale', $locale);
-        })
+        $locale = app()->getLocale();
+
+        $categories = Category::visible()
+            ->leftJoin('category_translations', function ($join) use ($locale) {
+                $join->on('category_translations.category_id', 'categories.id')->where('locale', $locale);
+            })
             ->select('categories.id', 'categories.slug', 'categories.icon', 'categories.created_at', 'category_translations.name')
             ->orderBy('categories.position')
             ->get();
 
-
         $brands = Brand::active()->orderBy('position')->get();
-        $tags = Tag::active()->orderBy('position')->get();
+        $tags   = Tag::active()->orderBy('position')->get();
 
         if (request()->filled('category')) {
             $activeCategory = $categories->where('slug', request()->category)->first();
@@ -65,24 +71,24 @@ class ProductController extends Controller
             $activeCategory = $categories->where('id', request()->category_id)->first();
         }
 
-        // if (empty($activeCategory)) {
-        //     $activeCategory = $categories->first();
-        // }
-
         $data['sidebarCategories'] = $this->sidebarCategories();
-        $data['activeCategory'] = $activeCategory ?? null;
-        $data['categories']     = $categories;
-        $data['brands']         = $brands;
-        $data['tags']           = $tags;
+        $data['activeCategory']    = $activeCategory ?? null;
+        $data['categories']        = $categories;
+        $data['brands']            = $brands;
+        $data['tags']              = $tags;
 
-        return view('theme.xtremez.products.index', $data);;
+        return view('theme.xtremez.products.index', $data);
     }
+
+    /* ======================================================
+        PRODUCT DETAIL
+    ====================================================== */
 
     public function show($slug, $variantId, Request $request)
     {
-        // $variantId      = $request->query('variant');
         $productVariant = $this->getProductVariant($variantId);
         $product        = $this->getProductWithAttributes($productVariant->product_id);
+
         $attributes     = $this->extractAttributesFromVariants($product);
         $selected       = $this->getSelectedAttributes($productVariant);
         $allVariants    = $this->formatAllVariants($product);
@@ -94,23 +100,32 @@ class ProductController extends Controller
         $data['allVariants']    = $allVariants;
 
         if (empty($product->metaForLocale()->meta_title)) {
-            $data['meta']           = (object)['meta_title' => $productVariant->name, 'meta_description' => Str::limit($productVariant->description, 160)];
+            $data['meta'] = (object)[
+                'meta_title' => $productVariant->name,
+                'meta_description' => Str::limit($productVariant->description, 160)
+            ];
         } else {
-            $data['meta']           = $product ? $product->metaForLocale() :  null;
+            $data['meta'] = $product ? $product->metaForLocale() : null;
         }
-
 
         return view('theme.xtremez.products.show', $data);
     }
 
+    /**
+     * Variant Resolver Endpoint (Amazon-style)
+     * If product has Size:
+     * - Keep other attributes fixed (e.g. color = Grey)
+     * - Always choose best Size by priority + stock:
+     *   Small -> Medium -> Large -> XL -> XXL -> 3X-Large -> 4X-Large
+     */
     public function resolve(Request $request)
     {
-        $productId  = $request->input('product_id');
+        $productId  = (int) $request->input('product_id');
         $attributes = $request->input('attributes', []);
 
         $variant = $this->resolveVariant($productId, $attributes);
 
-        if (!$variant) {
+        if (! $variant) {
             return response()->json(['message' => 'No variant found'], 404);
         }
 
@@ -120,9 +135,19 @@ class ProductController extends Controller
             ->with(['packagings', 'attachments', 'attributeValues.attribute', 'offers'])
             ->firstOrFail();
 
-        $variant                = $this->repository->transform($variant);
-        $variant->images        = $variant->attachments->map(fn($a) => get_attachment_url($a->file_path));
-        $variant->combination   = collect($variant->attributeValues)
+        $variant              = $this->repository->transform($variant);
+        $variant->images      = $variant->attachments->map(fn($a) => get_attachment_url($a->file_path));
+
+        // ✅ Combination sorting: Color first, then Size, then others
+        $variant->combination = collect($variant->attributeValues)
+            ->sortBy(function ($val) {
+                $name = Str::lower($val->attribute->name);
+
+                if ($name === 'color') return 0;
+                if ($name === 'size')  return 1;
+
+                return 2;
+            })
             ->mapWithKeys(function ($val) {
                 return [Str::slug($val->attribute->name) => $val->value];
             });
@@ -130,22 +155,28 @@ class ProductController extends Controller
         return response()->json($variant);
     }
 
+    /* ======================================================
+        LOAD HELPERS
+    ====================================================== */
+
     protected function getProductVariant($variantId)
     {
-        $variant =  ProductVariant::withJoins()
+        $variant = ProductVariant::withJoins()
             ->withSelection()
             ->where('product_variants.id', $variantId)
             ->firstOrFail();
 
-        $variant = $this->repository->transform($variant);
-
-        return $variant;
+        return $this->repository->transform($variant);
     }
 
     protected function getProductWithAttributes($productId)
     {
         return Product::with(['variants.attributeValues.attribute'])->findOrFail($productId);
     }
+
+    /* ======================================================
+        ATTRIBUTE UI HELPERS
+    ====================================================== */
 
     protected function extractAttributesFromVariants($product)
     {
@@ -159,29 +190,29 @@ class ProductController extends Controller
             }
         }
 
-        // 1. Sort values within each attribute
+        // 1) Sort values inside each attribute
         foreach ($attributes as $slug => &$attr) {
             $values = $attr['values'];
-            
+
             if (Str::lower($attr['name']) === 'size') {
                 // Custom sort for sizes
-                uksort($values, function($a, $b) {
+                uksort($values, function ($a, $b) {
                     $weightA = AttributeValue::getSizeSortWeight($a);
                     $weightB = AttributeValue::getSizeSortWeight($b);
-                    
+
                     if ($weightA == $weightB) return strcmp($a, $b);
                     return $weightA - $weightB;
                 });
             } else {
-                // Default alphabetical sort for others (like color name)
+                // Default alphabetical
                 ksort($values);
             }
-            
+
             $attr['values'] = $values;
         }
 
-        // 2. Sort attributes (Color always first)
-        uksort($attributes, function($a, $b) use ($attributes) {
+        // 2) Sort attributes: Color always first
+        uksort($attributes, function ($a, $b) use ($attributes) {
             $nameA = Str::lower($attributes[$a]['name']);
             $nameB = Str::lower($attributes[$b]['name']);
 
@@ -205,6 +236,12 @@ class ProductController extends Controller
         return $selected;
     }
 
+    /**
+     * ✅ All variants formatter
+     * If product has Size => return variants sorted like:
+     * - In-stock first
+     * - Size order (Small -> Medium -> Large -> XL -> ...)
+     */
     protected function formatAllVariants($product)
     {
         $allVariants = [];
@@ -228,11 +265,80 @@ class ProductController extends Controller
             ];
         }
 
+        // ✅ If Size exists, apply sort rules
+        $hasSize = collect($allVariants)->contains(function ($v) {
+            return isset($v['combination']['size']);
+        });
+
+        if ($hasSize) {
+            usort($allVariants, function ($a, $b) {
+
+                $stockA = (int) ($a['stock'] ?? 0);
+                $stockB = (int) ($b['stock'] ?? 0);
+
+                $inStockA = $stockA > 0 ? 1 : 0;
+                $inStockB = $stockB > 0 ? 1 : 0;
+
+                // 1) In-stock always first
+                if ($inStockA !== $inStockB) {
+                    return $inStockB <=> $inStockA;
+                }
+
+                // 2) Sort by size weight
+                $sizeA = $a['combination']['size'] ?? null;
+                $sizeB = $b['combination']['size'] ?? null;
+
+                $weightA = AttributeValue::getSizeSortWeight($sizeA);
+                $weightB = AttributeValue::getSizeSortWeight($sizeB);
+
+                if ($weightA === $weightB) {
+                    return strcmp((string) $sizeA, (string) $sizeB);
+                }
+
+                return $weightA <=> $weightB;
+            });
+        }
+
         return $allVariants;
     }
 
+    /* ======================================================
+        ✅ VARIANT RESOLVE LOGIC (YOUR REQUIRED RULE)
+    ====================================================== */
+
     protected function resolveVariant($productId, $attributes)
     {
+        // Normalize keys to lowercase (size, color...)
+        $attributes = collect($attributes)
+            ->mapWithKeys(fn($v, $k) => [strtolower($k) => $v])
+            ->toArray();
+
+        // Check if product has "size" attribute at all
+        $hasSize = ProductVariant::where('product_id', $productId)
+            ->whereHas('attributeValues.attribute', function ($q) {
+                $q->whereRaw('LOWER(name) = ?', ['size']);
+            })
+            ->exists();
+
+        /**
+         * ✅ If has size:
+         * Keep other attributes fixed (color stays Grey)
+         * Auto-select the best size:
+         * Small -> Medium -> Large -> XL -> ...
+         */
+        if ($hasSize) {
+            $baseAttrs = collect($attributes)->except(['size'])->toArray();
+
+            $preferred = $this->findPreferredSizeVariant($productId, $baseAttrs);
+
+            if ($preferred) {
+                return $preferred;
+            }
+        }
+
+        /**
+         * ✅ Fallback to exact match
+         */
         $query = ProductVariant::where('product_id', $productId);
 
         foreach ($attributes as $attr => $val) {
@@ -245,8 +351,13 @@ class ProductController extends Controller
         }
 
         $exact = $query->first();
-        if ($exact) return $exact;
+        if ($exact) {
+            return $exact;
+        }
 
+        /**
+         * ✅ Final fallback: match only last attribute
+         */
         $lastAttr = array_key_last($attributes);
         $lastValue = $attributes[$lastAttr];
 
@@ -259,6 +370,81 @@ class ProductController extends Controller
             })
             ->first();
     }
+
+    /**
+     * ✅ Returns best variant based on Size priority + Stock.
+     * This guarantees:
+     * Grey + Small (if stock) else Grey + Medium else Grey + Large ...
+     */
+    protected function findPreferredSizeVariant(int $productId, array $baseAttrs): ?ProductVariant
+    {
+        $priorities = ['Small', 'Medium', 'Large', 'XL', 'XXL', '3X-Large', '4X-Large'];
+
+        // ✅ 1) First pass: Size priority WITH stock > 0
+        foreach ($priorities as $size) {
+
+            $query = ProductVariant::where('product_id', $productId)
+                ->where('stock', '>', 0);
+
+            // Apply base attributes (example: color = Grey)
+            foreach ($baseAttrs as $attr => $val) {
+                $query->whereHas('attributeValues', function ($q) use ($attr, $val) {
+                    $q->where('value', $val)
+                        ->whereHas('attribute', function ($q2) use ($attr) {
+                            $q2->whereRaw('LOWER(name) = ?', [strtolower($attr)]);
+                        });
+                });
+            }
+
+            // Apply size condition
+            $query->whereHas('attributeValues', function ($q) use ($size) {
+                $q->where('value', $size)
+                    ->whereHas('attribute', function ($q2) {
+                        $q2->whereRaw('LOWER(name) = ?', ['size']);
+                    });
+            });
+
+            $variant = $query->first();
+
+            if ($variant) {
+                return $variant;
+            }
+        }
+
+        // ✅ 2) Second pass: Size priority WITHOUT stock (if all are out of stock)
+        foreach ($priorities as $size) {
+
+            $query = ProductVariant::where('product_id', $productId);
+
+            foreach ($baseAttrs as $attr => $val) {
+                $query->whereHas('attributeValues', function ($q) use ($attr, $val) {
+                    $q->where('value', $val)
+                        ->whereHas('attribute', function ($q2) use ($attr) {
+                            $q2->whereRaw('LOWER(name) = ?', [strtolower($attr)]);
+                        });
+                });
+            }
+
+            $query->whereHas('attributeValues', function ($q) use ($size) {
+                $q->where('value', $size)
+                    ->whereHas('attribute', function ($q2) {
+                        $q2->whereRaw('LOWER(name) = ?', ['size']);
+                    });
+            });
+
+            $variant = $query->first();
+
+            if ($variant) {
+                return $variant;
+            }
+        }
+
+        return null;
+    }
+
+    /* ======================================================
+        AJAX PRODUCTS
+    ====================================================== */
 
     public function getProducts()
     {
@@ -300,24 +486,52 @@ class ProductController extends Controller
         return response()->json(['success' => true, 'attributes' => $data]);
     }
 
+    /* ======================================================
+        PAGES
+    ====================================================== */
+
     function clearance()
     {
-        $slug           = request()->segment(1);
-        $page           = (new PageRepository())->findOrFailBySlug($slug);
-        $data['page']   = $page;
+        $slug         = request()->segment(1);
+        $page         = (new PageRepository())->findOrFailBySlug($slug);
+        $data['page'] = $page;
 
         return view('theme.xtremez.products.clearance', $data);
     }
 
     function featured()
     {
-        $slug               = request()->segment(1);
-        $page               = (new PageRepository())->findOrFailBySlug($slug);
-        $giftSetProducts    = (new ProductVariantRepository())->getGiftProducts();
+        $slug            = request()->segment(1);
+        $page            = (new PageRepository())->findOrFailBySlug($slug);
+        $giftSetProducts = (new ProductVariantRepository())->getGiftProducts();
 
-        $data['giftSetProducts']   = $giftSetProducts;
-        $data['page']   = $page;
+        $data['giftSetProducts'] = $giftSetProducts;
+        $data['page']            = $page;
 
         return view('theme.xtremez.products.featured', $data);
+    }
+
+    public function checkMultipleVariants(Request $request)
+    {
+        $variantId = $request->input('variant_id');
+        $productId = $this->repository->getProductIdFromVariantId($variantId);
+
+        if (! $productId) {
+            return response()->json(['error' => 'Variant not found'], 404);
+        }
+
+        $hasMultipleVariants = $this->repository->hasMultipleVariants($productId);
+
+        if ($hasMultipleVariants) {
+            $product = Product::find($productId);
+            $productUrl = route('products.show', ['slug' => $product->slug, 'variant' => $variantId]);
+        } else {
+            $productUrl = null;
+        }
+
+        return response()->json([
+            'has_multiple_variants' => $hasMultipleVariants,
+            'product_url' => $productUrl
+        ]);
     }
 }

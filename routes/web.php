@@ -30,6 +30,7 @@ Route::get('products/{slug}/variant/{variant}',                           [Produ
 Route::get('search',                                    [SearchController::class, 'search'])->name('search');
 
 Route::resource('cart',                                 CartController::class);
+Route::post('cart/add',                                 [CartController::class, 'store'])->name('cart.add');
 
 Route::get('checkout',                                  [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('checkout',                                 [CheckoutController::class, 'processOrder'])->name('checkout');
@@ -47,6 +48,7 @@ Route::get('/order-summary/{order}',                    [CheckoutController::cla
 
 Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('get-products',                          [ProductController::class, 'getProducts'])->name('get-products');
+    Route::post('check-multiple-variants',                          [ProductController::class, 'checkMultipleVariants'])->name('check-multiple-variants');
     Route::get('category/{category}/attributes',        [ProductController::class, 'getCategoryAttributes'])->name('category.attributes');
     Route::get('/variants/resolve',                     [ProductController::class, 'resolve'])->name('variants.resolve');
 

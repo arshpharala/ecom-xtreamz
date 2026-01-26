@@ -131,8 +131,7 @@
                   <div class="qty-wrapper d-flex align-items-center">
                     {{-- <i class="bi bi-dash-circle qty-btn minus" id="qtyMinus"></i> --}}
                     <i class="bi bi-dash-circle qty-btn minus"></i>
-                    <input type="text" id="qtyInput" class="qty-input py-1"
-                      value="{{ $productVariant->cart_item['qty'] ?? 1 }}" />
+                    <input type="text" id="qtyInput" class="qty-input py-1" value="1" />
                     <i class="bi bi-plus-circle qty-btn plus"></i>
                     {{-- <i class="bi bi-plus-circle qty-btn plus" id="qtyPlus"></i> --}}
                   </div>
@@ -197,7 +196,9 @@
                                 });
                             });
 
-                            $variantThumb = $colorVariant ? get_attachment_url($colorVariant->attachments->first()->file_path) : null;
+                            $variantThumb = $colorVariant
+                                ? get_attachment_url($colorVariant->attachments->first()->file_path)
+                                : null;
                         }
                       @endphp
                       <div
@@ -243,10 +244,10 @@
               data-variant-id="{{ $productVariant->id }}" data-qty-selector="#qtyInput">Buy Now</button>
             <button class="btn btn-buy flex-fill add-to-cart-btn" data-variant-id="{{ $productVariant->id }}"
               data-qty-selector="#qtyInput">
-              <span class="add-to-cart" style="{{ empty($productVariant->cart_item['qty']) ? '' : 'display:none' }}">
+              <span class="add-to-cart">
                 Add to Cart
               </span>
-              <span class="added-to-cart" style="{{ empty($productVariant->cart_item['qty']) ? 'display:none' : '' }}">
+              <span class="added-to-cart" style="display:none">
                 Added to Cart
               </span>
             </button>

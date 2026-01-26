@@ -187,7 +187,11 @@ class SaveJasaniData extends Command
 
     protected function storeBrand(array $apiBrand): string
     {
-        [$referenceId, $name] = $apiBrand;
+        $referenceId = $apiBrand['id'] ?? null;
+        $name = $apiBrand['name'] ?? null;
+        if (! $referenceId || ! $name) {
+            return '';
+        }
 
         return Brand::updateOrCreate(
             ['reference_id' => $referenceId],
@@ -206,9 +210,18 @@ class SaveJasaniData extends Command
 
         foreach ($categories as $cat) {
 
+            // check slug exists or not
+
+            $slug = Str::slug($cat['name']);
+
+            if (Category::where('slug', $slug)->where('reference_id', '!=', $cat['id'])->exists()) {
+                $slug .= '-' . $cat['id'];
+            }
+
+
             $category = Category::updateOrCreate(
                 ['reference_id' => $cat['id']],
-                ['slug' => Str::slug($cat['name']), 'is_visible' => 1]
+                ['slug' => $slug, 'is_visible' => 1]
             );
 
             $category->translations()->updateOrCreate(

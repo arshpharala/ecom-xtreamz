@@ -305,6 +305,10 @@ $(function () {
                 updateSelectedAttributesFromVariant(response);
                 updateVariantDisplay();
                 updateUrlVariantId();
+                // Update size variants after variant change
+                if (typeof window.updateSizeVariants === "function") {
+                    window.updateSizeVariants();
+                }
             },
             error: function () {
                 alert("This combination is currently not available.");

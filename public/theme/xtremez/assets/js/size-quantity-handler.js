@@ -11,7 +11,7 @@ $(document).ready(function () {
     }
 
     // Function to update size variant data based on current non-size attributes
-    function updateSizeVariants() {
+    window.updateSizeVariants = function () {
         if (!window.allVariants) return;
 
         const selectedAttrs = {};
@@ -64,7 +64,7 @@ $(document).ready(function () {
                 $stockInfo.html("Unavailable");
             }
         });
-    }
+    };
 
     // Function to update add-to-cart button state based on size quantities
     function updateAddToCartButtonState() {

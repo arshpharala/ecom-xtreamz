@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\CMS;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Catalog\Category;
 use App\Models\CMS\PaymentGateway;
 
 class SettingController extends Controller
@@ -14,38 +15,53 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $gateways               = PaymentGateway::get();
-        $settings               = Setting::pluck('value', 'key')->toArray();
+        $gateways  = PaymentGateway::get();
+        $settings  = Setting::pluck('value', 'key')->toArray();
 
-        $data['gateways']       = $gateways;
-        $data['settings']       = $settings;
-        $data['gatwayConfig']   = config('payment_gateways') ?? [];
+        $categories = Category::query()
+            ->with(['translations' => function ($q) {
+                $q->where('locale', app()->getLocale());
+            }])
+            ->orderBy('id')
+            ->get();
 
-        return view('theme.adminlte.settings.index', $data);
+        return view('theme.adminlte.settings.index', [
+            'categories'   => $categories,
+            'gateways'     => $gateways,
+            'settings'     => $settings,
+            'gatwayConfig' => config('payment_gateways') ?? [],
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store settings (used by ajax-form in tabs)
+     * NOTE: No global validation to avoid affecting other forms.
      */
     public function store(Request $request)
     {
         $data = $request->except('_token');
 
         foreach ($data as $key => $value) {
+
+            // ✅ File handling
             if ($request->hasFile($key)) {
                 $path = $request->file($key)->store('settings', 'public');
                 Setting::updateOrCreate(['key' => $key], ['value' => $path]);
-            } else {
-                Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+                continue;
             }
+
+            // ✅ Normalize arrays (multi-select etc.) into JSON
+            if (is_array($value)) {
+
+                // ✅ UUID-safe: store excluded category IDs as strings
+                if ($key === 'jasani_discount_excluded_category_ids') {
+                    $value = array_values(array_unique(array_map('strval', $value)));
+                }
+
+                $value = json_encode($value);
+            }
+
+            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
         cache()->forget('app_settings');
@@ -57,43 +73,33 @@ class SettingController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Update (kept for compatibility)
      */
     public function update(Request $request, string $id)
     {
         foreach ($request->except('_token') as $key => $value) {
+
             if ($request->hasFile($key)) {
                 $path = $request->file($key)->store('settings', 'public');
                 Setting::set($key, $path);
-            } else {
-                Setting::set($key, $value);
+                continue;
             }
+
+            if (is_array($value)) {
+
+                // ✅ UUID-safe: store excluded category IDs as strings
+                if ($key === 'jasani_discount_excluded_category_ids') {
+                    $value = array_values(array_unique(array_map('strval', $value)));
+                }
+
+                $value = json_encode($value);
+            }
+
+            Setting::set($key, $value);
         }
 
-        return back()->with('success', 'Settings updated successfully.');
-    }
+        cache()->forget('app_settings');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return back()->with('success', 'Settings updated successfully.');
     }
 }

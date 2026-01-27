@@ -1,44 +1,52 @@
 @extends('theme.adminlte.layouts.app')
+
 @section('content-header')
   <div class="row mb-2">
     <div class="col-sm-6">
       <h1 class="m-0">Setting</h1>
     </div>
-
   </div>
 @endsection
+
 @section('content')
   <div class="card">
-
     <div class="card-body">
       <div class="row">
         <div class="col-5 col-sm-3">
           <div class="nav flex-column nav-tabs" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <a class="nav-link active" id="home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button"
               role="tab" aria-controls="v-pills-home" aria-selected="true">Site</a>
+
             <a class="nav-link" id="profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button"
               role="tab" aria-controls="v-pills-profile" aria-selected="false">Social Links</a>
+
             <a class="nav-link" id="payment-gatway-tab" data-bs-toggle="pill" data-bs-target="#v-pills-payment-gateway"
               type="button" role="tab" aria-controls="v-pills-payment-gateway" aria-selected="false">Payment
               Gateway</a>
+
             <a class="nav-link" id="social-login-tab" data-bs-toggle="pill" data-bs-target="#v-pills-social-login"
               type="button" role="tab" aria-controls="v-pills-social-login" aria-selected="false">SSO</a>
+
             <a class="nav-link" id="password-tab" data-bs-toggle="pill" data-bs-target="#v-pills-password" type="button"
               role="tab" aria-controls="v-pills-password" aria-selected="false">Password</a>
 
+            {{-- ✅ NEW TAB --}}
+            <a class="nav-link" id="jasani-tab" data-bs-toggle="pill" data-bs-target="#v-pills-jasani" type="button"
+              role="tab" aria-controls="v-pills-jasani" aria-selected="false">Jasani Sync</a>
           </div>
         </div>
+
         <div class="col-7 col-sm-9">
           <div class="tab-content" id="v-pills-tabContent">
+
+            {{-- ===================== SITE ===================== --}}
             <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="home-tab">
               <form action="{{ route('admin.cms.settings.store') }}" method="POST" enctype="multipart/form-data"
                 class="ajax-form">
                 @csrf
+
                 <div class="row">
-
                   <div class="col-md-8">
-
-
                     <div class="mb-4">
                       <h5 class="mb-3">Site Title</h5>
                       <input type="text" class="form-control" name="site_title" value="{{ setting('site_title') }}"
@@ -100,7 +108,6 @@
                       <small class="text-muted d-block mt-2">When enabled, customers can purchase items even if stock is
                         insufficient</small>
                     </div>
-
                   </div>
 
                   <div class="col-md-4">
@@ -111,6 +118,7 @@
                         <img src="{{ asset(setting('site_logo')) }}" class="mt-2" width="100">
                       @endif
                     </div>
+
                     <div class="mb-4">
                       <h5 class="mb-3">Footer Logo</h5>
                       <input type="file" class="form-control" name="site_footer_logo" accept="image/*">
@@ -127,25 +135,24 @@
                       @endif
                     </div>
                   </div>
-
                 </div>
+
                 <div class="row">
                   <div class="col-md-12">
                     <button class="btn btn-primary px-5">Save</button>
                   </div>
                 </div>
               </form>
-
             </div>
-            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="profile-tab">
 
+            {{-- ===================== SOCIAL LINKS ===================== --}}
+            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="profile-tab">
               <form action="{{ route('admin.cms.settings.store') }}" method="POST" enctype="multipart/form-data"
                 class="ajax-form">
                 @csrf
 
                 <div class="row">
                   <div class="col-12">
-
                     <div class="mb-4">
                       <h5 class="mb-3">Facebook</h5>
                       <input type="url" class="form-control" name="facebook" value="{{ setting('facebook') }}">
@@ -155,7 +162,6 @@
                       <h5 class="mb-3">Instagram</h5>
                       <input type="url" class="form-control" name="instagram" value="{{ setting('instagram') }}">
                     </div>
-
 
                     <div class="mb-4">
                       <h5 class="mb-3">LinkedIn</h5>
@@ -167,13 +173,10 @@
                       <input type="url" class="form-control" name="pinterest" value="{{ setting('pinterest') }}">
                     </div>
 
-
                     <div class="mb-4">
                       <h5 class="mb-3">X (Twitter)</h5>
                       <input type="url" class="form-control" name="twitter" value="{{ setting('twitter') }}">
                     </div>
-
-
                   </div>
                 </div>
 
@@ -182,9 +185,10 @@
                     <button class="btn btn-primary px-5">Save</button>
                   </div>
                 </div>
-
               </form>
             </div>
+
+            {{-- ===================== PAYMENT GATEWAY ===================== --}}
             <div class="tab-pane fade" id="v-pills-payment-gateway" role="tabpanel"
               aria-labelledby="payment-gatway-tab">
 
@@ -234,7 +238,6 @@
                             </div>
                           @endforeach
 
-                          {{-- Optional Webhook --}}
                           @if (!empty($gatewayConfig['webhook']))
                             <div class="col-md-12 mt-2">
                               <label class="form-label fw-semibold">Webhook URL</label>
@@ -258,10 +261,12 @@
               </form>
             </div>
 
+            {{-- ===================== SSO ===================== --}}
             <div class="tab-pane fade" id="v-pills-social-login" role="tabpanel" aria-labelledby="social-login-tab">
               <form action="{{ route('admin.cms.settings.store') }}" method="POST" enctype="multipart/form-data"
                 class="ajax-form">
                 @csrf
+
                 <div class="row">
                   <div class="col-12">
                     <div class="card shadow-sm border-0">
@@ -273,10 +278,8 @@
                         <div class="mb-3">
                           <label for="social_login_enabled" class="form-label fw-bold">Enable Social Login</label>
                           <select id="social_login_enabled" name="social_login_enabled" class="form-select">
-                            <option value="1" {{ setting('social_login_enabled') ? 'selected' : '' }}>Enabled
-                            </option>
-                            <option value="0" {{ !setting('social_login_enabled') ? 'selected' : '' }}>Disabled
-                            </option>
+                            <option value="1" {{ setting('social_login_enabled') ? 'selected' : '' }}>Enabled</option>
+                            <option value="0" {{ !setting('social_login_enabled') ? 'selected' : '' }}>Disabled</option>
                           </select>
                         </div>
 
@@ -290,10 +293,8 @@
                                 <i class="fab fa-google text-danger me-1"></i> Google Login
                               </label>
                               <select id="social_login_google" name="social_login_google" class="form-select">
-                                <option value="1" {{ setting('social_login_google') ? 'selected' : '' }}>Enabled
-                                </option>
-                                <option value="0" {{ !setting('social_login_google') ? 'selected' : '' }}>Disabled
-                                </option>
+                                <option value="1" {{ setting('social_login_google') ? 'selected' : '' }}>Enabled</option>
+                                <option value="0" {{ !setting('social_login_google') ? 'selected' : '' }}>Disabled</option>
                               </select>
                             </div>
 
@@ -302,10 +303,8 @@
                                 <i class="fab fa-facebook text-primary me-1"></i> Facebook Login
                               </label>
                               <select id="social_login_facebook" name="social_login_facebook" class="form-select">
-                                <option value="1" {{ setting('social_login_facebook') ? 'selected' : '' }}>Enabled
-                                </option>
-                                <option value="0" {{ !setting('social_login_facebook') ? 'selected' : '' }}>
-                                  Disabled</option>
+                                <option value="1" {{ setting('social_login_facebook') ? 'selected' : '' }}>Enabled</option>
+                                <option value="0" {{ !setting('social_login_facebook') ? 'selected' : '' }}>Disabled</option>
                               </select>
                             </div>
 
@@ -314,10 +313,8 @@
                                 <i class="fab fa-twitter text-info me-1"></i> Twitter (X) Login
                               </label>
                               <select id="social_login_twitter" name="social_login_twitter" class="form-select">
-                                <option value="1" {{ setting('social_login_twitter') ? 'selected' : '' }}>Enabled
-                                </option>
-                                <option value="0" {{ !setting('social_login_twitter') ? 'selected' : '' }}>Disabled
-                                </option>
+                                <option value="1" {{ setting('social_login_twitter') ? 'selected' : '' }}>Enabled</option>
+                                <option value="0" {{ !setting('social_login_twitter') ? 'selected' : '' }}>Disabled</option>
                               </select>
                             </div>
 
@@ -326,10 +323,8 @@
                                 <i class="fab fa-linkedin text-primary me-1"></i> LinkedIn Login
                               </label>
                               <select id="social_login_linkedin" name="social_login_linkedin" class="form-select">
-                                <option value="1" {{ setting('social_login_linkedin') ? 'selected' : '' }}>Enabled
-                                </option>
-                                <option value="0" {{ !setting('social_login_linkedin') ? 'selected' : '' }}>
-                                  Disabled</option>
+                                <option value="1" {{ setting('social_login_linkedin') ? 'selected' : '' }}>Enabled</option>
+                                <option value="0" {{ !setting('social_login_linkedin') ? 'selected' : '' }}>Disabled</option>
                               </select>
                             </div>
 
@@ -338,10 +333,8 @@
                                 <i class="fab fa-github text-dark me-1"></i> GitHub Login
                               </label>
                               <select id="social_login_github" name="social_login_github" class="form-select">
-                                <option value="1" {{ setting('social_login_github') ? 'selected' : '' }}>Enabled
-                                </option>
-                                <option value="0" {{ !setting('social_login_github') ? 'selected' : '' }}>Disabled
-                                </option>
+                                <option value="1" {{ setting('social_login_github') ? 'selected' : '' }}>Enabled</option>
+                                <option value="0" {{ !setting('social_login_github') ? 'selected' : '' }}>Disabled</option>
                               </select>
                             </div>
 
@@ -361,6 +354,7 @@
               </form>
             </div>
 
+            {{-- ===================== PASSWORD ===================== --}}
             <div class="tab-pane fade" id="v-pills-password" role="tabpanel" aria-labelledby="password-tab">
               <form action="{{ route('admin.cms.settings.store') }}" method="POST" enctype="multipart/form-data"
                 class="ajax-form">
@@ -427,10 +421,78 @@
               </form>
             </div>
 
+            {{-- ===================== ✅ JASANI SYNC ===================== --}}
+            <div class="tab-pane fade" id="v-pills-jasani" role="tabpanel" aria-labelledby="jasani-tab">
+              <form action="{{ route('admin.cms.settings.store') }}" method="POST" class="ajax-form">
+                @csrf
 
+                <div class="row">
+                  <div class="col-12">
+
+                    <div class="mb-4 p-4 border rounded bg-light">
+                      <h5 class="mb-3">Jasani Price Discount</h5>
+
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label class="form-label fw-semibold">Discount Percentage (%)</label>
+                          <input type="number" step="0.01" min="0" max="90" class="form-control"
+                            name="jasani_price_discount_percent"
+                            value="{{ setting('jasani_price_discount_percent', 5) }}" placeholder="e.g. 5">
+                          <small class="text-muted d-block mt-1">
+                            This will reduce Jasani retail_price before saving variant price.
+                          </small>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                          @php
+                            $excluded = setting('jasani_discount_excluded_category_ids', '[]');
+                            $excludedIds = json_decode($excluded, true);
+                            if (!is_array($excludedIds)) {
+                                $excludedIds = [];
+                            }
+                            // ✅ UUID-safe: compare as strings (STRICT)
+                            $excludedIds = array_map('strval', $excludedIds);
+                          @endphp
+
+                          <label class="form-label fw-semibold">Excluded Categories (No Discount)</label>
+                          <select name="jasani_discount_excluded_category_ids[]" multiple class="select2 form-select">
+                            @foreach ($categories ?? [] as $cat)
+                              @php
+                                $catName = $cat->translations->first()->name ?? ($cat->slug ?? 'Category #' . $cat->id);
+                                $catId = (string) $cat->id;
+                              @endphp
+                              <option value="{{ $catId }}" {{ in_array($catId, $excludedIds, true) ? 'selected' : '' }}>
+                                {{ $catName }} (ID: {{ $catId }})
+                              </option>
+                            @endforeach
+                          </select>
+
+                          <small class="text-muted d-block mt-2">
+                            Products belonging to any selected category will NOT get Jasani discount.
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="alert alert-info mb-0">
+                        <strong>Example:</strong> If discount is 5% and Jasani sends 100 AED, saved price becomes 95 AED.
+                        Excluded category products will stay 100 AED.
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <button class="btn btn-primary px-5">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
 
           </div>
         </div>
+
       </div>
     </div>
   </div>

@@ -26,8 +26,13 @@ class SaveJasaniData extends Command
     protected $description = 'Save Jasani catalog sync (products, variants, prices, stock, packaging, tags)';
 
     protected array $priceMap = [];
-
     protected array $stockMap = [];
+
+    /** Jasani discount settings (loaded once per run) */
+    protected float $jasaniDiscountPercent = 5.0;
+
+    /** @var string[] UUID strings */
+    protected array $jasaniExcludedCategoryIds = [];
 
     /* =====================================================
        HANDLE (ORCHESTRATION ONLY)
@@ -36,6 +41,9 @@ class SaveJasaniData extends Command
     public function handle()
     {
         ini_set('max_execution_time', '300');
+
+        // Load settings once
+        $this->loadJasaniDiscountSettings();
 
         $products = $this->loadProducts();
         $this->loadPrices();
@@ -115,7 +123,7 @@ class SaveJasaniData extends Command
 
         foreach ($json['data'] ?? [] as $row) {
             if (! empty($row['id'])) {
-                $this->priceMap[(int) $row['id']] = (float) $row['retail_price']; // Now api sending retail_price
+                $this->priceMap[(int) $row['id']] = (float) ($row['retail_price'] ?? 0);
             }
         }
     }
@@ -136,9 +144,84 @@ class SaveJasaniData extends Command
 
         foreach ($json['data'] ?? [] as $row) {
             if (! empty($row['id'])) {
-                $this->stockMap[(int) $row['id']] = $row; // Store full row
+                $this->stockMap[(int) $row['id']] = $row;
             }
         }
+    }
+
+    /* =====================================================
+       SETTINGS (DISCOUNT)  ✅ UUID SAFE
+    ===================================================== */
+
+    protected function loadJasaniDiscountSettings(): void
+    {
+        // default 5%
+        $percent = (float) setting('jasani_price_discount_percent', 5);
+
+        // safety
+        if ($percent < 0) $percent = 0;
+        if ($percent > 90) $percent = 90;
+
+        $this->jasaniDiscountPercent = $percent;
+
+        // excluded categories saved as JSON array OR comma string
+        $raw = setting('jasani_discount_excluded_category_ids', '[]');
+
+        $decoded = null;
+
+        if (is_string($raw)) {
+            $decoded = json_decode($raw, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                // fallback: treat as comma list
+                $decoded = array_filter(array_map('trim', explode(',', $raw)));
+            }
+        } elseif (is_array($raw)) {
+            $decoded = $raw;
+        }
+
+        if (is_array($decoded)) {
+            // ✅ UUID-safe: store as strings, never intval()
+            $this->jasaniExcludedCategoryIds = array_values(
+                array_unique(array_map('strval', $decoded))
+            );
+        } else {
+            $this->jasaniExcludedCategoryIds = [];
+        }
+    }
+
+    /**
+     * Apply discount if:
+     * - percent > 0
+     * - product is NOT in excluded categories
+     *
+     * @param string[] $categoryIds UUID strings
+     */
+    protected function shouldApplyDiscountForCategoryIds(array $categoryIds): bool
+    {
+        if ($this->jasaniDiscountPercent <= 0) {
+            return false;
+        }
+
+        if (empty($this->jasaniExcludedCategoryIds)) {
+            return true;
+        }
+
+        $categoryIds = array_values(array_unique(array_map('strval', $categoryIds)));
+
+        // if product belongs to any excluded category → do NOT apply
+        return empty(array_intersect($categoryIds, $this->jasaniExcludedCategoryIds));
+    }
+
+    protected function applyDiscount(float $price, bool $apply): float
+    {
+        if (! $apply || $price <= 0) {
+            return $price;
+        }
+
+        $reduced = $price - ($price * ($this->jasaniDiscountPercent / 100));
+
+        return round(max(0, $reduced), 2);
     }
 
     /* =====================================================
@@ -155,10 +238,17 @@ class SaveJasaniData extends Command
                 ? $this->storeBrand($base['brand_id'])
                 : null;
 
+            // store categories and get UUID ids
             $categoryIds = $this->storeCategories($base['public_categ_ids'] ?? []);
             $this->storeTags($base['product_template_tags'] ?? []);
 
             $product = $this->storeProduct($base, $brandId, $categoryIds);
+
+            /**
+             * ✅ Discount decision per product, based on PRODUCT categories
+             * $categoryIds = [uuid => uuid], so array_values gives uuid strings
+             */
+            $applyDiscount = $this->shouldApplyDiscountForCategoryIds(array_values($categoryIds));
 
             // Pre-resolve primary variant ID for this product group
             $primaryVariantId = $this->resolvePrimaryVariantId($variants, $base);
@@ -169,7 +259,13 @@ class SaveJasaniData extends Command
                     $variantData['product_template_attribute_value_ids'] ?? []
                 );
 
-                $variant = $this->storeVariant($product, $variantData, $attributeValueIds, $primaryVariantId);
+                $variant = $this->storeVariant(
+                    $product,
+                    $variantData,
+                    $attributeValueIds,
+                    $primaryVariantId,
+                    $applyDiscount
+                );
 
                 $this->storeVariantImages($variant, $variantData);
                 $this->storeVariantPackaging($variant, $variantData);
@@ -189,6 +285,7 @@ class SaveJasaniData extends Command
     {
         $referenceId = $apiBrand['id'] ?? null;
         $name = $apiBrand['name'] ?? null;
+
         if (! $referenceId || ! $name) {
             return '';
         }
@@ -210,14 +307,11 @@ class SaveJasaniData extends Command
 
         foreach ($categories as $cat) {
 
-            // check slug exists or not
-
             $slug = Str::slug($cat['name']);
 
             if (Category::where('slug', $slug)->where('reference_id', '!=', $cat['id'])->exists()) {
                 $slug .= '-' . $cat['id'];
             }
-
 
             $category = Category::updateOrCreate(
                 ['reference_id' => $cat['id']],
@@ -229,7 +323,8 @@ class SaveJasaniData extends Command
                 ['name' => $cat['name'], 'reference_name' => $cat['name']]
             );
 
-            $ids[$category->id] = $category->id;
+            // ✅ UUID id
+            $ids[(string) $category->id] = (string) $category->id;
         }
 
         return $ids;
@@ -278,20 +373,16 @@ class SaveJasaniData extends Command
     }
 
     /* =====================================================
-       PRODUCT & VARIANT (PRICE + STOCK FIXED)
+       PRODUCT & VARIANT (PRICE + STOCK FIXED + DISCOUNT)
     ===================================================== */
 
     protected function storeProduct(array $apiProduct, ?string $brandId, array $categoryIds): Product
     {
         $refId = $apiProduct['parent_id'];
 
-        // 1️⃣ Generate base slug from product name
         $baseSlug = Str::slug($apiProduct['name']);
-
-        // 2️⃣ Resolve unique slug (safe for re-sync)
         $slug = $this->generateUniqueProductSlug($baseSlug, $refId);
 
-        // 3️⃣ Store / Update product
         $product = Product::updateOrCreate(
             ['reference_id' => $refId],
             [
@@ -302,7 +393,6 @@ class SaveJasaniData extends Command
             ]
         );
 
-        // 4️⃣ Translation
         $product->translations()->updateOrCreate(
             ['locale' => 'en-ae'],
             [
@@ -311,7 +401,6 @@ class SaveJasaniData extends Command
             ]
         );
 
-        // 5️⃣ Categories
         if ($categoryIds) {
             $product->categories()->sync($categoryIds);
         }
@@ -321,9 +410,7 @@ class SaveJasaniData extends Command
 
     protected function generateUniqueProductSlug(string $baseSlug, int $referenceId): string
     {
-        // Check if product already exists (same reference_id)
         $existing = Product::where('reference_id', $referenceId)->first();
-
         if ($existing) {
             return $existing->slug;
         }
@@ -331,9 +418,7 @@ class SaveJasaniData extends Command
         $slug = $baseSlug;
         $counter = 1;
 
-        while (
-            Product::where('slug', $slug)->exists()
-        ) {
+        while (Product::where('slug', $slug)->exists()) {
             $slug = $baseSlug . '-' . $counter;
             $counter++;
         }
@@ -341,13 +426,22 @@ class SaveJasaniData extends Command
         return $slug;
     }
 
-    protected function storeVariant(Product $product, array $apiVariant, array $attributeValueIds, int $primaryVariantId): ProductVariant
-    {
-        $refId = (int) $apiVariant['id'];
-        $price = 0;
+    protected function storeVariant(
+        Product $product,
+        array $apiVariant,
+        array $attributeValueIds,
+        int $primaryVariantId,
+        bool $applyDiscount
+    ): ProductVariant {
+        $refId = (int) ($apiVariant['id'] ?? 0);
+
+        $price = 0.0;
         if (! empty($this->priceMap[$refId])) {
-            $price = $this->priceMap[$refId]; // Use loaded price map
+            $price = (float) $this->priceMap[$refId];
         }
+
+        // ✅ Apply discount based on PRODUCT category exclusion
+        $price = $this->applyDiscount($price, $applyDiscount);
 
         $stockData = $this->stockMap[$refId] ?? null;
         $netQty = (int) ($stockData['net_available_qty'] ?? 0);
@@ -395,10 +489,8 @@ class SaveJasaniData extends Command
      */
     protected function resolvePrimaryVariantId($variants, $parentVariant): int
     {
-        // Only 3 size priorities as per requirement
         $priorities = ['Small', 'Medium', 'Large'];
 
-        // 1) Try to find priority size AND having stock > 0
         foreach ($priorities as $size) {
 
             $bestRefId = null;
@@ -407,20 +499,14 @@ class SaveJasaniData extends Command
             foreach ($variants as $v) {
 
                 $refId = (int) ($v['id'] ?? 0);
-                if (! $refId) {
-                    continue;
-                }
+                if (! $refId) continue;
 
                 $stockData = $this->stockMap[$refId] ?? null;
                 $stock = (int) ($stockData['net_available_qty'] ?? 0);
 
-                if ($stock <= 0) {
-                    continue;
-                }
+                if ($stock <= 0) continue;
 
                 if ($this->variantHasSize($v, $size)) {
-
-                    // If multiple same-size variants exist, pick the one with higher stock
                     if ($stock > $bestStock) {
                         $bestStock = $stock;
                         $bestRefId = $refId;
@@ -428,20 +514,15 @@ class SaveJasaniData extends Command
                 }
             }
 
-            if ($bestRefId) {
-                return $bestRefId;
-            }
+            if ($bestRefId) return $bestRefId;
         }
 
-        // 2) If none found (Small/Medium/Large with stock), fallback to ANY in-stock variant
         $bestRefId = null;
         $bestStock = 0;
 
         foreach ($variants as $v) {
             $refId = (int) ($v['id'] ?? 0);
-            if (! $refId) {
-                continue;
-            }
+            if (! $refId) continue;
 
             $stockData = $this->stockMap[$refId] ?? null;
             $stock = (int) ($stockData['net_available_qty'] ?? 0);
@@ -452,11 +533,8 @@ class SaveJasaniData extends Command
             }
         }
 
-        if ($bestRefId) {
-            return $bestRefId;
-        }
+        if ($bestRefId) return $bestRefId;
 
-        // 3) Fallback to parent variant ID if it exists in the list
         $parentId = (int) ($parentVariant['id'] ?? 0);
 
         if ($parentId) {
@@ -467,25 +545,17 @@ class SaveJasaniData extends Command
             }
         }
 
-        // 4) Final fallback: first variant in the list
         return (int) ($variants->first()['id'] ?? 0);
     }
 
-    /**
-     * Check if variant has a specific size in its attributes.
-     */
     protected function variantHasSize(array $variant, string $size): bool
     {
         $attrs = $variant['product_template_attribute_value_ids'] ?? [];
         foreach ($attrs as $attr) {
-            if (empty($attr['display_name'])) {
-                continue;
-            }
+            if (empty($attr['display_name'])) continue;
 
             $parts = explode(':', $attr['display_name']);
-            if (count($parts) < 2) {
-                continue;
-            }
+            if (count($parts) < 2) continue;
 
             $attrName = trim($parts[0]);
             $attrValue = trim($parts[1]);
@@ -541,9 +611,7 @@ class SaveJasaniData extends Command
         foreach ($data['specifications']['Packing'] as $row) {
             foreach ($row as $label => $value) {
 
-                if (! $label || ! $value) {
-                    continue;
-                }
+                if (! $label || ! $value) continue;
 
                 $packaging = Packaging::updateOrCreate(
                     ['reference_name' => trim($label)],

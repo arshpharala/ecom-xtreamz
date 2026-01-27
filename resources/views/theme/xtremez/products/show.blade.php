@@ -370,6 +370,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
-  <script src="{{ asset('theme/xtremez/assets/js/size-quantity-handler.js') }}"></script>
+  <script src="{{ asset('theme/xtremez/assets/js/size-quantity-handler.js?v=1') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/product-detail.js') }}"></script>
 @endpush

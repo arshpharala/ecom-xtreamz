@@ -158,7 +158,11 @@ if (!function_exists('price_format')) {
      */
     function price_format(string $ccy, float $amt, $decimal = null): string
     {
-        $currency = Currency::where('code', $ccy)->first();
+        $allCurrencies = once(function () {
+            return Currency::all();
+        });
+
+        $currency = $allCurrencies->where('code', $ccy)->first();
 
         if (!$currency) {
             return number_format($amt, 2); // fallback
@@ -261,17 +265,19 @@ if (!function_exists('menu_categories')) {
      */
     function menu_categories(int $limit = 6): Collection
     {
-        return Category::visible()
-            ->withJoins()
-            ->withSelection()
-            ->where('show_in_menu', 1)
-            // ->whereNull('parent_id')
-            ->with(['children' => function ($q) {
-                $q->visible()->applySorting('position')->with('translation');
-            }])
-            ->applySorting('position')
-            ->limit($limit)
-            ->get();
+        return once(function () use ($limit) {
+            return Category::visible()
+                ->withJoins()
+                ->withSelection()
+                ->where('show_in_menu', 1)
+                // ->whereNull('parent_id')
+                ->with(['children' => function ($q) {
+                    $q->visible()->applySorting('position')->with('translation');
+                }])
+                ->applySorting('position')
+                ->limit($limit)
+                ->get();
+        });
     }
 }
 if (!function_exists('header_menu')) {
@@ -279,6 +285,16 @@ if (!function_exists('header_menu')) {
     function header_menu(): array
     {
         $menus = [];
+
+        // Load all categories once to avoid multiple queries
+        $allCategories = once(function () {
+            return Category::visible()
+                ->with(['children' => function ($q) {
+                    $q->visible()->applySorting('position')->with('translation');
+                }, 'translation'])
+                ->applySorting('position')
+                ->get();
+        });
 
         foreach (config('menu.header') as $item) {
 
@@ -298,14 +314,7 @@ if (!function_exists('header_menu')) {
                 && $item['dropdown']
                 && !empty($item['menu_tag'])
             ) {
-                $menu['categories'] = Category::visible()
-                    ->where('menu_tag', $item['menu_tag'])
-                    // ->whereNull('parent_id')
-                    ->with(['children' => function ($q) {
-                        $q->visible()->applySorting('position')->with('translation');
-                    }])
-                    ->applySorting('position')
-                    ->get();
+                $menu['categories'] = $allCategories->where('menu_tag', $item['menu_tag']);
             }
 
             /* STATIC LINKS DROPDOWN */

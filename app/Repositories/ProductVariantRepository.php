@@ -121,7 +121,8 @@ class ProductVariantRepository
 
     protected function transformOffer($variant)
     {
-        $offer = $variant->activeOffer();
+        // $offer = $variant->activeOffer();
+        $offer = $variant->offers->first(); // use loaded offers to avoid extra query
 
         if (! $offer) {
             return [

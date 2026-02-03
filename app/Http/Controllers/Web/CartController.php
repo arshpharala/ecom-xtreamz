@@ -61,6 +61,10 @@ class CartController extends Controller
             'variant_id' => 'nullable|uuid',
             'product_variant_id' => 'nullable|uuid',
             'qty'        => 'required|integer|min:1',
+            'customization_enabled' => 'nullable|boolean',
+            'customization_text' => 'nullable|string|max:1000',
+            'customization_images' => 'nullable|array|max:5',
+            'customization_images.*' => 'image|max:5120',
         ]);
 
         $variantId = $request->variant_id ?: $request->product_variant_id;
@@ -78,16 +82,31 @@ class CartController extends Controller
 
         $pricing = PriceService::calculateDiscountedPrice($variant);
 
-        $this->cart->add(
-            $variant->id,
-            $qty,
-            $pricing['final_price'],
-            [
-                'original_price'  => $pricing['original_price'],
-                'discount_amount' => $pricing['discount_amount'],
-                'offer_id'        => $pricing['offer_id'],
-            ]
-        );
+        $customizationText = trim((string) $request->input('customization_text', ''));
+        $customizationImages = [];
+
+        if ($request->hasFile('customization_images')) {
+            foreach ((array) $request->file('customization_images') as $file) {
+                if ($file && $file->isValid()) {
+                    $customizationImages[] = $file->store('cart-customizations', 'public');
+                }
+            }
+        }
+
+        $options = [
+            'original_price'  => $pricing['original_price'],
+            'discount_amount' => $pricing['discount_amount'],
+            'offer_id'        => $pricing['offer_id'],
+        ];
+
+        if ($request->boolean('customization_enabled') || $customizationText !== '' || !empty($customizationImages)) {
+            $options['customization'] = [
+                'text' => $customizationText,
+                'images' => $customizationImages,
+            ];
+        }
+
+        $this->cart->add($variant->id, $qty, $pricing['final_price'], $options);
 
         $variant->cart_item = $this->cart->getItem($variant->id);
 

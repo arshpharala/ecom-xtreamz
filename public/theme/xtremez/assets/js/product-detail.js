@@ -127,7 +127,7 @@ $(function () {
 
     //         //     // 2. If no cart subtotal, show discounted offer
     //         // } else
-    //             if (hasOffer && discountedPrice > 0) {
+    //         // if (hasOffer && discountedPrice > 0) {
     //             html += `<span class="text-danger fw-bold">${currency} ${discountedPrice.toFixed(
     //                 2
     //             )}</span>`;
@@ -235,8 +235,7 @@ $(function () {
             $("#zoomImage").attr("src", variant.images[0]);
             const thumbs = variant.images.map(
                 (src, idx) =>
-                    `<img src="${src}" data-large="${src}" class="thumb-item ${
-                        idx === 0 ? "active" : ""
+                    `<img src="${src}" data-large="${src}" class="thumb-item ${idx === 0 ? "active" : ""
                     } me-2"/>`,
             );
             $(".thumb-wrapper").html(thumbs.join(""));
@@ -425,4 +424,9 @@ $(function () {
     // Recalculate on resize
     $(window).on("resize", updateThumbNav);
     updateThumbNav();
+
+    // Customization logic moved to upload.js
+    // Customization logic moved to upload.js
 });
+
+

@@ -156,22 +156,26 @@ function syncSelectAll() {
 }
 
 function addToCart(variantId, qty, callback) {
-    $.ajax({
-        url: `${appUrl}/cart`,
-        method: "POST",
-        data: {
-            variant_id: variantId,
-            qty: qty,
-        },
-        success: function (res) {
+    const payload = buildAddToCartPayload({
+        variant_id: variantId,
+        qty: qty,
+    });
+
+    if (!payload) {
+        callback(false);
+        return;
+    }
+
+    addToCartRequest(payload)
+        .done(function (res) {
             if (res.success) {
                 updateCartCount(res.cart);
                 callback(true);
             } else {
                 callback(false);
             }
-        },
-        error: function (res) {
+        })
+        .fail(function (res) {
             if (res.responseJSON && res.responseJSON.message) {
                 alert(res.responseJSON.message);
             } else {
@@ -179,9 +183,76 @@ function addToCart(variantId, qty, callback) {
             }
 
             callback(false);
-        },
+        });
+}
+
+function getCustomizationData() {
+    const $toggle = $("#customizationEnabled");
+    if ($toggle.length === 0 || !$toggle.is(":checked")) {
+        return null;
+    }
+
+    const notes = ($("#customizationNotes").val() || "").trim();
+    const files =
+        Array.isArray(window.customizationImages) &&
+        window.customizationImages.length > 0
+            ? window.customizationImages.map((item) => item.file).filter(Boolean)
+            : (() => {
+                  const input = document.getElementById("customizationImages");
+                  return input && input.files
+                      ? Array.from(input.files)
+                      : [];
+              })();
+
+    return { notes, files };
+}
+
+function buildAddToCartPayload(fields) {
+    const customization = getCustomizationData();
+
+    if (!customization) {
+        return { data: fields, useFormData: false };
+    }
+
+    if (customization.files.length > 5) {
+        alert("You can upload up to 5 images only.");
+        return null;
+    }
+
+    const formData = new FormData();
+    Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value);
+    });
+
+    formData.append("customization_enabled", "1");
+
+    if (customization.notes) {
+        formData.append("customization_text", customization.notes);
+    }
+
+    customization.files.forEach((file) => {
+        if (file && file.type && file.type.startsWith("image/")) {
+            formData.append("customization_images[]", file);
+        }
+    });
+
+    return { data: formData, useFormData: true };
+}
+
+function addToCartRequest(payload, urlOverride = null) {
+    const url = urlOverride || `${appUrl}/cart`;
+
+    return $.ajax({
+        url,
+        method: "POST",
+        data: payload.data,
+        processData: !payload.useFormData,
+        contentType: payload.useFormData ? false : undefined,
     });
 }
+
+window.buildAddToCartPayload = buildAddToCartPayload;
+window.addToCartRequest = addToCartRequest;
 
 $(document).on("click", ".add-to-cart-btn", function () {
     const $btn = $(this);

@@ -192,10 +192,34 @@ $(document).ready(function () {
             .html('<i class="bi bi-hourglass-split"></i> Adding...');
 
         let promises = sizeQuantities.map((item) => {
-            return $.post(appUrl + "/cart/add", {
+            const fields = {
                 product_variant_id: item.variant_id,
                 qty: item.qty,
-            });
+            };
+
+            if (typeof window.buildAddToCartPayload === "function") {
+                const payload = window.buildAddToCartPayload(fields);
+                if (!payload) {
+                    return $.Deferred().reject("Invalid customization").promise();
+                }
+
+                if (typeof window.addToCartRequest === "function") {
+                    return window.addToCartRequest(
+                        payload,
+                        appUrl + "/cart/add",
+                    );
+                }
+
+                return $.ajax({
+                    url: appUrl + "/cart/add",
+                    method: "POST",
+                    data: payload.data,
+                    processData: !payload.useFormData,
+                    contentType: payload.useFormData ? false : undefined,
+                });
+            }
+
+            return $.post(appUrl + "/cart/add", fields);
         });
 
         Promise.all(promises)

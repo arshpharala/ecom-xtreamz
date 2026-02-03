@@ -238,10 +238,30 @@
             </div> --}}
           </div>
 
+          <div class="product-customization bg-white p-4 mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="customizationEnabled">
+              <label class="form-check-label fw-semibold" for="customizationEnabled">
+                Add customization (optional)
+              </label>
+            </div>
+
+            <div id="customizationFields" class="mt-3" style="display:none;">
+              <div class="mb-3">
+                <label for="customizationNotes" class="form-label">Customization details</label>
+                <textarea id="customizationNotes" class="form-control" rows="3"
+                  placeholder="Share your notes, text, or instructions (optional)" maxlength="1000"></textarea>
+              </div>
+              <div>
+                <label for="customizationImages" class="form-label">Upload images (max 5)</label>
+                <input id="customizationImages" type="file" class="form-control" accept="image/*">
+                <small class="text-muted">Select images one by one (up to 5).</small>
+                <div id="customizationPreview" class="d-flex flex-wrap gap-2 mt-2"></div>
+              </div>
+            </div>
+          </div>
+
           <div class="d-flex gap-3 py-3">
-            <button
-              class="btn btn-cart flex-fill buy-now-btn {{ !empty($productVariant->cart_item['qty']) ? 'in-cart' : '' }}"
-              data-variant-id="{{ $productVariant->id }}" data-qty-selector="#qtyInput">Buy Now</button>
             <button class="btn btn-buy flex-fill add-to-cart-btn" data-variant-id="{{ $productVariant->id }}"
               data-qty-selector="#qtyInput">
               <span class="add-to-cart">
@@ -372,4 +392,5 @@
   <script src="{{ asset('theme/xtremez/assets/js/product-carousel.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/size-quantity-handler.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/product-detail.js') }}"></script>
+  <script src="{{ asset('theme/xtremez/assets/js/upload.js') }}"></script>
 @endpush

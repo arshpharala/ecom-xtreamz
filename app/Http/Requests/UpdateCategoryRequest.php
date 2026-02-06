@@ -44,6 +44,10 @@ class UpdateCategoryRequest extends FormRequest
 
             'text_color' => 'nullable|string|max:7',
             'background_color' => 'nullable|string|max:7',
+            'discount_type' => 'nullable|in:fixed,percent',
+            'discount_value' => 'nullable|numeric|min:0',
+            'valid_forever' => 'boolean',
+            'valid_till' => 'nullable|date|after_or_equal:today',
         ];
     }
 }

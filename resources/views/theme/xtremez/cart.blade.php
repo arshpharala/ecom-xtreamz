@@ -49,35 +49,61 @@
       <div class="row gx-4 gy-4">
         <!-- Cart List -->
         <div class="col-md-12 col-lg-7 col-xl-8">
-          <div class="cart-list bg-grey p-4">
+          {{-- Improved Design Container --}}
+          <div class="cart-list bg-white p-4 rounded-3 shadow-sm">
             @if ($variants->isNotEmpty())
               <div class="cart-items">
                 <!-- Cart Item Start -->
                 @foreach ($variants as $variant)
-                  <div class="cart-item row gx-2 gy-2 align-items-center border-bottom pb-3 mb-3"
+                  <div
+                    class="cart-item row gx-3 gy-3 align-items-start border-bottom pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
                     data-variant-id="{{ $variant->variant_id }}" data-price="{{ $variant->price }}"
                     data-qty="{{ $variant->qty }}">
-                    <div class="col-auto d-none d-md-flex align-items-center">
-                      <input type="checkbox" class="cc-form-check-input form-check-input me-2" />
+
+                    <div class="col-auto d-none d-md-flex align-items-center h-100 mt-2">
+                      <input type="checkbox" class="cc-form-check-input form-check-input me-2"
+                        style="width: 1.25em; height: 1.25em;" />
                     </div>
 
-                    <div class="col-4 col-md-4 cart-img-box">
-                      <img src="{{ asset($variant->image) }}" class="cart-img" alt="{{ $variant->name }}" />
+                    <div class="col-3 col-md-3 cart-img-box">
+                      <div class="ratio ratio-1x1 rounded-3 overflow-hidden border bg-light">
+                        <img src="{{ asset($variant->image) }}" class="cart-img w-100 h-100 object-fit-cover"
+                          alt="{{ $variant->name }}" />
+                      </div>
                     </div>
 
-                    <div class="col-9 col-md-6 cart-product-title d-flex flex-column align-self-start">
-                      <span class="fw-bold mb-2">
+                    <div class="col-9 col-md-6 cart-product-title d-flex flex-column">
+                      <a href="#" class="fw-bold text-dark text-decoration-none fs-5 mb-1">
                         {{ $variant->name }}
-                      </span>
+                      </a>
+
                       @if (isset($variant->variant_attributes) && $variant->variant_attributes->count() > 0)
-                        <div class="variant-details d-flex flex-wrap gap-1">
+                        <div class="variant-details mb-2">
                           @foreach ($variant->variant_attributes as $attribute)
-                            <span class="badge bg-light text-dark small">
-                              {{ ucfirst($attribute['attribute_name']) }}: {{ $attribute['value'] }}
-                            </span>
+                            <div class="small text-muted d-block">
+                              {{ ucfirst($attribute['attribute_name']) }}: <span
+                                class="text-dark fw-medium">{{ $attribute['value'] }}</span>
+                            </div>
                           @endforeach
                         </div>
                       @endif
+
+                      @if (isset($variant->customization))
+                        <div
+                          class="customization-details mt-2 ps-3 border-start border-4 border-warning bg-light bg-opacity-10 rounded-end p-2"
+                          data-customization-id="{{ $variant->customization['customization_id'] ?? '' }}">
+                          @if (!empty($variant->customization['text']))
+                            <div class="mb-1">
+                              <small class="fw-bold text-uppercase text-muted"
+                                style="font-size: 0.7rem; letter-spacing: 0.5px;">Branding Notes</small>
+                              <div class="small text-dark fst-italic">"{{ $variant->customization['text'] }}"</div>
+                            </div>
+                          @endif
+
+                          {{-- Image container will be populated by JS from IDB --}}
+                        </div>
+                      @endif
+
                     </div>
 
                     <div class="align-items-end col-md col-xl d-md-flex d-none flex-column">

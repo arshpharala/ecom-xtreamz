@@ -90,7 +90,8 @@ class OrderController extends Controller
             'lineItems.productVariant.attributeValues.attribute',
             'lineItems.productVariant.product',
             'couponUsages.coupon',
-            'currency'
+            'currency',
+            'comments.user'
         ])->findOrFail($id);
 
 

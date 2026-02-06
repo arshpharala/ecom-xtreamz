@@ -23,7 +23,8 @@
   <link rel="canonical" href="https://www.xtremez.com/" />
 
   <!-- Favicon -->
-  <link rel="icon" href="{{ asset(setting('site_favicon', 'theme/xtremez/assets/icons/apple-touch-icon.png')) }}" type="image/png">
+  <link rel="icon" href="{{ asset(setting('site_favicon', 'theme/xtremez/assets/icons/apple-touch-icon.png')) }}"
+    type="image/png">
   <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
@@ -38,7 +39,7 @@
 
 
   <style>
-     @font-face {
+    @font-face {
       font-family: 'UAESymbol';
       src: url('{{ asset('assets/fonts/font.woff2') }}') format('woff2'),
         url('{{ asset('assets/fonts/font.woff') }}') format('woff'),
@@ -109,6 +110,7 @@
   <!-- custom JS -->
 
   <script src="{{ asset('theme/xtremez/assets/js/main.js') }}"></script>
+  <script src="{{ asset('theme/xtremez/assets/js/idb-handler.js') }}"></script>
   <script src="{{ asset('theme/xtremez/assets/js/cart.js') }}"></script>
   <script src="{{ asset('assets/js/form.js') }}"></script>
 

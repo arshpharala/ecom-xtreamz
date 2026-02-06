@@ -242,7 +242,7 @@
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="customizationEnabled">
               <label class="form-check-label fw-semibold" for="customizationEnabled">
-                Add customization (optional)
+                Add Branding Options (optional)
               </label>
             </div>
 

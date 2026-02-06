@@ -45,6 +45,8 @@ class CartController extends Controller
                     ];
                 });
 
+                $transform->customization = $items[$variant->variant_id]['options']['customization'] ?? null;
+
                 return $transform;
             });
 
@@ -63,8 +65,8 @@ class CartController extends Controller
             'qty'        => 'required|integer|min:1',
             'customization_enabled' => 'nullable|boolean',
             'customization_text' => 'nullable|string|max:1000',
-            'customization_images' => 'nullable|array|max:5',
-            'customization_images.*' => 'image|max:5120',
+            // Files are no longer sent here; we expect ID or nothing
+            'customization_id' => 'nullable|string|max:255', 
         ]);
 
         $variantId = $request->variant_id ?: $request->product_variant_id;
@@ -83,15 +85,7 @@ class CartController extends Controller
         $pricing = PriceService::calculateDiscountedPrice($variant);
 
         $customizationText = trim((string) $request->input('customization_text', ''));
-        $customizationImages = [];
-
-        if ($request->hasFile('customization_images')) {
-            foreach ((array) $request->file('customization_images') as $file) {
-                if ($file && $file->isValid()) {
-                    $customizationImages[] = $file->store('cart-customizations', 'public');
-                }
-            }
-        }
+        $customizationId = $request->input('customization_id');
 
         $options = [
             'original_price'  => $pricing['original_price'],
@@ -99,10 +93,11 @@ class CartController extends Controller
             'offer_id'        => $pricing['offer_id'],
         ];
 
-        if ($request->boolean('customization_enabled') || $customizationText !== '' || !empty($customizationImages)) {
+        if ($request->boolean('customization_enabled') || $customizationText !== '' || $customizationId) {
             $options['customization'] = [
                 'text' => $customizationText,
-                'images' => $customizationImages,
+                'customization_id' => $customizationId,
+                // 'images' is removed from here as it's client-side only for now
             ];
         }
 

@@ -73,6 +73,9 @@ class CheckoutController extends Controller
             $order   = $this->createOrder($user, $address->id, $request->payment_method);
 
             $this->storeLineItems($order);
+            
+            // Handle Client-Side Uploads
+            $this->handleCustomizationUploads($request, $order);
 
             $response = match ($request->payment_method) {
                 'stripe'  => $this->handleStripePayment($request, $order, $user),
@@ -160,6 +163,7 @@ class CheckoutController extends Controller
                 'quantity'           => $item['qty'],
                 'price'              => $item['price'],
                 'subtotal'           => $item['subtotal'],
+                'options'            => $item['options'] ?? [],
             ]);
         }
     }
@@ -397,6 +401,44 @@ class CheckoutController extends Controller
                 'user_id' => $order->user_id,
                 'discount_amount' => $couponData['discount'],
             ]);
+        }
+    }
+
+    /* ======================================================
+     | LAZY UPLOAD HANDLER
+     ====================================================== */
+    protected function handleCustomizationUploads(Request $request, Order $order): void
+    {
+        // Expecting: customization_files[customization_id][] = [file, file]
+        if (!$request->hasFile('customization_files')) {
+            return;
+        }
+
+        $uploads = $request->file('customization_files'); // Array: customId => [files...]
+
+        foreach ($uploads as $customizationId => $files) {
+            if (empty($files)) continue;
+
+            // Find the line item with this customization ID
+            $lineItem = $order->lineItems->first(function ($item) use ($customizationId) {
+                $options = $item->options ?? []; 
+                return isset($options['customization']['customization_id']) 
+                    && $options['customization']['customization_id'] === $customizationId;
+            });
+
+            if ($lineItem) {
+                foreach ($files as $file) {
+                    if ($file && $file->isValid()) {
+                         $path = $file->store('cart-customizations', 'public');
+                         
+                         $lineItem->attachments()->create([
+                             'file_path' => $path,
+                             'file_name' => $file->getClientOriginalName(),
+                             'file_type' => $file->getClientMimeType(),
+                         ]);
+                    }
+                }
+            }
         }
     }
 }

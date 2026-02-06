@@ -3,6 +3,7 @@
 namespace App\Models\Cart;
 
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\Address;
 use App\Models\CMS\Currency;
 use Illuminate\Database\Eloquent\Model;
@@ -129,6 +130,11 @@ class Order extends Model
         // 3. Check if all items are already returned (optional but good for UI)
         // We'll handle item-level restriction in the wizard
         return true;
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     function scopeWithJoins($query)

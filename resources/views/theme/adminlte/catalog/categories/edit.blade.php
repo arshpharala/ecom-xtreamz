@@ -225,7 +225,70 @@
         </div>
 
         @include('theme.adminlte.components._metas', ['model' => $category, 'grid' => 'col-md-12 col-12'])
+
+        {{-- Offer Section --}}
+        <div class="card card-secondary">
+          <div class="card-header">
+            <h3 class="card-title">Offer Section</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="discount_type">Discount Type</label>
+              <select name="discount_type" id="discount_type" class="form-control">
+                <option value="">-- No Discount --</option>
+                <option value="fixed"
+                  {{ old('discount_type', $category->discount_type) == 'fixed' ? 'selected' : '' }}>
+                  Fixed</option>
+                <option value="percent"
+                  {{ old('discount_type', $category->discount_type) == 'percent' ? 'selected' : '' }}>Percent</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="discount_value">Discount Value</label>
+              <input type="number" step="0.01" name="discount_value" id="discount_value"
+                class="form-control @error('discount_value') is-invalid @enderror"
+                value="{{ old('discount_value', $category->discount_value) }}">
+              @error('discount_value')
+                <span class="text-danger">{{ $message }}</span>
+              @enderror
+            </div>
+
+            <div class="form-group">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" name="valid_forever" value="1" class="custom-control-input"
+                  id="valid_forever" {{ old('valid_forever', $category->valid_forever) ? 'checked' : '' }}>
+                <label class="custom-control-label" for="valid_forever">Valid Forever</label>
+              </div>
+            </div>
+
+            <div id="valid_till_group" class="form-group"
+              style="{{ old('valid_forever', $category->valid_forever) ? 'display:none;' : '' }}">
+              <label for="valid_till">Valid Till</label>
+              <input type="datetime-local" name="valid_till" id="valid_till"
+                class="form-control @error('valid_till') is-invalid @enderror"
+                value="{{ old('valid_till', $category->valid_till?->format('Y-m-d\TH:i')) }}">
+              @error('valid_till')
+                <span class="text-danger">{{ $message }}</span>
+              @enderror
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </form>
 @endsection
+
+@push('scripts')
+  <script>
+    $(document).ready(function() {
+      $('#valid_forever').change(function() {
+        if ($(this).is(':checked')) {
+          $('#valid_till_group').hide();
+        } else {
+          $('#valid_till_group').show();
+        }
+      }).trigger('change');
+    });
+  </script>
+@endpush

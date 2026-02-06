@@ -3,36 +3,41 @@
  * Handles image customization upload, preview, and deletion
  */
 
-$(function () {
-  const $customizationToggle = $("#customizationEnabled");
-  const $customizationFields = $("#customizationFields");
-  const $customizationImages = $("#customizationImages");
-  const $customizationPreview = $("#customizationPreview");
+$(document).ready(function () {
+  console.log("Upload.js loaded");
 
   // Ensure globally available for cart.js
   window.customizationImages = window.customizationImages || [];
 
-  if ($customizationToggle.length) {
-    $customizationToggle.on("change", function () {
-      if ($(this).is(":checked")) {
-        $customizationFields.slideDown(150);
-      } else {
-        $customizationFields.slideUp(150);
-      }
-    });
-  }
+  // Toggle Customization Section
+  $(document).on("change", "#customizationEnabled", function () {
+    const isChecked = $(this).is(":checked");
+    console.log("Branding Options toggled:", isChecked);
+    if (isChecked) {
+      $("#customizationFields").slideDown(150);
+    } else {
+      $("#customizationFields").slideUp(150);
+    }
+  });
 
+  // Render Preview
   function renderCustomizationPreview() {
-    if (!$customizationPreview.length) return;
+    const $previewContainer = $("#customizationPreview");
+    if (!$previewContainer.length) return;
 
-    $customizationPreview.empty();
+    $previewContainer.empty();
+
+    if (!window.customizationImages || !Array.isArray(window.customizationImages)) {
+      window.customizationImages = [];
+    }
 
     window.customizationImages.forEach((item, index) => {
       const $item = $("<div>").addClass("position-relative");
+
       const $img = $("<img>")
         .attr({
           src: item.url,
-          alt: "Customization image",
+          alt: "Branding asset " + (index + 1),
         })
         .addClass("img-thumbnail")
         .css({
@@ -51,45 +56,58 @@ $(function () {
           width: "20px",
           height: "20px",
           borderRadius: "50%",
-          transform: "translate(30%, -30%)"
+          transform: "translate(30%, -30%)",
+          zIndex: 10
         })
-        .text("x");
+        .html("&times;"); // Proper HTML checkmark/x
 
       $item.append($img, $btn);
-      $customizationPreview.append($item);
+      $previewContainer.append($item);
     });
+
+    // Update file input label or status if needed
+    console.log("Current images:", window.customizationImages.length);
   }
 
-  if ($customizationImages.length) {
-    $customizationImages.on("change", function () {
-      // Handle single file selection (one by one)
-      const file = this.files && this.files[0] ? this.files[0] : null;
+  // Handle File Selection
+  $(document).on("change", "#customizationImages", function () {
+    console.log("File input changed");
 
-      if (!file) return;
+    // Handle single file selection (one by one)
+    const file = this.files && this.files[0] ? this.files[0] : null;
 
-      if (window.customizationImages.length >= 5) {
-        alert("You can upload up to 5 images only.");
-        $(this).val("");
-        return;
-      }
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
 
-      if (!file.type || !file.type.startsWith("image/")) {
-        alert("Please select a valid image file.");
-        $(this).val("");
-        return;
-      }
-
-      const url = URL.createObjectURL(file);
-      window.customizationImages.push({ file, url });
-      renderCustomizationPreview();
-
-      // Reset input to allow selecting the same file again or a new one
+    if (window.customizationImages.length >= 5) {
+      alert("You can upload up to 5 images only.");
       $(this).val("");
-    });
-  }
+      return;
+    }
 
-  $(document).on("click", ".customization-remove", function () {
+    if (!file.type || !file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
+      $(this).val("");
+      return;
+    }
+
+    console.log("Adding file:", file.name);
+    const url = URL.createObjectURL(file);
+    window.customizationImages.push({ file, url });
+    renderCustomizationPreview();
+
+    // Reset input to allow selecting the same file again or a new one
+    $(this).val("");
+  });
+
+  // Handle Remove Button
+  $(document).on("click", ".customization-remove", function (e) {
+    e.preventDefault(); // Prevent accidental form submission
     const index = parseInt($(this).data("index"), 10);
+    console.log("Removing image at index:", index);
+
     if (isNaN(index)) return;
 
     const item = window.customizationImages[index];
@@ -100,4 +118,7 @@ $(function () {
     window.customizationImages.splice(index, 1);
     renderCustomizationPreview();
   });
+
+  // Initial render if any (e.g. from previous state if persisted, though unlikely)
+  renderCustomizationPreview();
 });

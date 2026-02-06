@@ -191,37 +191,63 @@ class SaveJasaniData extends Command
     }
 
     /**
-     * Apply discount if:
-     * - percent > 0
-     * - product is NOT in excluded categories
+     * Resolve discount for a product based on its categories.
+     * Priority:
+     * 1. Excluded Categories (No discount)
+     * 2. Category-specific offer
+     * 3. Global setting (fallback)
      *
      * @param string[] $categoryIds UUID strings
+     * @return array ['type' => string|null, 'value' => float|null]
      */
-    protected function shouldApplyDiscountForCategoryIds(array $categoryIds): bool
+    protected function resolveDiscountForCategoryIds(array $categoryIds): array
     {
-        if ($this->jasaniDiscountPercent <= 0) {
-            return false;
-        }
-
-        if (empty($this->jasaniExcludedCategoryIds)) {
-            return true;
-        }
-
         $categoryIds = array_values(array_unique(array_map('strval', $categoryIds)));
 
-        // if product belongs to any excluded category → do NOT apply
-        return empty(array_intersect($categoryIds, $this->jasaniExcludedCategoryIds));
+        // 1. Check EXCLUSIONS
+        if (!empty($this->jasaniExcludedCategoryIds) && !empty(array_intersect($categoryIds, $this->jasaniExcludedCategoryIds))) {
+            return ['type' => null, 'value' => null];
+        }
+
+        // 2. Check CATEGORY DISCOUNTS
+        // We check all categories the product belongs to, and take the first one with an active offer.
+        $categories = Category::whereIn('id', $categoryIds)->get();
+        foreach ($categories as $category) {
+            $offer = $category->activeOffer();
+            if ($offer) {
+                return [
+                    'type' => $offer->discount_type,
+                    'value' => (float) $offer->discount_value
+                ];
+            }
+        }
+
+        // 3. Fallback to GLOBAL setting
+        if ($this->jasaniDiscountPercent > 0) {
+            return [
+                'type' => 'percent',
+                'value' => $this->jasaniDiscountPercent
+            ];
+        }
+
+        return ['type' => null, 'value' => null];
     }
 
-    protected function applyDiscount(float $price, bool $apply): float
+    protected function applyDiscount(float $price, ?string $type, ?float $value): float
     {
-        if (! $apply || $price <= 0) {
+        if (!$type || !$value || $price <= 0) {
             return $price;
         }
 
-        $reduced = $price - ($price * ($this->jasaniDiscountPercent / 100));
+        $discountedPrice = $price;
 
-        return round(max(0, $reduced), 2);
+        if ($type === 'percent') {
+            $discountedPrice = $price - ($price * ($value / 100));
+        } elseif ($type === 'fixed') {
+            $discountedPrice = $price - $value;
+        }
+
+        return round(max(0, $discountedPrice), 2);
     }
 
     /* =====================================================
@@ -246,9 +272,9 @@ class SaveJasaniData extends Command
 
             /**
              * ✅ Discount decision per product, based on PRODUCT categories
-             * $categoryIds = [uuid => uuid], so array_values gives uuid strings
+             * Priority: Excluded > Category Offer > Global Fallback
              */
-            $applyDiscount = $this->shouldApplyDiscountForCategoryIds(array_values($categoryIds));
+            $discountData = $this->resolveDiscountForCategoryIds(array_values($categoryIds));
 
             // Pre-resolve primary variant ID for this product group
             $primaryVariantId = $this->resolvePrimaryVariantId($variants, $base);
@@ -264,7 +290,7 @@ class SaveJasaniData extends Command
                     $variantData,
                     $attributeValueIds,
                     $primaryVariantId,
-                    $applyDiscount
+                    $discountData
                 );
 
                 $this->storeVariantImages($variant, $variantData);
@@ -431,7 +457,7 @@ class SaveJasaniData extends Command
         array $apiVariant,
         array $attributeValueIds,
         int $primaryVariantId,
-        bool $applyDiscount
+        array $discountData
     ): ProductVariant {
         $refId = (int) ($apiVariant['id'] ?? 0);
 
@@ -440,8 +466,8 @@ class SaveJasaniData extends Command
             $price = (float) $this->priceMap[$refId];
         }
 
-        // ✅ Apply discount based on PRODUCT category exclusion
-        $price = $this->applyDiscount($price, $applyDiscount);
+        // ✅ Apply discount based on resolved priority
+        $price = $this->applyDiscount($price, $discountData['type'] ?? null, $discountData['value'] ?? null);
 
         $stockData = $this->stockMap[$refId] ?? null;
         $netQty = (int) ($stockData['net_available_qty'] ?? 0);

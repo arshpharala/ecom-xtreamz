@@ -148,4 +148,6 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
     Route::resource('api-sync-logs',                      ApiSyncLogController::class)->only(['index', 'show']);
 
     Route::post('upload/tinymce',                            [TinyMCEController::class, 'upload'])->name('upload.tinymce');
+
+    Route::resource('remarks', \App\Http\Controllers\Admin\RemarkController::class)->only(['store', 'destroy']);
 });

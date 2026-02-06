@@ -17,6 +17,8 @@ class Category extends Model
     protected $casts = [
         'is_visible' => 'boolean',
         'show_in_menu' => 'boolean',
+        'valid_forever' => 'boolean',
+        'valid_till' => 'datetime',
     ];
 
     protected $fillable = [
@@ -33,6 +35,10 @@ class Category extends Model
         'text_color',
         'background_color',
         'reference_id', // api reference id
+        'discount_type',
+        'discount_value',
+        'valid_forever',
+        'valid_till',
     ];
 
     function scopeVisible($query)
@@ -116,5 +122,24 @@ class Category extends Model
             'oldest' => $query->orderBy('categories.created_at', 'asc'),
             default => $query->orderBy('categories.position'),
         };
+    }
+
+    public function activeOffer()
+    {
+        if (empty($this->discount_type) || empty($this->discount_value)) {
+            return null;
+        }
+
+        if (!$this->valid_forever) {
+            if ($this->valid_till && $this->valid_till->isPast()) {
+                return null;
+            }
+        }
+
+        return (object) [
+            'discount_type' => $this->discount_type,
+            'discount_value' => $this->discount_value,
+            'label' => $this->discount_type === 'percent' ? $this->discount_value . '%' : active_currency() . ' ' . $this->discount_value,
+        ];
     }
 }

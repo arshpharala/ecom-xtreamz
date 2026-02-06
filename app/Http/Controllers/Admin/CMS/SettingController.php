@@ -41,6 +41,12 @@ class SettingController extends Controller
     {
         $data = $request->except('_token');
 
+        
+        if(isset($data['jasani_price_discount_percent']) && empty($data['jasani_discount_excluded_category_ids'])){
+            $data['jasani_discount_excluded_category_ids'] = [];
+        }
+
+
         foreach ($data as $key => $value) {
 
             // ✅ File handling

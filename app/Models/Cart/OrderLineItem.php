@@ -12,8 +12,18 @@ class OrderLineItem extends Model
         'product_variant_id',
         'quantity',
         'price',
-        'subtotal'
+        'subtotal',
+        'options'
     ];
+
+    protected $casts = [
+        'options' => 'array'
+    ];
+
+    public function attachments()
+    {
+        return $this->morphMany(\App\Models\Attachment::class, 'attachable');
+    }
 
     public function order()
     {

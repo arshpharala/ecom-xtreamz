@@ -106,6 +106,10 @@ class CategoryController extends Controller
             'position'   => $validated['position'] ?? 0,
             'is_visible' => $validated['is_visible'] ?? false,
             'show_in_menu' => $validated['show_in_menu'] ?? false,
+            'discount_type' => $validated['discount_type'] ?? null,
+            'discount_value' => $validated['discount_value'] ?? null,
+            'valid_forever' => $request->has('valid_forever'),
+            'valid_till' => $validated['valid_till'] ?? null,
         ]);
         foreach ($validated['name'] as $locale => $name) {
             $category->translations()->create(['locale' => $locale, 'name' => $name]);
@@ -209,6 +213,10 @@ class CategoryController extends Controller
             'text_color'        => $validated['text_color'] ?? $category->text_color,
             'background_color'  => $validated['background_color'] ?? $category->background_color,
             'menu_tag'          => $validated['menu_tag'] ?? null,
+            'discount_type'     => $validated['discount_type'] ?? null,
+            'discount_value'    => $validated['discount_value'] ?? null,
+            'valid_forever'     => $request->has('valid_forever'),
+            'valid_till'        => $validated['valid_till'] ?? null,
         ]);
 
 

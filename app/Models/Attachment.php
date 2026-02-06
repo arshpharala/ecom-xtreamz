@@ -14,7 +14,7 @@ class Attachment extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['file_path', 'file_type', 'file_name'];
+    protected $fillable = ['file_path', 'file_type', 'file_name', 'attachable_id', 'attachable_type'];
 
     public function attachable()
     {

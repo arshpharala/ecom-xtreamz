@@ -195,22 +195,31 @@ function getCustomizationData() {
     const notes = ($("#customizationNotes").val() || "").trim();
     const files =
         Array.isArray(window.customizationImages) &&
-        window.customizationImages.length > 0
+            window.customizationImages.length > 0
             ? window.customizationImages.map((item) => item.file).filter(Boolean)
             : (() => {
-                  const input = document.getElementById("customizationImages");
-                  return input && input.files
-                      ? Array.from(input.files)
-                      : [];
-              })();
+                const input = document.getElementById("customizationImages");
+                return input && input.files
+                    ? Array.from(input.files)
+                    : [];
+            })();
 
     return { notes, files };
+}
+
+// Generate UUID for customization
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
 
 function buildAddToCartPayload(fields) {
     const customization = getCustomizationData();
 
-    if (!customization) {
+    // If no customization, just return standard data
+    if (!customization || (!customization.notes && customization.files.length === 0)) {
         return { data: fields, useFormData: false };
     }
 
@@ -219,25 +228,40 @@ function buildAddToCartPayload(fields) {
         return null;
     }
 
-    const formData = new FormData();
-    Object.entries(fields).forEach(([key, value]) => {
-        formData.append(key, value);
-    });
-
-    formData.append("customization_enabled", "1");
+    // Prepare payload
+    // We will still use FormData just to be consistent, but we won't attach files
+    // actually, we can just use simple object if we aren't sending files
+    const payload = { ...fields };
+    payload.customization_enabled = "1";
 
     if (customization.notes) {
-        formData.append("customization_text", customization.notes);
+        payload.customization_text = customization.notes;
     }
 
-    customization.files.forEach((file) => {
-        if (file && file.type && file.type.startsWith("image/")) {
-            formData.append("customization_images[]", file);
-        }
-    });
+    // Handle Client-Side Storage for Images
+    if (customization.files.length > 0) {
+        const customizationId = generateUUID();
+        payload.customization_id = customizationId;
 
-    return { data: formData, useFormData: true };
+        // Save to IDB
+        // Note: This is async. We might need to handle this differently if builtAddToCartPayload is expected to be sync.
+        // However, looking at the calls (e.g. in size-quantity-handler), it expects a return value immediately.
+        // We have to initiate the save here, but we can't block.
+        // Ideally, we should change the flow to be async, but to minimize refactor:
+        // We will trigger the save. If it fails, the user might see missing images in cart.
+        // For better UX, we should probably start the save and return.
+
+        window.IDB.save(customizationId, customization.files).then(() => {
+            console.log("Customization images saved to IDB:", customizationId);
+        }).catch(err => {
+            console.error("Failed to save customization images:", err);
+            alert("Failed to save images locally. Please try again.");
+        });
+    }
+
+    return { data: payload, useFormData: false }; // No FormData needed if we don't send files
 }
+
 
 function addToCartRequest(payload, urlOverride = null) {
     const url = urlOverride || `${appUrl}/cart`;
@@ -247,12 +271,59 @@ function addToCartRequest(payload, urlOverride = null) {
         method: "POST",
         data: payload.data,
         processData: !payload.useFormData,
-        contentType: payload.useFormData ? false : undefined,
+        contentType: payload.useFormData ? false : undefined, // let jquery handle it if not FormData
+    });
+}
+
+// Load customization images from IDB on Cart Page
+function loadCustomizationImagesWithIDB() {
+    $(".customization-details").each(function () {
+        const $container = $(this);
+        const customizationId = $container.data("customization-id");
+
+        if (!customizationId) return;
+
+        // Check if we already loaded it (avoid duplicate logic if re-run)
+        if ($container.find(".custom-images-loaded").length > 0) return;
+
+        console.log("Loading images for:", customizationId);
+
+        window.IDB.get(customizationId).then(files => {
+            if (files && files.length > 0) {
+                const $imgContainer = $("<div>").addClass('mt-2');
+                $imgContainer.append('<small class="fw-bold text-uppercase text-muted d-block mb-1" style="font-size: 0.7rem; letter-spacing: 0.5px;">Branding Assets</small>');
+                const $flex = $('<div class="d-flex gap-2 flex-wrap custom-images-loaded"></div>');
+
+                files.forEach(file => {
+                    const url = URL.createObjectURL(file);
+                    const $link = $('<a>')
+                        .attr('href', url)
+                        .attr('target', '_blank');
+
+                    const $img = $('<img>')
+                        .attr('src', url)
+                        .addClass('border rounded')
+                        .css({ width: '40px', height: '40px', objectFit: 'cover' });
+
+                    $link.append($img);
+                    $flex.append($link);
+                });
+
+                $imgContainer.append($flex);
+                $container.append($imgContainer);
+            }
+        }).catch(err => console.error("Error loading IDB images:", err));
     });
 }
 
 window.buildAddToCartPayload = buildAddToCartPayload;
 window.addToCartRequest = addToCartRequest;
+
+$(document).ready(function () {
+    // Attempt to load images if on cart page
+    loadCustomizationImagesWithIDB();
+});
+
 
 $(document).on("click", ".add-to-cart-btn", function () {
     const $btn = $(this);

@@ -65,9 +65,37 @@
                     <img src="{{ $item->productVariant->getThumbnail() }}" alt="Product">
                   </div>
                   <div class="flex-grow-1 small fs-6">
-                    {{ optional($item->productVariant)->product->translation->name ?? 'Product' }} x {{ $item->quantity }}
+                    <div class="fw-bold fs-6">
+                      {{ optional($item->productVariant)->product->translation->name ?? 'Product' }}</div>
+                    <div class="text-muted">Quantity: {{ $item->quantity }}</div>
 
+                    @if (isset($item->options['customization']))
+                      <div class="order-branding-details mt-2 p-2 bg-light rounded border-start border-4 border-warning">
+                        @if (!empty($item->options['customization']['text']))
+                          <div class="mb-1">
+                            <small class="fw-bold text-uppercase text-muted" style="font-size: 0.7rem;">Branding
+                              Notes</small>
+                            <div class="fst-italic">"{{ $item->options['customization']['text'] }}"</div>
+                          </div>
+                        @endif
 
+                        @if ($item->attachments->count() > 0)
+                          <div class="mt-2">
+                            <small class="fw-bold text-uppercase text-muted d-block mb-1"
+                              style="font-size: 0.7rem;">Branding Assets</small>
+                            <div class="d-flex gap-2 flex-wrap">
+                              @foreach ($item->attachments as $attachment)
+                                <a href="{{ \Illuminate\Support\Facades\Storage::url($attachment->file_path) }}"
+                                  target="_blank">
+                                  <img src="{{ \Illuminate\Support\Facades\Storage::url($attachment->file_path) }}"
+                                    class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                </a>
+                              @endforeach
+                            </div>
+                          </div>
+                        @endif
+                      </div>
+                    @endif
                   </div>
                   <div class="fw-bold ms-2 fs-6 text-nowrap">
                     {!! price_format($order->currency->code, $item->price * $item->quantity) !!}
@@ -85,7 +113,6 @@
               </li>
               @if ($order->couponUsages->count() > 0)
                 @foreach ($order->couponUsages as $couponUsage)
-
                   <li class="d-flex justify-content-between mb-1">
                     <span class="text-muted">Coupon ({{ $couponUsage->coupon->code }})</span>
                     <span>-{!! price_format($order->currency->code, $couponUsage->discount_amount) !!}</span>

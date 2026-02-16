@@ -9,6 +9,7 @@
         'paypal' => ['paypal.webp'],
         'razorpay' => ['razorpay.png'],
         'mashreq' => ['visa.png', 'mastercard.png', 'applepay.png'],
+        'touras' => ['visa.png', 'mastercard.png'],
     ];
   @endphp
 

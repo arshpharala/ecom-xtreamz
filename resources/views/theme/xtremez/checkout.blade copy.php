@@ -1,7 +1,35 @@
 @extends('theme.xtremez.layouts.app')
 
 @push('head')
-  {{-- Touras CSS/JS removed as it now redirects to touras-pay page --}}
+  @foreach ($gateways as $gateway)
+    @switch($gateway->gateway)
+      @case('stripe')
+        <meta name="stripe-key" content="{{ $gateway->key }}">
+        <script src="https://js.stripe.com/v3/"></script>
+      @break
+
+      @case('paypal')
+        @php
+          $currency = $gateway->additional['currency'] ?? 'USD';
+        @endphp
+        <script src="https://www.paypal.com/sdk/js?client-id={{ $gateway->key }}&currency={{ $currency }}"></script>
+      @break
+
+      @case('razorpay')
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+      @break
+
+      @case('mashreq')
+        <script src="https://test-gateway.mastercard.com/checkout/version/62/checkout.js"></script>
+      @break
+
+      @case('touras')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+        <script src="https://uatcheckout.tourasuae.com/ms-transaction-core-1-0/jscheckout/js-checkoutNewCheck.js"></script>
+        <script type="text/javascript" src="integration.js"></script>
+      @break
+    @endswitch
+  @endforeach
 @endpush
 
 @section('breadcrumb')
@@ -42,14 +70,6 @@
     <div class="container">
       <form action="{{ route('checkout') }}" method="POST" id="checkout-form">
         @csrf
-
-        @if (request()->has('error'))
-          <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <strong>Payment Error:</strong> {{ request()->query('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        @endif
 
         <div class="row gx-4 gy-4">
 
@@ -121,7 +141,7 @@
                 @include('theme.xtremez.components.checkout._payment-method', ['gateways' => $gateways])
               </div>
 
-              {{-- Stripe Card UI only --}}
+              {{-- Stripe Card UI only (checkout.js hides it for Touras, Mashreq, COD etc.) --}}
               <div id="cardSection">
                 @include('theme.xtremez.components.checkout._card-form')
               </div>
@@ -142,6 +162,39 @@
     </div>
   </section>
 @endsection
+
 @push('scripts')
   <script src="{{ asset('assets/js/checkout.js') }}"></script>
+  <script>
+    document.addEventListener('transactionEvent', (event) => {
+  const response = event?.detail;
+  console.log("Received transaction event:", response);
+  if (response) {
+    alert(`Transaction Successful! Response: ${JSON.stringify(response)}`);
+  } else {
+    console.warn("Transaction event received with no details.");
+  }
+});
+</script>
+
+  @foreach ($gateways as $gateway)
+    @switch($gateway->gateway)
+      @case('stripe')
+        <script src="{{ asset('assets/js/stripe.js') }}"></script>
+      @break
+
+      @case('paypal')
+        <script src="{{ asset('assets/js/paypal.js') }}"></script>
+      @break
+
+      @case('mashreq')
+        <script src="{{ asset('assets/js/mashreq.js') }}"></script>
+      @break
+
+      @case('touras')
+  
+        {{-- <script src="{{ asset('assets/js/touras.js') }}"></script> --}}
+      @break
+    @endswitch
+  @endforeach
 @endpush

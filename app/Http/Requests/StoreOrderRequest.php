@@ -25,7 +25,7 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method'    => 'required|in:stripe,paypal,mashreq',
+            'payment_method'    => 'required|in:stripe,paypal,mashreq,touras',
             'card_token'        => 'nullable|string',
             'saved_card_id'     => 'nullable|exists:user_cards,id',
             'saved_address_id'  => 'nullable|exists:addresses,id',
@@ -38,6 +38,12 @@ class StoreOrderRequest extends FormRequest
             'landmark'          => 'nullable|string|max:500',
             'email'             => Auth::check() ? 'nullable|email' : 'required|email',
 
+            // Touras Card Details - HOSTED MODE (Empty)
+            'card_no'           => 'nullable',
+            'exp_month'         => 'nullable',
+            'exp_year'          => 'nullable',
+            'cvv2'              => 'nullable',
+            'card_name'         => 'nullable',
         ];
     }
 

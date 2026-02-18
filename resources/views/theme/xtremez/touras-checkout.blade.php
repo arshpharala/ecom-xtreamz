@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 
+@php
+  if(env('APP_ENV') == 'production'){
+    $touras_url = "https://pg.tourasuae.com";
+  }else{
+    $touras_url = "https://uatcheckout.tourasuae.com";
+  }
+@endphp
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,11 +19,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 
   {{-- Touras JS --}}
-  <script src="https://uatcheckout.tourasuae.com/ms-transaction-core-1-0/jscheckout/js-checkoutNewCheck.js"></script>
+  <script src="{{ $touras_url }}/ms-transaction-core-1-0/jscheckout/js-checkoutNewCheck.js"></script>
 
-  <link href="https://uatcheckout.tourasuae.com/ms-transaction-core-1-0/jscheckout/resourcesJS/css/checkout.css"
+  <link href="{{ $touras_url }}/ms-transaction-core-1-0/jscheckout/resourcesJS/css/checkout.css"
     rel="stylesheet" type="text/css" />
-  <link href="https://uatcheckout.tourasuae.com/ms-transaction-core-1-0/jscheckout/resourcesJS/css/swiper-bundle.min.css"
+  <link href="{{ $touras_url }}/ms-transaction-core-1-0/jscheckout/resourcesJS/css/swiper-bundle.min.css"
     rel="stylesheet" type="text/css" />
 
   <style>

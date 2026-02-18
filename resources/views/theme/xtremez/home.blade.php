@@ -127,11 +127,11 @@
 
   @include('theme.xtremez.components.products.gift-set', ['products' => $giftSetProducts])
 
-  @include('theme.xtremez.components.products.carousel', [
+  {{-- @include('theme.xtremez.components.products.carousel', [
       'id' => 'featured',
       'sectionName' => 'Featured Products',
       'productUrl' => route('ajax.get-products', ['tags' => ['On Sale', 'On Sale / Clearance Items']]),
-  ])
+  ]) --}}
 
 
   <section class="sustainable-section py-5 position-relative">

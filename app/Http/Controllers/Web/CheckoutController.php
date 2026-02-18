@@ -477,7 +477,6 @@ class CheckoutController extends Controller
             ], 422);
         }
 
-        dd($response);
         $orderNo = $response->order_number;
         $order = Order::where('reference_number', $orderNo)->first();
 

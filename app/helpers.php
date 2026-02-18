@@ -156,7 +156,7 @@ if (!function_exists('price_format')) {
      * @param float  $amt  Amount to format
      * @return string
      */
-    function price_format(string $ccy, float $amt, $decimal = null): string
+    function price_format(string $ccy, float $amt, $decimal = null, $symbol = true): string
     {
         $allCurrencies = once(function () {
             return Currency::all();
@@ -169,7 +169,12 @@ if (!function_exists('price_format')) {
         }
 
         if ($currency->code === 'AED') {
-            $currency->symbol = '<span class="dirham-symbol">&#xea;</span>';
+
+            if ($symbol) {
+                $currency->symbol = '<span class="dirham-symbol">&#xea;</span>';
+            }else{
+                $currency->symbol = 'AED';
+            }
         }
 
         $formattedAmount = number_format(

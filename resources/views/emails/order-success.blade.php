@@ -209,7 +209,7 @@
                 </td>
                 <td>{{ $item->quantity }}</td>
                 <td style="text-align:end">
-                  {!! price_format($order->currency->code, $item->price * $item->quantity) !!}
+                  {!! price_format($order->currency->code, $item->price * $item->quantity, null, false) !!}
                 </td>
               </tr>
             @endforeach
@@ -219,15 +219,15 @@
           <tbody>
             <tr>
               <td style="text-align:start">Subtotal</td>
-              <td style="text-align:end">{!! price_format($order->currency->code, $order->sub_total) !!}</td>
+              <td style="text-align:end">{!! price_format($order->currency->code, $order->sub_total, null, false) !!}</td>
             </tr>
             <tr>
               <td style="text-align:start">Tax</td>
-              <td style="text-align:end">{!! price_format($order->currency->code, $order->tax) !!}</td>
+              <td style="text-align:end">{!! price_format($order->currency->code, $order->tax, null, false) !!}</td>
             </tr>
             <tr class="total">
               <td style="text-align:start">Total</td>
-              <td style="text-align:end">{!! price_format($order->currency->code, $order->total) !!}</td>
+              <td style="text-align:end">{!! price_format($order->currency->code, $order->total, null, false) !!}</td>
             </tr>
           </tbody>
         </table>

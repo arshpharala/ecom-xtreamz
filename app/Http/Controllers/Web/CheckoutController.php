@@ -462,7 +462,7 @@ class CheckoutController extends Controller
         $data['jsData'] = $jsData;
         $data['order'] = $order;
 
-        return view('test-touras', $data);
+        return view('theme.xtremez.touras-checkout', $data);
     }
 
     public function tourasReturn(Request $request)

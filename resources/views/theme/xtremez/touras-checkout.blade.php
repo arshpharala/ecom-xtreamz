@@ -89,9 +89,9 @@
   </style>
 
   <script>
-    const jsData     = @json($jsData);
-    let spObj        = null;
-    let payStarted   = false;
+    const jsData = @json($jsData);
+    let spObj = null;
+    let payStarted = false;
 
     document.addEventListener('transactionEvent', (event) => {
       const response = event?.detail;
@@ -198,10 +198,11 @@
         })
         .fail(function(xhr) {
           console.error("Verification failed:", xhr.status, xhr.responseText);
-          alert("Verification failed. Please check the order status in your profile.");
-          payStarted = false;
-          document.querySelector('#payNowBtn').disabled = false;
-          setMessage("Ready to open secure payment popup.", false);
+          setMessage("Verification failed. Redirecting back to checkout...", false);
+
+          setTimeout(() => {
+            window.location.href = "{{ route('checkout') }}?error=Verification failed";
+          }, 3000);
         });
     }
 

@@ -11,7 +11,8 @@
       animation: scrollSmooth 30s linear infinite;
 
       .brand-logo {
-        max-height: 40px;
+        // max-height: 40px;
+        max-height: 90px;
         margin: 0 4.5rem;
         object-fit: contain;
         transition: transform 0.5s ease;

@@ -88,7 +88,7 @@
   </div>
 
   <script>
-    const appUrl = "{{ env('APP_URL') }}";
+    const appUrl = "{{ url('') }}";
   </script>
 
 

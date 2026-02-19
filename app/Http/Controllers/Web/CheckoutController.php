@@ -138,7 +138,7 @@ class CheckoutController extends Controller
             'country_id' => active_country()->id,
             'province_id' => $request->province_id,
             'city_id' => $request->city_id,
-            'area_id' => $request->area_id,
+            'area_id' => $request->area_id ?? null,
             'address' => $request->address,
             'landmark' => $request->landmark,
         ]);

@@ -56,7 +56,7 @@
                 value="{{ $user->detail->mobile ?? '' }}">
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label class="form-label">Province</label>
               <select name="province_id" id="province-select" class="form-select theme-select">
                 <option selected="">Select your province</option>
@@ -66,19 +66,19 @@
               </select>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label class="form-label">City</label>
               <select name="city_id" id="city-select" class="form-select theme-select">
                 <option selected="">Select your city</option>
               </select>
             </div>
 
-            <div class="col-md-4">
+            {{-- <div class="col-md-4">
               <label class="form-label">Area</label>
               <select name="area_id" id="area-select" class="form-select theme-select">
                 <option selected="">Select your area</option>
               </select>
-            </div>
+            </div> --}}
 
             <div class="col-12">
               <label class="form-label">Address</label>

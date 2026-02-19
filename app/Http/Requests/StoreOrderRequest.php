@@ -33,7 +33,7 @@ class StoreOrderRequest extends FormRequest
             'phone'             => 'required_without:saved_address_id|nullable|string|max:20',
             'province_id'       => 'required_without:saved_address_id|nullable|exists:provinces,id',
             'city_id'           => 'required_without:saved_address_id|nullable|exists:cities,id',
-            'area_id'           => 'required_without:saved_address_id|nullable|exists:areas,id',
+            // 'area_id'           => 'required_without:saved_address_id|nullable|exists:areas,id',
             'address'           => 'required_without:saved_address_id|nullable|string|max:1000',
             'landmark'          => 'nullable|string|max:500',
             'email'             => Auth::check() ? 'nullable|email' : 'required|email',
@@ -69,7 +69,7 @@ class StoreOrderRequest extends FormRequest
             'phone.required_without' => 'Please provide a phone number.',
             'province_id.required_without' => 'Please select a province.',
             'city_id.required_without' => 'Please select a city.',
-            'area_id.required_without' => 'Please select an area.',
+            // 'area_id.required_without' => 'Please select an area.',
             'address.required_without' => 'Please provide your address details.',
 
             // Optional — customize email duplication message (if you want)

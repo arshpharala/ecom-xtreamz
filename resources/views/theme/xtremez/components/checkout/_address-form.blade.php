@@ -13,8 +13,7 @@
   @endguest
 
   <div class="mb-3">
-    <label class="form-label">Mobile
-      Number</label>
+    <label class="form-label">Mobile Number <small>({{ active_country()->phone_code }})</small></label>
     <input type="text" name="phone" class="form-control theme-input" placeholder="Enter your mobile number">
   </div>
 
@@ -35,12 +34,12 @@
     </select>
   </div>
 
-  <div class="mb-3">
+  {{-- <div class="mb-3">
     <label class="form-label">Area</label>
     <select name="area_id" id="area-select" class="form-select theme-select">
       <option value="">Select your area</option>
     </select>
-  </div>
+  </div> --}}
 
   <div class="mb-3">
     <label class="form-label">Address</label>

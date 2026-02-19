@@ -12,7 +12,6 @@ class Address extends Model
 {
     protected $fillable = ['user_id', 'name', 'phone', 'country_id', 'province_id', 'city_id', 'area_id', 'address', 'landmark'];
 
-
     public function country()
     {
         return $this->belongsTo(Country::class);
@@ -35,25 +34,41 @@ class Address extends Model
 
     public function render(bool $plain = false): mixed
     {
+        $landmark = filled($this->landmark) ? "{$this->landmark}," : null;
+
         if ($plain) {
-            return "{$this->address},
-                    {$this->area->name},
-                    {$this->area->landmark}
-                    {$this->city->name},
-                    {$this->province->name},
-                    {$this->country->name }";
+            $parts = [
+                "{$this->address},",
+                $landmark,
+                "{$this->city->name},",
+                "{$this->province->name},",
+                $this->country->name,
+            ];
+
+            return implode(' ', array_filter($parts));
         }
 
-        return "<div>
-                    {$this->name}, {$this->phone}
-                    <br />
-                    {$this->address},
-                    {$this->area->name},
-                    {$this->area->landmark},
-                    <br />
-                    {$this->city->name},
-                    {$this->province->name},
-                    {$this->country->name }
-        </div>";
+        $line1Parts = array_filter([
+            "{$this->name}, {$this->phone}",
+        ]);
+
+        $line2Parts = array_filter([
+            "{$this->address},",
+            $landmark,
+        ]);
+
+        $line3Parts = array_filter([
+            "{$this->city->name},",
+            "{$this->province->name},",
+            $this->country->name,
+        ]);
+
+        return '<div>'
+            .implode(' ', $line1Parts)
+            .'<br />'
+            .implode(' ', $line2Parts)
+            .'<br />'
+            .implode(' ', $line3Parts)
+            .'</div>';
     }
 }

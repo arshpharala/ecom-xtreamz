@@ -43,7 +43,7 @@ class AddressController extends Controller
             'phone'       => 'nullable|string|max:20',
             'province_id' => 'required|exists:provinces,id',
             'city_id'     => 'required|exists:cities,id',
-            'area_id'     => 'required|exists:areas,id',
+            // 'area_id'     => 'required|exists:areas,id',
             'address'     => 'required|string|max:1000',
             'landmark'    => 'nullable|string|max:500',
         ]);

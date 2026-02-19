@@ -2,10 +2,10 @@
 <html lang="en">
 
 @php
-  if(env('APP_ENV') == 'production'){
-    $touras_url = "https://pg.tourasuae.com";
-  }else{
-    $touras_url = "https://uatcheckout.tourasuae.com";
+  if (env('APP_ENV') == 'production') {
+      $touras_url = 'https://pg.tourasuae.com';
+  } else {
+      $touras_url = 'https://uatcheckout.tourasuae.com';
   }
 @endphp
 
@@ -21,8 +21,8 @@
   {{-- Touras JS --}}
   <script src="{{ $touras_url }}/ms-transaction-core-1-0/jscheckout/js-checkoutNewCheck.js"></script>
 
-  <link href="{{ $touras_url }}/ms-transaction-core-1-0/jscheckout/resourcesJS/css/checkout.css"
-    rel="stylesheet" type="text/css" />
+  <link href="{{ $touras_url }}/ms-transaction-core-1-0/jscheckout/resourcesJS/css/checkout.css" rel="stylesheet"
+    type="text/css" />
   <link href="{{ $touras_url }}/ms-transaction-core-1-0/jscheckout/resourcesJS/css/swiper-bundle.min.css"
     rel="stylesheet" type="text/css" />
 
@@ -100,11 +100,14 @@
     const jsData = @json($jsData);
     let spObj = null;
     let payStarted = false;
+    let tourasResponseTriggered = false;
 
     document.addEventListener('transactionEvent', (event) => {
       const response = event?.detail;
       console.log("Received transaction event:", response);
       if (response) {
+        tourasResponseTriggered = true;
+
         handleTourasResponse(response);
 
       } else {
@@ -188,6 +191,8 @@
     function handleTourasResponse(rawOrArray) {
       if (!rawOrArray) return;
 
+      window.tourasResponseTriggered = true; // lock here too (double safe)
+
       const dataToSend = Array.isArray(rawOrArray) ? rawOrArray.join('|') : rawOrArray;
 
       setMessage("Verifying payment...", true);
@@ -229,5 +234,51 @@
     <button id="payNowBtn" type="button" onclick="Buy()">Pay Now</button>
   </div>
 </body>
+
+
+<script>
+  (function() {
+    const MODAL_SEL = '#main-checkout-modal';
+    let wasOpened = false;
+    let closedFired = false;
+
+    function isOpen() {
+      const m = document.querySelector(MODAL_SEL);
+      if (!m) return false;
+      if (m.classList.contains('show')) return true;
+      if (m.getAttribute('aria-hidden') === 'false') return true;
+      if ((m.style && m.style.display) === 'block') return true;
+      return false;
+    }
+
+    function check() {
+      // ✅ If we already got Touras response, NEVER treat closing as cancel
+      if (window.tourasResponseTriggered === true) return;
+
+      const m = document.querySelector(MODAL_SEL);
+      const open = isOpen();
+
+      if (open) wasOpened = true;
+
+      if (!closedFired && wasOpened && (!m || !open)) {
+        closedFired = true;
+        window.location.href = "{{ route('checkout') }}?error=Payment Cancelled";
+      }
+    }
+
+    check();
+
+    const obs = new MutationObserver(check);
+    obs.observe(document.documentElement, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['class', 'style', 'aria-hidden']
+    });
+
+    setInterval(check, 500);
+  })();
+</script>
+
 
 </html>

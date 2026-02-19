@@ -37,9 +37,8 @@ function clearSelectedCartItems(onSuccess = null) {
                 onSuccess(res);
             }
 
-            if (!res.cart || Object.keys(res.cart.items || {}).length === 0) {
-                location.reload();
-                return;
+            if (!res.cart || (res.cart.count === 0)) {
+                // updateCartCount will handle the UI switch
             }
         },
         error: function (res) {
@@ -139,8 +138,12 @@ function updateCartCount(cart) {
     $("body").find("#cart-items-count").html(cart.count);
     if (cart.count > 0) {
         $("body").find("#cart-items-count").show();
+        $("#cart-content").removeClass("d-none");
+        $("#empty-cart-container").addClass("d-none");
     } else {
         $("body").find("#cart-items-count").hide();
+        $("#cart-content").addClass("d-none");
+        $("#empty-cart-container").removeClass("d-none");
     }
 
     $("body").find(".cart-total").html(cart.total_with_currency);

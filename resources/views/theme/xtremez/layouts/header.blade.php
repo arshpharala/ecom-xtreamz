@@ -80,7 +80,7 @@
             {{-- NORMAL LINK --}}
             @if (!$menu['dropdown'])
               <li class="nav-item {{ $menu['class'] ?? '' }}">
-                <a href="{{ $menu['url'] }}" class="nav-link">
+                <a href="{{ url($menu['url']) }}" class="nav-link">
                   {{ $menu['label'] }}
                 </a>
               </li>
@@ -89,7 +89,7 @@
             {{-- DROPDOWN --}}
             @if ($menu['dropdown'])
               <li class="nav-item dropdown">
-                <a href="{{ $menu['url'] }}" class="nav-link has-submenu">
+                <a href="{{ url($menu['url']) }}" class="nav-link has-submenu">
                   {{ $menu['label'] }} <i class="bi bi-chevron-down ms-1"></i>
                 </a>
 
@@ -99,7 +99,7 @@
                   @if ($menu['type'] === 'static')
                     @foreach ($menu['links'] as $link)
                       <li>
-                        <a href="{{ $link['url'] }}">
+                        <a href="{{ url($link['url']) }}">
                           {{ $link['label'] }}
                         </a>
                       </li>

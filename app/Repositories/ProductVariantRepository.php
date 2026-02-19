@@ -40,7 +40,7 @@ class ProductVariantRepository
             ->with(['offers' => function ($query) {
                 $query->active();
             }])
-            ->where('is_primary', true)
+            ->primary()
             ->withSelection()
             ->withActiveProducts();
 

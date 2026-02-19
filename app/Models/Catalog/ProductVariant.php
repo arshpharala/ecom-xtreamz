@@ -28,6 +28,10 @@ class ProductVariant extends Model
             ->whereNull('products.deleted_at');
     }
 
+    public function scopePrimary($query)
+    {
+        return $query->where('is_primary', 1);
+    }
 
     public function product()
     {

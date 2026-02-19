@@ -126,48 +126,6 @@ function debounce(func, delay = 300) {
     };
 }
 
-// function render_product_card(product, grid = false) {
-//     const hasOffer = product.offer_data?.has_offer;
-//     const offerText = hasOffer ? product.offer_data.label : "";
-
-//     const currentCurrency = product.currency; // e.g., 'USD'
-//     const discountedPrice = parseFloat(product.offer_data?.discounted_price || 0);
-//     const basePrice = parseFloat(product.price);
-
-//     const displayPrice = hasOffer && discountedPrice > 0
-//         ? formatPrice(currentCurrency, discountedPrice)
-//         : formatPrice(currentCurrency, basePrice);
-
-//     const originalPrice = hasOffer
-//         ? `<span class="text-muted text-decoration-line-through ms-2"> ${formatPrice(currentCurrency, basePrice)}</span>`
-//         : "";
-
-//     return `<div class="item ${grid}" data-category="${product.category}">
-//         <div class="product-card d-flex flex-column">
-//             <div class="image-box position-relative">
-//                 <img src="${product.image}" alt="${product.name}" class="img-fluid"/>
-//                 ${hasOffer ? `<div class="offer-badge">${offerText}</div>` : ""}
-//             </div>
-//             <div class="image_overlay"></div>
-//             <a href="${product.link}" class="overlay-button">View details</a>
-//             <div class="stats-container">
-//                 <span class="product-title">${product.name}</span>
-//                 <div class="product-description">
-//                     <p>${product.description}</p>
-//                 </div>
-//                 <div class="product-meta">
-//                     <span class="price fs-4 fw-bold">${displayPrice}</span>
-//                     ${originalPrice}
-//                     <button class="btn cart-btn add-to-cart-btn ms-2" data-variant-id="${product.id}">
-//                         <i class="bi bi-cart add-to-cart" style="${product.is_in_cart ? "display:none;" : ""}"></i>
-//                         <i class="bi bi-cart-check added-to-cart" style="${product.is_in_cart ? "" : "display:none;"}"></i>
-//                     </button>
-//                 </div>
-//             </div>
-//         </div>
-//     </div>`;
-// }
-
 /**
  * Render stock badge based on stock quantity
  * @param {number} stock - Stock quantity
@@ -284,22 +242,6 @@ function render_product_card(product, grid = false) {
         </div>
       </div>`;
 }
-
-// function render_pagination(pagination) {
-//     const $pagination = $(".pagination");
-//     $pagination.empty();
-
-//     if (pagination.last_page == 1) {
-//         return;
-//     }
-
-//     for (let i = 1; i <= pagination.last_page; i++) {
-//         const active = i == pagination.current_page ? "active" : "";
-//         $pagination.append(
-//             `<li class="page-item ${active}"><a class="page-link ${active}" href="#" data-page="${i}">${i}</a></li>`
-//         );
-//     }
-// }
 
 function render_pagination(pagination) {
     const $pagination = $(".pagination");

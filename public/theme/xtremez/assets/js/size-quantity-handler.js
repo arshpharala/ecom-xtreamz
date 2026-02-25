@@ -230,10 +230,11 @@ $(document).ready(function () {
                 );
 
                 if (responses.length > 0) {
-                    $("#cart-count").text(responses[0].cart.count);
-                    $(".cart-count").text(responses[0].cart.count);
-                    $("#cart-items-count").text(responses[0].cart.count);
-                    if (responses[0].cart.count > 0) {
+                    const lastRes = responses[responses.length - 1];
+                    $("#cart-count").text(lastRes.cart.count);
+                    $(".cart-count").text(lastRes.cart.count);
+                    $("#cart-items-count").text(lastRes.cart.count);
+                    if (lastRes.cart.count > 0) {
                         $("#cart-items-count").show();
                     } else {
                         $("#cart-items-count").hide();

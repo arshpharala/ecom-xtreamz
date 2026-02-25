@@ -29,6 +29,7 @@ Route::get('search', [SearchController::class, 'search'])->name('search');
 
 Route::resource('cart', CartController::class);
 Route::post('cart/add', [CartController::class, 'store'])->name('cart.add');
+Route::post('cart/batch', [CartController::class, 'batchStore'])->name('cart.batch');
 
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('checkout', [CheckoutController::class, 'processOrder'])->name('checkout');

@@ -191,50 +191,51 @@ $(document).ready(function () {
             .prop("disabled", true)
             .html('<i class="bi bi-hourglass-split"></i> Adding...');
 
-        let promises = sizeQuantities.map((item) => {
-            const fields = {
-                product_variant_id: item.variant_id,
-                qty: item.qty,
-            };
+        const items = sizeQuantities.map((item) => ({
+            variant_id: item.variant_id,
+            qty: item.qty,
+        }));
 
-            if (typeof window.buildAddToCartPayload === "function") {
-                const payload = window.buildAddToCartPayload(fields);
-                if (!payload) {
-                    return $.Deferred().reject("Invalid customization").promise();
-                }
+        const fields = { items: items };
 
-                if (typeof window.addToCartRequest === "function") {
-                    return window.addToCartRequest(
-                        payload,
-                        appUrl + "/cart/add",
-                    );
-                }
+        let request;
+        if (typeof window.buildAddToCartPayload === "function") {
+            const payload = window.buildAddToCartPayload(fields);
+            if (!payload) {
+                $button.prop("disabled", false).html(originalText);
+                return;
+            }
 
-                return $.ajax({
-                    url: appUrl + "/cart/add",
+            if (typeof window.addToCartRequest === "function") {
+                request = window.addToCartRequest(
+                    payload,
+                    appUrl + "/cart/batch",
+                );
+            } else {
+                request = $.ajax({
+                    url: appUrl + "/cart/batch",
                     method: "POST",
                     data: payload.data,
                     processData: !payload.useFormData,
                     contentType: payload.useFormData ? false : undefined,
                 });
             }
+        } else {
+            request = $.post(appUrl + "/cart/batch", fields);
+        }
 
-            return $.post(appUrl + "/cart/add", fields);
-        });
-
-        Promise.all(promises)
-            .then((responses) => {
+        request
+            .done((response) => {
                 const totalQty = sizeQuantities.reduce(
                     (sum, item) => sum + item.qty,
                     0,
                 );
 
-                if (responses.length > 0) {
-                    const lastRes = responses[responses.length - 1];
-                    $("#cart-count").text(lastRes.cart.count);
-                    $(".cart-count").text(lastRes.cart.count);
-                    $("#cart-items-count").text(lastRes.cart.count);
-                    if (lastRes.cart.count > 0) {
+                if (response.cart) {
+                    $("#cart-count").text(response.cart.count);
+                    $(".cart-count").text(response.cart.count);
+                    $("#cart-items-count").text(response.cart.count);
+                    if (response.cart.count > 0) {
                         $("#cart-items-count").show();
                     } else {
                         $("#cart-items-count").hide();
@@ -265,12 +266,13 @@ $(document).ready(function () {
                     }, 2000);
                 }
             })
-            .catch((error) => {
-                console.error("Error adding to cart:", error);
+            .fail((xhr) => {
+                console.error("Error adding to cart:", xhr);
+                const message = xhr.responseJSON?.message || "Failed to add items to cart. Please try again.";
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "Failed to add items to cart. Please try again.",
+                    text: message,
                 });
                 $button.prop("disabled", false).html(originalText);
             });

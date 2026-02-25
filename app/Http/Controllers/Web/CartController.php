@@ -65,27 +65,71 @@ class CartController extends Controller
             'qty'        => 'required|integer|min:1',
             'customization_enabled' => 'nullable|boolean',
             'customization_text' => 'nullable|string|max:1000',
-            // Files are no longer sent here; we expect ID or nothing
             'customization_id' => 'nullable|string|max:255', 
         ]);
 
         $variantId = $request->variant_id ?: $request->product_variant_id;
-
-        $variant = ProductVariant::with('offers')->findOrFail($variantId);
         $qty = $request->qty;
+
+        $response = $this->addToCartLogic($variantId, $qty, $request->all());
+
+        if (!$response['success']) {
+            return response()->json($response, 400);
+        }
+
+        return response()->json([
+            'success' => true,
+            'variant' => $response['variant'],
+            'cart'    => $this->cart->get()
+        ]);
+    }
+
+    public function batchStore(Request $request)
+    {
+        $request->validate([
+            'items' => 'required|array|min:1',
+            'items.*.variant_id' => 'required|uuid',
+            'items.*.qty' => 'required|integer|min:1',
+            'customization_enabled' => 'nullable|boolean',
+            'customization_text' => 'nullable|string|max:1000',
+            'customization_id' => 'nullable|string|max:255',
+        ]);
+
+        foreach ($request->items as $item) {
+            $response = $this->addToCartLogic($item['variant_id'], $item['qty'], $request->all());
+            if (!$response['success']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Error for variant {$item['variant_id']}: " . ($response['message'] ?? 'Unknown error')
+                ], 400);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'cart'    => $this->cart->get()
+        ]);
+    }
+
+    protected function addToCartLogic($variantId, $qty, $data)
+    {
+        $variant = ProductVariant::with('offers')->find($variantId);
+        if (!$variant) {
+            return ['success' => false, 'message' => 'Variant not found.'];
+        }
 
         // Check stock availability
         if (!setting('allow_negative_purchase', false) && (!$variant->stock || $variant->stock < $qty)) {
-            return response()->json([
+            return [
                 'success' => false,
                 'message' => 'Insufficient stock available.'
-            ], 400);
+            ];
         }
 
         $pricing = PriceService::calculateDiscountedPrice($variant);
 
-        $customizationText = trim((string) $request->input('customization_text', ''));
-        $customizationId = $request->input('customization_id');
+        $customizationText = trim((string) ($data['customization_text'] ?? ''));
+        $customizationId = $data['customization_id'] ?? null;
 
         $options = [
             'original_price'  => $pricing['original_price'],
@@ -93,23 +137,16 @@ class CartController extends Controller
             'offer_id'        => $pricing['offer_id'],
         ];
 
-        if ($request->boolean('customization_enabled') || $customizationText !== '' || $customizationId) {
+        if (!empty($data['customization_enabled']) || $customizationText !== '' || $customizationId) {
             $options['customization'] = [
                 'text' => $customizationText,
                 'customization_id' => $customizationId,
-                // 'images' is removed from here as it's client-side only for now
             ];
         }
 
         $this->cart->add($variant->id, $qty, $pricing['final_price'], $options);
 
-        $variant->cart_item = $this->cart->getItem($variant->id);
-
-        return response()->json([
-            'success' => true,
-            'variant' => $variant,
-            'cart'    => $this->cart->get()
-        ]);
+        return ['success' => true, 'variant' => $variant];
     }
 
     public function update(Request $request, $variantId)

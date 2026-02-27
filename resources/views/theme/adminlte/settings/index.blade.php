@@ -33,6 +33,9 @@
             {{-- ✅ NEW TAB --}}
             <a class="nav-link" id="jasani-tab" data-bs-toggle="pill" data-bs-target="#v-pills-jasani" type="button"
               role="tab" aria-controls="v-pills-jasani" aria-selected="false">Jasani Sync</a>
+
+            <a class="nav-link" id="contact-tab" data-bs-toggle="pill" data-bs-target="#v-pills-contact" type="button"
+              role="tab" aria-controls="v-pills-contact" aria-selected="false">Contact Page</a>
           </div>
         </div>
 
@@ -278,8 +281,10 @@
                         <div class="mb-3">
                           <label for="social_login_enabled" class="form-label fw-bold">Enable Social Login</label>
                           <select id="social_login_enabled" name="social_login_enabled" class="form-select">
-                            <option value="1" {{ setting('social_login_enabled') ? 'selected' : '' }}>Enabled</option>
-                            <option value="0" {{ !setting('social_login_enabled') ? 'selected' : '' }}>Disabled</option>
+                            <option value="1" {{ setting('social_login_enabled') ? 'selected' : '' }}>Enabled
+                            </option>
+                            <option value="0" {{ !setting('social_login_enabled') ? 'selected' : '' }}>Disabled
+                            </option>
                           </select>
                         </div>
 
@@ -293,8 +298,10 @@
                                 <i class="fab fa-google text-danger me-1"></i> Google Login
                               </label>
                               <select id="social_login_google" name="social_login_google" class="form-select">
-                                <option value="1" {{ setting('social_login_google') ? 'selected' : '' }}>Enabled</option>
-                                <option value="0" {{ !setting('social_login_google') ? 'selected' : '' }}>Disabled</option>
+                                <option value="1" {{ setting('social_login_google') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_google') ? 'selected' : '' }}>Disabled
+                                </option>
                               </select>
                             </div>
 
@@ -303,8 +310,10 @@
                                 <i class="fab fa-facebook text-primary me-1"></i> Facebook Login
                               </label>
                               <select id="social_login_facebook" name="social_login_facebook" class="form-select">
-                                <option value="1" {{ setting('social_login_facebook') ? 'selected' : '' }}>Enabled</option>
-                                <option value="0" {{ !setting('social_login_facebook') ? 'selected' : '' }}>Disabled</option>
+                                <option value="1" {{ setting('social_login_facebook') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_facebook') ? 'selected' : '' }}>
+                                  Disabled</option>
                               </select>
                             </div>
 
@@ -313,8 +322,10 @@
                                 <i class="fab fa-twitter text-info me-1"></i> Twitter (X) Login
                               </label>
                               <select id="social_login_twitter" name="social_login_twitter" class="form-select">
-                                <option value="1" {{ setting('social_login_twitter') ? 'selected' : '' }}>Enabled</option>
-                                <option value="0" {{ !setting('social_login_twitter') ? 'selected' : '' }}>Disabled</option>
+                                <option value="1" {{ setting('social_login_twitter') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_twitter') ? 'selected' : '' }}>Disabled
+                                </option>
                               </select>
                             </div>
 
@@ -323,8 +334,10 @@
                                 <i class="fab fa-linkedin text-primary me-1"></i> LinkedIn Login
                               </label>
                               <select id="social_login_linkedin" name="social_login_linkedin" class="form-select">
-                                <option value="1" {{ setting('social_login_linkedin') ? 'selected' : '' }}>Enabled</option>
-                                <option value="0" {{ !setting('social_login_linkedin') ? 'selected' : '' }}>Disabled</option>
+                                <option value="1" {{ setting('social_login_linkedin') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_linkedin') ? 'selected' : '' }}>
+                                  Disabled</option>
                               </select>
                             </div>
 
@@ -333,8 +346,10 @@
                                 <i class="fab fa-github text-dark me-1"></i> GitHub Login
                               </label>
                               <select id="social_login_github" name="social_login_github" class="form-select">
-                                <option value="1" {{ setting('social_login_github') ? 'selected' : '' }}>Enabled</option>
-                                <option value="0" {{ !setting('social_login_github') ? 'selected' : '' }}>Disabled</option>
+                                <option value="1" {{ setting('social_login_github') ? 'selected' : '' }}>Enabled
+                                </option>
+                                <option value="0" {{ !setting('social_login_github') ? 'selected' : '' }}>Disabled
+                                </option>
                               </select>
                             </div>
 
@@ -461,7 +476,8 @@
                                 $catName = $cat->translations->first()->name ?? ($cat->slug ?? 'Category #' . $cat->id);
                                 $catId = (string) $cat->id;
                               @endphp
-                              <option value="{{ $catId }}" {{ in_array($catId, $excludedIds, true) ? 'selected' : '' }}>
+                              <option value="{{ $catId }}"
+                                {{ in_array($catId, $excludedIds, true) ? 'selected' : '' }}>
                                 {{ $catName }} (ID: {{ $catId }})
                               </option>
                             @endforeach
@@ -490,6 +506,57 @@
               </form>
             </div>
 
+            {{-- ===================== CONTACT PAGE ===================== --}}
+            <div class="tab-pane fade" id="v-pills-contact" role="tabpanel" aria-labelledby="contact-tab">
+              <form action="{{ route('admin.cms.settings.store') }}" method="POST" class="ajax-form">
+                @csrf
+
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="card card-outline card-primary mb-4">
+                      <div class="card-header">
+                        <h5 class="card-title">General Settings</h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="mb-4">
+                          <label class="form-label fw-bold">Contact Subjects</label>
+                          <textarea name="contact_subjects" class="form-control" rows="5" placeholder="Enter subjects (one per line)">{{ setting('contact_subjects') }}</textarea>
+                          <small class="text-muted">Enter subjects that will appear in the contact form dropdown. Put
+                            each subject on a new line.</small>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    <div class="card card-outline card-success mb-4">
+                      <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Office Map Configuration</h5>
+                        <div class="form-check form-switch ms-auto">
+                          <input type="hidden" name="show_office_map" value="0">
+                          <input type="checkbox" class="form-check-input" id="showOfficeMap" name="show_office_map"
+                            value="1" {{ (bool) setting('show_office_map', true) ? 'checked' : '' }}>
+                          <label class="form-check-label" for="showOfficeMap">Show Office Map</label>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="mb-4">
+                          <label class="form-label fw-bold">Google Map Embed Code</label>
+                          <textarea name="office_map_embed" class="form-control" rows="4"
+                            placeholder="Paste Google Map iframe code here">{{ setting('office_map_embed') }}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <button class="btn btn-primary px-5">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
 
@@ -497,3 +564,31 @@
     </div>
   </div>
 @endsection
+
+@push('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. On page load, check if there's a hash in the URL
+      const hash = window.location.hash;
+      if (hash) {
+        const activeTab = document.querySelector(`[data-bs-target="${hash}"]`);
+        if (activeTab) {
+          const tab = new bootstrap.Tab(activeTab);
+          tab.show();
+        }
+      }
+
+      // 2. When a tab is shown, update the URL hash
+      const tabLinks = document.querySelectorAll('.nav-link[data-bs-toggle="pill"]');
+      tabLinks.forEach(link => {
+        link.addEventListener('shown.bs.tab', function(event) {
+          const target = event.target.getAttribute('data-bs-target');
+          if (target) {
+            // Update the URL hash without scrolling the page
+            history.replaceState(null, null, target);
+          }
+        });
+      });
+    });
+  </script>
+@endpush

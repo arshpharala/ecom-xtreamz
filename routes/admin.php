@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\CMS\PaymentGatewayController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantController;
 use App\Http\Controllers\Admin\Inventory\InventorySourceController;
 use App\Http\Controllers\Admin\Catalog\ProductVariantOfferController;
+use App\Http\Controllers\Admin\CMS\ContactSubmissionController;
 
 Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
     Route::get('/',                     'dashboard')->name('dashboard');
@@ -140,6 +141,8 @@ Route::group(['prefix' => '/cms', 'as' => 'cms.'], function () {
     Route::resource('email.admins',                      EmailAdminController::class);
 
     Route::resource('testimonials',                     TestimonialController::class);
+    Route::resource('contact-submissions', ContactSubmissionController::class)->only(['index', 'show', 'destroy']);
+
     Route::resource('news',                     NewsController::class);
 
     Route::resource('banners', BannerController::class);

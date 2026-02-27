@@ -3,6 +3,7 @@
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\CheckoutController;
+use App\Http\Controllers\Web\ContactController;
 use App\Http\Controllers\Web\CouponController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\ProductController;
@@ -12,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('about-us', [HomeController::class, 'page'])->name('about-us');
-Route::get('contact-us', [HomeController::class, 'page'])->name('contact-us');
+Route::get('contact-us', [ContactController::class, 'index'])->name('contact-us');
+Route::post('contact-us', [ContactController::class, 'submit'])->name('contact-us.submit');
 Route::get('policy', [HomeController::class, 'page'])->name('policy');
 Route::get('faq', [HomeController::class, 'page'])->name('faq');
 Route::get('terms-and-conditions', [HomeController::class, 'page'])->name('terms-and-conditions');
@@ -46,6 +48,7 @@ Route::get('touras/pay/{order}', [CheckoutController::class, 'tourasPay'])->name
 Route::any('touras/return', [CheckoutController::class, 'tourasReturn'])->name('touras.return');
 
 Route::get('/order-summary/{order}', [CheckoutController::class, 'thankYou'])->name('order.summary');
+Route::get('/order/{order}/receipt/preview', [CheckoutController::class, 'previewReceipt'])->name('order.receipt.preview');
 
 Route::prefix('ajax/')->name('ajax.')->group(function () {
     Route::get('get-products', [ProductController::class, 'getProducts'])->name('get-products');

@@ -125,6 +125,12 @@
                   <p>Return Reasons</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.cms.contact-submissions.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Enquiries</p>
+                </a>
+              </li>
             </ul>
           </li>
 

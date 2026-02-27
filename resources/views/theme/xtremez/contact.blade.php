@@ -72,9 +72,7 @@
   <section class="heading-section py-5">
     <div class="container text-center">
       <div class="heading-row">
-        <span class="section-subtitle">Connect With Us</span>
         <h2 class="section-title fs-1 m-0 font-weight-bold">Contact Us</h2>
-        <div class="mx-auto mt-3" style="width: 60px; height: 3px; background: #000;"></div>
       </div>
     </div>
   </section>

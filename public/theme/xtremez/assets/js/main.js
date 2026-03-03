@@ -399,4 +399,19 @@ $(function () {
     $("#mobileNavClose, #mobileNavMask").on("click", function () {
         $drawer.removeClass("active");
     });
+
+    $(document).on("click", ".password-toggle-btn", function (e) {
+        e.preventDefault();
+        const $btn = $(this);
+        const $input = $btn.closest(".password-toggle-group").find("input");
+        const $icon = $btn.find("i");
+
+        if ($input.attr("type") === "password") {
+            $input.attr("type", "text");
+            $icon.removeClass("bi-eye").addClass("bi-eye-slash");
+        } else {
+            $input.attr("type", "password");
+            $icon.removeClass("bi-eye-slash").addClass("bi-eye");
+        }
+    });
 });

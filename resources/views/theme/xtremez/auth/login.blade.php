@@ -47,9 +47,12 @@
                   <input type="email" class="form-control theme-input" name="email" placeholder="Your email"
                     autocomplete="off">
                 </div>
-                <div class="mb-4">
+                <div class="mb-4 password-toggle-group">
                   <input type="password" class="form-control theme-input" name="password" placeholder="Password"
                     autocomplete="off">
+                  <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+                    <i class="bi bi-eye"></i>
+                  </button>
                 </div>
                 <button type="submit" class="btn btn-secondary w-100">SIGN
                   UP</button>
@@ -64,9 +67,12 @@
                   <input type="text" name="email" class="form-control login-inp theme-input"
                     placeholder="Your Email">
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 password-toggle-group">
                   <input type="password" name="password" class="form-control login-inp theme-input"
                     placeholder="Your Password">
+                  <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+                    <i class="bi bi-eye"></i>
+                  </button>
                 </div>
                 <div class="pt-2 d-flex align-items-center justify-content-between">
                   <div>

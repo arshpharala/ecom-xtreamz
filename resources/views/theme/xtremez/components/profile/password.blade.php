@@ -3,20 +3,29 @@
     action="{{ route('customers.password.update') }}">
     @csrf
     <div class="row g-4 p-4">
-      <div class="col-md-12">
+      <div class="col-md-12 password-toggle-group">
         <label for="currentPassword" class="form-label">Current Password</label>
         <input type="password" id="currentPassword" name="current_password" class="form-control theme-input" required>
+        <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+          <i class="bi bi-eye"></i>
+        </button>
       </div>
 
-      <div class="col-md-12">
+      <div class="col-md-12 password-toggle-group">
         <label for="newPassword" class="form-label">New Password</label>
         <input type="password" id="newPassword" name="password" class="form-control theme-input" required>
+        <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+          <i class="bi bi-eye"></i>
+        </button>
       </div>
 
-      <div class="col-md-12">
+      <div class="col-md-12 password-toggle-group">
         <label for="password_confirmation" class="form-label">Confirm New Password</label>
         <input type="password" id="password_confirmation" name="password_confirmation" class="form-control theme-input"
           required>
+        <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+          <i class="bi bi-eye"></i>
+        </button>
       </div>
 
       <div class="col-12 mt-4">

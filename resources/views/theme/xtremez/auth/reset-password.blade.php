@@ -44,17 +44,23 @@
                 @csrf
                 <input type="hidden" class="form-control theme-input" name="email" placeholder="Your email address"
                   autocomplete="off" value="{{ request('email') }}" required>
-                  <input type="hidden" name="token" value="{{ $token }}">
+                <input type="hidden" name="token" value="{{ $token }}">
 
-                <div class="form-group mb-4">
+                <div class="form-group mb-4 password-toggle-group">
                   <label for="">New Password</label>
                   <input type="password" class="form-control theme-input" name="password" placeholder="Your new password"
                     autocomplete="off" required>
+                  <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+                    <i class="bi bi-eye"></i>
+                  </button>
                 </div>
-                <div class="form-group mb-4">
+                <div class="form-group mb-4 password-toggle-group">
                   <label for="">Confirm Password</label>
                   <input type="password" class="form-control theme-input" name="password_confirmation"
                     placeholder="Confirm your new password" autocomplete="off" required>
+                  <button type="button" class="password-toggle-btn" aria-label="Toggle password visibility">
+                    <i class="bi bi-eye"></i>
+                  </button>
                 </div>
                 <button type="submit" class="btn btn-secondary w-100">Reset Password</button>
               </form>

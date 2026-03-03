@@ -32,6 +32,7 @@ class Order extends Model
         'delivered_at',
         'tracking_number',
         'tracking_link',
+        'tracking_provider',
         'tracking_status',
     ];
 
@@ -141,6 +142,31 @@ class Order extends Model
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status === 'draft' || $this->status === 'in_progress';
+    }
+
+    public function isPlaced(): bool
+    {
+        return $this->status === 'placed';
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->status === 'confirmed';
+    }
+
+    public function isFulfilled(): bool
+    {
+        return $this->status === 'fulfilled';
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->status === 'cancelled';
     }
 
     function scopeWithJoins($query)

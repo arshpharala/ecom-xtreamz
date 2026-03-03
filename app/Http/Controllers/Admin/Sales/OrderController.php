@@ -39,17 +39,19 @@ class OrderController extends Controller
                     return view('theme.adminlte.components._table-actions', [
                         'row' => $row,
                         'editSidebar' => false,
-                        'editUrl' => $viewUrl,
-                        'deleteUrl' => $deleteUrl,
-                        'restoreUrl' => $restoreUrl,
+                        'showUrl' => $viewUrl,
+                        // 'deleteUrl' => $deleteUrl,
+                        // 'restoreUrl' => $restoreUrl,
                     ])->render();
                 })
                 ->editColumn('created_at', fn($row) => $row->created_at?->format('d-M-Y h:i A'))
                 ->addColumn('order_status', fn($row) => '<span class="badge ' . (
                     $row->order_status === 'fulfilled' || $row->order_status === 'delivered' ? 'badge-success' : (
-                        $row->order_status === 'placed' ? 'badge-info' : (
-                            $row->order_status === 'processing' ? 'badge-primary' : (
-                                $row->order_status === 'cancelled' ? 'badge-danger' : 'badge-secondary'
+                        $row->order_status === 'confirmed' ? 'badge-primary' : (
+                            $row->order_status === 'placed' ? 'badge-info' : (
+                                $row->order_status === 'processing' ? 'badge-warning' : (
+                                    $row->order_status === 'cancelled' || $row->order_status === 'rejected' ? 'badge-danger' : 'badge-secondary'
+                                )
                             )
                         )
                     )
@@ -122,10 +124,17 @@ class OrderController extends Controller
         $data = $request->validate([
             'delivered_at' => 'nullable|date',
             'payment_status' => 'nullable|string',
-            'status' => 'nullable|string|in:draft,placed,fulfilled,processing,confirmed,cancelled'
+            'status' => 'nullable|string|in:draft,placed,fulfilled,processing,confirmed,cancelled,rejected',
+            'tracking_number' => 'nullable|string',
+            'tracking_link' => 'nullable|url',
+            'tracking_provider' => 'nullable|string',
         ]);
 
         $order->update($data);
+
+        if ($request->status === 'fulfilled') {
+            $order->update(['delivered_at' => now()]);
+        }
 
         if ($request->ajax()) {
             return response()->json(['message' => 'Order updated successfully.']);

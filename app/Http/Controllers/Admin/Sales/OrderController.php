@@ -87,6 +87,7 @@ class OrderController extends Controller
     {
         $order = Order::with([
             'billingAddress',
+            'shippingAddress',
             'lineItems.productVariant.attributeValues.attribute',
             'lineItems.productVariant.product',
             'couponUsages.coupon',

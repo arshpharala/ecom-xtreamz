@@ -37,17 +37,27 @@
               <span class="fw-bold">Email</span><br>
               {{ $order->email ?? 'N/A' }}
             </div>
+            @php
+              $shippingAddress = $order->shippingAddress ?: $order->billingAddress;
+            @endphp
             <div class="row">
               <div class="col-6">
                 <div class="fw-bold">Billing address</div>
                 <div>
-                  {!! $order->address->render() !!}
+                  {!! $order->billingAddress?->render() ?? 'N/A' !!}
                 </div>
               </div>
               <div class="col-6">
                 <div class="fw-bold">Shipping address</div>
                 <div>
-                  {!! $order->address->render() !!}
+                  {!! $shippingAddress?->render() ?? 'N/A' !!}
+                  @if ($shippingAddress?->map_url)
+                    <div class="mt-2">
+                      <a href="{{ $shippingAddress?->map_url }}" target="_blank" rel="noopener noreferrer">
+                        &#128205; View On Map
+                      </a>
+                    </div>
+                  @endif
                 </div>
               </div>
             </div>

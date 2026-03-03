@@ -234,15 +234,24 @@
       </div>
 
       <!-- Addresses -->
+      @php
+        $shippingAddress = $order->shippingAddress ?: $order->billingAddress;
+      @endphp
       <div class="addresses">
         <div class="address-box">
           <strong>Billing Address</strong><br>
-          {!! $order->address->render() !!}
+          {!! $order->billingAddress?->render() ?? 'N/A' !!}
         </div>
 
         <div class="address-box">
           <strong>Shipping Address</strong><br>
-          {!! $order->address->render() !!}
+          {!! $shippingAddress?->render() ?? 'N/A' !!}
+          @if ($shippingAddress?->map_url)
+            <br>
+            <a href="{{ $shippingAddress?->map_url }}" target="_blank" rel="noopener noreferrer">
+              &#128205; View On Map
+            </a>
+          @endif
         </div>
       </div>
 

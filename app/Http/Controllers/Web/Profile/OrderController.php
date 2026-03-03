@@ -21,6 +21,7 @@ class OrderController extends Controller
             'lineItems.productVariant.product.translation',
             'currency',
             'billingAddress',
+            'shippingAddress',
             'returnRequests.items.orderLineItem.productVariant.product.translation',
             'returnRequests.attachments',
             'couponUsages.coupon',

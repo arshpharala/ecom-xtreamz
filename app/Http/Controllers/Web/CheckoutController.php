@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
+use App\Models\Address;
 use App\Models\Cart\CouponUsage;
 use App\Models\Cart\Order;
 use App\Models\CMS\Currency;
@@ -75,8 +76,20 @@ class CheckoutController extends Controller
 
         try {
             $user = Auth::check() ? $request->user() : $this->createUser($request);
-            $address = $this->getOrCreateAddress($request, $user);
-            $order = $this->createOrder($user, $address->id, $request->payment_method);
+            $billingAddress = $this->getOrCreateBillingAddress($request, $user);
+            $shippingAddress = $this->getOrCreateShippingAddress($request, $user, $billingAddress);
+            $this->updateAddressMapPin(
+                $shippingAddress,
+                (float) $request->shipping_map_latitude,
+                (float) $request->shipping_map_longitude,
+                (string) $request->input('shipping_map_url', '')
+            );
+            $order = $this->createOrder(
+                $user,
+                $billingAddress->id,
+                $shippingAddress->id,
+                $request->payment_method
+            );
 
             $this->storeLineItems($order);
 
@@ -124,7 +137,7 @@ class CheckoutController extends Controller
         ]);
     }
 
-    protected function getOrCreateAddress(Request $request, User $user)
+    protected function getOrCreateBillingAddress(Request $request, User $user): Address
     {
         if ($request->filled('saved_address_id')) {
             return $user->addresses()->findOrFail($request->saved_address_id);
@@ -144,15 +157,81 @@ class CheckoutController extends Controller
         ]);
     }
 
+    protected function getOrCreateShippingAddress(Request $request, User $user, Address $billingAddress): Address
+    {
+        if (! $this->hasSeparateShippingAddressInput($request)) {
+            return $billingAddress;
+        }
+
+        return $this->addressRepository->create([
+            'user_id' => $user->id,
+            'email' => $request->email ?? $user->email,
+            'name' => $request->shipping_name,
+            'phone' => $request->shipping_phone,
+            'country_id' => active_country()->id,
+            'province_id' => $request->shipping_province_id,
+            'city_id' => $request->shipping_city_id,
+            'area_id' => $request->shipping_area_id ?? null,
+            'address' => $request->shipping_address,
+            'landmark' => $request->shipping_landmark,
+        ]);
+    }
+
+    protected function hasSeparateShippingAddressInput(Request $request): bool
+    {
+        $fields = [
+            'shipping_name',
+            'shipping_phone',
+            'shipping_province_id',
+            'shipping_city_id',
+            'shipping_address',
+        ];
+
+        foreach ($fields as $field) {
+            if ($request->filled($field)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function buildGoogleMapUrl(float $latitude, float $longitude, string $submittedUrl = ''): string
+    {
+        if (filled($submittedUrl)) {
+            return $submittedUrl;
+        }
+
+        $lat = number_format($latitude, 6, '.', '');
+        $lng = number_format($longitude, 6, '.', '');
+
+        return "https://www.google.com/maps?q={$lat},{$lng}";
+    }
+
+    protected function updateAddressMapPin(Address $address, float $latitude, float $longitude, string $submittedUrl = ''): void
+    {
+        $address->update([
+            'map_latitude' => $latitude,
+            'map_longitude' => $longitude,
+            'map_url' => $this->buildGoogleMapUrl($latitude, $longitude, $submittedUrl),
+        ]);
+    }
+
     /* ======================================================
      | ORDER CREATION
      ====================================================== */
-    protected function createOrder(User $user, int $addressId, string $paymentMethod): Order
+    protected function createOrder(
+        User $user,
+        int $billingAddressId,
+        int $shippingAddressId,
+        string $paymentMethod
+    ): Order
     {
         return Order::create([
             'order_number' => Str::uuid(),
             'user_id' => $user->id,
-            'billing_address_id' => $addressId,
+            'billing_address_id' => $billingAddressId,
+            'shipping_address_id' => $shippingAddressId,
             'email' => $user->email,
             'payment_method' => $paymentMethod,
             'payment_status' => 'pending',
@@ -185,7 +264,7 @@ class CheckoutController extends Controller
         $stripe = new StripeService;
 
         $stripe->ensureStripeCustomer($user);
-        $stripe->syncBillingAddress($user, $order->address);
+        $stripe->syncBillingAddress($user, $order->billingAddress);
 
         if ($request->filled('saved_card_id')) {
 
@@ -382,12 +461,12 @@ class CheckoutController extends Controller
 
     protected function handleTourasPayment(Request $request, Order $order)
     {
-        $order->loadMissing(['user', 'address', 'lineItems']);
+        $order->loadMissing(['user', 'billingAddress', 'shippingAddress', 'lineItems']);
 
-        $address = $order->address;
+        $billingAddress = $order->billingAddress;
         $user = $order->user;
 
-        abort_if(! $address, 422, 'Billing address missing for order.');
+        abort_if(! $billingAddress, 422, 'Billing address missing for order.');
         abort_if(! $user, 422, 'User missing for order.');
 
         // Mark order pending (optional)
@@ -405,12 +484,13 @@ class CheckoutController extends Controller
     public function tourasPay(Request $request, $orderRef)
     {
         $order = Order::where('order_number', $orderRef)->firstOrFail();
-        $order->loadMissing(['user', 'address', 'lineItems']);
+        $order->loadMissing(['user', 'billingAddress', 'shippingAddress', 'lineItems']);
 
-        $address = $order->address;
+        $billingAddress = $order->billingAddress;
+        $shippingAddress = $order->shippingAddress ?: $billingAddress;
         $user = $order->user;
 
-        abort_if(! $address, 422, 'Billing address missing for order.');
+        abort_if(! $billingAddress, 422, 'Billing address missing for order.');
         abort_if(! $user, 422, 'User missing for order.');
 
         // IMPORTANT: Must match what you’ll search in return()
@@ -432,22 +512,22 @@ class CheckoutController extends Controller
             // Customer
             'cust_name' => (string) ($user->name ?? 'Customer'),
             'email_id' => (string) ($user->email ?? ''),
-            'mobile_no' => (string) ($address->phone ?? $user->phone ?? ''),
+            'mobile_no' => (string) ($shippingAddress?->phone ?? $billingAddress->phone ?? $user->phone ?? ''),
         ];
 
         // Billing details (keys must match Touras doc)
-        $payload['bill_address'] = (string) ($address->address ?? '');
-        $payload['bill_city'] = (string) optional($address->city)->name ?: 'City';
-        $payload['bill_state'] = (string) optional($address->province)->name ?: 'State';
+        $payload['bill_address'] = (string) ($billingAddress->address ?? '');
+        $payload['bill_city'] = (string) optional($billingAddress->city)->name ?: 'City';
+        $payload['bill_state'] = (string) optional($billingAddress->province)->name ?: 'State';
         $payload['bill_country'] = 'UAE';
-        $payload['bill_zip'] = (string) ($address->zip ?? '00000');
+        $payload['bill_zip'] = (string) ($billingAddress->zip ?? '00000');
 
-        // Shipping - if same as billing for now
-        $payload['ship_address'] = $payload['bill_address'];
-        $payload['ship_city'] = $payload['bill_city'];
-        $payload['ship_state'] = $payload['bill_state'];
-        $payload['ship_country'] = $payload['bill_country'];
-        $payload['ship_zip'] = $payload['bill_zip'];
+        // Shipping
+        $payload['ship_address'] = (string) ($shippingAddress?->address ?? $billingAddress->address ?? '');
+        $payload['ship_city'] = (string) (optional($shippingAddress?->city)->name ?: optional($billingAddress->city)->name ?: 'City');
+        $payload['ship_state'] = (string) (optional($shippingAddress?->province)->name ?: optional($billingAddress->province)->name ?: 'State');
+        $payload['ship_country'] = 'UAE';
+        $payload['ship_zip'] = (string) ($shippingAddress?->zip ?? $billingAddress->zip ?? '00000');
 
         // Items (optional in doc but keep)
         $payload['item_count'] = (string) $order->lineItems->count();
@@ -514,7 +594,13 @@ class CheckoutController extends Controller
     {
         $order = Order::where('order_number', $orderNumber)->where('status', '!=', 'pending')->firstOrFail();
 
-        $data['order'] = $order->load(['lineItems.productVariant.product', 'address', 'user', 'couponUsages.coupon']);
+        $data['order'] = $order->load([
+            'lineItems.productVariant.product',
+            'billingAddress',
+            'shippingAddress',
+            'user',
+            'couponUsages.coupon',
+        ]);
         $this->cart->clear();
 
         if ($order->email && ! $order->email_sent) {
@@ -583,5 +669,22 @@ class CheckoutController extends Controller
                 }
             }
         }
+    }
+    public function previewReceipt(Order $order)
+    {
+        $order->loadMissing([
+            'lineItems.productVariant.attributeValues.attribute',
+            'lineItems.productVariant.product.translation',
+            'currency',
+            'billingAddress',
+            'shippingAddress',
+            'couponUsages',
+        ]);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdfs.order-receipt', [
+            'order' => $order,
+        ]);
+
+        return $pdf->stream("Receipt-{$order->reference_number}.pdf");
     }
 }

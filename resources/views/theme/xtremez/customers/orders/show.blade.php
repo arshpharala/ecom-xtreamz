@@ -183,6 +183,29 @@
           </div>
         </div>
 
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h3 class="card-title">Shipping Details</h3>
+          </div>
+          <div class="card-body">
+            @php
+              $shippingAddress = $order->shippingAddress ?: $order->billingAddress;
+            @endphp
+            @if ($shippingAddress)
+              <div class="bg-light p-2 rounded small">
+                {!! $shippingAddress->render() !!}
+              </div>
+              @if ($shippingAddress?->map_url)
+                <a href="{{ $shippingAddress?->map_url }}" target="_blank" rel="noopener noreferrer" class="d-inline-block mt-2 small">
+                  &#128205; View On Map
+                </a>
+              @endif
+            @else
+              <p class="text-muted small mb-0">Shipping address not available.</p>
+            @endif
+          </div>
+        </div>
+
         <!-- Summary Card -->
         <div class="card mb-4">
           <div class="card-header bg-light">

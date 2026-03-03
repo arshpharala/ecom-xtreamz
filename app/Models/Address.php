@@ -10,7 +10,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-    protected $fillable = ['user_id', 'name', 'phone', 'country_id', 'province_id', 'city_id', 'area_id', 'address', 'landmark'];
+    protected $fillable = [
+        'user_id',
+        'name',
+        'phone',
+        'country_id',
+        'province_id',
+        'city_id',
+        'area_id',
+        'address',
+        'landmark',
+        'map_latitude',
+        'map_longitude',
+        'map_url',
+    ];
+
+    protected $casts = [
+        'map_latitude' => 'decimal:7',
+        'map_longitude' => 'decimal:7',
+    ];
 
     public function country()
     {

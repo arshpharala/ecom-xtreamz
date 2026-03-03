@@ -18,6 +18,7 @@ class Order extends Model
         'order_number',
         'user_id',
         'billing_address_id',
+        'shipping_address_id',
         'email',
         'payment_method',
         'payment_status',
@@ -88,6 +89,11 @@ class Order extends Model
     public function billingAddress()
     {
         return $this->belongsTo(Address::class, 'billing_address_id');
+    }
+
+    public function shippingAddress()
+    {
+        return $this->belongsTo(Address::class, 'shipping_address_id');
     }
 
     // public function billingAddress()

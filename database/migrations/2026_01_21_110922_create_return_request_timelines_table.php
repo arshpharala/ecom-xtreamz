@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('return_request_timelines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('return_request_id')->constrained()->cascadeOnDelete();
+            $table->bigInteger('return_request_id');
             $table->string('actor_type'); // 'admin', 'user', 'system'
             $table->unsignedBigInteger('actor_id')->nullable();
             $table->string('title');

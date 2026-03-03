@@ -1,7 +1,10 @@
 @extends('theme.xtremez.layouts.app')
 
 @push('head')
-  {{-- Touras CSS/JS removed as it now redirects to touras-pay page --}}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 @endpush
 
 @section('breadcrumb')
@@ -58,17 +61,51 @@
             <div class="fw-bold mb-3 section-label">Billing Address</div>
 
             <div class="bg-white p-4 shadow-sm">
+              @php
+                $hasSavedAddresses = auth()->check() && isset($addresses) && $addresses->isNotEmpty();
+                $billingFormHasErrors =
+                    $errors->has('name') ||
+                    $errors->has('email') ||
+                    $errors->has('phone') ||
+                    $errors->has('province_id') ||
+                    $errors->has('city_id') ||
+                    $errors->has('address') ||
+                    $errors->has('landmark');
+                $billingHasOldInput =
+                    filled(old('name')) ||
+                    filled(old('email')) ||
+                    filled(old('phone')) ||
+                    filled(old('province_id')) ||
+                    filled(old('city_id')) ||
+                    filled(old('address')) ||
+                    filled(old('landmark'));
+                $showBillingForm = !$hasSavedAddresses || $billingFormHasErrors || $billingHasOldInput;
+                $shippingSameAsBilling =
+                    !filled(old('shipping_name')) &&
+                    !filled(old('shipping_phone')) &&
+                    !filled(old('shipping_province_id')) &&
+                    !filled(old('shipping_city_id')) &&
+                    !filled(old('shipping_address')) &&
+                    !filled(old('shipping_landmark'));
+              @endphp
 
               @auth
                 @if ($addresses->isNotEmpty())
-                  <div class="mb-3 fw-bold">Select Saved Address</div>
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="fw-bold">Select Saved Address</div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleBillingFormBtn">
+                      {{ $showBillingForm ? 'Hide New Address' : 'Add New Address' }}
+                    </button>
+                  </div>
 
-                  <div class="mb-5">
+                  <div class="mb-4">
                     @foreach ($addresses as $address)
                       <div class="default-address-box mb-1">
                         <div class="form-check">
                           <input class="form-check-input theme-radio mt-4 saved-address" type="radio"
-                            name="saved_address_id" value="{{ $address->id }}" id="address_{{ $address->id }}">
+                            name="saved_address_id" value="{{ $address->id }}" id="address_{{ $address->id }}"
+                            data-lat="{{ $address->map_latitude }}" data-lng="{{ $address->map_longitude }}"
+                            {{ old('saved_address_id') == $address->id ? 'checked' : '' }}>
                           <label class="form-check-label w-100 ms-4" for="address_{{ $address->id }}">
                             {!! $address->render() !!}
                           </label>
@@ -77,17 +114,98 @@
                     @endforeach
                   </div>
                 @endif
-
-                <div class="fw-semibold mb-2">Add New Address</div>
               @endauth
 
-              @include('theme.xtremez.components.checkout._address-form', ['provinces' => $provinces])
+              <div id="billingNewAddressSection" class="{{ $showBillingForm ? '' : 'd-none' }}">
+                @auth
+                  @if ($addresses->isNotEmpty())
+                    <div class="fw-semibold mb-2">Add New Address</div>
+                  @endif
+                @endauth
+                @include('theme.xtremez.components.checkout._address-form', ['provinces' => $provinces])
+              </div>
+
+
 
             </div>
           </div>
 
-          {{-- Payment Method --}}
+          {{-- Shipping Address & Payment Method --}}
           <div class="col-lg-6">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="fw-bold section-label mb-0">Shipping Address</div>
+              <div class="form-check form-switch m-0">
+                <input class="form-check-input" type="checkbox" role="switch" id="shipping_same_as_billing"
+                  {{ $shippingSameAsBilling ? 'checked' : '' }}>
+                <label class="form-check-label small" for="shipping_same_as_billing">Same as billing</label>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 mb-4 shadow-sm">
+              <div id="shippingAddressSection" class="{{ $shippingSameAsBilling ? 'd-none' : '' }}">
+                <div class="mb-3">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" name="shipping_name" class="form-control theme-input"
+                    placeholder="Enter shipping recipient name" value="{{ old('shipping_name') }}">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Mobile Number <small>({{ active_country()->phone_code }})</small></label>
+                  <input type="text" name="shipping_phone" class="form-control theme-input"
+                    placeholder="Enter shipping mobile number" value="{{ old('shipping_phone') }}">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Province</label>
+                  <select name="shipping_province_id" id="shipping-province-select" class="form-select theme-select">
+                    <option value="">Select shipping province</option>
+                    @foreach ($provinces ?? [] as $province)
+                      <option value="{{ $province->id }}"
+                        {{ old('shipping_province_id') == $province->id ? 'selected' : '' }}>{{ $province->name }}
+                      </option>
+                    @endforeach
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">City</label>
+                  <select name="shipping_city_id" id="shipping-city-select" class="form-select theme-select"
+                    data-old-city="{{ old('shipping_city_id') }}">
+                    <option value="">Select shipping city</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Address</label>
+                  <input type="text" name="shipping_address" class="form-control theme-input"
+                    placeholder="House no / building / street / area" value="{{ old('shipping_address') }}">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Landmark (Optional)</label>
+                  <textarea name="shipping_landmark" class="form-control theme-input" placeholder="E.g. beside train station">{{ old('shipping_landmark') }}</textarea>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <div class="fw-semibold mb-2">Shipping Pin Location (Required)</div>
+                <div id="shipping-map-picker" style="height: 280px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <small class="text-muted">Click on map to drop shipping pin.</small>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" id="use-current-location">Use Current
+                    Location</button>
+                </div>
+
+                <input type="hidden" name="shipping_map_latitude" id="shipping_map_latitude"
+                  value="{{ old('shipping_map_latitude') }}">
+                <input type="hidden" name="shipping_map_longitude" id="shipping_map_longitude"
+                  value="{{ old('shipping_map_longitude') }}">
+                <input type="hidden" name="shipping_map_url" id="shipping_map_url"
+                  value="{{ old('shipping_map_url') }}">
+              </div>
+            </div>
+
             <div class="fw-bold mb-3 section-label">Payment Method</div>
 
             <div class="bg-white p-4 mb-4 shadow-sm">

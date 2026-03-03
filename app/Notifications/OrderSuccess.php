@@ -3,8 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class OrderSuccess extends Notification
@@ -34,10 +32,26 @@ class OrderSuccess extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->subject('Your Order #' . $this->order->reference_number . ' has been placed')
+        $this->order->loadMissing([
+            'lineItems.productVariant.attributeValues.attribute',
+            'lineItems.productVariant.product.translation',
+            'currency',
+            'billingAddress',
+            'shippingAddress',
+            'couponUsages',
+        ]);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdfs.order-receipt', [
+            'order' => $this->order,
+        ]);
+
+        return (new \Illuminate\Notifications\Messages\MailMessage)
+            ->subject('Your Order #'.$this->order->reference_number.' has been placed')
             ->view('emails.order-success', [
                 'order' => $this->order,
+            ])
+            ->attachData($pdf->output(), "Receipt-{$this->order->reference_number}.pdf", [
+                'mime' => 'application/pdf',
             ]);
     }
 

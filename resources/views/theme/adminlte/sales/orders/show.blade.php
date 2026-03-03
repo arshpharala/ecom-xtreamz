@@ -211,8 +211,23 @@
           </h6>
         </div>
         <div class="card-body pt-2 overflow-auto">
+          @php
+            $shippingAddress = $order->shippingAddress ?: $order->billingAddress;
+          @endphp
+          <div class="small text-muted font-weight-bold mb-1">Billing</div>
+          <address class="small mb-2 text-dark" style="line-height: 1.4;">
+            {!! $order->billingAddress?->render() ?? 'N/A' !!}
+          </address>
+          <div class="small text-muted font-weight-bold mb-1">Shipping</div>
           <address class="small mb-0 text-dark" style="line-height: 1.4;">
-            {!! $order->address->render() !!}
+            {!! $shippingAddress?->render() ?? 'N/A' !!}
+            @if ($shippingAddress?->map_url)
+              <div class="mt-1">
+                <a href="{{ $shippingAddress?->map_url }}" target="_blank" rel="noopener noreferrer">
+                  &#128205; View On Map
+                </a>
+              </div>
+            @endif
           </address>
         </div>
       </div>

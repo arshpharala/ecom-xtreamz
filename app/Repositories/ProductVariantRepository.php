@@ -7,6 +7,7 @@ use App\Models\Catalog\ProductVariant;
 use App\Models\Wishlist;
 use App\Services\CartService;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Arr;
 
 class ProductVariantRepository
 {
@@ -27,7 +28,11 @@ class ProductVariantRepository
             'search',
             'sort_by',
             'exclude_ids',
+            'include_ids',
         ]);
+
+        $filters['exclude_ids'] = $this->normalizeIdFilter($filters['exclude_ids'] ?? []);
+        $filters['include_ids'] = $this->normalizeIdFilter($filters['include_ids'] ?? []);
 
         $filters['attributes'] = collect(Request::all())
             ->filter(fn($val, $key) => str_starts_with($key, 'attr_'))
@@ -50,6 +55,21 @@ class ProductVariantRepository
 
         $query->groupBy('product_variants.id'); // Required to avoid duplicate entries due to joins
 
+        if (! empty($filters['include_ids'])) {
+            $includeIds = array_values(array_unique($filters['include_ids']));
+            $qualifiedIdColumn = $query->getQuery()->getGrammar()->wrap($query->qualifyColumn('id'));
+
+            $query->whereIn('product_variants.id', $includeIds);
+
+            $caseSql = "CASE {$qualifiedIdColumn} ";
+            foreach ($includeIds as $index => $id) {
+                $caseSql .= "WHEN ? THEN {$index} ";
+            }
+            $caseSql .= 'ELSE ' . count($includeIds) . ' END';
+
+            $query->reorder()->orderByRaw($caseSql, $includeIds);
+        }
+
         // Handle pagination
         if (Request::has('page')) {
             return $query->paginate($perPage)->through(function ($productVariant) {
@@ -60,6 +80,23 @@ class ProductVariantRepository
         return $query->limit($perPage)->get()->map(function ($productVariant) {
             return $this->transform($productVariant);
         });
+    }
+
+    protected function normalizeIdFilter($value): array
+    {
+        if (is_null($value) || $value === '') {
+            return [];
+        }
+
+        if (is_string($value)) {
+            $value = str_contains($value, ',') ? explode(',', $value) : [$value];
+        }
+
+        return collect(Arr::wrap($value))
+            ->map(fn($id) => trim((string) $id))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     public function transform($productVariant)

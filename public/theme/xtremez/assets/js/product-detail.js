@@ -1,10 +1,41 @@
 $(function () {
+    const RECENTLY_VIEWED_KEY = "recently_viewed_variant_ids";
+    const RECENTLY_VIEWED_LIMIT = 12;
+
     const thumbItemWidth = $(".thumb-item").outerWidth(true);
     const $thumbWrapper = $(".thumb-wrapper");
     const $prevBtn = $("#thumbPrev");
     const $nextBtn = $("#thumbNext");
     const visibleCount = 4;
     const productSelector = $(".product-detail");
+
+    function rememberRecentlyViewed(variantId) {
+        if (!variantId || typeof localStorage === "undefined") return;
+
+        try {
+            const normalizedId = String(variantId).trim();
+            if (!normalizedId) return;
+
+            const existing = JSON.parse(
+                localStorage.getItem(RECENTLY_VIEWED_KEY) || "[]",
+            );
+
+            const ids = Array.isArray(existing)
+                ? existing.map((id) => String(id).trim()).filter(Boolean)
+                : [];
+
+            const next = [
+                normalizedId,
+                ...ids.filter((id) => id !== normalizedId),
+            ].slice(0, RECENTLY_VIEWED_LIMIT);
+
+            localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(next));
+        } catch (err) {
+            console.warn("Unable to store recently viewed product.", err);
+        }
+    }
+
+    rememberRecentlyViewed(window.variant?.id || window.variant?.variant_id);
 
     productSelector.on("click", ".qty-btn", function () {
         const isPlus = $(this).hasClass("plus");
@@ -287,6 +318,7 @@ $(function () {
         updateCartButtonState(variant);
 
         updatePriceDisplay();
+        rememberRecentlyViewed(variant?.id || variant?.variant_id);
     }
 
     function fetchVariant(selectedAttributes) {
@@ -428,5 +460,4 @@ $(function () {
     // Customization logic moved to upload.js
     // Customization logic moved to upload.js
 });
-
 

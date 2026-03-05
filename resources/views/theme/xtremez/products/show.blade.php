@@ -368,6 +368,14 @@
 
     </div>
   </section>
+
+    @include('theme.xtremez.components.products.carousel', [
+      'id' => 'recentlyViewed',
+      'type' => 'recently-viewed',
+      'source' => 'recently-viewed',
+      'sectionName' => 'Recently Viewed',
+      'productUrl' => route('ajax.get-products'),
+  ])
 @endsection
 
 

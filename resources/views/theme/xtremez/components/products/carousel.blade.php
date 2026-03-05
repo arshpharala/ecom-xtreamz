@@ -2,6 +2,10 @@
   if (!$productUrl) {
       $productUrl = route('ajax.get-products', ['category_id' => $category->id]);
   }
+
+  $carouselType = $type ?? $id;
+  $carouselLimit = $limit ?? 8;
+  $carouselItems = $items ?? 4;
 @endphp
 <section class="heading-section pt-5">
   <div class="container">
@@ -27,7 +31,8 @@
 
 
 <section class="product-section pt-5 animate-on-scroll ajax-carousel" id="carousel-{{ $id }}"
-  data-animate="fade-up" data-type="{{ $id }}" data-limit="8" data-items="4"
+  data-animate="fade-up" data-type="{{ $carouselType }}" data-limit="{{ $carouselLimit }}" data-items="{{ $carouselItems }}"
+  @if (!empty($source)) data-source="{{ $source }}" @endif
   data-prev="#product{{ $id }}Prev" data-next="#product{{ $id }}Next"
   data-url="{{ $productUrl }}">
   <div class="container">

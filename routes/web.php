@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'home']);
 Route::get('about-us', [HomeController::class, 'page'])->name('about-us');
 Route::get('contact-us', [ContactController::class, 'index'])->name('contact-us');
 Route::post('contact-us', [ContactController::class, 'submit'])->name('contact-us.submit');

@@ -112,4 +112,10 @@ class HomeController extends Controller
 
         return response()->json(['message' => __('Subscribed successfully')]);
     }
+
+
+
+    function home(){
+        return view('theme.store.home');
+    }
 }

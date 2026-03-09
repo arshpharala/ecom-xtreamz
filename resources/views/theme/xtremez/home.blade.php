@@ -2,24 +2,31 @@
 @section('content')
   <main class="flex-fill">
 
-    <section class="hero-section d-flex align-items-center p-0">
+    <section class="hero-section p-0">
       <div class="owl-carousel hero-carousel w-100">
         <!-- Slide 1 -->
         @foreach ($banners as $banner)
           <div class="hero-slide" style="background: url({{ asset('storage/' . $banner->background) }});"
             data-background="{{ asset('storage/' . $banner->background) }}">
             <div class="container">
-              <div class="row">
+              <div class="hero-banner">
 
-                <div class="col-lg-4">
+                <div class="hero-img">
+
                   <div class="slider-img d-none d-lg-block" data-animation="fadeInRight" data-delay=".8s">
                     <img src="{{ asset('storage/' . $banner->image) }}" alt="">
                   </div>
                 </div>
-                <div class="col-lg-8 text-white hero-text animate-on-scroll" data-animate="fade-up">
+
+                <div class="hero-text animate-on-scroll" data-animate="fade-up">
+
+                  <div class="tagline-box">
+                    <span class="tagline-text">{{ $banner->tagline ?? 'Sustainable Products' }}</span>
+                  </div>
+
                   <h1 class="hero-title" style="color: {{ $banner->text_color }}">{{ $banner->translation->title }}</h1>
                   @if ($banner->btn_link)
-                    <a href="{{ $banner->btn_link }}" class="mt-3 buy-link"
+                    <a href="{{ $banner->btn_link }}" class="buy-link"
                       style="background: {{ $banner->btn_color }}">{{ $banner->btn_text ?? __('Shop Now') }}</a>
                   @endif
                 </div>
@@ -32,7 +39,7 @@
       </div>
     </section>
 
-    @if(request()->has('banner'))
+    @if (request()->has('banner'))
       <section class="features-strip-section">
         <div class="container">
           <div class="features-strip">
@@ -92,21 +99,32 @@
             <input type="text" class="form-control border-0 type-placeholder" name="q"
               placeholder="Search Products" required>
             <button class="btn btn-link text-dark p-0 pe-3 no-animate">
-              <i class="bi bi-search fs-2"></i>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path d="M17 17L21 21" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  </path>
+                  <path
+                    d="M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+                    stroke="#323232" stroke-width="2"></path>
+                </g>
+              </svg>
             </button>
           </div>
         </form>
       </div>
     </div>
 
-    <section class="heading-section py-5">
+    <section class="heading-section py-40">
       <div class="container">
-        <div class="heading-row">
-          <h2 class="section-title fs-1 text-center m-0 text-uppercase">Browse by Category</h2>
+        <div class="heading-row heading-row-center">
+          <h2 class="section-title fs-1 text-center">Browse by Category</h2>
+          <div class="heading-tagline text-center animate-on-scroll" data-animate="fade-up">Explore our store the easy way: shop by category
+            and enjoy a seamless, organized shopping
+            experience.</div>
         </div>
-        <p class="text-center animate-on-scroll" data-animate="fade-up">Explore our store the easy way: shop by category
-          and enjoy a seamless, organized shopping
-          experience.</p>
+        
       </div>
     </section>
 
@@ -305,8 +323,8 @@
   $(document).ready(function() {
     $('.hero-carousel').owlCarousel({
       items: 1,
-      loop: true,
-      autoplay: true,
+      loop: false,
+      autoplay: false,
       autoplayTimeout: 3000,
       nav: true,
       dots: true,

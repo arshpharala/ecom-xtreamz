@@ -8,6 +8,12 @@
 		align-items: center;
 		justify-content: center;
 	}
+	
+	.heading-row-center{
+		flex-direction: column;
+		gap: 10px;
+	
+	}
 
 	.section-title {
 		font-family: var(--font-family-primary);
@@ -15,6 +21,17 @@
 		color: #222;
 		width: 100%;
 		z-index: 1; // ensures it stays above the button if overlapped
+	}
+
+	.heading-tagline {
+		font-size: 18px;
+		font-weight: 500;
+		color: #818181;
+		// font-family: ;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 610px;
 	}
 
 	.left-tools {
@@ -26,9 +43,9 @@
 	}
 
 	@media (max-width: #{$screen-md - 1}) {
-			.heading-row{
-				margin-bottom: 0 !important;
-			}
+		.heading-row {
+			margin-bottom: 0 !important;
+		}
 
 		.left-tools {
 			padding: 0.5rem 1rem;

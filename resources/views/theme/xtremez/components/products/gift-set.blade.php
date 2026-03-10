@@ -7,7 +7,7 @@
               <div class="gift-box gift-left">
                 <div class="gift-box-item">
                   <div class="gift-content-box">
-                    <p class="fs-5 fw-bold my-3">{{ $product->name }}</p>
+                    <p class="fs-5 fw-bold">{{ $product->name }}</p>
                     <div class="price-bar d-none d-md-flex d-lg-none">
                       <div class="price">
                         {!! price_format(active_currency(true)->code, $product->price) !!}
@@ -39,7 +39,7 @@
               <div class="gift-box gift-right-half">
                 <div class="gift-box-item">
                   <div class="gift-content-box">
-                    <p class="fs-5 fw-bold my-3">{{ $product->name }}</p>
+                    <p class="fs-5 fw-bold">{{ $product->name }}</p>
                     <div class="price-bar d-none d-md-flex d-lg-flex">
                       <div class="price">
                         {!! price_format(active_currency(true)->code, $product->price) !!}

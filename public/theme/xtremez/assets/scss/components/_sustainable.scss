@@ -2,7 +2,7 @@
     position: relative;
 
     .sustainable-banner {
-        background: #f5faf7;
+        background: #6c7380;
         border-radius: 20px;
         padding: 5rem 6rem;
         position: relative;
@@ -20,7 +20,7 @@
         .subtitle {
             font-size: var(--font-size-7xl);
             font-weight: 500;
-            color: #111;
+            color: #fff;
             margin-bottom: 0.1rem;
         }
 
@@ -28,22 +28,22 @@
             font-size: var(--font-size-16xl);
             font-weight: 700;
             line-height: 1.1;
-            color: #59a25b;
+            color: #fff;
             margin-bottom: 1.5rem;
         }
 
         .cta-link {
             font-size: var(--font-size-7xl);
             font-weight: 700;
-            color: #111;
+            color: #fff;
             text-decoration: none;
-            border-bottom: 3px solid #59a25b;
+            border-bottom: 3px solid #fff;
             //   padding-bottom: 3px;
             transition: color 0.2s ease, border-color 0.2s ease;
 
             &:hover {
-                color: #1b7c3b;
-                border-color: #111;
+                color: #fff;
+                border-color: #fff;
             }
         }
     }

@@ -1,5 +1,6 @@
 .product-section {
     background-color: var(--color-light);
+    padding: 48px 0;
 
     .section-title {
         font-family: var(--font-family-primary);
@@ -21,7 +22,7 @@
 }
 
 .product-card {
-    background: var(--color-grey);
+    background: #f3f3f3;
     border-radius: 18px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     padding: 16px;
@@ -122,12 +123,17 @@
 
         .stock-badge {
             position: absolute;
-            bottom: 10px;
+            top: 10px;
             left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 30px;
             font-size: 0.7rem;
             font-weight: 600;
             padding: 4px 12px;
-            border-radius: 12px;
+            border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             backdrop-filter: blur(8px);
@@ -219,11 +225,16 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: #fff;
-        border-radius: 999px;
-        padding: 10px 16px;
+        background: #f8f8f8;
+        border-radius: 6px;
+        padding: 10px 0px 10px 16px;
         margin-top: auto;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+        height: 46px;
+        box-shadow: 0px 0px 25.11px 1.89px rgba(113, 113, 113, 0.26);
+
+
+
 
         .price-wrap {
             font-size: var(--font-size-lg);
@@ -242,9 +253,9 @@
             border: none;
             width: 42px;
             height: 42px;
-            border-radius: 50%;
+            border-radius: 6px;
             background: #fff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 25.11px 1.89px rgba(113, 113, 113, 0.26);
             display: flex;
             align-items: center;
             justify-content: center;

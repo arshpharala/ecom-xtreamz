@@ -49,6 +49,7 @@ class CategoryRepository
     {
         $category->link       = route('products', ['category_id' => $category->id]);
         $category->image      = $category->image ? asset('storage/' . $category->image) : null;
+        $category->icon       = $category->icon ? asset('storage/' . $category->icon) : null;
 
         return $category;
     }

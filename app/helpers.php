@@ -170,11 +170,11 @@ if (!function_exists('price_format')) {
 
         if ($currency->code === 'AED') {
 
-            if ($symbol) {
-                $currency->symbol = '<span class="dirham-symbol">&#xea;</span>';
-            }else{
+            // if ($symbol) {
+            //     $currency->symbol = '<span class="dirham-symbol">&#xea;</span>';
+            // }else{
                 $currency->symbol = 'AED';
-            }
+            // }
         }
 
         $formattedAmount = number_format(

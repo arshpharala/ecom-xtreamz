@@ -120,21 +120,43 @@
       <div class="container">
         <div class="heading-row heading-row-center">
           <h2 class="section-title fs-1 text-center">Browse by Category</h2>
-          <div class="heading-tagline text-center animate-on-scroll" data-animate="fade-up">Explore our store the easy way: shop by category
+          <div class="heading-tagline text-center animate-on-scroll" data-animate="fade-up">Explore our store the easy
+            way: shop by category
             and enjoy a seamless, organized shopping
             experience.</div>
         </div>
-        
+
+      </div>
+    </section>
+
+    <section class="categories-section">
+      <div class="container">
+        <div class="category-grid">
+          @foreach ($categories as $category)
+            <div class="category-card-wrap animate-on-scroll" data-animate="fade-up">
+              <a href="{{ $category->link }}" class="category-card">
+                <div class="category-icon-box">
+                  <img src="{{ $category->icon }}" alt="{{ $category->name }}" class="icon-img">
+                </div>
+                <h3 class="category-name">{{ $category->name }}</h3>
+                <div class="category-product-img">
+                  <img src="{{ $category->image }}" alt="{{ $category->name }}" class="product-img">
+                </div>
+              </a>
+            </div>
+          @endforeach
+        </div>
       </div>
     </section>
 
 
-    <section class="promo-tiles py-3">
+    {{-- <section class="promo-tiles py-3">
       <div class="container">
         <div class="row g-3 g-lg-4 d-flex animate-on-scroll" data-animate="zoom-out">
           @foreach ($categories as $category)
             <div class="col-12 col-lg-4 flex-fill">
-              <a href="{{ $category->link }}" class="promo-tile" style="background: {{ $category->background_color }}">
+              <a href="{{ $category->link }}" class="promo-tile"
+                style="background: {{ $category->background_color }}">
                 <div class="promo-copy d-flex flex-column h-100 justify-content-around">
                   <h3 class="title">{{ $category->name }}</h3>
                   <span class="cta">Shop Now</span>
@@ -148,7 +170,7 @@
           @endforeach
         </div>
       </div>
-    </section>
+    </section> --}}
 
     @include('theme.xtremez.components.products.carousel', [
         'id' => 'new',
@@ -196,11 +218,11 @@
 
   @include('theme.xtremez.components.products.gift-set', ['products' => $giftSetProducts])
 
-  {{-- @include('theme.xtremez.components.products.carousel', [
+  @include('theme.xtremez.components.products.carousel', [
       'id' => 'featured',
       'sectionName' => 'Featured Products',
       'productUrl' => route('ajax.get-products', ['tags' => ['On Sale', 'On Sale / Clearance Items']]),
-  ]) --}}
+  ])
 
 
   <section class="sustainable-section py-5 position-relative">

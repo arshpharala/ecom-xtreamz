@@ -38,7 +38,7 @@
                 align-items: center;
                 gap: 1rem;
 
-                    .price {
+                .price {
                     font-size: var(--font-size-7xl);
                     color: black;
                     font-weight: 600;
@@ -142,8 +142,13 @@
     }
 
     @media (max-width: ($screen-xl - 1)) {
+        .gift-box {
+            padding: 30px 24px !important;
+
+        }
+
         .gift-box-item {
-            gap: 1.5rem !important;
+            gap: 10px !important;
 
             .price {
                 font-size: var(--font-size-5xl) !important;
@@ -217,10 +222,10 @@
 
         .gift-right-half {
             .gift-box-item {
-                flex-direction: column !important;
+                // flex-direction: column !important;
 
                 .gift-img-box {
-                    align-items: center !important;
+                    // align-items: center !important;
                 }
             }
         }

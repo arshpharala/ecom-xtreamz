@@ -2,11 +2,12 @@
     .brochure-box {
         background: #e7e7e7;
         border-radius: 20px;
-        padding: 5rem 0rem;
+        padding: 60px 0rem;
     }
 
     .brochure-img {
         padding: 1rem 3rem;
+
         img {
             max-width: 100%;
             height: auto;
@@ -16,18 +17,24 @@
 
     .brochure-text {
         padding: 1rem 3rem;
+
         .subtitle {
-            font-size: var(--font-size-7xl);
-            color: #555;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
+            font-size: 22px;
+            font-family: "Inter";
+            color: rgb(40, 40, 40);
+            line-height: 1.2;
+            font-weight: 400;
+
+            margin-bottom: 0.1rem;
         }
 
         .title {
-            font-size: var(--font-size-16xl);
-            font-weight: 800;
-            color: #111;
-            line-height: 0.9;
+
+            font-family: "DM Sans";
+            font-size: 75.693px;
+            color: rgb(0, 0, 0);
+            line-height: 0.972;
+            font-weight: 700;
             margin-bottom: 1.5rem;
         }
 
@@ -63,6 +70,7 @@
             .brochure-img {
                 padding: 1rem;
             }
+
             .brochure-text {
                 padding: 1rem;
 

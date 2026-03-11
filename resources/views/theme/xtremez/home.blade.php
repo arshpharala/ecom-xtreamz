@@ -13,7 +13,7 @@
 
                 <div class="hero-img">
 
-                  <div class="slider-img d-none d-lg-block" data-animation="fadeInRight" data-delay=".8s">
+                  <div class="slider-img" data-animation="fadeInRight" data-delay=".8s">
                     <img src="{{ asset('storage/' . $banner->image) }}" alt="">
                   </div>
                 </div>
@@ -225,9 +225,9 @@
   ])
 
 
-  <section class="sustainable-section py-5 position-relative">
+  <section class="sustainable-section">
     <div class="container position-relative">
-      <div class="sustainable-banner d-flex align-items-center justify-content-between flex-wrap">
+      <div class="sustainable-banner flex-wrap">
 
         <!-- Left: Text -->
         <div class="sustainable-text">
@@ -265,7 +265,7 @@
             <!-- Play Button Overlay -->
             <div class="video-player">
               <a class="youtube cboxElement" href="https://www.youtube.com/embed/pjtsGzQjFM4">
-                <svg width="70" height="70" viewBox="0 0 24 24" fill="white">
+                <svg viewBox="0 0 24 24" fill="white">
                   <path d="M8 5v14l11-7z"></path>
                 </svg>
               </a>

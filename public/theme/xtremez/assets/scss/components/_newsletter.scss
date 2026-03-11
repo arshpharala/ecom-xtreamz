@@ -3,17 +3,24 @@
     padding: 5rem 1rem;
 
     .subtitle {
-        font-size: var(--font-size-7xl);
-        color: #555;
-        font-weight: 600;
+        font-size: 22px;
+        font-family: "Inter";
+        color: rgb(40, 40, 40);
+        line-height: 1.2;
+        font-weight: 400;
         margin-bottom: 0.1rem;
+
+
     }
 
     .newsletter-title {
-        font-size: var(--font-size-16xl);
-        font-weight: 800;
-        color: #111;
+        font-family: "DM Sans";
+        font-size: 75.693px;
+        color: rgb(0, 0, 0);
+        line-height: 0.972;
+        font-weight: 700;
         margin-bottom: 2rem;
+
     }
 
     .newsletter-form {
@@ -21,17 +28,18 @@
         justify-content: center;
 
         .newsletter-input {
-            background: var(--color-grey);
-            border-radius: 50px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            background-color: #e3e3e3;
+            border-radius: 5px;
+            box-shadow: 0px 0px 25.11px 1.89px rgba(113, 113, 113, 0.26);
             padding: 0 0 0 2rem;
+            height: 55px;
             max-width: 420px;
             width: 100%;
             position: relative;
 
             .icon {
                 font-size: 1.2rem;
-                color: #888;
+                color: #000000;
                 margin-right: 0.75rem;
             }
 
@@ -42,15 +50,18 @@
                 padding: 0.75rem 0;
                 box-shadow: none;
                 outline: none;
-                background-color: var(--color-grey);
+                background-color: #e3e3e3;
             }
 
             .btn-submit {
-                background: var(--color-light);
+
+
+                border-radius: 6px;
+                background-color: rgb(255, 255, 255);
+                box-shadow: 0px 0px 25.11px 1.89px rgba(113, 113, 113, 0.26);
                 border: none;
-                border-radius: 50%;
-                width: 60px;
-                height: 60px;
+                width: 58px;
+                height: 56px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -80,7 +91,8 @@
         .newsletter-title {
             font-size: var(--font-size-11xl);
         }
-        .subtitle{
+
+        .subtitle {
             font-size: var(--font-size-5xl);
         }
     }

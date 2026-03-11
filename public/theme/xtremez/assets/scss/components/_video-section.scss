@@ -24,8 +24,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 90px;
-                height: 90px;
+                width: 60px;
+                height: 60px;
                 background: rgba(0, 0, 0, 0.6);
                 border-radius: 50%;
                 transition: background 0.3s ease;
@@ -47,6 +47,11 @@
                     animation: wavePulse 3s ease-in-out infinite;
                     pointer-events: none;
                     z-index: -1;
+                }
+
+                svg{
+                    height: 26px;
+                    width: 26px;
                 }
 
                 &::after {

@@ -7,7 +7,7 @@
   </div>
 </section>
 
-<section class="our-brands-section py-5">
+<section class="our-brands-section">
   <div class="container">
     <div class="slider pb-5">
       @for ($i = 0; $i < 2; $i++)

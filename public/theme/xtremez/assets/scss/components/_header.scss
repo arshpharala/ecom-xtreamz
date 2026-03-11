@@ -292,6 +292,14 @@
     }
 
     /* --- Responsive Rules --- */
+
+    @media (max-width: #{$screen-xl - 1}) {
+        .header-bottom .container .main-nav .nav  {
+            gap: 20px !important;
+        }
+    }
+
+
     @media (max-width: ($screen-lg - 1)) {
         .header-bottom {
             display: none !important;
@@ -320,6 +328,8 @@
                 padding: 0.5rem 1.2rem;
             }
         }
+
+
     }
 
     @media (min-width: $screen-lg) {

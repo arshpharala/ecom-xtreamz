@@ -178,7 +178,7 @@ class Order extends Model
 
     public function sendAdminNotification(): void
     {
-        \Illuminate\Support\Facades\Notification::route('mail', 'info@xtremez.store')
+        \Illuminate\Support\Facades\Notification::route('mail', env('ORDERS_EMAIL', env('MAIL_FROM_ADDRESS')))
             ->notify(new \App\Notifications\NewOrderAdminNotification($this));
     }
 }

@@ -95,6 +95,8 @@ Route::group(['prefix' => '/sales', 'as' => 'sales.'], function () {
 
     Route::resource('orders',                               OrderController::class);
     Route::delete('orders/{order}/restore',                 [OrderController::class, 'restore'])->name('orders.restore');
+    Route::post('orders/{order}/resend-admin-notification', [OrderController::class, 'resendAdminNotification'])->name('orders.resend-admin-notification');
+
 
     Route::resource('customers',                            CustomerController::class);
 

@@ -607,6 +607,8 @@ class CheckoutController extends Controller
             Notification::route('mail', $order->email)
                 ->notify(new OrderSuccess($order));
 
+            $order->sendAdminNotification();
+
             $order->update(['email_sent' => true]);
         }
 

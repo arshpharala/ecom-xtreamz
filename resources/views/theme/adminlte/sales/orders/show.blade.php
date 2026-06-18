@@ -436,6 +436,15 @@
               <h3 class="card-title"><i class="fas fa-bolt mr-2"></i>Actions</h3>
             </div>
             <div class="card-body">
+              @if (! $order->isDraft())
+                <form action="{{ route('admin.sales.orders.resend-admin-notification', $order->id) }}" method="POST" class="mb-2">
+                  @csrf
+                  <button type="submit" class="btn btn-info btn-block font-weight-bold" onclick="return confirm('Resend admin notification email?')">
+                    <i class="fas fa-envelope mr-1"></i> Resend Admin Email
+                  </button>
+                </form>
+              @endif
+
               @if ($order->isDraft())
                 <button class="btn btn-danger btn-block font-weight-bold archive-order-btn" data-id="{{ $order->id }}">
                   <i class="fas fa-archive mr-1"></i> Archive Order

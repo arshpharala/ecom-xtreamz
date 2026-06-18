@@ -160,4 +160,20 @@ class OrderController extends Controller
         Order::withTrashed()->findOrFail($id)->restore();
         return response()->json(['message' => 'Order restored.']);
     }
+
+    /**
+     * Resend the admin notification email.
+     */
+    public function resendAdminNotification($id)
+    {
+        $order = Order::findOrFail($id);
+
+        if ($order->isDraft()) {
+            return back()->with('error', 'Cannot send notification for an incomplete order.');
+        }
+        
+        $order->sendAdminNotification();
+
+        return back()->with('success', 'Admin notification email sent successfully.');
+    }
 }

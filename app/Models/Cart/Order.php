@@ -175,4 +175,10 @@ class Order extends Model
             ->leftJoin('users', 'users.id', 'orders.user_id')
             ->leftJoin('currencies', 'currencies.id', 'orders.currency_id');
     }
+
+    public function sendAdminNotification(): void
+    {
+        \Illuminate\Support\Facades\Notification::route('mail', 'info@xtremez.store')
+            ->notify(new \App\Notifications\NewOrderAdminNotification($this));
+    }
 }

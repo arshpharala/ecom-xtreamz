@@ -351,7 +351,7 @@ if (!function_exists('get_attachment_url')) {
             return $filePath;
         }
         $pathInfo = pathinfo($filePath);
-        $thumbnailPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_thumb.' . $pathInfo['extension'];
+        $thumbnailPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '.' . $pathInfo['extension'];
         return asset('storage/' . $thumbnailPath);
     }
 }

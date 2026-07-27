@@ -46,6 +46,17 @@
                 @endforeach
               </select>
             </div>
+            <div class="form-group">
+              <label for="additional_categories">Additional Categories</label>
+              <select name="additional_categories[]" id="additional_categories" class="form-control select2" multiple>
+                @foreach ($categories as $cat)
+                  <option value="{{ $cat->id }}"
+                    {{ $product->categories->contains($cat->id) ? 'selected' : '' }}>
+                    {{ $cat->translations->where('locale', app()->getLocale())->first()?->name ?? $cat->slug }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
 
             {{-- Brand Select --}}
             <div class="form-group">

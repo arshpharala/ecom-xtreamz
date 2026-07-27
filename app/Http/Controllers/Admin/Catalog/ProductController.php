@@ -187,6 +187,8 @@ class ProductController extends Controller
             'show_in_slider'   => $request->boolean('show_in_slider'),
         ]);
 
+        $product->categories()->sync($request->additional_categories);
+
         // Translations
         foreach (active_locals() as $locale) {
             $product->translations()->updateOrCreate(

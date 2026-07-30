@@ -222,7 +222,7 @@ class ProductVariantController extends Controller
         =============================== */
             if ($request->has('attributes')) {
                 $variant->attributeValues()->sync(
-                    array_filter(array_values($request->attributes))
+                    array_filter(array_values($request['attributes']))
                 );
             }
 
@@ -230,7 +230,7 @@ class ProductVariantController extends Controller
            TAGS (OPTIONAL)
         =============================== */
             if ($request->has('tags')) {
-                $variant->tags()->sync(array_values($request->tags ?? []));
+                $variant->tags()->sync(array_values($request['tags'] ?? []));
             }
 
             /* ===============================

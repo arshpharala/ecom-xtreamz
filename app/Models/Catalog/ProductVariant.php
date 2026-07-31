@@ -196,7 +196,7 @@ class ProductVariant extends Model
             'price_desc' => $query->orderBy('product_variants.price', 'desc'),
             'newest' => $query->orderBy('products.created_at', 'desc'),
             'featured' => $query->orderBy('products.position'),
-            // default => $query->orderBy('products.position'),
+            default => $query->orderBy('product_variants.created_at', 'desc'),
         };
     }
 

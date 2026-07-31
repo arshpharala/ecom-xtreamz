@@ -47,7 +47,8 @@
         <div class="col-md-4 col-lg-3  col-xl-3 d-none d-md-flex align-items-center justify-content-end gap-3">
           <span class="fw-bold sort-label text-nowrap">Sort By</span>
           <select class="form-select theme-select sort-select" name="sort_by">
-            <option value="">Featured</option>
+            <option value="">Default</option>
+            <option value="featured">Featured</option>
             <option value="price_asc">Price: Low to High</option>
             <option value="price_desc">Price: High to Low</option>
             <option value="newest">Newest</option>

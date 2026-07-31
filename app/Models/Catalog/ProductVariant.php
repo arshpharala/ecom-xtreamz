@@ -195,7 +195,8 @@ class ProductVariant extends Model
             'price_asc' => $query->orderBy('product_variants.price', 'asc'),
             'price_desc' => $query->orderBy('product_variants.price', 'desc'),
             'newest' => $query->orderBy('products.created_at', 'desc'),
-            default => $query->orderBy('products.position'),
+            'featured' => $query->orderBy('products.position'),
+            // default => $query->orderBy('products.position'),
         };
     }
 
